@@ -18,14 +18,15 @@ export default async function AdminLayout({
   return (
     <SessionProvider>
       <ReactQueryProvider>
-        <main className="flex flex-col min-h-screen max-w-screen dark:bg-black dark:text-white">
-          <AdminNavbar />
-          <div className="flex-1 px-6 flex mt-2">
-            <main className="flex-1 flex">{children}</main>
-          </div>
-          <ModalProvider />
-          <Toaster position="top-center" richColors />
-        </main>
+        <ModalProvider>
+          <main className="flex flex-col min-h-screen max-w-screen dark:bg-black dark:text-white">
+            <AdminNavbar />
+            <div className="flex-1 px-6 flex mt-2">
+              <main className="flex-1 flex">{children}</main>
+            </div>
+            <Toaster position="top-center" richColors />
+          </main>
+        </ModalProvider>
       </ReactQueryProvider>
     </SessionProvider>
   )
