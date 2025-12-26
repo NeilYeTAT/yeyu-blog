@@ -1,0 +1,2 @@
+pnpm ts:check
+pnpm lint-staged

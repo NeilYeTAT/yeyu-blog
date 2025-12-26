@@ -13,7 +13,10 @@
     "lint": "eslint --max-warnings 0 .",
     "lint:fix": "eslint --max-warnings 0 --fix .",
     "postinstall": "prisma generate",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "prepare": "husky",
+    "commit": "git-cz",
+    "qwer": "git-cz"
   },
   "dependencies": {
     "@bytemd/plugin-breaks": "^1.22.0",
@@ -78,6 +81,8 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/js": "^9.39.2",
     "@next/eslint-plugin-next": "^15.5.4",
     "@shikijs/rehype": "^3.2.2",
@@ -87,6 +92,8 @@
     "@types/node": "^22.14.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "commitizen": "^4.3.1",
+    "cz-git": "^1.12.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-check-file": "^3.3.1",
@@ -94,6 +101,8 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.1",
     "next-sitemap": "^4.2.3",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
@@ -102,5 +111,10 @@
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.50.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
   }
 }

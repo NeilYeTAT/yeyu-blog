@@ -120,6 +120,7 @@ export default [
       'public',
       'components/ui/*',
       'next-sitemap.config.js',
+      'commitlint.config.cjs',
     ],
   },
 ]
