@@ -1,10 +1,10 @@
-import LenisScrollProvider from '@/components/provider/lenis-scroll-provider'
-import ContactMe from '@/components/shared/contact-me'
-import HorizontalDividingLine from '@/components/shared/horizontal-dividing-line'
-import MaxWidthWrapper from '@/components/shared/max-width-wrapper'
-import StarsBackground from '@/components/shared/stars-background'
-import StartUpMotion from '@/components/shared/start-up-motion'
 import MainLayoutHeader from '@/modules/main/layout/main-layout-header'
+import LenisScrollProvider from '@/ui/components/provider/lenis-scroll-provider'
+import ContactMe from '@/ui/components/shared/contact-me'
+import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
+import MaxWidthWrapper from '@/ui/components/shared/max-width-wrapper'
+import StarsBackground from '@/ui/components/shared/stars-background'
+import StartUpMotion from '@/ui/components/shared/start-up-motion'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (

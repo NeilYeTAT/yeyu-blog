@@ -1,10 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import type { ArticleDTO, UpdateArticleDTO } from '@/components/shared/admin-article-edit-page/type'
 import { prisma } from '@/db'
 import { requireAdmin } from '@/lib/auth'
 import { processor } from '@/lib/markdown'
+import type {
+  ArticleDTO,
+  UpdateArticleDTO,
+} from '@/ui/components/shared/admin-article-edit-page/type'
 
 export async function createNote(values: ArticleDTO) {
   await requireAdmin()

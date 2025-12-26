@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import { getRawBlogBySlug } from '@/actions/blogs'
 import { getBlogTags } from '@/actions/tags'
-import AdminArticleEditPage from '@/components/shared/admin-article-edit-page'
 import { requireAdmin } from '@/lib/auth'
+import AdminArticleEditPage from '@/ui/components/shared/admin-article-edit-page'
 
 export default async function Page({
   params,

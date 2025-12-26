@@ -1,5 +1,5 @@
-import TagItemBadge from '@/components/shared/tag-item-badge'
 import { toZhDay } from '@/lib/time'
+import TagItemBadge from '@/ui/components/shared/tag-item-badge'
 
 export default function ArticleDisplayHeader({
   title,

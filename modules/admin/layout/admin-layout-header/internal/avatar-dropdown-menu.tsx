@@ -2,7 +2,7 @@
 
 import { LogOut } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
-import YeYuAvatar from '@/components/shared/yeyu-avatar'
+import YeYuAvatar from '@/ui/components/shared/yeyu-avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,

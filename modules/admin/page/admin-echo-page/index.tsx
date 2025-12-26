@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getAllEchos, getQueryEchos } from '@/actions/echos'
-import Loading from '@/components/shared/loading'
+import Loading from '@/ui/components/shared/loading'
 import EchoListTable from './internal/echo-list-table'
 import EchoSearch from './internal/echo-search'
 

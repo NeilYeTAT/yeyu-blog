@@ -3,8 +3,8 @@
 import { GithubIcon, RotateCcw } from 'lucide-react'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
-import HorizontalDividingLine from '@/components/shared/horizontal-dividing-line'
-import StarsBackground from '@/components/shared/stars-background'
+import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
+import StarsBackground from '@/ui/components/shared/stars-background'
 import { Button } from '@/ui/shadcn/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/ui/shadcn/card'
 

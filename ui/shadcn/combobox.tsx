@@ -21,7 +21,7 @@ import {
 } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { ScrollArea } from './scroll-area'
-import TagItemBadge from '../../components/shared/tag-item-badge'
+import TagItemBadge from '../components/shared/tag-item-badge'
 
 export interface ComboboxOption {
   value: string

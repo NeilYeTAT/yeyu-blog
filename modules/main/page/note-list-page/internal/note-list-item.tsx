@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import ScaleUnderline from '@/components/shared/scale-underline'
 import { toZhDay } from '@/lib/time'
+import ScaleUnderline from '@/ui/components/shared/scale-underline'
 
 export default function NoteListItem({
   noteTitle,
