@@ -82,7 +82,7 @@ importers:
         version: 1.9.0
       '@uploadthing/react':
         specifier: ^7.3.1
-        version: 7.3.1(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4))
+        version: 7.3.1(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.18))
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.5.0(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -175,13 +175,13 @@ importers:
         version: 3.2.0
       tailwindcss-animate:
         specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@4.1.4)
+        version: 1.0.7(tailwindcss@4.1.18)
       unified:
         specifier: ^11.0.5
         version: 11.0.5
       uploadthing:
         specifier: ^7.7.2
-        version: 7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4)
+        version: 7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.18)
       zod:
         specifier: ^3.24.3
         version: 3.24.3
@@ -206,7 +206,7 @@ importers:
         version: 4.1.4
       '@tailwindcss/typography':
         specifier: ^0.5.16
-        version: 0.5.16(tailwindcss@4.1.4)
+        version: 0.5.16(tailwindcss@4.1.18)
       '@tanstack/eslint-plugin-query':
         specifier: ^5.90.1
         version: 5.91.2(eslint@9.39.2(jiti@2.6.1))(typescript@5.8.3)
@@ -265,8 +265,8 @@ importers:
         specifier: ^6.6.0
         version: 6.6.0(typescript@5.8.3)
       tailwindcss:
-        specifier: ^4.1.4
-        version: 4.1.4
+        specifier: ^4.1.18
+        version: 4.1.18
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
@@ -4276,6 +4276,9 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
 
+  tailwindcss@4.1.18:
+    resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
+
   tailwindcss@4.1.4:
     resolution: {integrity: sha512-1ZIUqtPITFbv/DxRmDr5/agPqJwF69d24m9qmM1939TJehgY539CtzeZRjbLt5G6fSy/7YqqYsfvoTEw9xUI2A==}
 
@@ -5774,13 +5777,13 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.1.4
 
-  '@tailwindcss/typography@0.5.16(tailwindcss@4.1.4)':
+  '@tailwindcss/typography@0.5.16(tailwindcss@4.1.18)':
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.1.4
+      tailwindcss: 4.1.18
 
   '@tanstack/eslint-plugin-query@5.91.2(eslint@9.39.2(jiti@2.6.1))(typescript@5.8.3)':
     dependencies:
@@ -5976,12 +5979,12 @@ snapshots:
 
   '@uploadthing/mime-types@0.3.5': {}
 
-  '@uploadthing/react@7.3.1(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4))':
+  '@uploadthing/react@7.3.1(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.18))':
     dependencies:
       '@uploadthing/shared': 7.1.8
       file-selector: 0.6.0
       react: 19.1.0
-      uploadthing: 7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4)
+      uploadthing: 7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.18)
     optionalDependencies:
       next: 15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
@@ -9156,9 +9159,11 @@ snapshots:
 
   tailwind-merge@3.2.0: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@4.1.4):
+  tailwindcss-animate@1.0.7(tailwindcss@4.1.18):
     dependencies:
-      tailwindcss: 4.1.4
+      tailwindcss: 4.1.18
+
+  tailwindcss@4.1.18: {}
 
   tailwindcss@4.1.4: {}
 
@@ -9355,7 +9360,7 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4):
+  uploadthing@7.7.2(next@15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.18):
     dependencies:
       '@effect/platform': 0.81.0(effect@3.14.21)
       '@standard-schema/spec': 1.0.0-beta.4
@@ -9364,7 +9369,7 @@ snapshots:
       effect: 3.14.21
     optionalDependencies:
       next: 15.4.10(@babel/core@7.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      tailwindcss: 4.1.4
+      tailwindcss: 4.1.18
 
   uri-js@4.4.1:
     dependencies:
