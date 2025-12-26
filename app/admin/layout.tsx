@@ -2,9 +2,9 @@ import { redirect } from 'next/navigation'
 import { SessionProvider } from 'next-auth/react'
 import { ModalProvider } from '@/components/provider/modal-provider'
 import ReactQueryProvider from '@/components/provider/react-query-provider'
-import { Toaster } from '@/components/ui/sonner'
 import { noPermission } from '@/lib/auth'
 import AdminNavbar from '@/modules/admin/layout/admin-layout-header'
+import { Toaster } from '@/ui/shadcn/sonner'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   if (await noPermission()) {

@@ -9,24 +9,17 @@ import { toast } from 'sonner'
 import { updateBlogTagById, updateNoteTagById } from '@/actions/tags'
 import type { UpdateTagNameDTO } from '@/actions/tags/type'
 import { UpdateTagNameSchema } from '@/actions/tags/type'
-import { Button } from '@/components/ui/button'
+import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { useModalStore } from '@/store/use-modal-store'
+} from '@/ui/shadcn/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
+import { Input } from '@/ui/shadcn/input'
 
 export default function EditTagModal() {
   const { modalType, onModalClose, payload } = useModalStore()

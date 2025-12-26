@@ -1,6 +1,6 @@
-import { Skeleton } from '@/components/ui/skeleton'
-import { toggleVariants } from '@/components/ui/toggle'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
+import { Skeleton } from '@/ui/shadcn/skeleton'
+import { toggleVariants } from '@/ui/shadcn/toggle'
 
 export default function TagContainerSkeleton() {
   return (

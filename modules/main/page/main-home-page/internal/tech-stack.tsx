@@ -10,7 +10,7 @@ import TailwindcssSvg from '@/config/svg/tailwindcss-svg'
 import TypeScriptSvg from '@/config/svg/typescript-svg'
 import VueSvg from '@/config/svg/vuejs-svg'
 import { startConfettiGinkgo, startConfettiSakura } from '@/lib/animation/particle-effects'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
 
 const techStackSvg: JSX.Element[] = [
   <VueSvg key="vue" />,

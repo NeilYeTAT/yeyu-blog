@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { toggleEchoPublishedById } from '@/actions/echos'
-import { Switch } from '@/components/ui/switch'
+import { Switch } from '@/ui/shadcn/switch'
 
 export default function PublishToggleSwitch({
   echoId,

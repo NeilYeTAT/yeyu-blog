@@ -1,7 +1,7 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/ui/shadcn/button'
 import { useTransitionTheme } from '@/hooks/use-transition-theme'
 
 export function ModeToggle() {

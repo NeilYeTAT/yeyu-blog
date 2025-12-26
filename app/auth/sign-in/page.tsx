@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 import HorizontalDividingLine from '@/components/shared/horizontal-dividing-line'
 import StarsBackground from '@/components/shared/stars-background'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/ui/shadcn/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/ui/shadcn/card'
 
 export default function LoginPage() {
   return (

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
 
 // * 后序给配置颜色
 export default function ScaleUnderline({ className }: { className?: string }) {

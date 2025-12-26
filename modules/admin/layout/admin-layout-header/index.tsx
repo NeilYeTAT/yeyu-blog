@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { ModeToggle } from '@/components/ui/mode-toggle'
 import { getActiveAdminPath } from '@/lib/url'
+import { Button } from '@/ui/shadcn/button'
+import { ModeToggle } from '@/ui/shadcn/mode-toggle'
 import AdminLogo from './internal/admin-logo'
 import AvatarDropdownMenu from './internal/avatar-dropdown-menu'
 

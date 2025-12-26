@@ -5,9 +5,9 @@ import type { Dispatch, SetStateAction } from 'react'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { BlogTagItemToggle } from '@/components/shared/tag-item-toggle'
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
-import type { CarouselApi } from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
+import { Carousel, CarouselContent, CarouselItem } from '@/ui/shadcn/carousel'
+import type { CarouselApi } from '@/ui/shadcn/carousel'
 
 export function BlogTagsContainer({
   blogTagList,

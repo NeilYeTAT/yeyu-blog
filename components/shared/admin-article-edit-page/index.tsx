@@ -11,20 +11,13 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { createBlog, updateBlogById } from '@/actions/blogs'
 import { createNote, updateNoteById } from '@/actions/notes'
-import { Button } from '@/components/ui/button'
-import { Combobox } from '@/components/ui/combobox'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import { parseEditPageTypeFromUrl } from '@/lib/url'
 import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
+import { Combobox } from '@/ui/shadcn/combobox'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
+import { Input } from '@/ui/shadcn/input'
+import { Switch } from '@/ui/shadcn/switch'
 import MarkdownEditor from './internal/markdown-editor'
 import { ArticleSchema } from './type'
 

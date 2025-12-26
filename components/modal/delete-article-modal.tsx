@@ -3,15 +3,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { deleteBlogById } from '@/actions/blogs'
 import { deleteNoteById } from '@/actions/notes'
-import { Button } from '@/components/ui/button'
+import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useModalStore } from '@/store/use-modal-store'
+} from '@/ui/shadcn/dialog'
 
 interface DeleteArticleParams {
   id: number

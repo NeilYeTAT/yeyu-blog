@@ -121,6 +121,7 @@ export default [
       'components/ui/*',
       'next-sitemap.config.js',
       'commitlint.config.cjs',
+      'ui/shadcn',
     ],
   },
 ]

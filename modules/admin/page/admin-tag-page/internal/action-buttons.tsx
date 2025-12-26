@@ -1,7 +1,7 @@
 import type { TagType } from '@prisma/client'
 import { Edit2, Trash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
 
 export default function ActionButtons({
   id,

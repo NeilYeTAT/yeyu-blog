@@ -8,7 +8,7 @@ import { Check, ChevronDown, X } from 'lucide-react'
 
 // 源代码来自：https://github.com/shadcn-ui/ui/issues/927#issuecomment-1788084995
 // 根据自己需要做了部分修改
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
 
 import { Badge } from './badge'
 import { Button } from './button'
@@ -21,7 +21,7 @@ import {
 } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { ScrollArea } from './scroll-area'
-import TagItemBadge from '../shared/tag-item-badge'
+import TagItemBadge from '../../components/shared/tag-item-badge'
 
 export interface ComboboxOption {
   value: string

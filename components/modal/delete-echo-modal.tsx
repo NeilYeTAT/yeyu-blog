@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { deleteEchoById } from '@/actions/echos'
-import { Button } from '@/components/ui/button'
+import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useModalStore } from '@/store/use-modal-store'
+} from '@/ui/shadcn/dialog'
 
 export default function DeleteEchoModal() {
   const { modalType, payload, onModalClose } = useModalStore()

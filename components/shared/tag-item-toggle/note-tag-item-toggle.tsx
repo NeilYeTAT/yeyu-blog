@@ -1,7 +1,7 @@
 'use client'
 
 import type { Dispatch, SetStateAction } from 'react'
-import { Toggle } from '@/components/ui/toggle'
+import { Toggle } from '@/ui/shadcn/toggle'
 
 export function NoteTagItemToggle({
   tag,

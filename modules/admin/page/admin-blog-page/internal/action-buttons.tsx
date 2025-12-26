@@ -1,9 +1,9 @@
 import { TagType } from '@prisma/client'
 import { Edit2, Eye, Trash } from 'lucide-react'
 import Link from 'next/link'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/common/shadcn'
 import { useModalStore } from '@/store/use-modal-store'
+import { Button, buttonVariants } from '@/ui/shadcn/button'
 
 export default function ActionButtons({
   blogId,

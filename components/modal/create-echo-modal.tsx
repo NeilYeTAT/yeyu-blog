@@ -8,7 +8,8 @@ import { toast } from 'sonner'
 import { createEcho } from '@/actions/echos'
 import type { CreateEchoDTO } from '@/actions/echos/type'
 import { CreateEchoSchema } from '@/actions/echos/type'
-import { Button } from '@/components/ui/button'
+import { useModalStore } from '@/store/use-modal-store'
+import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
   DialogContent,
@@ -16,19 +17,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
-import { useModalStore } from '@/store/use-modal-store'
+} from '@/ui/shadcn/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
+import { Input } from '@/ui/shadcn/input'
+import { Switch } from '@/ui/shadcn/switch'
+import { Textarea } from '@/ui/shadcn/textarea'
 
 export default function CreateEchoModal() {
   const { modalType, onModalClose } = useModalStore()
