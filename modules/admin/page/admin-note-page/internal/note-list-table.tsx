@@ -1,7 +1,7 @@
 'use client'
 
-import type { NoteListItem } from '@/actions/notes/type'
 import { motion } from 'motion/react'
+import type { NoteListItem } from '@/actions/notes/type'
 import { DataTable } from './data-table'
 import { columns } from './note-table-column'
 

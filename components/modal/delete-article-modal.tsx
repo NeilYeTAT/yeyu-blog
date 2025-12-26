@@ -1,3 +1,6 @@
+import { TagType } from '@prisma/client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { deleteBlogById } from '@/actions/blogs'
 import { deleteNoteById } from '@/actions/notes'
 import { Button } from '@/components/ui/button'
@@ -9,9 +12,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { useModalStore } from '@/store/use-modal-store'
-import { TagType } from '@prisma/client'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 interface DeleteArticleParams {
   id: number
@@ -22,7 +22,7 @@ interface DeleteArticleParams {
 export default function DeleteArticleModal() {
   const { modalType, payload, onModalClose } = useModalStore()
   const isModalOpen = modalType === 'deleteArticleModal'
-  const { id, title, articleType } = payload ? (payload as DeleteArticleParams) : {}
+  const { id, title, articleType } = payload != null ? (payload as DeleteArticleParams) : {}
 
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
@@ -44,15 +44,14 @@ export default function DeleteArticleModal() {
     onError: (error, variables) => {
       if (error instanceof Error) {
         toast.error(`删除文章「${variables.title}」失败~ ${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`删除文章「${variables.title}」出错~`)
       }
     },
   })
 
   async function onSubmit() {
-    if (!id || !articleType || !title) {
+    if (id == null || articleType == null || title == null) {
       return
     }
     mutate({ id, articleType, title })

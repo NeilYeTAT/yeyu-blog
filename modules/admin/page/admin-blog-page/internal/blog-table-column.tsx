@@ -1,19 +1,11 @@
 'use client'
 
-import type { BlogListItem } from '@/actions/blogs/type'
 import type { ColumnDef } from '@tanstack/react-table'
+import { ArrowDown, ArrowUp, CalendarDays, Eye, TagIcon, TypeIcon, Wrench } from 'lucide-react'
+import type { BlogListItem } from '@/actions/blogs/type'
 import TagItemBadge from '@/components/shared/tag-item-badge'
 import { Button } from '@/components/ui/button'
 import { prettyDateTime } from '@/lib/time'
-import {
-  ArrowDown,
-  ArrowUp,
-  CalendarDays,
-  Eye,
-  TagIcon,
-  TypeIcon,
-  Wrench,
-} from 'lucide-react'
 import ActionButtons from './action-buttons'
 import PublishToggleSwitch from './publish-toggle-switch'
 
@@ -22,7 +14,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
     accessorKey: 'title',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TypeIcon className="size-4" />
           标题
         </span>
@@ -33,7 +25,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
     accessorKey: 'tags',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TagIcon className="size-4" />
           标签
         </span>
@@ -55,7 +47,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
     accessorKey: 'isPublished',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <Eye className="size-4" />
           是否发布
         </span>
@@ -64,9 +56,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
     cell: ({ row }) => {
       const blog = row.original
 
-      return (
-        <PublishToggleSwitch blogId={blog.id} isPublished={blog.isPublished} key={blog.id} />
-      )
+      return <PublishToggleSwitch blogId={blog.id} isPublished={blog.isPublished} key={blog.id} />
     },
   },
   {
@@ -85,15 +75,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
         >
           <CalendarDays className="size-4" />
           创建时间
-          {sorted === 'asc'
-            ? (
-                <ArrowUp />
-              )
-            : sorted === 'desc'
-              ? (
-                  <ArrowDown />
-                )
-              : null}
+          {sorted === 'asc' ? <ArrowUp /> : sorted === 'desc' ? <ArrowDown /> : null}
         </Button>
       )
     },
@@ -106,7 +88,7 @@ export const columns: ColumnDef<BlogListItem>[] = [
     accessorKey: 'actions',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <Wrench className="size-4" />
           操作
         </span>

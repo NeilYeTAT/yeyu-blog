@@ -1,12 +1,12 @@
 'use client'
 
 import type { Dispatch, SetStateAction } from 'react'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 import { Plus, RotateCw, Search } from 'lucide-react'
 import Link from 'next/link'
 import { memo, useRef } from 'react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 function NoteSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }) {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -17,13 +17,12 @@ function NoteSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
         placeholder="请输入标题喵~"
         className="w-1/2 xl:w-1/3"
         ref={inputRef}
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === 'Enter') {
             const query = inputRef.current?.value
-            if (query?.trim()) {
+            if (query?.trim() != null) {
               setQuery(query)
-            }
-            else {
+            } else {
               setQuery('')
             }
           }
@@ -35,7 +34,7 @@ function NoteSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
         variant="secondary"
         onClick={() => {
           const query = inputRef.current?.value
-          if (query?.trim()) {
+          if (query?.trim() != null) {
             setQuery(query)
           }
         }}
@@ -57,10 +56,7 @@ function NoteSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
       </Button>
 
       <Link
-        className={cn(
-          buttonVariants({ variant: 'secondary' }),
-          'cursor-pointer',
-        )}
+        className={cn(buttonVariants({ variant: 'secondary' }), 'cursor-pointer')}
         href="note/edit"
       >
         <Plus />

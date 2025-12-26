@@ -1,7 +1,7 @@
 'use client'
 
-import type { BlogListItem } from '@/actions/blogs/type'
 import { motion } from 'motion/react'
+import type { BlogListItem } from '@/actions/blogs/type'
 import { columns } from './blog-table-column'
 import { DataTable } from './data-table'
 

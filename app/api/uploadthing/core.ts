@@ -1,7 +1,7 @@
 import type { FileRouter } from 'uploadthing/next'
-import { noPermission } from '@/lib/auth'
 import { createUploadthing } from 'uploadthing/next'
 import { UploadThingError } from 'uploadthing/server'
+import { noPermission } from '@/lib/auth'
 
 const f = createUploadthing()
 
@@ -14,13 +14,12 @@ export const uploadRouter = {
   })
     // * 中间件校验
     .middleware(async () => {
-      if (await noPermission())
-        throw new UploadThingError('权限不够~')
+      if (await noPermission()) throw new UploadThingError('权限不够~')
 
       return {}
     })
     .onUploadComplete(async () => {
-      return { }
+      return {}
     }),
 } satisfies FileRouter
 

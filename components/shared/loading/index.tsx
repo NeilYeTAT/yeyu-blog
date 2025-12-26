@@ -19,11 +19,7 @@ export default function Loading() {
   return (
     <div className="container m-auto">
       <div className="ripple-container">
-        <motion.div
-          className="ripple"
-          animate={animation}
-          transition={transition}
-        />
+        <motion.div className="ripple" animate={animation} transition={transition} />
         <motion.div
           className="ripple"
           animate={animation}

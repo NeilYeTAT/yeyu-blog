@@ -1,18 +1,17 @@
+import { notFound } from 'next/navigation'
 import { getPublishedBlogHTMLBySlug } from '@/actions/blogs'
 import ArticleDisplayPage from '@/components/shared/article-display-page'
 import CommentCard from '@/components/shared/comment-card'
 import HorizontalDividingLine from '@/components/shared/horizontal-dividing-line'
 import ScrollIndicator from '@/components/shared/scroll-indicator'
 import { prisma } from '@/db'
-import { notFound } from 'next/navigation'
 
 export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const article = await getPublishedBlogHTMLBySlug((await params).slug)
 
-  if (!article)
-    notFound()
+  if (article == null) notFound()
 
   return {
     title: article.title,
@@ -31,15 +30,10 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const article = await getPublishedBlogHTMLBySlug((await params).slug)
 
-  if (!article)
-    notFound()
+  if (article == null) notFound()
 
   const { content, title, createdAt, tags, id } = article
 
@@ -47,12 +41,7 @@ export default async function Page({
 
   return (
     <div className="flex flex-col gap-4">
-      <ArticleDisplayPage
-        title={title}
-        createdAt={createdAt}
-        content={content}
-        tags={tagNames}
-      />
+      <ArticleDisplayPage title={title} createdAt={createdAt} content={content} tags={tagNames} />
       <HorizontalDividingLine fill="#EC7FA9" />
       <CommentCard term={`${title}-blog-${id}`} />
       <ScrollIndicator />

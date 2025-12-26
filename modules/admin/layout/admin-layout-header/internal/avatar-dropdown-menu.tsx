@@ -1,5 +1,7 @@
 'use client'
 
+import { LogOut } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
 import YeYuAvatar from '@/components/shared/yeyu-avatar'
 import {
   DropdownMenu,
@@ -9,8 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut } from 'lucide-react'
-import { signOut, useSession } from 'next-auth/react'
 
 function AvatarDropdownMenu() {
   const { data: session } = useSession()
@@ -20,16 +20,13 @@ function AvatarDropdownMenu() {
       <DropdownMenuTrigger className="flex items-center">
         <YeYuAvatar />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="rounded-lg w-56">
-        <DropdownMenuLabel className="p-1 flex gap-2 items-center">
+      <DropdownMenuContent align="end" className="w-56 rounded-lg">
+        <DropdownMenuLabel className="flex items-center gap-2 p-1">
           <YeYuAvatar />
           <section>
-            <h3 className="font-mono">
-              {session?.user?.name || 'example'}
-              {' '}
-            </h3>
+            <h3 className="font-mono">{session?.user?.name != null || 'example'} </h3>
             <small className="font-thin">
-              {session?.user?.email || 'example@gmail.com'}
+              {session?.user?.email != null || 'example@gmail.com'}
             </small>
           </section>
         </DropdownMenuLabel>

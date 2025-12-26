@@ -1,11 +1,11 @@
 'use client'
 
 import type { Dispatch, SetStateAction } from 'react'
+import { Plus, RotateCw, Search } from 'lucide-react'
+import { memo, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useModalStore } from '@/store/use-modal-store'
-import { Plus, RotateCw, Search } from 'lucide-react'
-import { memo, useRef } from 'react'
 
 function TagSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }) {
   const { setModalOpen } = useModalStore()
@@ -17,13 +17,12 @@ function TagSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> })
         className="w-1/2 xl:w-1/3"
         placeholder="请输入标签名喵~"
         ref={inputRef}
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === 'Enter') {
             const query = inputRef.current?.value
-            if (query?.trim()) {
+            if (query?.trim() != null) {
               setQuery(query)
-            }
-            else {
+            } else {
               setQuery('')
             }
           }
@@ -35,7 +34,7 @@ function TagSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> })
         className="cursor-pointer"
         onClick={() => {
           const query = inputRef.current?.value
-          if (query?.trim()) {
+          if (query?.trim() != null) {
             setQuery(query)
           }
         }}

@@ -1,18 +1,11 @@
 'use client'
 
-import type { WithCountTagDTO } from '@/actions/tags/type'
 import type { ColumnDef } from '@tanstack/react-table'
+import { ArrowDown, ArrowUp, FileText, TagsIcon, TypeIcon, Wrench } from 'lucide-react'
+import type { WithCountTagDTO } from '@/actions/tags/type'
 import TagItemBadge from '@/components/shared/tag-item-badge'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  ArrowDown,
-  ArrowUp,
-  FileText,
-  TagsIcon,
-  TypeIcon,
-  Wrench,
-} from 'lucide-react'
 import ActionButtons from './action-buttons'
 
 // * 后序整一个分类排序
@@ -21,7 +14,7 @@ export const columns: ColumnDef<WithCountTagDTO>[] = [
     accessorKey: 'tagName',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TypeIcon className="size-4" />
           标签名
         </span>
@@ -35,7 +28,7 @@ export const columns: ColumnDef<WithCountTagDTO>[] = [
     accessorKey: 'tagType',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TagsIcon className="size-4" />
           标签类型
         </span>
@@ -60,22 +53,16 @@ export const columns: ColumnDef<WithCountTagDTO>[] = [
         >
           <FileText className="size-4" />
           关联文章数量
-          {sorted === 'asc'
-            ? (
-                <ArrowUp />
-              )
-            : sorted === 'desc'
-              ? (
-                  <ArrowDown />
-                )
-              : null}
+          {sorted === 'asc' ? <ArrowUp /> : sorted === 'desc' ? <ArrowDown /> : null}
         </Button>
       )
     },
     cell: ({ row }) => {
       const relatedArticleCount = row.original.count
       return (
-        <div className="font-mono max-w-36 flex justify-center text-base">{relatedArticleCount}</div>
+        <div className="flex max-w-36 justify-center font-mono text-base">
+          {relatedArticleCount}
+        </div>
       )
     },
   },
@@ -83,7 +70,7 @@ export const columns: ColumnDef<WithCountTagDTO>[] = [
     accessorKey: 'actions',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <Wrench className="size-4" />
           操作
         </span>

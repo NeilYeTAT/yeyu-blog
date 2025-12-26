@@ -1,10 +1,13 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TagType } from '@prisma/client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { createBlogTag, createNoteTag } from '@/actions/tags'
 import type { CreateTagDTO } from '@/actions/tags/type'
-import {
-  createBlogTag,
-  createNoteTag,
-} from '@/actions/tags'
 import { CreateTagSchema } from '@/actions/tags/type'
 import { Button } from '@/components/ui/button'
 import {
@@ -31,12 +34,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useModalStore } from '@/store/use-modal-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { TagType } from '@prisma/client'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 export default function CreateTagModal() {
   const { modalType, onModalClose } = useModalStore()
@@ -49,11 +46,10 @@ export default function CreateTagModal() {
       queryClient.invalidateQueries({ queryKey: ['tags'] })
       toast.success(`创建成功`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`创建标签失败~ ${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`创建标签失败~`)
       }
     },
@@ -111,7 +107,7 @@ export default function CreateTagModal() {
                     <FormControl>
                       <Select
                         value={field.value}
-                        onValueChange={(value) => {
+                        onValueChange={value => {
                           field.onChange(value)
                         }}
                       >
@@ -129,7 +125,9 @@ export default function CreateTagModal() {
                 )}
               />
               <DialogFooter>
-                <Button type="submit" className="cursor-pointer">保存</Button>
+                <Button type="submit" className="cursor-pointer">
+                  保存
+                </Button>
               </DialogFooter>
             </form>
           </Form>

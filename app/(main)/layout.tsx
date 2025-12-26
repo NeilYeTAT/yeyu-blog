@@ -6,23 +6,14 @@ import StarsBackground from '@/components/shared/stars-background'
 import StartUpMotion from '@/components/shared/start-up-motion'
 import MainLayoutHeader from '@/modules/main/layout/main-layout-header'
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <LenisScrollProvider>
-      <main
-        className="min-h-screen max-w-screen
-                    flex flex-col justify-between gap-2
-                  bg-slate-200 dark:bg-black dark:text-white
-                    md:text-lg"
-      >
+      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 bg-slate-200 md:text-lg dark:bg-black dark:text-white">
         <MainLayoutHeader />
 
-        <MaxWidthWrapper className="overflow-x-hidden flex flex-col justify-between flex-1 gap-2">
-          <main className="flex flex-col flex-1">{children}</main>
+        <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">
+          <main className="flex flex-1 flex-col">{children}</main>
 
           <HorizontalDividingLine />
           <ContactMe />

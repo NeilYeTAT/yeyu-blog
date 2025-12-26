@@ -1,8 +1,8 @@
-import { toggleBlogPublishedById } from '@/actions/blogs'
-import { Switch } from '@/components/ui/switch'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { toggleBlogPublishedById } from '@/actions/blogs'
+import { Switch } from '@/components/ui/switch'
 
 export default function PublishToggleSwitch({
   blogId,
@@ -27,24 +27,16 @@ export default function PublishToggleSwitch({
           exact: false,
         })
         toast.success(`更新成功`)
-      }
-      catch (error) {
+      } catch (error) {
         setIsPublished(!newStatus)
         if (error instanceof Error) {
           toast.error(`发布状态更新失败 ${error?.message}`)
-        }
-        else {
+        } else {
           toast.error(`发布状态更新失败`)
         }
       }
     })
   }
 
-  return (
-    <Switch
-      onCheckedChange={handleToggle}
-      checked={isPublished}
-      disabled={isPending}
-    />
-  )
+  return <Switch onCheckedChange={handleToggle} checked={isPublished} disabled={isPending} />
 }

@@ -1,7 +1,12 @@
 'use client'
 
-import type { CreateEchoDTO } from '@/actions/echos/type'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { createEcho } from '@/actions/echos'
+import type { CreateEchoDTO } from '@/actions/echos/type'
 import { CreateEchoSchema } from '@/actions/echos/type'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,11 +29,6 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { useModalStore } from '@/store/use-modal-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 export default function CreateEchoModal() {
   const { modalType, onModalClose } = useModalStore()
@@ -41,11 +41,10 @@ export default function CreateEchoModal() {
       queryClient.invalidateQueries({ queryKey: ['echo-list'] })
       toast.success(`创建成功`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`创建引用失败~ ${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`创建引用失败~`)
       }
     },
@@ -92,7 +91,7 @@ export default function CreateEchoModal() {
                       <Textarea
                         placeholder="请输入新的引用"
                         {...field}
-                        className="resize-none h-52"
+                        className="h-52 resize-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,17 +120,16 @@ export default function CreateEchoModal() {
                   <FormItem>
                     <FormLabel>是否发布</FormLabel>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <DialogFooter>
-                <Button type="submit" className="cursor-pointer">保存修改</Button>
+                <Button type="submit" className="cursor-pointer">
+                  保存修改
+                </Button>
               </DialogFooter>
             </form>
           </Form>

@@ -1,12 +1,18 @@
 'use client'
 
-import { toggleEchoPublishedById } from '@/actions/echos'
-import { Switch } from '@/components/ui/switch'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { toggleEchoPublishedById } from '@/actions/echos'
+import { Switch } from '@/components/ui/switch'
 
-export default function PublishToggleSwitch({ echoId, isPublished: initial }: { echoId: number, isPublished: boolean }) {
+export default function PublishToggleSwitch({
+  echoId,
+  isPublished: initial,
+}: {
+  echoId: number
+  isPublished: boolean
+}) {
   const [isPublished, setIsPublished] = useState(initial)
   const [isPending, startTransition] = useTransition()
   const queryClient = useQueryClient()
@@ -23,24 +29,16 @@ export default function PublishToggleSwitch({ echoId, isPublished: initial }: { 
           exact: false,
         })
         toast.success(`更新成功`)
-      }
-      catch (error) {
+      } catch (error) {
         setIsPublished(!newStatus)
         if (error instanceof Error) {
           toast.error(`发布状态更新失败 ${error?.message}`)
-        }
-        else {
+        } else {
           toast.error(`发布状态更新失败`)
         }
       }
     })
   }
 
-  return (
-    <Switch
-      onCheckedChange={handleToggle}
-      checked={isPublished}
-      disabled={isPending}
-    />
-  )
+  return <Switch onCheckedChange={handleToggle} checked={isPublished} disabled={isPending} />
 }

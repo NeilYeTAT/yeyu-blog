@@ -1,7 +1,14 @@
 'use client'
 
-import type { Blog, BlogTag, Note, NoteTag } from '@prisma/client'
 import type { ArticleDTO } from './type'
+import type { Blog, BlogTag, Note, NoteTag } from '@prisma/client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TagType } from '@prisma/client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { File, Loader2 } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { createBlog, updateBlogById } from '@/actions/blogs'
 import { createNote, updateNoteById } from '@/actions/notes'
 import { Button } from '@/components/ui/button'
@@ -18,13 +25,6 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { parseEditPageTypeFromUrl } from '@/lib/url'
 import { useModalStore } from '@/store/use-modal-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { TagType } from '@prisma/client'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { File, Loader2 } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import MarkdownEditor from './internal/markdown-editor'
 import { ArticleSchema } from './type'
 
@@ -62,11 +62,10 @@ export default function AdminArticleEditPage({
       toast.success('保存成功')
       router.push(`/admin/${editPageType.toLowerCase()}/edit/${variables.slug}`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`保存失败 ${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`保存失败`)
       }
     },
@@ -90,10 +89,7 @@ export default function AdminArticleEditPage({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 w-full pb-44"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8 pb-44">
         <FormField
           control={form.control}
           name="title"
@@ -131,11 +127,10 @@ export default function AdminArticleEditPage({
               <FormControl>
                 <Switch
                   checked={field.value}
-                  onCheckedChange={(checked) => {
+                  onCheckedChange={checked => {
                     field.onChange(checked)
                   }}
-                >
-                </Switch>
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,7 +159,8 @@ export default function AdminArticleEditPage({
                     onValueChange={val =>
                       form.setValue('relatedTagNames', val, {
                         shouldValidate: true,
-                      })}
+                      })
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -197,19 +193,17 @@ export default function AdminArticleEditPage({
         />
 
         <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending
-            ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  保存中...
-                </>
-              )
-            : (
-                <>
-                  <File className="mr-2 h-4 w-4" />
-                  保存
-                </>
-              )}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              保存中...
+            </>
+          ) : (
+            <>
+              <File className="mr-2 h-4 w-4" />
+              保存
+            </>
+          )}
         </Button>
       </form>
     </Form>
@@ -217,7 +211,7 @@ export default function AdminArticleEditPage({
 }
 
 async function updateArticle(values: ArticleDTO, editPageType: TagType, id: number | undefined) {
-  if (id) {
+  if (id != null) {
     switch (editPageType) {
       case TagType.BLOG:
         await updateBlogById({ ...values, id })
@@ -228,8 +222,7 @@ async function updateArticle(values: ArticleDTO, editPageType: TagType, id: numb
       default:
         throw new Error(`文章类型错误`)
     }
-  }
-  else {
+  } else {
     switch (editPageType) {
       case TagType.BLOG:
         await createBlog(values)

@@ -12,23 +12,17 @@ export function sayHi() {
 
   if (hour < 6) {
     return '凌晨不好喵...'
-  }
-  else if (hour < 9) {
+  } else if (hour < 9) {
     return '早上好喵~'
-  }
-  else if (hour < 12) {
+  } else if (hour < 12) {
     return '上午好喵~'
-  }
-  else if (hour < 14) {
+  } else if (hour < 14) {
     return '中午好喵~'
-  }
-  else if (hour < 17) {
+  } else if (hour < 17) {
     return '下午好喵~'
-  }
-  else if (hour < 19) {
+  } else if (hour < 19) {
     return '傍晚好喵~'
-  }
-  else {
+  } else {
     return '晚上好喵~'
   }
 }
@@ -47,7 +41,7 @@ export function getRemainingDaysOfYear(): number {
   return endOfYear.diff(now, 'day')
 }
 
-export function getYearProgress(): { passed: number, remaining: number } {
+export function getYearProgress(): { passed: number; remaining: number } {
   const now = dayjs().tz(SHANGHAI)
   const startOfYear = now.startOf('year')
   const endOfYear = now.endOf('year')
@@ -64,7 +58,7 @@ export function getYearProgress(): { passed: number, remaining: number } {
   }
 }
 
-export function getTodayDayInfo(): { year: number, dayOfYear: number } {
+export function getTodayDayInfo(): { year: number; dayOfYear: number } {
   const now = dayjs().tz(SHANGHAI)
   const startOfYear = now.startOf('year')
   const dayOfYear = now.diff(startOfYear, 'day') + 1

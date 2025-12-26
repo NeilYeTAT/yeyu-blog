@@ -1,7 +1,7 @@
 import type { TagType } from '@prisma/client'
+import { Edit2, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useModalStore } from '@/store/use-modal-store'
-import { Edit2, Trash } from 'lucide-react'
 
 export default function ActionButtons({
   id,
@@ -24,7 +24,8 @@ export default function ActionButtons({
             id,
             tagName,
             tagType,
-          })}
+          })
+        }
       >
         <Edit2 className="size-4" />
       </Button>

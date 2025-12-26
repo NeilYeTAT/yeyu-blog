@@ -1,10 +1,10 @@
 'use server'
 
 import type { UpdateTagNameDTO } from './type'
-import { prisma } from '@/db'
-import { requireAdmin } from '@/lib/auth'
 import { TagType } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
+import { prisma } from '@/db'
+import { requireAdmin } from '@/lib/auth'
 
 export async function createBlogTag(tagName: string) {
   await requireAdmin()
@@ -15,7 +15,7 @@ export async function createBlogTag(tagName: string) {
     },
   })
 
-  if (existingTagName) {
+  if (existingTagName != null) {
     throw new Error('标签名已存在')
   }
 
@@ -38,7 +38,7 @@ export async function createNoteTag(tagName: string) {
     },
   })
 
-  if (existingTagName) {
+  if (existingTagName != null) {
     throw new Error('标签名已存在')
   }
 
@@ -57,7 +57,7 @@ export async function deleteBlogTagById(id: number) {
 
   const tag = await prisma.blogTag.findUnique({ where: { id } })
 
-  if (!tag) {
+  if (tag == null) {
     throw new Error('标签不存在')
   }
 
@@ -76,7 +76,7 @@ export async function deleteNoteTagById(id: number) {
 
   const tag = await prisma.noteTag.findUnique({ where: { id } })
 
-  if (!tag) {
+  if (tag == null) {
     throw new Error('标签不存在')
   }
 
@@ -104,7 +104,7 @@ export async function updateBlogTagById(values: UpdateTagNameDTO) {
     },
   })
 
-  if (existingTag) {
+  if (existingTag != null) {
     throw new Error(`标签名 "${tagName}" 已存在`)
   }
 
@@ -135,7 +135,7 @@ export async function updateNoteTagById(values: UpdateTagNameDTO) {
     },
   })
 
-  if (existingTag) {
+  if (existingTag != null) {
     throw new Error(`标签名 "${tagName}" 已存在`)
   }
 

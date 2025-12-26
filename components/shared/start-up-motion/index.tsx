@@ -1,13 +1,8 @@
 'use client'
 
-import { INITIAL_WELCOME_TEXT } from '@/config/constant'
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-} from 'motion/react'
+import { animate, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import { useEffect } from 'react'
+import { INITIAL_WELCOME_TEXT } from '@/config/constant'
 
 export default function StartUpMotion() {
   const scaleY = useMotionValue(0)
@@ -34,7 +29,7 @@ export default function StartUpMotion() {
       duration: 2,
       ease: [0.65, 0, 0.35, 1],
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -42,7 +37,7 @@ export default function StartUpMotion() {
       {/* 中间的白线,做两个, 先伸, 后缩 */}
       <>
         <motion.span
-          className="fixed bg-white h-screen w-[1px] top-2/3 left-1/2 z-50 -translate-x-1/2"
+          className="fixed top-2/3 left-1/2 z-50 h-screen w-[1px] -translate-x-1/2 bg-white"
           initial={{ scaleY: 0 }}
           style={{
             scaleY,
@@ -54,7 +49,7 @@ export default function StartUpMotion() {
           }}
         />
         <motion.span
-          className="fixed bg-white h-screen w-[1px] bottom-2/3 left-1/2 z-50 -translate-x-1/2"
+          className="fixed bottom-2/3 left-1/2 z-50 h-screen w-[1px] -translate-x-1/2 bg-white"
           initial={{ scaleY: 0 }}
           style={{
             scaleY,
@@ -67,7 +62,7 @@ export default function StartUpMotion() {
         />
         {/* 淡入淡出效果 */}
         <motion.div
-          className="fixed left-1/2 top-1/2 z-50 text-purple-300 text-5xl -translate-x-1/2 -translate-y-1/2 flex flex-col items-center leading-none pointer-events-none"
+          className="pointer-events-none fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl leading-none text-purple-300"
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{
             opacity: [0, 1, 1, 0],
@@ -84,11 +79,11 @@ export default function StartUpMotion() {
       </>
       {/* 两边的遮罩 */}
       <motion.span
-        className="fixed w-1/2 h-screen top-0 left-0 z-40 bg-gradient-to-r from-[#22177A] to-[#000957]"
+        className="fixed top-0 left-0 z-40 h-screen w-1/2 bg-gradient-to-r from-[#22177A] to-[#000957]"
         style={{ x: toLeft }}
       />
       <motion.span
-        className="fixed w-1/2 h-screen top-0 right-0 z-40 bg-gradient-to-l from-[#22177A] to-[#000957]"
+        className="fixed top-0 right-0 z-40 h-screen w-1/2 bg-gradient-to-l from-[#22177A] to-[#000957]"
         style={{ x: toRight }}
       />
     </>

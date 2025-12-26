@@ -1,3 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { deleteEchoById } from '@/actions/echos'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,15 +10,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { useModalStore } from '@/store/use-modal-store'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 export default function DeleteEchoModal() {
   const { modalType, payload, onModalClose } = useModalStore()
   const isModalOpen = modalType === 'deleteEchoModal'
-  const { id } = payload
-    ? (payload as { id: number })
-    : {}
+  const { id } = payload != null ? (payload as { id: number }) : {}
 
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
@@ -25,18 +23,17 @@ export default function DeleteEchoModal() {
       queryClient.invalidateQueries({ queryKey: ['echo-list'] })
       toast.success(`删除成功`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`删除失败${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`删除失败`)
       }
     },
   })
 
   async function onSubmit() {
-    if (!id) {
+    if (id == null) {
       toast.error(`标签信息不存在，删除失败`)
       return
     }

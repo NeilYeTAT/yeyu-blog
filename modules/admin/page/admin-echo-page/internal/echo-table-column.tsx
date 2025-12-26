@@ -2,15 +2,9 @@
 
 import type { Echo } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
+import { CalendarDays, Eye, Quote, TypeIcon, Wrench } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { prettyDateTime } from '@/lib/time'
-import {
-  CalendarDays,
-  Eye,
-  Quote,
-  TypeIcon,
-  Wrench,
-} from 'lucide-react'
 import ActionButtons from './action-buttons'
 import PublishToggleSwitch from './publish-toggle-switch'
 
@@ -19,7 +13,7 @@ export const columns: ColumnDef<Echo>[] = [
     accessorKey: 'content',
     header: () => {
       return (
-        <span className="flex gap-1 items-center dark:text-gray-200 text-gray-500">
+        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
           <TypeIcon className="size-4" />
           内容
         </span>
@@ -30,7 +24,7 @@ export const columns: ColumnDef<Echo>[] = [
     accessorKey: 'reference',
     header: () => {
       return (
-        <span className="flex gap-1 items-center dark:text-gray-200 text-gray-500">
+        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
           <Quote className="size-4" />
           来源
         </span>
@@ -45,14 +39,20 @@ export const columns: ColumnDef<Echo>[] = [
     accessorKey: 'isPublished',
     header: () => {
       return (
-        <span className="flex gap-1 items-center dark:text-gray-200 text-gray-500">
+        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
           <Eye className="size-4" />
           是否发布
         </span>
       )
     },
     cell: ({ row }) => {
-      return <PublishToggleSwitch echoId={row.original.id} isPublished={row.original.isPublished} key={row.original.id} />
+      return (
+        <PublishToggleSwitch
+          echoId={row.original.id}
+          isPublished={row.original.isPublished}
+          key={row.original.id}
+        />
+      )
     },
   },
   {
@@ -81,7 +81,7 @@ export const columns: ColumnDef<Echo>[] = [
     accessorKey: 'actions',
     header: () => {
       return (
-        <span className="flex gap-1 items-center dark:text-gray-200 text-gray-500">
+        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
           <Wrench className="size-4" />
           操作
         </span>
@@ -91,12 +91,7 @@ export const columns: ColumnDef<Echo>[] = [
       const { id, content, isPublished, reference } = row.original
 
       return (
-        <ActionButtons
-          content={content}
-          id={id}
-          isPublished={isPublished}
-          reference={reference}
-        />
+        <ActionButtons content={content} id={id} isPublished={isPublished} reference={reference} />
       )
     },
   },

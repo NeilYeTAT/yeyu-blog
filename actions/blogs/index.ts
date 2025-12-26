@@ -1,10 +1,10 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import type { ArticleDTO, UpdateArticleDTO } from '@/components/shared/admin-article-edit-page/type'
 import { prisma } from '@/db'
 import { requireAdmin } from '@/lib/auth'
 import { processor } from '@/lib/markdown'
-import { revalidatePath } from 'next/cache'
 
 export async function createBlog(values: ArticleDTO) {
   await requireAdmin()
@@ -13,7 +13,7 @@ export async function createBlog(values: ArticleDTO) {
     where: { slug: values.slug },
   })
 
-  if (existingBlog) {
+  if (existingBlog != null) {
     throw new Error('该 slug 已存在')
   }
 
@@ -110,10 +110,9 @@ export async function updateBlogById(values: UpdateArticleDTO) {
         },
       },
     }),
-
   ])
 
-  if (existingBlog) {
+  if (existingBlog != null) {
     throw new Error('该 slug 已存在')
   }
 
@@ -121,7 +120,7 @@ export async function updateBlogById(values: UpdateArticleDTO) {
     throw new Error('标签数量超过 3 个限制')
   }
 
-  if (!currentTags) {
+  if (currentTags == null) {
     throw new Error('Blog 不存在')
   }
 
@@ -223,7 +222,7 @@ export async function getBlogsBySelectedTagName(tagNamesArray: string[]) {
     },
   })
 
-  return blogs.filter((blog) => {
+  return blogs.filter(blog => {
     const blogTagNames = blog.tags.map(tagOnBlog => tagOnBlog.tagName)
     return tagNamesArray.every(tag => blogTagNames.includes(tag))
   })
@@ -270,8 +269,7 @@ export async function getPublishedBlogHTMLBySlug(slug: string) {
       tags: true,
     },
   })
-  if (!blog || !blog.content)
-    return null
+  if (blog == null || blog.content.length === 0) return null
 
   const blogHTML = await processor.process(blog.content)
 

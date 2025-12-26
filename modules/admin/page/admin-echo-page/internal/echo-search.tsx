@@ -1,11 +1,11 @@
 'use client'
 
 import type { Dispatch, SetStateAction } from 'react'
+import { Plus, RotateCw, Search } from 'lucide-react'
+import { memo, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useModalStore } from '@/store/use-modal-store'
-import { Plus, RotateCw, Search } from 'lucide-react'
-import { memo, useRef } from 'react'
 
 function EchoSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }) {
   const { setModalOpen } = useModalStore()
@@ -17,13 +17,12 @@ function EchoSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
         placeholder="请输入引用喵~"
         className="w-1/2 xl:w-1/3"
         ref={inputRef}
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === 'Enter') {
             const query = inputRef.current?.value
-            if (query?.trim()) {
+            if (query?.trim() != null) {
               setQuery(query)
-            }
-            else {
+            } else {
               setQuery('')
             }
           }
@@ -35,7 +34,7 @@ function EchoSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
         variant="secondary"
         onClick={() => {
           const query = inputRef.current?.value
-          if (query?.trim()) {
+          if (query?.trim() != null) {
             setQuery(query)
           }
         }}

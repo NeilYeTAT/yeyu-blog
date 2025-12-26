@@ -1,5 +1,5 @@
-import { getAllShowBlogs } from '@/actions/blogs'
 import * as motion from 'motion/react-client'
+import { getAllShowBlogs } from '@/actions/blogs'
 import BlogListItem from './internal/blog-list-item'
 
 const containerVariants = {
@@ -42,11 +42,7 @@ export default async function BlogListPage() {
     >
       {allBlogs.map(v => (
         <motion.div variants={itemVariants} key={v.id}>
-          <BlogListItem
-            blogTitle={v.title}
-            createdAt={v.createdAt}
-            slug={v.slug}
-          />
+          <BlogListItem blogTitle={v.title} createdAt={v.createdAt} slug={v.slug} />
         </motion.div>
       ))}
     </motion.main>

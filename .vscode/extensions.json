@@ -2,7 +2,6 @@
   "recommendations": [
     "aaron-bond.better-comments",
     "streetsidesoftware.code-spell-checker",
-    "dbaeumer.vscode-eslint",
     "prisma.prisma",
     "bradlc.vscode-tailwindcss"
   ]

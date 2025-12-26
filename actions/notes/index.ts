@@ -1,10 +1,10 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import type { ArticleDTO, UpdateArticleDTO } from '@/components/shared/admin-article-edit-page/type'
 import { prisma } from '@/db'
 import { requireAdmin } from '@/lib/auth'
 import { processor } from '@/lib/markdown'
-import { revalidatePath } from 'next/cache'
 
 export async function createNote(values: ArticleDTO) {
   await requireAdmin()
@@ -13,7 +13,7 @@ export async function createNote(values: ArticleDTO) {
     where: { slug: values.slug },
   })
 
-  if (existingNote) {
+  if (existingNote != null) {
     throw new Error('该 slug 已存在')
   }
 
@@ -112,7 +112,7 @@ export async function updateNoteById(values: UpdateArticleDTO) {
     }),
   ])
 
-  if (existingNote) {
+  if (existingNote != null) {
     throw new Error('该 slug 已存在')
   }
 
@@ -120,7 +120,7 @@ export async function updateNoteById(values: UpdateArticleDTO) {
     throw new Error('标签数量超过 3 个限制')
   }
 
-  if (!currentTags) {
+  if (currentTags == null) {
     throw new Error('Note 不存在')
   }
 
@@ -212,7 +212,7 @@ export async function getNotesBySelectedTagName(tagNamesArray: string[]) {
     },
   })
 
-  return notes.filter((note) => {
+  return notes.filter(note => {
     const noteTagNames = note.tags.map(tagOnNote => tagOnNote.tagName)
     return tagNamesArray.every(tag => noteTagNames.includes(tag)) // 选中的标签必须都在笔记的标签中
   })
@@ -250,8 +250,7 @@ export async function getPublishedNoteHTMLBySlug(slug: string) {
       tags: true,
     },
   })
-  if (!note || !note.content)
-    return null
+  if (note == null || note.content.length === 0) return null
 
   const noteHTML = await processor.process(note.content)
 

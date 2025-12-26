@@ -21,16 +21,11 @@ const ExternalLinks = [
 
 export default function ContactMe() {
   return (
-    <main className="flex items-center justify-center flex-col gap-2 md:gap-4 w-full">
+    <main className="flex w-full flex-col items-center justify-center gap-2 md:gap-4">
       <h3>
-        联系方式 -
-        {' '}
+        联系方式 -{' '}
         <small>
-          如果你
-          {' '}
-          <span className="line-through text-pink-400">喜欢</span>
-          {' '}
-          我的话~
+          如果你 <span className="text-pink-400 line-through">喜欢</span> 我的话~
         </small>
       </h3>
       <p className="flex gap-4 underline">

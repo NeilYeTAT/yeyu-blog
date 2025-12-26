@@ -7,9 +7,9 @@ export default function NotFound() {
   const router = useRouter()
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center gap-4 m-auto">
+    <div className="m-auto flex h-screen w-screen flex-col items-center justify-center gap-4">
       <motion.h2
-        className="text-5xl font-bold text-purple-500  dark:text-emerald-300"
+        className="text-5xl font-bold text-purple-500 dark:text-emerald-300"
         initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 1.2, ease: 'easeOut' }}
@@ -29,7 +29,11 @@ export default function NotFound() {
         animate={{ opacity: 1, filter: 'blur(0px)' }}
         transition={{ delay: 0.4, duration: 0.6, ease: 'easeInOut' }}
       >
-        <button type="button" onClick={() => router.back()} className="text-lg text-indigo-600 dark:text-indigo-400 cursor-pointer font-bold hover:underline">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="cursor-pointer text-lg font-bold text-indigo-600 hover:underline dark:text-indigo-400"
+        >
           回到过去
         </button>
       </motion.div>

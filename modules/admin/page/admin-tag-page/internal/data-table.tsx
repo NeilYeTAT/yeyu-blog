@@ -1,9 +1,14 @@
 'use client'
 
-import type {
-  ColumnDef,
-  SortingState,
+import type { ColumnDef, SortingState } from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table'
+import { useState } from 'react'
 import { DataTablePagination } from '@/components/shared/pagination'
 import {
   Table,
@@ -13,31 +18,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([
-    { desc: true, id: 'count' },
-  ])
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([{ desc: true, id: 'count' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15,
   })
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -54,23 +47,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="rounded-md border overflow-hidden">
+      <div className="overflow-hidden rounded-md border">
         <Table>
-          <TableHeader className="bg-gray-100 dark:bg-card">
+          <TableHeader className="dark:bg-card bg-gray-100">
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      className="dark:text-gray-200 text-gray-500"
-                    >
+                    <TableHead key={header.id} className="text-gray-500 dark:text-gray-200">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )
                 })}
@@ -80,34 +67,23 @@ export function DataTable<TData, TValue>({
 
           {/* 后序再骨架屏效果 */}
           <TableBody>
-            {table.getRowModel().rows?.length
-              ? (
-                  table.getRowModel().rows.map(row => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                )
-              : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      虚无。
+            {table.getRowModel().rows?.length !== 0 ? (
+              table.getRowModel().rows.map(row => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
-                  </TableRow>
-                )}
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  虚无。
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

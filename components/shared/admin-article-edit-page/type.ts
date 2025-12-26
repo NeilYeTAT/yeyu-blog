@@ -1,6 +1,6 @@
+import { z } from 'zod'
 import { ARTICLE_TITLE_MAX_LENGTH } from '@/config/constant'
 import { REGEX } from '@/lib/regex'
-import { z } from 'zod'
 
 export const ArticleSchema = z.object({
   title: z
@@ -16,9 +16,7 @@ export const ArticleSchema = z.object({
     })
     .min(1, { message: '长度不能少于1个字符' }),
   isPublished: z.boolean(),
-  relatedTagNames: z
-    .array(z.string())
-    .max(3, { message: '最多只能选择 3 个标签' }),
+  relatedTagNames: z.array(z.string()).max(3, { message: '最多只能选择 3 个标签' }),
   content: z.string(),
 })
 

@@ -1,10 +1,13 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TagType } from '@prisma/client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { updateBlogTagById, updateNoteTagById } from '@/actions/tags'
 import type { UpdateTagNameDTO } from '@/actions/tags/type'
-import {
-  updateBlogTagById,
-  updateNoteTagById,
-} from '@/actions/tags'
 import { UpdateTagNameSchema } from '@/actions/tags/type'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,19 +27,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useModalStore } from '@/store/use-modal-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { TagType } from '@prisma/client'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 export default function EditTagModal() {
   const { modalType, onModalClose, payload } = useModalStore()
   const isModalOpen = modalType === 'editTagModal'
-  const { id, tagName, tagType } = payload
-    ? (payload as UpdateTagNameDTO)
-    : {}
+  const { id, tagName, tagType } = payload != null ? (payload as UpdateTagNameDTO) : {}
 
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
@@ -45,11 +40,10 @@ export default function EditTagModal() {
       queryClient.invalidateQueries({ queryKey: ['tags'] })
       toast.success(`修改成功`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`修改标签出错 ${error.message}`)
-      }
-      else {
+      } else {
         toast.error(`修改标签出错`)
       }
     },
@@ -61,7 +55,7 @@ export default function EditTagModal() {
   })
 
   useEffect(() => {
-    if (isModalOpen && tagName) {
+    if (isModalOpen && tagName != null) {
       form.reset({
         id: id!,
         tagName: tagName!,
@@ -80,9 +74,7 @@ export default function EditTagModal() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>编辑标签</DialogTitle>
-          <DialogDescription>
-            修改标签名会影响所有关联的文章喵~
-          </DialogDescription>
+          <DialogDescription>修改标签名会影响所有关联的文章喵~</DialogDescription>
         </DialogHeader>
         <div>
           <Form {...form}>
@@ -100,7 +92,9 @@ export default function EditTagModal() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="cursor-pointer" disabled={isPending}>保存修改</Button>
+              <Button type="submit" className="cursor-pointer" disabled={isPending}>
+                保存修改
+              </Button>
             </form>
           </Form>
         </div>

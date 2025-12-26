@@ -6,7 +6,10 @@ type Direction = 'left' | 'right' | 'center' | 'top' | 'bottom'
 function getClipPathDirection(direction: Direction) {
   switch (direction) {
     case 'center':
-      return ['polygon(50% 0, 50% 0, 50% 100%, 50% 100%)', 'polygon(0 0, 100% 0, 100% 100%, 0 100%)']
+      return [
+        'polygon(50% 0, 50% 0, 50% 100%, 50% 100%)',
+        'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+      ]
     case 'left':
       return [`inset(0 0 0 100%)`, `inset(0 0 0 0)`]
     case 'right':
@@ -19,29 +22,30 @@ function getClipPathDirection(direction: Direction) {
 }
 
 export function useTransitionTheme() {
-  const { setTheme, theme, themes, forcedTheme, resolvedTheme, systemTheme }
-    = useTheme()
+  const { setTheme, theme, themes, forcedTheme, resolvedTheme, systemTheme } = useTheme()
 
   const setTransitionTheme = useCallback(
     (t: 'light' | 'dark', direction: Direction = 'center') => {
-      if (theme === t)
-        return
+      if (theme === t) return
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (document.startViewTransition) {
         const transition = document.startViewTransition(() => {
           setTheme(t)
         })
         transition.ready.then(() => {
           const clipPath = getClipPathDirection(direction)
-          document.documentElement.animate({
-            clipPath,
-          }, {
-            duration: 450,
-            pseudoElement: '::view-transition-new(root)',
-            easing: 'ease-in-out',
-          })
+          document.documentElement.animate(
+            {
+              clipPath,
+            },
+            {
+              duration: 450,
+              pseudoElement: '::view-transition-new(root)',
+              easing: 'ease-in-out',
+            },
+          )
         })
-      }
-      else {
+      } else {
         setTheme(t)
       }
     },

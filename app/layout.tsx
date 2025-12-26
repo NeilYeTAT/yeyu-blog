@@ -1,7 +1,7 @@
-import { ThemeProvider } from '@/components/ui/theme-provider'
-import { metadata } from '@/config/constant'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { ThemeProvider } from '@/components/ui/theme-provider'
+import { metadata } from '@/config/constant'
 import './globals.css'
 
 export { metadata }

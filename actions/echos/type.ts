@@ -1,8 +1,5 @@
-import {
-  ECHO_CONTENT_MAX_LENGTH,
-  ECHO_REFERENCE_MAX_LENGTH,
-} from '@/config/constant'
 import { z } from 'zod'
+import { ECHO_CONTENT_MAX_LENGTH, ECHO_REFERENCE_MAX_LENGTH } from '@/config/constant'
 
 export const CreateEchoSchema = z.object({
   content: z
@@ -17,9 +14,11 @@ export const CreateEchoSchema = z.object({
   isPublished: z.boolean(),
 })
 
-export const UpdateEchoSchema = z.object({
-  id: z.number(),
-}).merge(CreateEchoSchema)
+export const UpdateEchoSchema = z
+  .object({
+    id: z.number(),
+  })
+  .merge(CreateEchoSchema)
 
 export type CreateEchoDTO = z.infer<typeof CreateEchoSchema>
 export type UpdateEchoDTO = z.infer<typeof UpdateEchoSchema>

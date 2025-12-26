@@ -1,9 +1,9 @@
 'use server'
 
 import type { CreateEchoDTO, UpdateEchoDTO } from './type'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/db'
 import { requireAdmin } from '@/lib/auth'
-import { revalidatePath } from 'next/cache'
 
 export async function createEcho(values: CreateEchoDTO) {
   await requireAdmin()

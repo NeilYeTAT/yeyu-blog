@@ -23,8 +23,8 @@ const plugins: BytemdPlugin[] = [
   mediumZoom(),
 ]
 
-const handleUploadImages: EditorProps['uploadImages'] = async (files) => {
-  if (!files || files.length === 0) {
+const handleUploadImages: EditorProps['uploadImages'] = async files => {
+  if (files == null || files.length === 0) {
     toast.error('请先选择图片')
     return []
   }

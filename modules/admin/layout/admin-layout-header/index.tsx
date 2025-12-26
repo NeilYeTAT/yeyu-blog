@@ -1,10 +1,10 @@
 'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import { getActiveAdminPath } from '@/lib/url'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import AdminLogo from './internal/admin-logo'
 import AvatarDropdownMenu from './internal/avatar-dropdown-menu'
 
@@ -36,10 +36,7 @@ function AdminNavbar() {
   const activeUrl = getActiveAdminPath(pathname)
 
   return (
-    <header
-      className="sticky h-14 top-0 backdrop-blur-lg z-50 border-b border-dashed
-                  flex justify-between items-center px-6"
-    >
+    <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-dashed px-6 backdrop-blur-lg">
       <nav className="flex gap-4">
         {/* 左侧logo区域, 回到首页 */}
         <AdminLogo />
@@ -47,7 +44,7 @@ function AdminNavbar() {
         {AdminRoutes.map(link => (
           <Link href={link.path} key={link.path}>
             <Button
-              className="rounded-lg text-base cursor-pointer"
+              className="cursor-pointer rounded-lg text-base"
               variant={activeUrl === link.path ? 'default' : 'ghost'}
               size="sm"
             >
@@ -56,7 +53,7 @@ function AdminNavbar() {
           </Link>
         ))}
       </nav>
-      <section className="flex gap-4 items-center">
+      <section className="flex items-center gap-4">
         <ModeToggle />
         <AvatarDropdownMenu />
       </section>

@@ -1,9 +1,9 @@
 'use client'
 
-import Mandala from '@/config/svg/mandala'
-import { useTransitionTheme } from '@/hooks/use-transition-theme'
 import { motion, useAnimationFrame, useMotionValue } from 'motion/react'
 import { useState } from 'react'
+import Mandala from '@/config/svg/mandala'
+import { useTransitionTheme } from '@/hooks/use-transition-theme'
 
 // * 拖拽两边移动距离阈值，超过触发
 // * 移动端拉不了多少...所以调低点，虽然会让 pc 端很容易触发
@@ -19,8 +19,8 @@ export default function HorizontalDividingLine({ fill = '#6FC3C4' }: { fill?: st
   })
 
   return (
-    <div className="relative w-full flex items-center justify-center">
-      <hr className="absolute w-[45%] left-0 dark:border-accent border-indigo-500 border-dashed" />
+    <div className="relative flex w-full items-center justify-center">
+      <hr className="dark:border-accent absolute left-0 w-[45%] border-dashed border-indigo-500" />
       <motion.div
         style={{ rotate }}
         drag="x"
@@ -34,15 +34,14 @@ export default function HorizontalDividingLine({ fill = '#6FC3C4' }: { fill?: st
           setDuration(4)
           if (info.offset.x < -THRESHOLD) {
             setTransitionTheme('light', 'left')
-          }
-          else if (info.offset.x > THRESHOLD) {
+          } else if (info.offset.x > THRESHOLD) {
             setTransitionTheme('dark', 'right')
           }
         }}
       >
         <Mandala className="size-10 cursor-grabbing" fill={fill} />
       </motion.div>
-      <hr className="absolute w-[45%] right-0 dark:border-accent border-indigo-500 border-dashed" />
+      <hr className="dark:border-accent absolute right-0 w-[45%] border-dashed border-indigo-500" />
     </div>
   )
 }

@@ -1,5 +1,5 @@
-import { getAllShowNotes } from '@/actions/notes'
 import * as motion from 'motion/react-client'
+import { getAllShowNotes } from '@/actions/notes'
 import NoteListItem from './internal/note-list-item'
 
 const containerVariants = {
@@ -42,11 +42,7 @@ export default async function NoteListPage() {
     >
       {allNotes.map(v => (
         <motion.div variants={itemVariants} key={v.id}>
-          <NoteListItem
-            noteTitle={v.title}
-            createdAt={v.createdAt}
-            slug={v.slug}
-          />
+          <NoteListItem noteTitle={v.title} createdAt={v.createdAt} slug={v.slug} />
         </motion.div>
       ))}
     </motion.main>

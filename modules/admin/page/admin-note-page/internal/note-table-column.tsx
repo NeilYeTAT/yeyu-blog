@@ -1,19 +1,11 @@
 'use client'
 
-import type { NoteListItem } from '@/actions/notes/type'
 import type { ColumnDef } from '@tanstack/react-table'
+import { ArrowDown, ArrowUp, CalendarDays, Eye, TagIcon, TypeIcon, Wrench } from 'lucide-react'
+import type { NoteListItem } from '@/actions/notes/type'
 import TagItemBadge from '@/components/shared/tag-item-badge'
 import { Button } from '@/components/ui/button'
 import { prettyDateTime } from '@/lib/time'
-import {
-  ArrowDown,
-  ArrowUp,
-  CalendarDays,
-  Eye,
-  TagIcon,
-  TypeIcon,
-  Wrench,
-} from 'lucide-react'
 import ActionButtons from './action-buttons'
 import PublishToggleSwitch from './publish-toggle-switch'
 
@@ -22,7 +14,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     accessorKey: 'title',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TypeIcon className="size-4" />
           标题
         </span>
@@ -33,7 +25,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     accessorKey: 'tags',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <TagIcon className="size-4" />
           标签
         </span>
@@ -42,7 +34,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     cell: ({ row }) => {
       const tags = row.original.tags
       return (
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {tags.map(tag => (
             <TagItemBadge tag={tag.tagName} key={tag.id} />
           ))}
@@ -54,7 +46,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     accessorKey: 'isPublished',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <Eye className="size-4" />
           是否发布
         </span>
@@ -63,13 +55,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     cell: ({ row }) => {
       const note = row.original
 
-      return (
-        <PublishToggleSwitch
-          noteId={note.id}
-          isPublished={note.isPublished}
-          key={note.id}
-        />
-      )
+      return <PublishToggleSwitch noteId={note.id} isPublished={note.isPublished} key={note.id} />
     },
   },
   {
@@ -88,15 +74,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
         >
           <CalendarDays className="size-4" />
           创建时间
-          {sorted === 'asc'
-            ? (
-                <ArrowUp />
-              )
-            : sorted === 'desc'
-              ? (
-                  <ArrowDown />
-                )
-              : null}
+          {sorted === 'asc' ? <ArrowUp /> : sorted === 'desc' ? <ArrowDown /> : null}
         </Button>
       )
     },
@@ -109,7 +87,7 @@ export const columns: ColumnDef<NoteListItem>[] = [
     accessorKey: 'actions',
     header: () => {
       return (
-        <span className="flex gap-1 items-center">
+        <span className="flex items-center gap-1">
           <Wrench className="size-4" />
           操作
         </span>

@@ -1,13 +1,13 @@
 'use client'
 
-import MaxWidthWrapper from '@/components/shared/max-width-wrapper'
-import { useIndicatorPosition } from '@/hooks/use-indicator-position'
-import { getActiveMainPath } from '@/lib/url'
-import { cn } from '@/lib/utils'
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Fragment, useRef } from 'react'
+import MaxWidthWrapper from '@/components/shared/max-width-wrapper'
+import { useIndicatorPosition } from '@/hooks/use-indicator-position'
+import { getActiveMainPath } from '@/lib/url'
+import { cn } from '@/lib/utils'
 
 const RouteList = [
   {
@@ -36,24 +36,19 @@ export default function MainLayoutHeader() {
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header
-      className="h-14 flex items-center justify-center sticky top-0 backdrop-blur-lg z-20
-                border-b border-dashed dark:border-b-accent border-b-indigo-200"
-    >
+    <header className="dark:border-b-accent sticky top-0 z-20 flex h-14 items-center justify-center border-b border-dashed border-b-indigo-200 backdrop-blur-lg">
       <MaxWidthWrapper className="flex items-center justify-center">
-        <nav className="relative flex md:gap-16 gap-8">
+        <nav className="relative flex gap-8 md:gap-16">
           {RouteList.map(route => (
             <Fragment key={route.path}>
               <Link
                 href={route.path}
-                ref={(el) => {
-                  if (el)
-                    refs.current.set(route.path, el)
+                ref={el => {
+                  if (el != null) refs.current.set(route.path, el)
                 }}
                 className={cn(
-                  'relative md:text-xl px-4',
-                  route.path === activeUrl
-                  && 'text-purple-600 dark:text-emerald-300 font-bold',
+                  'relative px-4 md:text-xl',
+                  route.path === activeUrl && 'font-bold text-purple-600 dark:text-emerald-300',
                 )}
               >
                 <h2>{route.pathName}</h2>
@@ -63,7 +58,7 @@ export default function MainLayoutHeader() {
 
           {/* 指示条 */}
           <motion.div
-            className="absolute bottom-0 h-[2px] bg-purple-600 dark:bg-emerald-300 rounded-full"
+            className="absolute bottom-0 h-[2px] rounded-full bg-purple-600 dark:bg-emerald-300"
             animate={indicatorStyle}
             transition={{
               type: 'spring',

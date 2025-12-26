@@ -1,15 +1,15 @@
 'use client'
 
-import type { UpdateEchoDTO } from '@/actions/echos/type'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { updateEchoById } from '@/actions/echos'
+import type { UpdateEchoDTO } from '@/actions/echos/type'
 import { UpdateEchoSchema } from '@/actions/echos/type'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -22,19 +22,12 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { useModalStore } from '@/store/use-modal-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 export default function EditEchoModal() {
   const { modalType, onModalClose, payload } = useModalStore()
   const isModalOpen = modalType === 'editEchoModal'
 
-  const { id, content, isPublished, reference } = payload
-    ? (payload as UpdateEchoDTO)
-    : {}
+  const { id, content, isPublished, reference } = payload != null ? (payload as UpdateEchoDTO) : {}
 
   const initialValues: UpdateEchoDTO = {
     content: content ?? '',
@@ -58,7 +51,7 @@ export default function EditEchoModal() {
     if (isModalOpen) {
       form.reset(initialValues)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen, form])
 
   const queryClient = useQueryClient()
@@ -68,11 +61,10 @@ export default function EditEchoModal() {
       queryClient.invalidateQueries({ queryKey: ['echo-list'] })
       toast.success(`修改成功`)
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof Error) {
         toast.error(`更新引用失败~ ${error.message}`)
-      }
-      else {
+      } else {
         toast.error('更新引用失败~')
       }
     },
@@ -106,7 +98,7 @@ export default function EditEchoModal() {
                     <FormLabel>引用</FormLabel>
                     <FormControl>
                       <Textarea
-                        className="resize-none h-52"
+                        className="h-52 resize-none"
                         value={field.value}
                         onChange={field.onChange}
                       />
@@ -139,7 +131,7 @@ export default function EditEchoModal() {
                     <FormControl>
                       <Switch
                         checked={field.value}
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={checked => {
                           field.onChange(checked)
                         }}
                       />
@@ -148,7 +140,9 @@ export default function EditEchoModal() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="cursor-pointer" disabled={isPending}>保存修改</Button>
+              <Button type="submit" className="cursor-pointer" disabled={isPending}>
+                保存修改
+              </Button>
             </form>
           </Form>
         </div>

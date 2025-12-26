@@ -1,5 +1,5 @@
-import { getAllPublishedEcho } from '@/actions/echos'
 import * as motion from 'motion/react-client'
+import { getAllPublishedEcho } from '@/actions/echos'
 import BioSection from './internal/bio-section'
 import EchoCard from './internal/echo-card'
 import TechStack from './internal/tech-stack'
@@ -10,7 +10,7 @@ export default async function MainLayoutContainer() {
 
   return (
     <motion.main
-      className="flex flex-col justify-center items-center gap-6 py-4 overflow-hidden"
+      className="flex flex-col items-center justify-center gap-6 overflow-hidden py-4"
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: [-10, 0] }}
       transition={{
