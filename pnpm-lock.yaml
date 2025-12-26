@@ -199,8 +199,8 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2
       '@next/eslint-plugin-next':
-        specifier: ^15.5.4
-        version: 15.5.9
+        specifier: ^16.1.1
+        version: 16.1.1
       '@tailwindcss/postcss':
         specifier: ^4.1.18
         version: 4.1.18
@@ -899,8 +899,8 @@ packages:
   '@next/env@15.4.10':
     resolution: {integrity: sha512-knhmoJ0Vv7VRf6pZEPSnciUG1S4bIhWx+qTYBW/AjxEtlzsiNORPk8sFDCEvqLfmKuey56UB9FL1UdHEV3uBrg==}
 
-  '@next/eslint-plugin-next@15.5.9':
-    resolution: {integrity: sha512-kUzXx0iFiXw27cQAViE1yKWnz/nF8JzRmwgMRTMh8qMY90crNsdXJRh2e+R0vBpFR3kk1yvAR7wev7+fCCb79Q==}
+  '@next/eslint-plugin-next@16.1.1':
+    resolution: {integrity: sha512-Ovb/6TuLKbE1UiPcg0p39Ke3puyTCIKN9hGbNItmpQsp+WX3qrjO3WaMVSi6JHr9X1NrmthqIguVHodMJbh/dw==}
 
   '@next/swc-darwin-arm64@15.4.8':
     resolution: {integrity: sha512-Pf6zXp7yyQEn7sqMxur6+kYcywx5up1J849psyET7/8pG2gQTVMjU3NzgIt8SeEP5to3If/SaWmaA6H6ysBr1A==}
@@ -2498,8 +2498,8 @@ packages:
   fast-uri@3.1.0:
     resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
 
-  fastq@1.19.1:
-    resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
+  fastq@1.20.1:
+    resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
 
   fault@2.0.1:
     resolution: {integrity: sha512-WtySTkS4OKev5JtpHXnib4Gxiurzh5NCGvWrFaZ34m6JehfTUhKZvn9njTfw48t6JumVQOmrKqpmGcdwxnhqBQ==}
@@ -5248,7 +5248,7 @@ snapshots:
 
   '@next/env@15.4.10': {}
 
-  '@next/eslint-plugin-next@15.5.9':
+  '@next/eslint-plugin-next@16.1.1':
     dependencies:
       fast-glob: 3.3.1
 
@@ -5286,7 +5286,7 @@ snapshots:
   '@nodelib/fs.walk@1.2.8':
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
-      fastq: 1.19.1
+      fastq: 1.20.1
 
   '@panva/hkdf@1.2.1': {}
 
@@ -7005,7 +7005,7 @@ snapshots:
 
   fast-uri@3.1.0: {}
 
-  fastq@1.19.1:
+  fastq@1.20.1:
     dependencies:
       reusify: 1.1.0
 
