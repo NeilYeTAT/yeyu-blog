@@ -31,7 +31,8 @@ export const INITIAL_WELCOME_TEXT = '业余'
 // * 配置评论系统的官方文档 https://giscus.app/zh-CN
 export const COMMENT_CARD_REPO = 'NeilYeTAT/yeyu-blog-comment'
 
-export const COMMENT_CARD_REPO_ID = 'R_kgDOOiAAJA'
+// ! 需要去 .env 中配置
+export const COMMENT_CARD_REPO_ID = process.env.NEXT_PUBLIC_COMMENT_CARD_REPO_ID ?? ''
 
 // ! --------------- 以下配置不建议修改 ---------------
 
