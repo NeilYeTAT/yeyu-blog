@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
-module.exports = {
+const config = {
   siteUrl: process.env.SITE_URL || 'https://useyeyu.cc',
   generateRobotsTxt: true,
   exclude: ['/admin/*', '/auth/*', '/api/*', '/server-sitemap.xml'],
@@ -13,3 +13,5 @@ module.exports = {
     ],
   },
 }
+
+export default config

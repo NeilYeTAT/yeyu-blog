@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+@plugin "tailwindcss-animate";
+
+@plugin "@tailwindcss/typography";
+
+/* * 感谢大哥🥹 import from https://github.com/aifuxi/fuxiaochen/blob/master/styles/bytemd.css  */
+@import './bytemd.css';
+
+/* * 感谢工具 https://chinese-font.netlify.app/zh-cn/online-split/ */
+@import './font/LXGWWenKaiMono-Regular/result.css';
+@import './font/LXGWWenKaiMono-Medium/result.css';
+
+@import './shadcn.css';
+
+@import './custom.css';
