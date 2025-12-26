@@ -4,9 +4,9 @@
 @import '../lib/styles/bytemd.css';
 
 /* * 感谢工具 https://chinese-font.netlify.app/zh-cn/online-split/ */
-@import '../lib/styles/LXGWWenKaiMono-Regular/result.css';
+@import '../lib/styles/font/LXGWWenKaiMono-Regular/result.css';
 
-@import '../lib/styles/LXGWWenKaiMono-Medium/result.css';
+@import '../lib/styles/font/LXGWWenKaiMono-Medium/result.css';
 
 @plugin "tailwindcss-animate";
 
