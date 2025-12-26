@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from 'lucide-react'
 import { Button } from '@/ui/shadcn/button'
-import { useTransitionTheme } from '@/hooks/use-transition-theme'
+import { useTransitionTheme } from '@/lib/hooks/animation'
 
 export function ModeToggle() {
   const { setTransitionTheme, theme } = useTransitionTheme()

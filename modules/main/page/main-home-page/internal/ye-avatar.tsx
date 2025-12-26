@@ -3,7 +3,7 @@
 import { motion } from 'motion/react'
 import Image from 'next/image'
 import avatar from '@/config/img/avatar.webp'
-import { useTransitionTheme } from '@/hooks/use-transition-theme'
+import { useTransitionTheme } from '@/lib/hooks/animation'
 
 export default function YeAvatar() {
   const { setTransitionTheme, theme } = useTransitionTheme()
