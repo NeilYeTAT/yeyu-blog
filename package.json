@@ -89,7 +89,7 @@
     "@tailwindcss/postcss": "^4.1.4",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/eslint-plugin-query": "^5.90.1",
-    "@types/node": "^22.14.1",
+    "@types/node": "^25.0.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "commitizen": "^4.3.1",
