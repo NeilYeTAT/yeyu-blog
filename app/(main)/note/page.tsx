@@ -1,4 +1,4 @@
-import NoteListPage from '@/modules/main/page/note-list-page'
+import NoteListPage from '@/ui/(main)/note'
 
 export default function Page() {
   return <NoteListPage />
