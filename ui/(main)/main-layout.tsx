@@ -9,7 +9,8 @@ import MainHeader from './main-header'
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <LenisScrollProvider>
-      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 bg-slate-200 md:text-lg dark:bg-black dark:text-white">
+      {/* TODO: temp dark color for dev */}
+      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 bg-slate-200 md:text-lg dark:bg-gray-900 dark:text-white">
         <MainHeader />
 
         <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">

@@ -36,8 +36,15 @@ export default function MainHeader() {
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header className="dark:border-b-accent sticky top-0 z-20 flex h-14 items-center justify-center border-b border-dashed border-b-indigo-200 backdrop-blur-lg">
-      <MaxWidthWrapper className="flex items-center justify-center">
+    <header className="sticky top-3 z-20 mb-4 flex h-12 items-center justify-center backdrop-blur-sm">
+      <MaxWidthWrapper
+        className={cn(
+          // TODO: config other colors
+          'flex h-full items-center justify-center rounded-full bg-indigo-200/40 py-2',
+          'border border-[#00000011] dark:border-[#FFFFFF1A]',
+          'shadow-[0px_4px_10px_0px_#0000001A]',
+        )}
+      >
         <nav className="relative flex gap-8 md:gap-16">
           {RouteList.map(route => (
             <Fragment key={route.path}>
@@ -47,18 +54,19 @@ export default function MainHeader() {
                   if (el != null) refs.current.set(route.path, el)
                 }}
                 className={cn(
-                  'relative px-4 md:text-xl',
-                  route.path === activeUrl && 'font-bold text-purple-600 dark:text-emerald-300',
+                  'relative z-10 px-4 md:text-xl',
+                  route.path === activeUrl && 'font-bold',
                 )}
               >
                 <h2>{route.pathName}</h2>
               </Link>
             </Fragment>
           ))}
+          {/* TODO: Web3 Login */}
+          <div>登录</div>
 
-          {/* 指示条 */}
           <motion.div
-            className="absolute bottom-0 h-0.5 rounded-full bg-purple-600 dark:bg-emerald-300"
+            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-indigo-600"
             animate={indicatorStyle}
             transition={{
               type: 'spring',
