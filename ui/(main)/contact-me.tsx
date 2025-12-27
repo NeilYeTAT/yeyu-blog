@@ -1,3 +1,4 @@
+import type { ComponentProps, FC } from 'react'
 import Link from 'next/link'
 
 const ExternalLinks = [
@@ -19,7 +20,7 @@ const ExternalLinks = [
   },
 ] as const
 
-export default function ContactMe() {
+export const ContactMe: FC<ComponentProps<'div'>> = () => {
   return (
     <main className="flex w-full flex-col items-center justify-center gap-2 md:gap-4">
       <h3>

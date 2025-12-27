@@ -7,7 +7,7 @@ import { Fragment, useRef } from 'react'
 import { useIndicatorPosition } from '@/lib/hooks/animation'
 import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
-import MaxWidthWrapper from '@/ui/components/shared/max-width-wrapper'
+import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 
 const RouteList = [
   {
@@ -28,7 +28,7 @@ const RouteList = [
   },
 ] as const
 
-export default function MainLayoutHeader() {
+export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
   const refs = useRef(new Map<string, HTMLAnchorElement>())
@@ -58,7 +58,7 @@ export default function MainLayoutHeader() {
 
           {/* 指示条 */}
           <motion.div
-            className="absolute bottom-0 h-[2px] rounded-full bg-purple-600 dark:bg-emerald-300"
+            className="absolute bottom-0 h-0.5 rounded-full bg-purple-600 dark:bg-emerald-300"
             animate={indicatorStyle}
             transition={{
               type: 'spring',

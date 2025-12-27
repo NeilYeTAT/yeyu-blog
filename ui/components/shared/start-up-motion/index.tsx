@@ -37,7 +37,7 @@ export default function StartUpMotion() {
       {/* 中间的白线,做两个, 先伸, 后缩 */}
       <>
         <motion.span
-          className="fixed top-2/3 left-1/2 z-50 h-screen w-[1px] -translate-x-1/2 bg-white"
+          className="fixed top-2/3 left-1/2 z-50 h-screen w-px -translate-x-1/2 bg-white"
           initial={{ scaleY: 0 }}
           style={{
             scaleY,
@@ -49,7 +49,7 @@ export default function StartUpMotion() {
           }}
         />
         <motion.span
-          className="fixed bottom-2/3 left-1/2 z-50 h-screen w-[1px] -translate-x-1/2 bg-white"
+          className="fixed bottom-2/3 left-1/2 z-50 h-screen w-px -translate-x-1/2 bg-white"
           initial={{ scaleY: 0 }}
           style={{
             scaleY,
@@ -79,11 +79,11 @@ export default function StartUpMotion() {
       </>
       {/* 两边的遮罩 */}
       <motion.span
-        className="fixed top-0 left-0 z-40 h-screen w-1/2 bg-gradient-to-r from-[#22177A] to-[#000957]"
+        className="fixed top-0 left-0 z-40 h-screen w-1/2 bg-linear-to-r from-[#22177A] to-[#000957]"
         style={{ x: toLeft }}
       />
       <motion.span
-        className="fixed top-0 right-0 z-40 h-screen w-1/2 bg-gradient-to-l from-[#22177A] to-[#000957]"
+        className="fixed top-0 right-0 z-40 h-screen w-1/2 bg-linear-to-l from-[#22177A] to-[#000957]"
         style={{ x: toRight }}
       />
     </>
