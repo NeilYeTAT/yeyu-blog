@@ -1,35 +1,10 @@
 import type { ComponentProps, FC } from 'react'
 import { notFound } from 'next/navigation'
 import { getPublishedNoteHTMLBySlug } from '@/actions/notes'
-import { prisma } from '@/db'
 import ArticleDisplayPage from '@/ui/components/shared/article-display-page'
 import CommentCard from '@/ui/components/shared/comment-card'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 import ScrollIndicator from '@/ui/components/shared/scroll-indicator'
-
-export const dynamicParams = true
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const article = await getPublishedNoteHTMLBySlug((await params).slug)
-
-  if (article == null) notFound()
-
-  return {
-    title: article.title,
-  }
-}
-
-export async function generateStaticParams() {
-  const allArticles = await prisma.note.findMany({
-    where: {
-      isPublished: true,
-    },
-  })
-
-  return allArticles.map(article => ({
-    slug: article.slug,
-  }))
-}
 
 export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({ slug }) => {
   const article = await getPublishedNoteHTMLBySlug(slug)
