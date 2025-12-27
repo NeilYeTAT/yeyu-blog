@@ -1,6 +1,6 @@
 import * as motion from 'motion/react-client'
 import { getAllShowBlogs } from '@/actions/blogs'
-import BlogListItem from './internal/blog-list-item'
+import BlogListItem from './blog-list-item'
 
 const containerVariants = {
   hidden: {},
