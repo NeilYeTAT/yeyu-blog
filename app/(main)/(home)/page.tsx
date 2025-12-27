@@ -1,5 +1,5 @@
-import MainLayoutContainer from '@/modules/main/page/main-home-page'
+import HomePage from '@/ui/(main)/(home)'
 
 export default function Page() {
-  return <MainLayoutContainer />
+  return <HomePage />
 }
