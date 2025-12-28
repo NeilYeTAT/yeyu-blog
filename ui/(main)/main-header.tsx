@@ -46,7 +46,7 @@ export default function MainHeader() {
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'h-full rounded-full bg-[#c9e6f3]',
+          'bg-clear-sky-background h-full rounded-full',
           'px-2.5 py-1 md:px-3 md:py-2',
           'border border-[#00000011] dark:border-[#FFFFFF1A]',
           'shadow-[0px_4px_10px_0px_#0000001A]',
@@ -63,7 +63,7 @@ export default function MainHeader() {
               }}
               className={cn(
                 'relative z-10 px-2 md:px-4',
-                route.path === activeUrl && 'font-bold text-[#f2f4f5]',
+                route.path === activeUrl && 'text-clear-sky-active-text font-bold',
               )}
               onMouseEnter={() => setHoveredPath(route.path)}
               onMouseLeave={() => setHoveredPath(null)}
@@ -85,7 +85,7 @@ export default function MainHeader() {
           </div>
 
           <motion.div
-            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-[#1babbb] shadow-md"
+            className="bg-clear-sky-indicator absolute top-1/2 -translate-y-1/2 rounded-full shadow-md"
             animate={indicatorStyle}
             transition={{
               type: 'spring',
@@ -105,7 +105,7 @@ function HoverBackground({ isVisible }: { isVisible: boolean }) {
       {isVisible && (
         <motion.div
           layoutId="hoverBackground"
-          className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-[#9ACBD0] shadow-sm"
+          className="bg-clear-sky-hover-background absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full shadow-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
