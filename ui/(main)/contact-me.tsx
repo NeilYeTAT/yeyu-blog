@@ -1,7 +1,7 @@
 import type { ComponentProps, FC } from 'react'
 import Link from 'next/link'
 
-const ExternalLinks = [
+const ExternalLinks: { name: string; url: string }[] = [
   {
     name: 'GitHub',
     url: 'https://github.com/NeilYeTAT',
@@ -10,29 +10,31 @@ const ExternalLinks = [
     name: 'bilibili',
     url: 'https://space.bilibili.com/1859558916',
   },
+  // * 掘金现在水文太多了，也没出多少新的优秀的小册了...
+  // {
+  //   name: '掘金',
+  //   url: 'https://juejin.cn/user/64204896208252',
+  // },
+  // * 以前觉得，这种境外帐号很敏感，不想自找麻烦
+  // * 后来发现，咱又不乱说话，良民desu~😋
   {
-    name: '掘金',
-    url: 'https://juejin.cn/user/64204896208252',
+    name: 'Twitter',
+    url: 'https://x.com/yeyuTvT',
   },
   {
     name: 'Gmail',
     url: 'mailto:nearjilt@gmail.com',
   },
-] as const
+]
 
 export const ContactMe: FC<ComponentProps<'div'>> = () => {
   return (
     <main className="flex w-full flex-col items-center justify-center gap-2 md:gap-4">
-      <h3>
-        联系方式 -{' '}
-        <small>
-          如果你 <span className="text-pink-400 line-through">喜欢</span> 我的话~
-        </small>
-      </h3>
+      <h3>社交网络</h3>
       <p className="flex gap-4 underline">
         {ExternalLinks.map(link => (
           <Link
-            className="hover:text-purple-600 dark:hover:text-emerald-300"
+            className="hover:text-clear-sky-primary dark:hover:text-emerald-300"
             href={link.url}
             key={link.url}
             target="_blank"
