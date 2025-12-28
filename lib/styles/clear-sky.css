@@ -1,6 +1,7 @@
 /* * temp, for dev */
 /* TODO: config more theme */
 :root {
+  --clear-sky-primary: #107c84;
   --clear-sky-background: #c9e6f3;
   --clear-sky-active-text: #f2f4f5;
   --clear-sky-indicator: #1babbb;
@@ -8,6 +9,7 @@
 }
 
 @theme inline {
+  --color-clear-sky-primary: var(--clear-sky-primary);
   --color-clear-sky-background: var(--clear-sky-background);
   --color-clear-sky-active-text: var(--clear-sky-active-text);
   --color-clear-sky-indicator: var(--clear-sky-indicator);

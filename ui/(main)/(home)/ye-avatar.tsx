@@ -12,7 +12,8 @@ export default function YeAvatar() {
     // 摸摸头~
     // * 拍拍头切换亮暗模式~
     <motion.figure
-      className="relative cursor-grab drop-shadow-2xl active:drop-shadow-purple-300 dark:active:drop-shadow-emerald-300"
+      // TODO: config color
+      className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-emerald-300"
       onDoubleClick={() => setTransitionTheme(theme === 'light' ? 'dark' : 'light')}
       whileTap={{ scale: 0.99, rotate: 1 }}
       drag
@@ -27,8 +28,7 @@ export default function YeAvatar() {
         placeholder="blur"
         priority
       />
-      {/* 亮模式宽度为 2, 暗模式宽度为 4, 视觉效果 */}
-      <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-2 ring-pink-600 ring-offset-1 dark:ring-4 dark:ring-blue-800" />
+      <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-blue-800" />
     </motion.figure>
   )
 }
