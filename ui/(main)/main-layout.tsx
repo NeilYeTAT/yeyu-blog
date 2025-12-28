@@ -1,16 +1,15 @@
 import LenisScrollProvider from '@/ui/components/provider/lenis-scroll-provider'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
-import StarsBackground from '@/ui/components/shared/stars-background'
 import StartUpMotion from '@/ui/components/shared/start-up-motion'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
+import { Background } from './background'
 import { ContactMe } from './contact-me'
 import MainHeader from './main-header'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <LenisScrollProvider>
-      {/* TODO: temp dark color for dev */}
-      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 bg-slate-200 md:text-lg dark:bg-gray-900 dark:text-white">
+      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 md:text-lg dark:text-white">
         <MainHeader />
 
         <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">
@@ -20,8 +19,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <ContactMe />
         </MaxWidthWrapper>
 
+        <Background />
         <StartUpMotion />
-        <StarsBackground />
       </main>
     </LenisScrollProvider>
   )
