@@ -12,7 +12,7 @@ export default function EchoCard({ allPublishedEcho }: { allPublishedEcho: Echo[
   const echo = allPublishedEcho[randomIndex ?? 0]
 
   return (
-    <section className="flex w-2/3 flex-col rounded-sm bg-slate-300/40 p-2 backdrop-blur-3xl dark:bg-gray-900/30">
+    <section className="mt-4 flex w-2/3 flex-col">
       <p
         suppressHydrationWarning
         className="underline drop-shadow-[0_0_0.75rem_#211C84] dark:drop-shadow-[0_0_0.75rem_#91DDCF]"
