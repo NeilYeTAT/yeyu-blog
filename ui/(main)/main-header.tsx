@@ -42,11 +42,11 @@ export default function MainHeader() {
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-5/12 items-center justify-center backdrop-blur-sm md:h-12">
+    <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-5/12 items-center justify-center md:h-12">
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'bg-clear-sky-background h-full rounded-full',
+          'bg-clear-sky-background/80 h-full rounded-full backdrop-blur-sm',
           'px-2.5 py-1 md:px-3 md:py-2',
           'border border-[#00000011] dark:border-[#FFFFFF1A]',
           'shadow-[0px_4px_10px_0px_#0000001A]',
