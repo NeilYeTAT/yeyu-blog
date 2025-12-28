@@ -1,15 +1,15 @@
 'use client'
 
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Fragment, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useIndicatorPosition } from '@/lib/hooks/animation'
 import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 
-const RouteList = [
+const RouteList: { path: string; pathName: string }[] = [
   {
     path: '/',
     pathName: '首页',
@@ -23,47 +23,92 @@ const RouteList = [
     pathName: '笔记',
   },
   {
+    path: '/refer',
+    pathName: '参考',
+  },
+  {
     path: '/about',
     pathName: '关于',
   },
-] as const
+]
 
 export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
   const refs = useRef(new Map<string, HTMLAnchorElement>())
+  const [hoveredPath, setHoveredPath] = useState<string | null>(null)
 
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header className="sticky top-3 z-20 mb-4 flex h-12 items-center justify-center backdrop-blur-sm">
+    <header className="sticky top-3 z-20 mb-4 flex h-9 items-center justify-center backdrop-blur-sm md:h-12">
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'flex h-full items-center justify-center rounded-full bg-indigo-200/40 py-2',
+          'h-full rounded-full bg-indigo-200/40',
+          'px-2.5 py-1 md:px-3 md:py-2',
           'border border-[#00000011] dark:border-[#FFFFFF1A]',
           'shadow-[0px_4px_10px_0px_#0000001A]',
         )}
       >
-        <nav className="relative flex gap-8 md:gap-16">
+        <nav className="relative flex h-full items-center justify-between text-sm text-nowrap md:text-xl">
           {RouteList.map(route => (
-            <Fragment key={route.path}>
-              <Link
-                href={route.path}
-                ref={el => {
-                  if (el != null) refs.current.set(route.path, el)
-                }}
-                className={cn(
-                  'relative z-10 px-4 md:text-xl',
-                  route.path === activeUrl && 'font-bold',
+            <Link
+              key={route.path}
+              href={route.path}
+              ref={el => {
+                if (el != null) refs.current.set(route.path, el)
+              }}
+              className={cn(
+                'relative z-10 px-2 md:px-4',
+                route.path === activeUrl && 'font-bold text-white',
+              )}
+              onMouseEnter={() => setHoveredPath(route.path)}
+              onMouseLeave={() => setHoveredPath(null)}
+            >
+              <h2>{route.pathName}</h2>
+              <AnimatePresence>
+                {hoveredPath !== activeUrl && hoveredPath === route.path && (
+                  <motion.div
+                    layoutId="hoverBackground"
+                    className="absolute -inset-x-1 -inset-y-0.5 rounded-full bg-indigo-300/50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 30,
+                    }}
+                  />
                 )}
-              >
-                <h2>{route.pathName}</h2>
-              </Link>
-            </Fragment>
+              </AnimatePresence>
+            </Link>
           ))}
           {/* TODO: Web3 Login */}
-          <div>登录</div>
+          <div
+            className="relative z-10 cursor-pointer px-2 md:px-4"
+            onMouseEnter={() => setHoveredPath('login')}
+            onMouseLeave={() => setHoveredPath(null)}
+          >
+            登录
+            <AnimatePresence>
+              {hoveredPath === 'login' && (
+                <motion.div
+                  layoutId="hoverBackground"
+                  className="absolute -inset-x-1 -inset-y-0.5 rounded-full bg-indigo-300/50"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </div>
 
           <motion.div
             className="absolute top-1/2 -translate-y-1/2 rounded-full bg-indigo-600"
