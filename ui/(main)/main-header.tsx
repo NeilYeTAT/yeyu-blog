@@ -32,6 +32,7 @@ const RouteList: { path: string; pathName: string }[] = [
   },
 ]
 
+// TODO: 暂且仅考虑一种主题，亮色模式
 export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
@@ -41,14 +42,15 @@ export default function MainHeader() {
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header className="sticky top-3 z-20 mb-4 flex h-9 items-center justify-center backdrop-blur-sm md:h-12">
+    <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-5/12 items-center justify-center backdrop-blur-sm md:h-12">
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'h-full rounded-full bg-indigo-200/40',
+          'h-full rounded-full bg-[#c9e6f3]',
           'px-2.5 py-1 md:px-3 md:py-2',
           'border border-[#00000011] dark:border-[#FFFFFF1A]',
           'shadow-[0px_4px_10px_0px_#0000001A]',
+          'w-full',
         )}
       >
         <nav className="relative flex h-full items-center justify-between text-sm text-nowrap md:text-xl">
@@ -61,28 +63,15 @@ export default function MainHeader() {
               }}
               className={cn(
                 'relative z-10 px-2 md:px-4',
-                route.path === activeUrl && 'font-bold text-white',
+                route.path === activeUrl && 'font-bold text-[#f2f4f5]',
               )}
               onMouseEnter={() => setHoveredPath(route.path)}
               onMouseLeave={() => setHoveredPath(null)}
             >
               <h2>{route.pathName}</h2>
-              <AnimatePresence>
-                {hoveredPath !== activeUrl && hoveredPath === route.path && (
-                  <motion.div
-                    layoutId="hoverBackground"
-                    className="absolute -inset-x-1 -inset-y-0.5 rounded-full bg-indigo-300/50"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 30,
-                    }}
-                  />
-                )}
-              </AnimatePresence>
+              <HoverBackground
+                isVisible={hoveredPath !== activeUrl && hoveredPath === route.path}
+              />
             </Link>
           ))}
           {/* TODO: Web3 Login */}
@@ -92,26 +81,11 @@ export default function MainHeader() {
             onMouseLeave={() => setHoveredPath(null)}
           >
             登录
-            <AnimatePresence>
-              {hoveredPath === 'login' && (
-                <motion.div
-                  layoutId="hoverBackground"
-                  className="absolute -inset-x-1 -inset-y-0.5 rounded-full bg-indigo-300/50"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                />
-              )}
-            </AnimatePresence>
+            <HoverBackground isVisible={hoveredPath === 'login'} />
           </div>
 
           <motion.div
-            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-indigo-600"
+            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-[#1babbb] shadow-md"
             animate={indicatorStyle}
             transition={{
               type: 'spring',
@@ -122,5 +96,26 @@ export default function MainHeader() {
         </nav>
       </MaxWidthWrapper>
     </header>
+  )
+}
+
+function HoverBackground({ isVisible }: { isVisible: boolean }) {
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          layoutId="hoverBackground"
+          className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-[#9ACBD0] shadow-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 30,
+          }}
+        />
+      )}
+    </AnimatePresence>
   )
 }
