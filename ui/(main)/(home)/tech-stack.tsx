@@ -2,6 +2,7 @@
 
 import type { JSX } from 'react'
 import { motion, useAnimationFrame, useMotionValue, useSpring } from 'motion/react'
+import { useState } from 'react'
 import GolangSvg from '@/config/svg/golang-svg'
 import NextjsSvg from '@/config/svg/nextjs-svg'
 import ReactSvg from '@/config/svg/reactjs-svg'
@@ -9,19 +10,66 @@ import TailwindcssSvg from '@/config/svg/tailwindcss-svg'
 import TypeScriptSvg from '@/config/svg/typescript-svg'
 import VueSvg from '@/config/svg/vuejs-svg'
 import { cn } from '@/lib/utils/common/shadcn'
+import { HoverCard } from '@/ui/components/shared/hover-card'
 
-const techStackSvg: JSX.Element[] = [
-  <VueSvg key="vue" />,
-  <TypeScriptSvg key="ts" />,
-  <ReactSvg key="react" />,
-  <TailwindcssSvg key="tailwindcss" />,
-  <NextjsSvg key="next" />,
-  <GolangSvg key="go" />,
+type TechItem = {
+  key: string
+  component: JSX.Element
+  name: string
+  insight: string
+  color?: string
+}
+
+const techStackData: TechItem[] = [
+  {
+    key: 'vue',
+    component: <VueSvg />,
+    name: 'Vue.js',
+    insight: '哥们写过，但已经忘完了，兄弟，v-if 怎么用来着🤡',
+    color: '#42b883',
+  },
+  {
+    key: 'ts',
+    component: <TypeScriptSvg />,
+    name: 'TypeScript',
+    insight: '最喜欢的编程语言，选择 ts 全栈开发，让 ts 再次伟大🙌🏻',
+    color: '#3178c6',
+  },
+  {
+    key: 'react',
+    component: <ReactSvg />,
+    name: 'React',
+    insight: 'jsx/tsx 语法顶级，但 useEffect 确实不好用，也容易被人滥用性能优化的那些 hook😅',
+    color: '#61dafb',
+  },
+  {
+    key: 'tailwindcss',
+    component: <TailwindcssSvg />,
+    name: 'Tailwind CSS',
+    insight: '神中神👍🏻，没有 tailwindcss 根本不想写前端',
+    color: '#38bdf8',
+  },
+  {
+    key: 'next',
+    component: <NextjsSvg />,
+    name: 'Next.js',
+    insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
+    color: '#000000',
+  },
+  {
+    key: 'go',
+    component: <GolangSvg />,
+    name: 'Go',
+    insight:
+      '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
+    color: '#00add8',
+  },
 ]
 
 function TechStack() {
   const rotation = useMotionValue(0)
   const speed = useSpring(1, { stiffness: 40, damping: 20 })
+  const [hoveredItem, setHoveredItem] = useState<TechItem | null>(null)
 
   useAnimationFrame((_time, delta) => {
     const currentRotation = rotation.get()
@@ -32,27 +80,43 @@ function TechStack() {
   })
 
   return (
-    <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] pt-10 md:mt-20 md:h-70">
-      <motion.section
-        style={{ rotate: rotation }}
-        className="relative size-80 rounded-full md:size-160"
-      >
-        {techStackSvg.map((svg, i) => (
-          <motion.div
-            key={svg.key}
-            onHoverStart={() => speed.set(0)}
-            onHoverEnd={() => speed.set(1)}
-            className={cn(
-              `absolute left-1/2 z-10 size-16 origin-[center_160px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_320px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
-            )}
-            style={{
-              rotate: i * (360 / techStackSvg.length),
-            }}
-          >
-            {svg}
-          </motion.div>
-        ))}
-      </motion.section>
+    <div className="relative mx-auto w-full max-w-5xl">
+      <HoverCard
+        show={hoveredItem !== null}
+        title={hoveredItem !== null ? hoveredItem.name : ''}
+        description={hoveredItem !== null ? hoveredItem.insight : ''}
+        icon={hoveredItem?.component}
+        color={hoveredItem?.color}
+        className="absolute top-0 right-4 hidden md:block"
+      />
+      <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] pt-10 md:mt-20 md:h-70">
+        <motion.section
+          style={{ rotate: rotation }}
+          className="relative size-80 rounded-full md:size-160"
+        >
+          {techStackData.map((item, i) => (
+            <motion.div
+              key={item.key}
+              onHoverStart={() => {
+                speed.set(0)
+                setHoveredItem(item)
+              }}
+              onHoverEnd={() => {
+                speed.set(1)
+                setHoveredItem(null)
+              }}
+              className={cn(
+                `absolute left-1/2 z-10 size-16 origin-[center_160px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_320px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
+              )}
+              style={{
+                rotate: i * (360 / techStackData.length),
+              }}
+            >
+              {item.component}
+            </motion.div>
+          ))}
+        </motion.section>
+      </div>
     </div>
   )
 }
