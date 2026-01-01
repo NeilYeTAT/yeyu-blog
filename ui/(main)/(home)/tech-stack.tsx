@@ -114,7 +114,7 @@ function TechStack() {
                 width: 'calc(var(--r) * 2)',
                 height: 'calc(var(--r) * 2)',
                 '--n': techStackData.length,
-                '--r': 'max(var(--min-r), calc((var(--n) * var(--view-w) / 3.5) / 6.28))',
+                '--r': `max(var(--min-r), calc((var(--n) * var(--view-w) / ${techStackData.length > 5 ? 4 : 3}) / 6.28))`,
               } as MotionStyle
             }
             className="relative rounded-full [--min-r:160px] [--s:64px] [--view-w:100vw] md:[--min-r:320px] md:[--s:128px] md:[--view-w:64rem]"
