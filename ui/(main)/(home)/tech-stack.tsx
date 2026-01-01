@@ -1,7 +1,13 @@
 'use client'
 
 import type { JSX } from 'react'
-import { motion, useAnimationFrame, useMotionValue, useSpring } from 'motion/react'
+import {
+  motion,
+  type MotionStyle,
+  useAnimationFrame,
+  useMotionValue,
+  useSpring,
+} from 'motion/react'
 import { useState } from 'react'
 import GolangSvg from '@/config/svg/golang-svg'
 import NextjsSvg from '@/config/svg/nextjs-svg'
@@ -64,6 +70,37 @@ const techStackData: TechItem[] = [
       '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
     color: '#00add8',
   },
+  // * for test
+  // {
+  //   key: 'next11',
+  //   component: <NextjsSvg />,
+  //   name: 'Next.js',
+  //   insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
+  //   color: '#000000',
+  // },
+  // {
+  //   key: 'go22',
+  //   component: <GolangSvg />,
+  //   name: 'Go',
+  //   insight:
+  //     '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
+  //   color: '#00add8',
+  // },
+  // {
+  //   key: 'next134',
+  //   component: <NextjsSvg />,
+  //   name: 'Next.js',
+  //   insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
+  //   color: '#000000',
+  // },
+  // {
+  //   key: 'go22qwser',
+  //   component: <GolangSvg />,
+  //   name: 'Go',
+  //   insight:
+  //     '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
+  //   color: '#00add8',
+  // },
 ]
 
 function TechStack() {
@@ -89,33 +126,44 @@ function TechStack() {
         color={hoveredItem?.color}
         className="absolute top-0 right-4 hidden md:block"
       />
-      <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] pt-10 md:mt-20 md:h-70">
-        <motion.section
-          style={{ rotate: rotation }}
-          className="relative size-80 rounded-full md:size-160"
-        >
-          {techStackData.map((item, i) => (
-            <motion.div
-              key={item.key}
-              onHoverStart={() => {
-                speed.set(0)
-                setHoveredItem(item)
-              }}
-              onHoverEnd={() => {
-                speed.set(1)
-                setHoveredItem(null)
-              }}
-              className={cn(
-                `absolute left-1/2 z-10 size-16 origin-[center_160px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_320px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
-              )}
-              style={{
-                rotate: i * (360 / techStackData.length),
-              }}
-            >
-              {item.component}
-            </motion.div>
-          ))}
-        </motion.section>
+      <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] md:mt-20 md:h-70">
+        <div className="flex w-full justify-center mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] pt-10">
+          <motion.section
+            style={
+              {
+                rotate: rotation,
+                width: 'calc(var(--r) * 2)',
+                height: 'calc(var(--r) * 2)',
+                '--n': techStackData.length,
+                '--r': 'max(var(--min-r), calc((var(--n) * var(--view-w) / 3.5) / 6.28))',
+              } as MotionStyle
+            }
+            className="relative rounded-full [--min-r:160px] [--s:64px] [--view-w:100vw] md:[--min-r:320px] md:[--s:128px] md:[--view-w:64rem]"
+          >
+            {techStackData.map((item, i) => (
+              <motion.div
+                key={item.key}
+                onHoverStart={() => {
+                  speed.set(0)
+                  setHoveredItem(item)
+                }}
+                onHoverEnd={() => {
+                  speed.set(1)
+                  setHoveredItem(null)
+                }}
+                className={cn(
+                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_0.75rem_#006A71]`,
+                )}
+                style={{
+                  rotate: i * (360 / techStackData.length),
+                  transformOrigin: 'center var(--r)',
+                }}
+              >
+                {item.component}
+              </motion.div>
+            ))}
+          </motion.section>
+        </div>
       </div>
     </div>
   )
