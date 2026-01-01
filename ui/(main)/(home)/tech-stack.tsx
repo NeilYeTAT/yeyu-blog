@@ -8,15 +8,18 @@ import {
   useMotionValue,
   useSpring,
 } from 'motion/react'
+import Image from 'next/image'
 import { useState } from 'react'
-import GolangSvg from '@/config/svg/golang-svg'
-import NextjsSvg from '@/config/svg/nextjs-svg'
-import ReactSvg from '@/config/svg/reactjs-svg'
-import TailwindcssSvg from '@/config/svg/tailwindcss-svg'
-import TypeScriptSvg from '@/config/svg/typescript-svg'
-import VueSvg from '@/config/svg/vuejs-svg'
 import { cn } from '@/lib/utils/common/shadcn'
 import { HoverCard } from '@/ui/components/shared/hover-card'
+// * svg
+import GolangIcon from './assets/golang-icon.svg'
+import NestjsIcon from './assets/nestjs-icon.svg'
+import NextjsIcon from './assets/nextjs-icon.svg'
+import ReactIcon from './assets/react-icon.svg'
+import TailwindcssIcon from './assets/tailwindcss-icon.svg'
+import TypeScriptIcon from './assets/typescript-icon.svg'
+import VimIcon from './assets/vim-icon.svg'
 
 type TechItem = {
   key: string
@@ -28,79 +31,55 @@ type TechItem = {
 
 const techStackData: TechItem[] = [
   {
-    key: 'vue',
-    component: <VueSvg />,
-    name: 'Vue.js',
-    insight: '哥们写过，但已经忘完了，兄弟，v-if 怎么用来着🤡',
-    color: '#42b883',
-  },
-  {
     key: 'ts',
-    component: <TypeScriptSvg />,
+    component: <Image src={TypeScriptIcon} alt="TypeScript" className="size-full" />,
     name: 'TypeScript',
     insight: '最喜欢的编程语言，选择 ts 全栈开发，让 ts 再次伟大🙌🏻',
     color: '#3178c6',
   },
   {
     key: 'react',
-    component: <ReactSvg />,
+    component: <Image src={ReactIcon} alt="React" className="size-full" />,
     name: 'React',
     insight: 'jsx/tsx 语法顶级，但 useEffect 确实不好用，也容易被人滥用性能优化的那些 hook😅',
     color: '#61dafb',
   },
   {
     key: 'tailwindcss',
-    component: <TailwindcssSvg />,
+    component: <Image src={TailwindcssIcon} alt="Tailwind CSS" className="size-full" />,
     name: 'Tailwind CSS',
     insight: '神中神👍🏻，没有 tailwindcss 根本不想写前端',
     color: '#38bdf8',
   },
   {
     key: 'next',
-    component: <NextjsSvg />,
+    component: <Image src={NextjsIcon} alt="Next.js" className="size-full" />,
     name: 'Next.js',
     insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
     color: '#000000',
   },
   {
     key: 'go',
-    component: <GolangSvg />,
+    component: <Image src={GolangIcon} alt="Go" className="size-full" />,
     name: 'Go',
     insight:
       '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
     color: '#00add8',
   },
-  // * for test
-  // {
-  //   key: 'next11',
-  //   component: <NextjsSvg />,
-  //   name: 'Next.js',
-  //   insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
-  //   color: '#000000',
-  // },
-  // {
-  //   key: 'go22',
-  //   component: <GolangSvg />,
-  //   name: 'Go',
-  //   insight:
-  //     '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
-  //   color: '#00add8',
-  // },
-  // {
-  //   key: 'next134',
-  //   component: <NextjsSvg />,
-  //   name: 'Next.js',
-  //   insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
-  //   color: '#000000',
-  // },
-  // {
-  //   key: 'go22qwser',
-  //   component: <GolangSvg />,
-  //   name: 'Go',
-  //   insight:
-  //     '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
-  //   color: '#00add8',
-  // },
+  {
+    key: 'nest',
+    component: <Image src={NestjsIcon} alt="NestJS" className="size-full" />,
+    name: 'NestJS',
+    insight: '还在学习中...暂时还觉得挺优雅',
+    color: '#e0234e',
+  },
+  {
+    key: 'vim',
+    component: <Image src={VimIcon} alt="Vim" className="size-full" />,
+    name: 'Vim',
+    insight: '编辑器之神，虽然我是 vscode + vim 插件，不够纯粹🥹',
+    color: '#019733',
+  },
 ]
 
 function TechStack() {
