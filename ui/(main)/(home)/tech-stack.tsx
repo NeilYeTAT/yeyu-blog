@@ -20,14 +20,13 @@ const techStackSvg: JSX.Element[] = [
 
 function TechStack() {
   return (
-    <div>
-      {/* 尺子量的~ */}
-      <section className="animate-ye-spin-slowly relative size-62.5 rounded-full md:size-125">
+    <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] pt-10 md:mt-20 md:h-70">
+      <section className="animate-ye-spin-slowly relative size-80 rounded-full md:size-160">
         {techStackSvg.map((svg, i) => (
           <div
             key={svg.key}
             className={cn(
-              `absolute left-1/2 z-10 size-1/4 origin-[center_125px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_250px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
+              `absolute left-1/2 z-10 size-16 origin-[center_160px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_320px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
             )}
             style={{
               transform: `rotate(${i * (360 / techStackSvg.length)}deg)`,
