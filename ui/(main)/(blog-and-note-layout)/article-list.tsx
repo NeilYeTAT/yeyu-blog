@@ -40,13 +40,18 @@ export const ArticleList: FC<
 
   return (
     <motion.div
-      className="flex flex-col"
+      className="group/list flex flex-col"
       initial="hidden"
       animate="visible"
       variants={listVariants}
     >
       {items.map(v => (
-        <motion.div variants={itemVariants} key={v.id}>
+        <motion.div
+          variants={itemVariants}
+          key={v.id}
+          className="transition-opacity group-hover/list:opacity-50! hover:opacity-100!"
+          whileHover={{ scale: 1.01, transition: { type: 'spring', stiffness: 200, damping: 25 } }}
+        >
           <ArticleLink item={v} type={type} />
         </motion.div>
       ))}
