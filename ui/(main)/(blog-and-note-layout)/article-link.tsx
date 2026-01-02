@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { BlogListItem } from '@/actions/blogs/type'
 import type { NoteListItem } from '@/actions/notes/type'
 import { toZhDay } from '@/lib/time'
+import { cn } from '@/lib/utils/common/shadcn'
 import ScaleUnderline from '@/ui/components/shared/scale-underline'
 
 export const ArticleLink: FC<{
@@ -16,13 +17,16 @@ export const ArticleLink: FC<{
   return (
     <Link
       href={isBlog ? `/blog/${item?.slug}` : isNote ? `/note/${item?.slug}` : '/'}
-      className="group flex cursor-pointer items-center justify-between gap-10 rounded-sm p-2 duration-500 hover:text-purple-600 dark:hover:text-emerald-300"
+      className={cn(
+        'group flex cursor-pointer items-center justify-between gap-10 rounded-sm p-2 duration-500',
+        'hover:text-clear-sky-indicator dark:hover:text-emerald-300',
+      )}
     >
       <h2 className="group relative truncate">
         {item.title}
-        <ScaleUnderline className="bg-purple-600 dark:bg-emerald-300" />
+        <ScaleUnderline className="bg-clear-sky-indicator dark:bg-emerald-300" />
       </h2>
-      <time className="shrink-0 text-sm font-light text-gray-400 group-hover:text-purple-600 dark:group-hover:text-emerald-300">
+      <time className="group-hover:text-clear-sky-indicator shrink-0 text-sm font-light text-gray-400 dark:group-hover:text-emerald-300">
         {toZhDay(item.createdAt)}
       </time>
     </Link>

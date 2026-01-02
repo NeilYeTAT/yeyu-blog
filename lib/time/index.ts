@@ -32,7 +32,7 @@ export function prettyDateTime(date: number | Date) {
 }
 
 export function toZhDay(date: number | Date) {
-  return dayjs(date).tz(SHANGHAI).locale('zh-cn').format('YY年M月D日')
+  return dayjs(date).tz(SHANGHAI).locale('zh-cn').format('YYYY年MM月DD日')
 }
 
 export function getRemainingDaysOfYear(): number {
