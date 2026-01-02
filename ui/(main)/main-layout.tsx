@@ -1,10 +1,10 @@
 import LenisScrollProvider from '@/ui/components/provider/lenis-scroll-provider'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
-import StartUpMotion from '@/ui/components/shared/start-up-motion'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 import { Background } from './background'
 import { ContactMe } from './contact-me'
 import MainHeader from './main-header'
+// import StartUpMotion from './start-up-motion'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +20,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </MaxWidthWrapper>
 
         <Background />
-        <StartUpMotion />
+        {/* <StartUpMotion /> */}
       </main>
     </LenisScrollProvider>
   )
