@@ -1,5 +1,5 @@
 import { prisma } from '@/db'
-import { NoteDetail } from '@/ui/(main)/note/[slug]'
+import { NoteDetail } from '@/ui/(main)/(blog-and-note-layout)/note/[slug]'
 
 export async function generateStaticParams() {
   const notes = await prisma.note.findMany({

@@ -1,5 +1,5 @@
 import { prisma } from '@/db'
-import { BlogDetail } from '@/ui/(main)/blog/[slug]'
+import { BlogDetail } from '@/ui/(main)/(blog-and-note-layout)/blog/[slug]'
 
 export async function generateStaticParams() {
   const blogs = await prisma.blog.findMany({
