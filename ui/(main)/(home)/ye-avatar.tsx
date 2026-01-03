@@ -1,17 +1,20 @@
 'use client'
 
-import { Moon, Sun, Volume2, VolumeOff } from 'lucide-react'
+import type { Point } from './constant'
 import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
+import { typedEntries } from '@/lib/utils/typed'
+import { icons, type IconsId } from './constant'
 
 export default function YeAvatar() {
-  const { setTransitionTheme } = useTransitionTheme()
+  const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
   const [isDragging, setIsDragging] = useState(false)
-  const [activeIcon, setActiveIcon] = useState<string | null>(null)
+  const [activeIcon, setActiveIcon] = useState<IconsId | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -33,18 +36,24 @@ export default function YeAvatar() {
 
   const checkProximity = (currX: number, currY: number) => {
     const threshold = 100
-    const targets = {
-      tl: { x: -100, y: -30 },
-      tr: { x: 100, y: -30 },
-      bl: { x: -100, y: 30 },
-      br: { x: 100, y: 30 },
-    }
 
-    let closest = null
+    const points = icons.reduce<Record<(typeof icons)[number]['id'], Point>>(
+      (acc, { id, initial }) => {
+        acc[id] = {
+          x: -initial.x * (100 / 30),
+          y: -initial.y * (30 / 10),
+        }
+        return acc
+      },
+      {} as Record<(typeof icons)[number]['id'], Point>,
+    )
+
+    let closest: IconsId | null = null
     let minDist = Infinity
 
-    for (const [key, pos] of Object.entries(targets)) {
-      const dist = Math.sqrt(Math.pow(currX - pos.x, 2) + Math.pow(currY - pos.y, 2))
+    for (const [key, pos] of typedEntries(points)) {
+      const dist = Math.hypot(currX - pos.x, currY - pos.y)
+
       if (dist < minDist) {
         minDist = dist
         closest = key
@@ -66,76 +75,46 @@ export default function YeAvatar() {
       <AnimatePresence>
         {isDragging && (
           <>
-            <motion.div
-              initial={{ opacity: 0, scale: 0, x: 30, y: 10 }}
-              animate={{
-                opacity: 1,
-                scale: activeIcon === 'tl' ? 1.5 : 1,
-                x: 0,
-                y: 0,
-              }}
-              exit={{ opacity: 0, scale: 0, x: 30, y: 10 }}
-              className={cn(
-                'absolute -top-4 -left-20 z-50 flex size-8 rounded-full',
-                activeIcon === 'tl' && 'ring-2 ring-white dark:ring-gray-800',
-              )}
-            >
-              <VolumeOff className="m-auto" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0, x: -30, y: 10 }}
-              animate={{
-                opacity: 1,
-                scale: activeIcon === 'tr' ? 1.5 : 1,
-                x: 0,
-                y: 0,
-              }}
-              exit={{ opacity: 0, scale: 0, x: -30, y: 10 }}
-              className={cn(
-                'absolute -top-4 -right-20 z-50 flex size-8 rounded-full',
-                activeIcon === 'tr' && 'ring-2 ring-white dark:ring-gray-800',
-              )}
-            >
-              <Volume2 className="m-auto" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-              animate={{
-                opacity: 1,
-                scale: activeIcon === 'bl' ? 1.5 : 1,
-                x: 0,
-                y: 0,
-              }}
-              exit={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-              className={cn(
-                'absolute -bottom-4 -left-20 z-50 flex size-8 rounded-full',
-                activeIcon === 'bl' && 'ring-2 ring-white dark:ring-gray-800',
-              )}
-            >
-              <Sun className="m-auto" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0, x: -30, y: -10 }}
-              animate={{
-                opacity: 1,
-                scale: activeIcon === 'br' ? 1.5 : 1,
-                x: 0,
-                y: 0,
-              }}
-              exit={{ opacity: 0, scale: 0, x: -30, y: -10 }}
-              className={cn(
-                'absolute -right-20 -bottom-4 z-50 flex size-8 rounded-full',
-                activeIcon === 'br' && 'ring-2 ring-white dark:ring-gray-800',
-              )}
-            >
-              <Moon className="m-auto" />
-            </motion.div>
+            {icons.map(({ id, Icon, className, initial }) => {
+              const isFunctionActive =
+                (id === 'tl' && !isPlaying) ||
+                (id === 'tr' && isPlaying) ||
+                (id === 'bl' && resolvedTheme === 'light') ||
+                (id === 'br' && resolvedTheme === 'dark')
+
+              return (
+                <motion.div
+                  key={id}
+                  initial={{ opacity: 0, scale: 0, ...initial }}
+                  animate={{
+                    opacity: 1,
+                    scale: activeIcon === id ? 1.2 : 1,
+                    x: 0,
+                    y: 0,
+                  }}
+                  exit={{ opacity: 0, scale: 0, ...initial }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  className={cn(
+                    'absolute z-50 flex size-10 items-center justify-center rounded-full shadow-sm backdrop-blur-md transition-colors duration-300',
+                    className,
+                    'bg-[#fafafa] dark:bg-zinc-800',
+                    activeIcon === id || isFunctionActive
+                      ? 'text-clear-sky-[#7ac7b9]'
+                      : 'text-zinc-500 dark:text-zinc-400',
+                  )}
+                >
+                  {activeIcon === id && (
+                    <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute inset-0 rounded-full ring-2 ring-offset-2 ring-offset-[#7ac7b9] dark:ring-offset-zinc-800" />
+                  )}
+                  <Icon className="relative z-10 size-5" />
+                </motion.div>
+              )
+            })}
           </>
         )}
       </AnimatePresence>
 
       {/* 摸摸头~ */}
-      {/* * 拍拍头切换亮暗模式~ */}
       <motion.figure
         // TODO: config color
         className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-emerald-300"
@@ -167,9 +146,11 @@ export default function YeAvatar() {
             if (audioRef.current !== null) {
               audioRef.current.currentTime = 0
             }
+            setIsPlaying(false)
           } else if (activeIcon === 'tr') {
             audioRef.current?.play().catch(e => console.error('Audio play failed', e))
             playSoundEffect()
+            setIsPlaying(true)
           }
         }}
         style={{ x, y }}
