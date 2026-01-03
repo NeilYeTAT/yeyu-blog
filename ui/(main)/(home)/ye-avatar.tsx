@@ -3,7 +3,7 @@
 import { Moon, Sun, Volume2, VolumeOff } from 'lucide-react'
 import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -14,6 +14,22 @@ export default function YeAvatar() {
   const [activeIcon, setActiveIcon] = useState<string | null>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const soundEffectRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    // TODO: config or settings
+    audioRef.current = new Audio('/music/日暮里 - JINBAO.mp3')
+    audioRef.current.loop = true
+
+    soundEffectRef.current = new Audio('/sound/ui-select.wav')
+
+    return () => {
+      audioRef.current?.pause()
+      audioRef.current = null
+      soundEffectRef.current = null
+    }
+  }, [])
 
   const checkProximity = (currX: number, currY: number) => {
     const threshold = 100
@@ -132,10 +148,28 @@ export default function YeAvatar() {
         onPointerUp={() => setIsDragging(false)}
         onDragEnd={() => {
           setIsDragging(false)
+
+          const playSoundEffect = () => {
+            if (soundEffectRef.current !== null) {
+              soundEffectRef.current.currentTime = 0
+              soundEffectRef.current.play().catch(e => console.error('Sound effect play failed', e))
+            }
+          }
+
           if (activeIcon === 'bl') {
             setTransitionTheme('light', { direction: 'left', duration: 300 })
+            playSoundEffect()
           } else if (activeIcon === 'br') {
             setTransitionTheme('dark', { direction: 'left', duration: 300 })
+            playSoundEffect()
+          } else if (activeIcon === 'tl') {
+            audioRef.current?.pause()
+            if (audioRef.current !== null) {
+              audioRef.current.currentTime = 0
+            }
+          } else if (activeIcon === 'tr') {
+            audioRef.current?.play().catch(e => console.error('Audio play failed', e))
+            playSoundEffect()
           }
         }}
         style={{ x, y }}
