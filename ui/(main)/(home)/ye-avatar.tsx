@@ -1,6 +1,6 @@
 'use client'
 
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, Volume2, VolumeOff } from 'lucide-react'
 import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -59,8 +59,13 @@ export default function YeAvatar() {
                 y: 0,
               }}
               exit={{ opacity: 0, scale: 0, x: 30, y: 10 }}
-              className={`absolute -top-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'tl' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
-            />
+              className={cn(
+                'absolute -top-4 -left-20 z-50 flex size-8 rounded-full',
+                activeIcon === 'tl' && 'ring-2 ring-white dark:ring-gray-800',
+              )}
+            >
+              <VolumeOff className="m-auto" />
+            </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0, x: -30, y: 10 }}
               animate={{
@@ -70,8 +75,13 @@ export default function YeAvatar() {
                 y: 0,
               }}
               exit={{ opacity: 0, scale: 0, x: -30, y: 10 }}
-              className={`absolute -top-4 -right-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'tr' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
-            />
+              className={cn(
+                'absolute -top-4 -right-20 z-50 flex size-8 rounded-full',
+                activeIcon === 'tr' && 'ring-2 ring-white dark:ring-gray-800',
+              )}
+            >
+              <Volume2 className="m-auto" />
+            </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0, x: 30, y: -10 }}
               animate={{
@@ -82,7 +92,7 @@ export default function YeAvatar() {
               }}
               exit={{ opacity: 0, scale: 0, x: 30, y: -10 }}
               className={cn(
-                'absolute -bottom-4 -left-20 z-50 size-8 rounded-full',
+                'absolute -bottom-4 -left-20 z-50 flex size-8 rounded-full',
                 activeIcon === 'bl' && 'ring-2 ring-white dark:ring-gray-800',
               )}
             >
