@@ -1,6 +1,7 @@
 import LenisScrollProvider from '@/ui/components/provider/lenis-scroll-provider'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
+import { DraggableFloatingMenu } from './(home)/draggable-floating-menu'
 import { Background } from './background'
 import { ContactMe } from './contact-me'
 import MainHeader from './main-header'
@@ -20,6 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </MaxWidthWrapper>
 
         <Background />
+        <DraggableFloatingMenu />
         {/* <StartUpMotion /> */}
       </main>
     </LenisScrollProvider>
