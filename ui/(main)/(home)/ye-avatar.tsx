@@ -1,14 +1,47 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 
 export default function YeAvatar() {
-  const { setTransitionTheme, theme } = useTransitionTheme()
+  const { setTransitionTheme } = useTransitionTheme()
   const [isDragging, setIsDragging] = useState(false)
+  const [activeIcon, setActiveIcon] = useState<string | null>(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const checkProximity = (currX: number, currY: number) => {
+    const threshold = 100
+    const targets = {
+      tl: { x: -100, y: -30 },
+      tr: { x: 100, y: -30 },
+      bl: { x: -100, y: 30 },
+      br: { x: 100, y: 30 },
+    }
+
+    let closest = null
+    let minDist = Infinity
+
+    for (const [key, pos] of Object.entries(targets)) {
+      const dist = Math.sqrt(Math.pow(currX - pos.x, 2) + Math.pow(currY - pos.y, 2))
+      if (dist < minDist) {
+        minDist = dist
+        closest = key
+      }
+    }
+
+    if (minDist < threshold && closest !== null) {
+      setActiveIcon(closest)
+    } else {
+      setActiveIcon(null)
+    }
+  }
+
+  useMotionValueEvent(x, 'change', latest => checkProximity(latest, y.get()))
+  useMotionValueEvent(y, 'change', latest => checkProximity(x.get(), latest))
 
   return (
     <div className="relative">
@@ -17,27 +50,47 @@ export default function YeAvatar() {
           <>
             <motion.div
               initial={{ opacity: 0, scale: 0, x: 30, y: 10 }}
-              animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+              animate={{
+                opacity: 1,
+                scale: activeIcon === 'tl' ? 1.5 : 1,
+                x: 0,
+                y: 0,
+              }}
               exit={{ opacity: 0, scale: 0, x: 30, y: 10 }}
-              className="absolute -top-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300"
+              className={`absolute -top-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'tl' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0, x: -30, y: 10 }}
-              animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+              animate={{
+                opacity: 1,
+                scale: activeIcon === 'tr' ? 1.5 : 1,
+                x: 0,
+                y: 0,
+              }}
               exit={{ opacity: 0, scale: 0, x: -30, y: 10 }}
-              className="absolute -top-4 -right-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300"
+              className={`absolute -top-4 -right-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'tr' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-              animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+              animate={{
+                opacity: 1,
+                scale: activeIcon === 'bl' ? 1.5 : 1,
+                x: 0,
+                y: 0,
+              }}
               exit={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-              className="absolute -bottom-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300"
+              className={`absolute -bottom-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'bl' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0, x: -30, y: -10 }}
-              animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+              animate={{
+                opacity: 1,
+                scale: activeIcon === 'br' ? 1.5 : 1,
+                x: 0,
+                y: 0,
+              }}
               exit={{ opacity: 0, scale: 0, x: -30, y: -10 }}
-              className="absolute -right-20 -bottom-4 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300"
+              className={`absolute -right-20 -bottom-4 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'br' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
             />
           </>
         )}
@@ -48,7 +101,6 @@ export default function YeAvatar() {
       <motion.figure
         // TODO: config color
         className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-emerald-300"
-        onDoubleClick={() => setTransitionTheme(theme === 'light' ? 'dark' : 'light')}
         whileTap={{ scale: 0.99, rotate: 1 }}
         drag
         dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -56,7 +108,15 @@ export default function YeAvatar() {
         dragElastic={0.2}
         onPointerDown={() => setIsDragging(true)}
         onPointerUp={() => setIsDragging(false)}
-        onDragEnd={() => setIsDragging(false)}
+        onDragEnd={() => {
+          setIsDragging(false)
+          if (activeIcon === 'bl') {
+            setTransitionTheme('light', 'left')
+          } else if (activeIcon === 'br') {
+            setTransitionTheme('dark', 'right')
+          }
+        }}
+        style={{ x, y }}
       >
         <Image
           src={avatar}
