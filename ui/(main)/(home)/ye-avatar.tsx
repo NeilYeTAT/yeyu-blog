@@ -1,10 +1,12 @@
 'use client'
 
+import { Moon, Sun } from 'lucide-react'
 import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
+import { cn } from '@/lib/utils/common/shadcn'
 
 export default function YeAvatar() {
   const { setTransitionTheme } = useTransitionTheme()
@@ -79,8 +81,13 @@ export default function YeAvatar() {
                 y: 0,
               }}
               exit={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-              className={`absolute -bottom-4 -left-20 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'bl' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
-            />
+              className={cn(
+                'absolute -bottom-4 -left-20 z-50 size-8 rounded-full',
+                activeIcon === 'bl' && 'ring-2 ring-white dark:ring-gray-800',
+              )}
+            >
+              <Sun className="m-auto" />
+            </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0, x: -30, y: -10 }}
               animate={{
@@ -90,8 +97,13 @@ export default function YeAvatar() {
                 y: 0,
               }}
               exit={{ opacity: 0, scale: 0, x: -30, y: -10 }}
-              className={`absolute -right-20 -bottom-4 z-50 size-8 rounded-full bg-[#7AB2B2] dark:bg-emerald-300 ${activeIcon === 'br' ? 'ring-4 ring-white dark:ring-gray-800' : ''}`}
-            />
+              className={cn(
+                'absolute -right-20 -bottom-4 z-50 flex size-8 rounded-full',
+                activeIcon === 'br' && 'ring-2 ring-white dark:ring-gray-800',
+              )}
+            >
+              <Moon className="m-auto" />
+            </motion.div>
           </>
         )}
       </AnimatePresence>
