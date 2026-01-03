@@ -10,7 +10,7 @@ export default async function HomePage() {
 
   return (
     <motion.main
-      className="flex flex-col items-center justify-center gap-6 overflow-hidden py-4"
+      className="flex flex-col items-center justify-center gap-6 pt-16 pb-4"
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: [-10, 0] }}
       transition={{
