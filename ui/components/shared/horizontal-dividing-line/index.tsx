@@ -45,9 +45,9 @@ export default function HorizontalDividingLine({
         onDragEnd={(event, info) => {
           setDuration(4)
           if (info.offset.x < -THRESHOLD) {
-            setTransitionTheme('light', 'left')
+            setTransitionTheme('light', { direction: 'left' })
           } else if (info.offset.x > THRESHOLD) {
-            setTransitionTheme('dark', 'right')
+            setTransitionTheme('dark', { direction: 'right' })
           }
         }}
       >

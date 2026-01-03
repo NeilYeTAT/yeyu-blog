@@ -1,17 +1,21 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
-import { Button } from '@/ui/shadcn/button'
 import { useTransitionTheme } from '@/lib/hooks/animation'
+import { Button } from '@/ui/shadcn/button'
 
 export function ModeToggle() {
   const { setTransitionTheme, theme } = useTransitionTheme()
 
   return (
     <Button
-      onClick={() => setTransitionTheme(theme === 'light' ? 'dark' : 'light', theme === 'light' ? 'bottom' : 'top')}
+      onClick={() =>
+        setTransitionTheme(theme === 'light' ? 'dark' : 'light', {
+          direction: theme === 'light' ? 'bottom' : 'top',
+        })
+      }
       size="sm"
-      className='cursor-pointer'
+      className="cursor-pointer"
     >
       {theme === 'light' ? <Sun /> : <Moon />}
     </Button>

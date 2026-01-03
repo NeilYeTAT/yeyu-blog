@@ -111,9 +111,9 @@ export default function YeAvatar() {
         onDragEnd={() => {
           setIsDragging(false)
           if (activeIcon === 'bl') {
-            setTransitionTheme('light', 'left')
+            setTransitionTheme('light', { direction: 'left', duration: 300 })
           } else if (activeIcon === 'br') {
-            setTransitionTheme('dark', 'right')
+            setTransitionTheme('dark', { direction: 'left', duration: 300 })
           }
         }}
         style={{ x, y }}
