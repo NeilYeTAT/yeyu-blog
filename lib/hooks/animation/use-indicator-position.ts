@@ -36,10 +36,12 @@ export function useIndicatorPosition(
 
     update()
 
+    window.addEventListener('resize', update)
     observerRef.current = new ResizeObserver(update)
     observerRef.current.observe(el)
 
     return () => {
+      window.removeEventListener('resize', update)
       observerRef.current?.disconnect()
     }
   }, [activeUrl, refs, mergedOffset.left, mergedOffset.width, mergedOffset.height])

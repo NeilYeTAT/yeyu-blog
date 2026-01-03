@@ -42,7 +42,7 @@ export default function MainHeader() {
   const indicatorStyle = useIndicatorPosition(activeUrl, refs)
 
   return (
-    <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-5/12 items-center justify-center md:h-12">
+    <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center md:h-12 md:w-1/2 lg:w-5/12">
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
@@ -75,14 +75,14 @@ export default function MainHeader() {
             </Link>
           ))}
           {/* TODO: Web3 Login */}
-          <div
+          {/* <div
             className="relative z-10 cursor-pointer px-2 md:px-4"
             onMouseEnter={() => setHoveredPath('login')}
             onMouseLeave={() => setHoveredPath(null)}
           >
             登录
             <HoverBackground isVisible={hoveredPath === 'login'} />
-          </div>
+          </div> */}
 
           <motion.div
             className="bg-clear-sky-indicator absolute top-1/2 -translate-y-1/2 rounded-full shadow-md"
