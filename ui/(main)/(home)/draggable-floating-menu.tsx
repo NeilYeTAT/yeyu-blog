@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useBackgroundMusicStore } from '@/store/use-background-music-store'
 import avatar from './assets/img/haibaraai.webp'
 import { icons } from './constant'
 
@@ -18,22 +19,16 @@ const menuAngles = [157.5, 112.5, 67.5, 22.5]
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const pathname = usePathname()
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
+  const { isPlaying, play, pause } = useBackgroundMusicStore()
   const [isOpen, setIsOpen] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
   const soundEffectRef = useRef<HTMLAudioElement | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const constraintsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    audioRef.current = new Audio('/music/日暮里 - JINBAO.mp3')
-    audioRef.current.loop = true
-
     soundEffectRef.current = new Audio('/sound/ui-select.wav')
 
     return () => {
-      audioRef.current?.pause()
-      audioRef.current = null
       soundEffectRef.current = null
     }
   }, [])
@@ -68,15 +63,10 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
       setTransitionTheme('dark', { direction: 'left', duration: 300 })
       playSoundEffect()
     } else if (id === 'tl') {
-      audioRef.current?.pause()
-      if (audioRef.current !== null) {
-        audioRef.current.currentTime = 0
-      }
-      setIsPlaying(false)
+      pause()
     } else if (id === 'tr') {
-      audioRef.current?.play().catch(e => console.error('Audio play failed', e))
+      play()
       playSoundEffect()
-      setIsPlaying(true)
     }
     setIsOpen(false)
   }

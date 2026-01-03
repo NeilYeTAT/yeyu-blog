@@ -8,28 +8,22 @@ import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { typedEntries } from '@/lib/utils/typed'
+import { useBackgroundMusicStore } from '@/store/use-background-music-store'
 import { icons, type IconsId } from './constant'
 
 export default function YeAvatar() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
+  const { isPlaying, play, pause } = useBackgroundMusicStore()
   const [isDragging, setIsDragging] = useState(false)
   const [activeIcon, setActiveIcon] = useState<IconsId | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
   const soundEffectRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
-    // TODO: config or settings
-    audioRef.current = new Audio('/music/日暮里 - JINBAO.mp3')
-    audioRef.current.loop = true
-
     soundEffectRef.current = new Audio('/sound/ui-select.wav')
 
     return () => {
-      audioRef.current?.pause()
-      audioRef.current = null
       soundEffectRef.current = null
     }
   }, [])
@@ -142,15 +136,10 @@ export default function YeAvatar() {
             setTransitionTheme('dark', { direction: 'left', duration: 300 })
             playSoundEffect()
           } else if (activeIcon === 'tl') {
-            audioRef.current?.pause()
-            if (audioRef.current !== null) {
-              audioRef.current.currentTime = 0
-            }
-            setIsPlaying(false)
+            pause()
           } else if (activeIcon === 'tr') {
-            audioRef.current?.play().catch(e => console.error('Audio play failed', e))
+            play()
             playSoundEffect()
-            setIsPlaying(true)
           }
         }}
         style={{ x, y }}
