@@ -13,13 +13,13 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { HoverCard } from '@/ui/components/shared/hover-card'
 // * svg
-import GolangIcon from './assets/golang-icon.svg'
-import NestjsIcon from './assets/nestjs-icon.svg'
-import NextjsIcon from './assets/nextjs-icon.svg'
-import ReactIcon from './assets/react-icon.svg'
-import TailwindcssIcon from './assets/tailwindcss-icon.svg'
-import TypeScriptIcon from './assets/typescript-icon.svg'
-import VimIcon from './assets/vim-icon.svg'
+import GolangIcon from './assets/svg/golang-icon.svg'
+import NestjsIcon from './assets/svg/nestjs-icon.svg'
+import NextjsIcon from './assets/svg/nextjs-icon.svg'
+import ReactIcon from './assets/svg/react-icon.svg'
+import TailwindcssIcon from './assets/svg/tailwindcss-icon.svg'
+import TypeScriptIcon from './assets/svg/typescript-icon.svg'
+import VimIcon from './assets/svg/vim-icon.svg'
 
 type TechItem = {
   key: string
