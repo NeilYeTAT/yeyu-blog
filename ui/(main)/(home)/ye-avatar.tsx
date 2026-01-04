@@ -91,14 +91,14 @@ export default function YeAvatar() {
                   className={cn(
                     'absolute z-50 flex size-10 items-center justify-center rounded-full shadow-sm backdrop-blur-md transition-colors duration-300',
                     className,
-                    'bg-[#fafafa] dark:bg-zinc-800',
+                    'bg-[#fafafa] dark:border dark:border-neutral-800 dark:bg-black',
                     activeIcon === id || isFunctionActive
-                      ? 'text-clear-sky-[#7ac7b9]'
-                      : 'text-zinc-500 dark:text-zinc-400',
+                      ? 'text-clear-sky-[#7ac7b9] dark:text-white'
+                      : 'text-zinc-500 dark:text-neutral-500',
                   )}
                 >
                   {activeIcon === id && (
-                    <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute inset-0 rounded-full ring-2 ring-offset-2 ring-offset-[#7ac7b9] dark:ring-offset-zinc-800" />
+                    <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute inset-0 rounded-full ring-2 ring-offset-2 ring-offset-[#7ac7b9] dark:ring-white dark:ring-offset-black" />
                   )}
                   <Icon className="relative z-10 size-5" />
                 </motion.div>
@@ -111,7 +111,7 @@ export default function YeAvatar() {
       {/* 摸摸头~ */}
       <motion.figure
         // TODO: config color
-        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-emerald-300"
+        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]"
         whileTap={{ scale: 0.99, rotate: 1 }}
         drag
         dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -151,7 +151,7 @@ export default function YeAvatar() {
           placeholder="blur"
           priority
         />
-        <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-blue-800" />
+        <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-neutral-800 dark:ring-offset-black" />
       </motion.figure>
     </div>
   )
