@@ -1,10 +1,13 @@
+import { headers } from 'next/headers'
 import { auth } from '@/auth'
 import { ADMIN_EMAILS } from '@/config/constant'
 
 // import from (https://github.com/aifuxi/fuxiaochen/blob/master/features/user/actions/index.ts)
 // 感谢大佬带来的启发 🥹
 export async function noPermission() {
-  const session = await auth()
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
 
   // 没有邮箱或者未配置admin邮箱，返回true，无权限
   if (session?.user?.email == null || ADMIN_EMAILS?.length == null) {

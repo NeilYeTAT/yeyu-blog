@@ -1,89 +1,149 @@
 'use client'
 
 import type { JSX } from 'react'
-import { ArrowDown } from 'lucide-react'
+import {
+  motion,
+  type MotionStyle,
+  useAnimationFrame,
+  useMotionValue,
+  useSpring,
+} from 'motion/react'
+import Image from 'next/image'
 import { useState } from 'react'
-import GolangSvg from '@/config/svg/golang-svg'
-import NextjsSvg from '@/config/svg/nextjs-svg'
-import ReactSvg from '@/config/svg/reactjs-svg'
-import TailwindcssSvg from '@/config/svg/tailwindcss-svg'
-import TypeScriptSvg from '@/config/svg/typescript-svg'
-import VueSvg from '@/config/svg/vuejs-svg'
-import { startConfettiGinkgo, startConfettiSakura } from '@/lib/animation/particle-effects'
 import { cn } from '@/lib/utils/common/shadcn'
+import { HoverCard } from '@/ui/components/shared/hover-card'
+// * svg
+import GolangIcon from './assets/svg/golang-icon.svg'
+import NestjsIcon from './assets/svg/nestjs-icon.svg'
+import NextjsIcon from './assets/svg/nextjs-icon.svg'
+import ReactIcon from './assets/svg/react-icon.svg'
+import TailwindcssIcon from './assets/svg/tailwindcss-icon.svg'
+import TypeScriptIcon from './assets/svg/typescript-icon.svg'
+import VimIcon from './assets/svg/vim-icon.svg'
 
-const techStackSvg: JSX.Element[] = [
-  <VueSvg key="vue" />,
-  <TypeScriptSvg key="ts" />,
-  <ReactSvg key="react" />,
-  <TailwindcssSvg key="tailwindcss" />,
-  <NextjsSvg key="next" />,
-  <GolangSvg key="go" />,
+type TechItem = {
+  key: string
+  component: JSX.Element
+  name: string
+  insight: string
+  color?: string
+}
+
+const techStackData: TechItem[] = [
+  {
+    key: 'ts',
+    component: <Image src={TypeScriptIcon} alt="TypeScript" className="size-full" />,
+    name: 'TypeScript',
+    insight: '最喜欢的编程语言，选择 ts 全栈开发，让 ts 再次伟大🙌🏻',
+    color: '#3178c6',
+  },
+  {
+    key: 'react',
+    component: <Image src={ReactIcon} alt="React" className="size-full" />,
+    name: 'React',
+    insight: 'jsx/tsx 语法顶级，但 useEffect 确实不好用，也容易被人滥用性能优化的那些 hook😅',
+    color: '#61dafb',
+  },
+  {
+    key: 'tailwindcss',
+    component: <Image src={TailwindcssIcon} alt="Tailwind CSS" className="size-full" />,
+    name: 'Tailwind CSS',
+    insight: '神中神👍🏻，没有 tailwindcss 根本不想写前端',
+    color: '#38bdf8',
+  },
+  {
+    key: 'next',
+    component: <Image src={NextjsIcon} alt="Next.js" className="size-full dark:invert" />,
+    name: 'Next.js',
+    insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
+    color: '#000000',
+  },
+  {
+    key: 'go',
+    component: <Image src={GolangIcon} alt="Go" className="size-full" />,
+    name: 'Go',
+    insight:
+      '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
+    color: '#00add8',
+  },
+  {
+    key: 'nest',
+    component: <Image src={NestjsIcon} alt="NestJS" className="size-full" />,
+    name: 'NestJS',
+    insight: '还在学习中...暂时还觉得挺优雅',
+    color: '#e0234e',
+  },
+  {
+    key: 'vim',
+    component: <Image src={VimIcon} alt="Vim" className="size-full" />,
+    name: 'Vim',
+    insight: '编辑器之神，虽然我是 vscode + vim 插件，不够纯粹🥹',
+    color: '#019733',
+  },
 ]
 
-// * 按照上面 techStackSvg 的顺序开始点亮
-const correctOrder = [0, 1, 2, 3, 4, 5]
-
 function TechStack() {
-  const [clicked, setClicked] = useState<boolean[]>(
-    Array.from({ length: techStackSvg.length }, () => false),
-  )
-  const [clickOrder, setClickOrder] = useState<number[]>([])
+  const rotation = useMotionValue(0)
+  const speed = useSpring(1, { stiffness: 40, damping: 20 })
+  const [hoveredItem, setHoveredItem] = useState<TechItem | null>(null)
 
-  const handleClick = (index: number) => {
-    // * 已经点过了，取消点击
-    if (clicked[index]) {
-      const newClicked = [...clicked]
-      newClicked[index] = false
-      setClicked(newClicked)
-
-      setClickOrder(prev => prev.filter(i => i !== index))
-      return
-    }
-
-    // * 新点击
-    const newClicked = [...clicked]
-    newClicked[index] = true
-    setClicked(newClicked)
-
-    setClickOrder(prev => [...prev, index])
-
-    const allClicked = newClicked.every(Boolean)
-    if (allClicked) {
-      const isCorrect =
-        clickOrder.length + 1 === correctOrder.length &&
-        [...clickOrder, index].every((val, i) => val === correctOrder[i])
-
-      if (isCorrect) {
-        startConfettiSakura(10000)
-      } else {
-        startConfettiGinkgo(10000)
-      }
-    }
-  }
+  useAnimationFrame((_time, delta) => {
+    const currentRotation = rotation.get()
+    const currentSpeed = speed.get()
+    // 360 degrees in 24 seconds (24000 ms)
+    const baseSpeed = 360 / 24000
+    rotation.set(currentRotation + baseSpeed * delta * currentSpeed)
+  })
 
   return (
-    <div>
-      <ArrowDown height={100} width={40} className="mx-auto animate-bounce" />
-      {/* 尺子量的~ */}
-      <section className="animate-ye-spin-slowly relative size-62.5 rounded-full md:size-125">
-        {techStackSvg.map((svg, i) => (
-          <div
-            key={svg.key}
-            onClick={() => handleClick(i)}
-            className={cn(
-              `absolute left-1/2 z-10 size-1/4 origin-[center_125px] -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 md:origin-[center_250px] dark:drop-shadow-[0_0_0.75rem_#006A71]`,
-              clicked[i] &&
-                'brightness-125 drop-shadow-[0_0_1.25rem_#4D55CC] dark:drop-shadow-[0_0_1.25rem_#91DDCF]',
-            )}
-            style={{
-              transform: `rotate(${i * (360 / techStackSvg.length)}deg)`,
-            }}
+    <div className="relative mx-auto w-full max-w-5xl">
+      <HoverCard
+        show={hoveredItem !== null}
+        title={hoveredItem !== null ? hoveredItem.name : ''}
+        description={hoveredItem !== null ? hoveredItem.insight : ''}
+        icon={hoveredItem?.component}
+        color={hoveredItem?.color}
+        className="absolute top-0 right-4 hidden md:block"
+      />
+      <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] md:mt-20 md:h-70">
+        <div className="flex w-full justify-center mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] pt-10">
+          <motion.section
+            style={
+              {
+                rotate: rotation,
+                width: 'calc(var(--r) * 2)',
+                height: 'calc(var(--r) * 2)',
+                '--n': techStackData.length,
+                '--r': `max(var(--min-r), calc((var(--n) * var(--view-w) / ${techStackData.length > 5 ? 4 : 3}) / 6.28))`,
+              } as MotionStyle
+            }
+            className="relative rounded-full [--min-r:160px] [--s:64px] [--view-w:100vw] md:[--min-r:320px] md:[--s:128px] md:[--view-w:64rem]"
           >
-            {svg}
-          </div>
-        ))}
-      </section>
+            {techStackData.map((item, i) => (
+              <motion.div
+                key={item.key}
+                onHoverStart={() => {
+                  speed.set(0)
+                  setHoveredItem(item)
+                }}
+                onHoverEnd={() => {
+                  speed.set(1)
+                  setHoveredItem(null)
+                }}
+                className={cn(
+                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_0.75rem_#1babbb] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]`,
+                )}
+                style={{
+                  rotate: i * (360 / techStackData.length),
+                  transformOrigin: 'center var(--r)',
+                }}
+              >
+                {item.component}
+              </motion.div>
+            ))}
+          </motion.section>
+        </div>
+      </div>
     </div>
   )
 }

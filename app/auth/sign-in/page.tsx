@@ -2,7 +2,7 @@
 
 import { GithubIcon, RotateCcw } from 'lucide-react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import { signIn } from '@/lib/auth/client'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 import StarsBackground from '@/ui/components/shared/stars-background'
 import { Button } from '@/ui/shadcn/button'
@@ -22,7 +22,7 @@ export default function LoginPage() {
           <main className="flex w-full flex-col gap-4">
             <Button
               type="button"
-              onClick={() => signIn('github', { redirectTo: '/admin' })}
+              onClick={() => signIn.social({ provider: 'github', callbackURL: '/admin' })}
               className="cursor-pointer"
             >
               <GithubIcon />
