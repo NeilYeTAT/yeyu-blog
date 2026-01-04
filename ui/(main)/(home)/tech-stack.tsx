@@ -53,7 +53,7 @@ const techStackData: TechItem[] = [
   },
   {
     key: 'next',
-    component: <Image src={NextjsIcon} alt="Next.js" className="size-full" />,
+    component: <Image src={NextjsIcon} alt="Next.js" className="size-full dark:invert" />,
     name: 'Next.js',
     insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
     color: '#000000',
@@ -131,7 +131,7 @@ function TechStack() {
                   setHoveredItem(null)
                 }}
                 className={cn(
-                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_0.75rem_#211C84] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_0.75rem_#006A71]`,
+                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_0.75rem_#1babbb] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]`,
                 )}
                 style={{
                   rotate: i * (360 / techStackData.length),
