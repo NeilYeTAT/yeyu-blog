@@ -47,7 +47,7 @@ export default function MainHeader() {
           // TODO: config other colors
           'bg-clear-sky-background/80 h-full rounded-full backdrop-blur-sm dark:bg-black/70',
           'px-2.5 py-1 md:px-3 md:py-2',
-          'border border-[#00000011] dark:border-white/[0.1]',
+          'border border-[#00000011] dark:border-white/10',
           'shadow-[0px_4px_10px_0px_#0000001A]',
           'w-full',
         )}
@@ -106,7 +106,7 @@ function HoverBackground({ isVisible }: { isVisible: boolean }) {
       {isVisible && (
         <motion.div
           layoutId="hoverBackground"
-          className="bg-clear-sky-hover-background absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full shadow-sm dark:bg-neutral-800"
+          className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-white/60 shadow-sm dark:bg-neutral-800"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
