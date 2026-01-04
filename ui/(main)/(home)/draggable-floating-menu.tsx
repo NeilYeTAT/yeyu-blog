@@ -99,7 +99,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         {...props}
       >
         <div
-          className="relative flex size-12 items-center justify-center rounded-full bg-white shadow-lg dark:bg-zinc-800"
+          className="relative flex size-12 items-center justify-center rounded-full bg-white shadow-lg dark:border dark:border-neutral-800 dark:bg-black dark:shadow-[0_0_15px_rgba(255,255,255,0.5)]"
           onClick={() => setIsOpen(!isOpen)}
         >
           <Image
@@ -108,7 +108,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
             className="size-full rounded-full object-cover"
             placeholder="blur"
           />
-          <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute top-0 left-0 size-full rounded-full ring-2 ring-offset-1 dark:ring-blue-800" />
+          <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute top-0 left-0 size-full rounded-full ring-2 ring-offset-1 ring-offset-white dark:ring-neutral-800 dark:ring-offset-black" />
         </div>
 
         <AnimatePresence>
@@ -140,10 +140,10 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     className={cn(
                       'absolute top-1 left-1 flex size-10 cursor-pointer items-center justify-center rounded-full shadow-sm backdrop-blur-md transition-colors duration-300',
-                      'bg-[#fafafa] dark:bg-zinc-800',
+                      'border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-black',
                       isFunctionActive
-                        ? 'text-clear-sky-primary'
-                        : 'text-zinc-500 dark:text-zinc-400',
+                        ? 'text-black dark:text-white'
+                        : 'text-neutral-500 dark:text-neutral-500',
                     )}
                     onClick={e => {
                       e.stopPropagation()
