@@ -5,7 +5,7 @@ import { DraggableFloatingMenu } from './(home)/draggable-floating-menu'
 import { Background } from './background'
 import { ContactMe } from './contact-me'
 import MainHeader from './main-header'
-// import StartUpMotion from './start-up-motion'
+import StartUpMotion from './start-up-motion'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +22,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         <Background />
         <DraggableFloatingMenu />
-        {/* <StartUpMotion /> */}
+        <StartUpMotion />
       </main>
     </LenisScrollProvider>
   )
