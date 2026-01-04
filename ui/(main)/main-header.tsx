@@ -32,7 +32,6 @@ const RouteList: { path: string; pathName: string }[] = [
   },
 ]
 
-// TODO: 暂且仅考虑一种主题，亮色模式
 export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
@@ -46,14 +45,14 @@ export default function MainHeader() {
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'bg-clear-sky-background/80 h-full rounded-full backdrop-blur-sm',
+          'bg-clear-sky-background/80 h-full rounded-full backdrop-blur-sm dark:bg-black/70',
           'px-2.5 py-1 md:px-3 md:py-2',
-          'border border-[#00000011] dark:border-[#FFFFFF1A]',
+          'border border-[#00000011] dark:border-white/[0.1]',
           'shadow-[0px_4px_10px_0px_#0000001A]',
           'w-full',
         )}
       >
-        <nav className="relative flex h-full items-center justify-between text-sm text-nowrap md:text-xl">
+        <nav className="relative flex h-full items-center justify-between text-sm text-nowrap md:text-xl dark:text-neutral-400">
           {RouteList.map(route => (
             <Link
               key={route.path}
@@ -62,8 +61,10 @@ export default function MainHeader() {
                 if (el != null) refs.current.set(route.path, el)
               }}
               className={cn(
-                'relative z-10 px-2 md:px-4',
-                route.path === activeUrl && 'text-clear-sky-active-text font-bold',
+                'relative z-10 px-2 transition-colors md:px-4',
+                route.path === activeUrl
+                  ? 'text-clear-sky-active-text font-bold dark:text-black'
+                  : 'dark:hover:text-neutral-200',
               )}
               onMouseEnter={() => setHoveredPath(route.path)}
               onMouseLeave={() => setHoveredPath(null)}
@@ -85,7 +86,7 @@ export default function MainHeader() {
           </div> */}
 
           <motion.div
-            className="bg-clear-sky-indicator absolute top-1/2 -translate-y-1/2 rounded-full shadow-md"
+            className="bg-clear-sky-indicator absolute top-1/2 -translate-y-1/2 rounded-full shadow-md dark:bg-white"
             animate={indicatorStyle}
             transition={{
               type: 'spring',
@@ -105,7 +106,7 @@ function HoverBackground({ isVisible }: { isVisible: boolean }) {
       {isVisible && (
         <motion.div
           layoutId="hoverBackground"
-          className="bg-clear-sky-hover-background absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full shadow-sm"
+          className="bg-clear-sky-hover-background absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full shadow-sm dark:bg-neutral-800"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
