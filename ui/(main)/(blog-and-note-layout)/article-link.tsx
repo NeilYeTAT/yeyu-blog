@@ -19,14 +19,14 @@ export const ArticleLink: FC<{
       href={isBlog ? `/blog/${item?.slug}` : isNote ? `/note/${item?.slug}` : '/'}
       className={cn(
         'group flex cursor-pointer items-center justify-between gap-10 rounded-sm p-2 duration-500',
-        'hover:text-clear-sky-indicator dark:hover:text-emerald-300',
+        'hover:text-clear-sky-indicator dark:hover:text-white',
       )}
     >
       <h2 className="group relative truncate">
         {item.title}
-        <ScaleUnderline className="bg-clear-sky-indicator dark:bg-emerald-300" />
+        <ScaleUnderline className="bg-clear-sky-indicator dark:bg-white" />
       </h2>
-      <time className="group-hover:text-clear-sky-indicator shrink-0 text-sm font-light text-gray-400 dark:group-hover:text-emerald-300">
+      <time className="group-hover:text-clear-sky-indicator shrink-0 text-sm font-light text-gray-400 dark:group-hover:text-white">
         {toZhDay(item.createdAt)}
       </time>
     </Link>
