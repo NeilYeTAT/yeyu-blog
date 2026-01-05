@@ -1,6 +1,21 @@
 import * as motion from 'motion/react-client'
 import { customMarkdownTheme } from '@/lib/markdown'
 import ArticleDisplayHeader from './internal/article-display-header'
+import { type Heading, PostToc } from './internal/post-toc'
+
+function extractHeadings(html: string): Heading[] {
+  const regex = /<h([1-6])(?:[^>]*id="([^"]*)")?[^>]*>(.*?)<\/h\1>/g
+  const headings: Heading[] = []
+  let match
+  while ((match = regex.exec(html)) !== null) {
+    headings.push({
+      level: parseInt(match[1]),
+      id: match[2] ?? '',
+      text: match[3].replace(/<[^>]*>/g, ''),
+    })
+  }
+  return headings
+}
 
 export default function ArticleDisplayPage({
   title,
@@ -13,6 +28,8 @@ export default function ArticleDisplayPage({
   createdAt: Date
   tags: string[]
 }) {
+  const headings = extractHeadings(content)
+
   return (
     <div className="z-10 min-h-screen backdrop-blur-[1px]">
       <motion.article
@@ -34,6 +51,7 @@ export default function ArticleDisplayPage({
         <ArticleDisplayHeader title={title} createdAt={createdAt} tags={tags} />
         {/* 渲染的主要内容 */}
         <main className={customMarkdownTheme} dangerouslySetInnerHTML={{ __html: content }} />
+        <PostToc headings={headings} />
       </motion.article>
     </div>
   )
