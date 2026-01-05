@@ -4,7 +4,6 @@ import { getPublishedBlogHTMLBySlug } from '@/actions/blogs'
 import ArticleDisplayPage from '@/ui/components/shared/article-display-page'
 import CommentCard from '@/ui/components/shared/comment-card'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
-import ScrollIndicator from '@/ui/components/shared/scroll-indicator'
 
 export const BlogDetail: FC<
   ComponentProps<'div'> & {
@@ -24,7 +23,6 @@ export const BlogDetail: FC<
       <ArticleDisplayPage title={title} createdAt={createdAt} content={content} tags={tagNames} />
       <HorizontalDividingLine fill="#EC7FA9" />
       <CommentCard term={`${title}-blog-${id}`} />
-      <ScrollIndicator />
     </div>
   )
 }

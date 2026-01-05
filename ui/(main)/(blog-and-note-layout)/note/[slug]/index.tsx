@@ -4,7 +4,6 @@ import { getPublishedNoteHTMLBySlug } from '@/actions/notes'
 import ArticleDisplayPage from '@/ui/components/shared/article-display-page'
 import CommentCard from '@/ui/components/shared/comment-card'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
-import ScrollIndicator from '@/ui/components/shared/scroll-indicator'
 
 export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({ slug }) => {
   const article = await getPublishedNoteHTMLBySlug(slug)
@@ -18,7 +17,6 @@ export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({
       <ArticleDisplayPage title={title} createdAt={createdAt} content={content} tags={tagNames} />
       <HorizontalDividingLine fill="#EC7FA9" />
       <CommentCard term={`${title}-note-${id}`} />
-      <ScrollIndicator />
     </div>
   )
 }
