@@ -91,7 +91,7 @@ export default function YeAvatar() {
                   className={cn(
                     'absolute z-50 flex size-10 items-center justify-center rounded-full shadow-sm backdrop-blur-md transition-colors duration-300',
                     className,
-                    'bg-[#fafafa] dark:border dark:border-neutral-800 dark:bg-black',
+                    'border border-zinc-200 bg-white dark:border-neutral-800 dark:bg-black',
                     activeIcon === id || isFunctionActive
                       ? 'text-clear-sky-[#7ac7b9] dark:text-white'
                       : 'text-zinc-500 dark:text-neutral-500',
