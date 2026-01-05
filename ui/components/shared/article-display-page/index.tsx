@@ -33,7 +33,7 @@ export default function ArticleDisplayPage({
   return (
     <div className="z-10 min-h-screen backdrop-blur-[1px]">
       <motion.article
-        className="dark:border-accent flex max-w-3xl flex-1 flex-col gap-4 rounded-sm border border-dashed border-indigo-200 bg-slate-300/30 px-6 py-2 dark:bg-gray-900/30"
+        className="flex max-w-3xl flex-1 flex-col gap-4 rounded-sm px-6 py-2"
         initial={{
           opacity: 0,
           y: 40,
