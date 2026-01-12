@@ -45,7 +45,7 @@
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "better-auth": "^1.4.9",
+    "better-auth": "^1.4.11",
     "bytemd": "^1.22.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
