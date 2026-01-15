@@ -1,5 +1,6 @@
 import LenisScrollProvider from '@/ui/components/provider/lenis-scroll-provider'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
+import { Toaster } from '@/ui/shadcn/sonner'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 import { DraggableFloatingMenu } from './(home)/draggable-floating-menu'
 import { Background } from './background'
@@ -23,6 +24,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <Background />
         <DraggableFloatingMenu />
         <StartUpMotion />
+        <Toaster position="top-center" richColors />
       </main>
     </LenisScrollProvider>
   )

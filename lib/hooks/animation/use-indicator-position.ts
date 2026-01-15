@@ -14,7 +14,7 @@ const defaultOffset: Required<IndicatorOffset> = {
 
 export function useIndicatorPosition(
   activeUrl: string,
-  refs: React.MutableRefObject<Map<string, HTMLAnchorElement>>,
+  refs: React.MutableRefObject<Map<string, HTMLElement>>,
   offset: IndicatorOffset = {},
 ) {
   const [style, setStyle] = useState({ left: 0, width: 0, height: 0 })
