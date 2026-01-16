@@ -75,11 +75,28 @@ const RouteList: RouteItem[] = [
   },
 ]
 
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction === 0 ? 0 : direction > 0 ? 20 : -20,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction === 0 ? 0 : direction < 0 ? 20 : -20,
+    opacity: 0,
+  }),
+}
+
 export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
   const refs = useRef(new Map<string, HTMLElement>())
   const [hoveredPath, setHoveredPath] = useState<string | null>(null)
+  const [direction, setDirection] = useState(0)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const [groupLastActivePaths, setGroupLastActivePaths] = useState<Record<string, string>>({})
   const [prevActiveUrl, setPrevActiveUrl] = useState(activeUrl)
@@ -132,6 +149,35 @@ export default function MainHeader() {
     }
   }
 
+  const handleMouseEnter = (path: string) => {
+    if (timeoutRef.current != null) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    const newIndex = RouteList.findIndex(r => 'group' in r && r.group?.key === path)
+    const oldIndex = RouteList.findIndex(r => 'group' in r && r.group?.key === hoveredPath)
+
+    if (newIndex !== -1 && oldIndex !== -1 && newIndex !== oldIndex) {
+      setDirection(newIndex > oldIndex ? 1 : -1)
+    }
+
+    setHoveredPath(path)
+  }
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setHoveredPath(null)
+      setDirection(0)
+    }, 150)
+  }
+
+  const activeGroupRoute = useMemo(() => {
+    return RouteList.find(
+      route => 'group' in route && route.group != null && route.group.key === hoveredPath,
+    ) as (RouteItem & { group: NavGroup }) | undefined
+  }, [hoveredPath])
+
   return (
     <header className="sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center md:h-12 md:w-1/2 lg:w-5/12">
       <AnimatePresence>
@@ -182,8 +228,8 @@ export default function MainHeader() {
                     if (el != null) refs.current.set(route.group.key, el)
                   }}
                   className="z-10"
-                  onMouseEnter={() => setHoveredPath(route.group.key)}
-                  onMouseLeave={() => setHoveredPath(null)}
+                  onMouseEnter={() => handleMouseEnter(route.group.key)}
+                  onMouseLeave={handleMouseLeave}
                 >
                   <Link
                     href={effectivePath}
@@ -210,48 +256,6 @@ export default function MainHeader() {
                       <HoverBackground isVisible={!isGroupActive && isGroupHovered} />
                     </div>
                   </Link>
-
-                  {/* Submenu */}
-                  <AnimatePresence>
-                    {isGroupHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className={cn(
-                          'absolute top-[116%] left-0 w-full overflow-hidden rounded-3xl py-1 backdrop-blur-sm md:py-2',
-                          'bg-clear-sky-background/80 dark:bg-black/70',
-                          'border border-[#00000011] dark:border-white/10',
-                          'shadow-[0px_4px_10px_0px_#0000001A]',
-                        )}
-                      >
-                        <div className="flex justify-around px-8 md:px-12">
-                          {route.group.items.map(item => (
-                            <Link
-                              key={item.path}
-                              href={item.path}
-                              onClick={e =>
-                                handleLinkClick(
-                                  e,
-                                  (route.group.disabled ?? false) || (item.disabled ?? false),
-                                )
-                              }
-                              className={cn(
-                                'rounded-lg px-4 py-2 transition-colors',
-                                'hover:underline',
-                                item.path === activeUrl
-                                  ? 'text-clear-sky-active-text font-bold'
-                                  : 'text-neutral-600 dark:text-neutral-400',
-                              )}
-                            >
-                              {item.pathName}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
               )
             }
@@ -273,8 +277,8 @@ export default function MainHeader() {
                     ? 'text-clear-sky-active-text font-bold dark:text-black'
                     : 'dark:hover:text-neutral-200',
                 )}
-                onMouseEnter={() => setHoveredPath(path)}
-                onMouseLeave={() => setHoveredPath(null)}
+                onMouseEnter={() => handleMouseEnter(path)}
+                onMouseLeave={handleMouseLeave}
               >
                 <h2>{pathName}</h2>
                 <HoverBackground isVisible={hoveredPath !== activeKey && hoveredPath === path} />
@@ -291,6 +295,66 @@ export default function MainHeader() {
               damping: 16,
             }}
           />
+
+          {/* Submenu */}
+          <AnimatePresence>
+            {isSubmenuOpen && activeGroupRoute != null && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className={cn(
+                  'absolute top-[116%] left-0 w-full overflow-hidden rounded-3xl py-1 backdrop-blur-sm md:py-2',
+                  'bg-clear-sky-background/80 dark:bg-black/70',
+                  'border border-[#00000011] dark:border-white/10',
+                  'shadow-[0px_4px_10px_0px_#0000001A]',
+                )}
+                onMouseEnter={() => {
+                  if (timeoutRef.current != null) {
+                    clearTimeout(timeoutRef.current)
+                    timeoutRef.current = null
+                  }
+                }}
+                onMouseLeave={handleMouseLeave}
+              >
+                <AnimatePresence mode="popLayout" custom={direction}>
+                  <motion.div
+                    key={activeGroupRoute.group.key}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                    className="flex justify-around px-8 md:px-12"
+                  >
+                    {activeGroupRoute.group.items.map(item => (
+                      <Link
+                        key={item.path}
+                        href={item.path}
+                        onClick={e =>
+                          handleLinkClick(
+                            e,
+                            (activeGroupRoute.group.disabled ?? false) || (item.disabled ?? false),
+                          )
+                        }
+                        className={cn(
+                          'rounded-lg px-4 py-2 transition-colors',
+                          'hover:underline',
+                          item.path === activeUrl
+                            ? 'text-clear-sky-active-text font-bold'
+                            : 'text-neutral-600 dark:text-neutral-400',
+                        )}
+                      >
+                        {item.pathName}
+                      </Link>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
       </MaxWidthWrapper>
     </header>
