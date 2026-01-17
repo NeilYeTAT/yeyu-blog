@@ -50,7 +50,11 @@ export default function ArticleDisplayPage({
       >
         <ArticleDisplayHeader title={title} createdAt={createdAt} tags={tags} />
         {/* 渲染的主要内容 */}
-        <main className={customMarkdownTheme} dangerouslySetInnerHTML={{ __html: content }} />
+        <main
+          id="article-content"
+          className={customMarkdownTheme}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
         <PostToc headings={headings} />
       </motion.article>
     </div>

@@ -3,7 +3,7 @@
 import { useLenis } from 'lenis/react'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
 import { AnimatePresence, motion, useScroll } from 'motion/react'
-import { type FC, useEffect, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
 
@@ -13,19 +13,41 @@ export type Heading = {
   id: string
 }
 
+const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
+  const ref = useRef(container)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end end'],
+  })
+
+  return (
+    <motion.circle
+      cx="50"
+      cy="50"
+      r="36"
+      pathLength="1"
+      className="fill-none stroke-black/70 dark:stroke-white/70"
+      strokeWidth="8"
+      style={{
+        pathLength: scrollYProgress,
+      }}
+    />
+  )
+}
+
 export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
   const [activeId, setActiveId] = useState<string>('')
   const [isExpanded, setIsExpanded] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [articleContent, setArticleContent] = useState<HTMLElement | null>(null)
   const lenis = useLenis()
-
-  const { scrollYProgress } = useScroll()
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true)
+      setArticleContent(document.getElementById('article-content'))
     }, 0)
     return () => clearTimeout(timer)
   }, [])
@@ -95,12 +117,12 @@ export const PostToc: FC<{
         'border border-[#00000011] dark:border-white/10',
         'shadow-[0px_4px_10px_0px_#0000001A]',
         'overflow-hidden',
-        'max-w-[90vw] min-w-50',
+        'max-w-[90vw]',
         isExpanded ? 'rounded-2xl' : 'rounded-full',
       )}
-      initial={{ width: 'auto' }}
+      initial={{ width: 300 }}
       animate={{
-        width: isExpanded ? 360 : 'auto',
+        width: isExpanded ? 360 : 300,
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
@@ -129,17 +151,19 @@ export const PostToc: FC<{
                 />
 
                 {/* progress */}
-                <motion.circle
-                  cx="50"
-                  cy="50"
-                  r="36"
-                  pathLength="1"
-                  className="fill-none stroke-black/70 dark:stroke-white/70"
-                  strokeWidth="4"
-                  style={{
-                    pathLength: scrollYProgress,
-                  }}
-                />
+                {articleContent != null ? (
+                  <TocProgressCircle container={articleContent} />
+                ) : (
+                  <motion.circle
+                    cx="50"
+                    cy="50"
+                    r="36"
+                    pathLength="1"
+                    className="fill-none stroke-black/70 dark:stroke-white/70"
+                    strokeWidth="4"
+                    style={{ pathLength: 0 }}
+                  />
+                )}
               </svg>
             </figure>
             <span>{activeHeading?.text ?? '目录'}</span>
@@ -164,7 +188,8 @@ export const PostToc: FC<{
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="max-h-[60vh] overflow-y-auto border-t border-black/5 dark:border-white/5"
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="max-h-[60vh] overflow-x-hidden overflow-y-auto border-t border-black/5 dark:border-white/5"
             >
               <ul className="flex flex-col gap-1 p-2">
                 {headings.map(heading => (
