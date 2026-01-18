@@ -178,14 +178,11 @@ export default function MainHeader() {
 
   const effectiveActiveUrl = useMemo(() => {
     if (modalType != null) {
-      for (const route of RouteList) {
-        if ('group' in route && route.group != null) {
-          const item = route.group.items.find(i => i.modal === modalType)
-          if (item != null) return item.path
-        } else {
-          if (route.modal === modalType) return route.path
-        }
-      }
+      const modalRoute = RouteList.flatMap(route =>
+        'group' in route && route.group != null ? route.group.items : [route as NavRoute],
+      ).find(route => route.modal === modalType)
+
+      if (modalRoute != null) return modalRoute.path
     }
     return activeUrl
   }, [activeUrl, modalType])
@@ -216,12 +213,13 @@ export default function MainHeader() {
       if ('group' in route && route.group != null) {
         return route.group.items.some(item => item.path === effectiveActiveUrl)
       }
-      return route.path === effectiveActiveUrl
+      return (route as NavRoute).path === effectiveActiveUrl
     })
+
     if (activeRoute != null && 'group' in activeRoute && activeRoute.group != null) {
       return activeRoute.group.key
     }
-    return activeRoute?.path ?? effectiveActiveUrl
+    return (activeRoute as NavRoute)?.path ?? effectiveActiveUrl
   }, [effectiveActiveUrl])
 
   const isSubmenuOpen = useMemo(() => {
