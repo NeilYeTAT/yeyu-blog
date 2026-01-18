@@ -116,7 +116,7 @@ const NavItem: FC<
     item: NavRoute
     elRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>
   } & Omit<ComponentProps<'a'>, 'href' | 'ref'>
-> = ({ item, className, children, elRef }) => {
+> = ({ item, className, children, elRef, ...props }) => {
   const isButton = item.type === 'button'
   const setModalOpen = useModalStore(s => s.setModalOpen)
 
@@ -125,6 +125,7 @@ const NavItem: FC<
       <button
         ref={elRef as React.Ref<HTMLButtonElement>}
         className={className}
+        type="button"
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           if (item.disabled === true) {
             e.preventDefault()
@@ -148,6 +149,7 @@ const NavItem: FC<
       ref={elRef as React.Ref<HTMLAnchorElement>}
       href={item.path}
       className={className}
+      {...props}
       onClick={e => {
         if (item.disabled === true) {
           e.preventDefault()
@@ -351,7 +353,7 @@ export default function MainHeader() {
                   if (el != null) refs.current.set(path, el)
                 }}
                 className={cn(
-                  'relative z-10 px-2 transition-colors md:px-4',
+                  'relative z-10 block transition-colors',
                   path === activeKey
                     ? 'text-clear-sky-active-text font-bold dark:text-black'
                     : 'dark:hover:text-neutral-200',
@@ -359,8 +361,10 @@ export default function MainHeader() {
                 onMouseEnter={() => handleMouseEnter(path)}
                 onMouseLeave={handleMouseLeave}
               >
-                <h2>{pathName}</h2>
-                <HoverBackground isVisible={hoveredPath !== activeKey && hoveredPath === path} />
+                <div className="relative px-2 md:px-4">
+                  <h2>{pathName}</h2>
+                  <HoverBackground isVisible={hoveredPath !== activeKey && hoveredPath === path} />
+                </div>
               </NavItem>
             )
           })}
