@@ -12,7 +12,8 @@ export default function ArticleDisplayHeader({
 }) {
   return (
     <header className="flex flex-col items-center justify-center gap-1">
-      <h1 className="text-3xl font-extrabold text-purple-600 md:text-4xl dark:text-emerald-300">
+      {/* TODO: extract */}
+      <h1 className="text-3xl font-extrabold text-[#e64553] md:text-4xl dark:text-[#ff757f]">
         {title}
       </h1>
 

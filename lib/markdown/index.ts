@@ -44,12 +44,12 @@ const className = `
   prose-h5:text-base sm:prose-h5:text-xl 
   prose-h6:text-base sm:prose-h6:text-xl
 
-prose-h1:text-[#e53935] dark:prose-h1:text-[#ef5350]
-prose-h2:text-[#fb8c00] dark:prose-h2:text-[#ffb74d]
-prose-h3:text-[#43a047] dark:prose-h3:text-[#66bb6a]
-prose-h4:text-[#3495e9] dark:prose-h4:text-[#64b5f6]
-prose-h5:text-[#8d5cee] dark:prose-h5:text-[#b39ddb]
-prose-h6:text-[#fe5a24] dark:prose-h6:text-[#d7ccc8]
+  prose-h1:text-[#e64553] dark:prose-h1:text-[#ff757f]
+  prose-h2:text-[#fe640b] dark:prose-h2:text-[#e0af68]
+  prose-h3:text-[#df8e1d] dark:prose-h3:text-[#9ece6a]
+  prose-h4:text-[#1e66f5] dark:prose-h4:text-[#7dcfff]
+  prose-h5:text-[#7287fd] dark:prose-h5:text-[#7aa2f7]
+  prose-h6:text-[#209fb5] dark:prose-h6:text-[#bb9af7]
 
   prose-h1:text-center
   prose-h2:text-center
@@ -59,17 +59,17 @@ prose-h6:text-[#fe5a24] dark:prose-h6:text-[#d7ccc8]
   prose-h6:text-center
 
   prose-code:font-normal prose-code:font-mono prose-code:rounded-sm
-  prose-strong:font-bold prose-strong:text-pink-500 dark:prose-strong:text-pink-400
+  prose-strong:font-bold prose-strong:text-[#ea76cb] dark:prose-strong:text-[#f5c2e7]
 
-prose-a:text-blue-600 prose-a:hover:text-blue-700 
-dark:prose-a:text-blue-400 dark:prose-a:hover:text-blue-300 
+  prose-a:text-[#1e66f5] prose-a:hover:text-[#209fb5] 
+  dark:prose-a:text-[#89b4fa] dark:prose-a:hover:text-[#74c7ec] 
   prose-a:transition-all
 
   prose-img:border prose-img:border-dashed prose-img:rounded-sm 
   prose-img:p-1 prose-img:hover:scale-105 prose-img:duration-300 
   prose-img:m-auto
 
-prose-ul:marker:text-gray-500 dark:prose-ul:marker:text-gray-400
+  prose-ul:marker:text-[#9ca0b0] dark:prose-ul:marker:text-[#6c7086]
 `
 
 export const customMarkdownTheme = className
