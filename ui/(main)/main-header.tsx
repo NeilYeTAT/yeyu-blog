@@ -1,19 +1,24 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useIndicatorPosition } from '@/lib/hooks/animation'
 import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
+import type { IModalType } from '@/store/use-modal-store'
+import { useModalStore } from '@/store/use-modal-store'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 
 export type NavRoute = {
   path: string
   pathName: string
   disabled?: boolean
+  type?: 'link' | 'button'
+  modal?: IModalType
 }
 
 export type NavGroup = {
@@ -55,10 +60,12 @@ const RouteList: RouteItem[] = [
         {
           path: '/refer',
           pathName: '参考',
+          disabled: true,
         },
         {
           path: '/tool',
           pathName: '工具',
+          disabled: true,
         },
       ],
     },
@@ -69,9 +76,23 @@ const RouteList: RouteItem[] = [
   },
   // TODO: login
   {
-    path: '/more',
-    pathName: '更多',
-    disabled: true,
+    group: {
+      key: 'more',
+      mainPath: '/login',
+      items: [
+        {
+          path: '/login',
+          pathName: '登录',
+          type: 'button',
+          modal: 'loginModal',
+        },
+        {
+          path: '/todo',
+          pathName: 'TODO',
+          disabled: true,
+        },
+      ],
+    },
   },
 ]
 
@@ -90,31 +111,102 @@ const slideVariants = {
   }),
 }
 
+const NavItem: FC<
+  {
+    item: NavRoute
+    elRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>
+  } & Omit<ComponentProps<'a'>, 'href' | 'ref'>
+> = ({ item, className, children, elRef }) => {
+  const isButton = item.type === 'button'
+  const setModalOpen = useModalStore(s => s.setModalOpen)
+
+  if (isButton) {
+    return (
+      <button
+        ref={elRef as React.Ref<HTMLButtonElement>}
+        className={className}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          if (item.disabled === true) {
+            e.preventDefault()
+            toast('Coming soon...', {
+              position: 'top-left',
+            })
+            return
+          }
+          if (item.modal != null) {
+            setModalOpen(item.modal)
+          }
+        }}
+      >
+        {children}
+      </button>
+    )
+  }
+
+  return (
+    <Link
+      ref={elRef as React.Ref<HTMLAnchorElement>}
+      href={item.path}
+      className={className}
+      onClick={e => {
+        if (item.disabled === true) {
+          e.preventDefault()
+          toast('Coming soon...', {
+            position: 'top-left',
+          })
+          return
+        }
+      }}
+    >
+      {children}
+    </Link>
+  )
+}
+
 export default function MainHeader() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
+  const { modalType, onModalClose } = useModalStore()
   const refs = useRef(new Map<string, HTMLElement>())
   const [hoveredPath, setHoveredPath] = useState<string | null>(null)
   const [direction, setDirection] = useState(0)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const [groupLastActivePaths, setGroupLastActivePaths] = useState<Record<string, string>>({})
-  const [prevActiveUrl, setPrevActiveUrl] = useState(activeUrl)
+  useEffect(() => {
+    onModalClose()
+  }, [pathname, onModalClose])
 
-  if (activeUrl !== prevActiveUrl) {
-    setPrevActiveUrl(activeUrl)
+  const effectiveActiveUrl = useMemo(() => {
+    if (modalType != null) {
+      for (const route of RouteList) {
+        if ('group' in route && route.group != null) {
+          const item = route.group.items.find(i => i.modal === modalType)
+          if (item != null) return item.path
+        } else {
+          if (route.modal === modalType) return route.path
+        }
+      }
+    }
+    return activeUrl
+  }, [activeUrl, modalType])
+
+  const [groupLastActivePaths, setGroupLastActivePaths] = useState<Record<string, string>>({})
+  const [prevActiveUrl, setPrevActiveUrl] = useState(effectiveActiveUrl)
+
+  if (effectiveActiveUrl !== prevActiveUrl) {
+    setPrevActiveUrl(effectiveActiveUrl)
 
     const activeRoute = RouteList.find(
       route =>
         'group' in route &&
         route.group != null &&
-        route.group.items.some(item => item.path === activeUrl),
+        route.group.items.some(item => item.path === effectiveActiveUrl),
     )
 
     if (activeRoute != null && 'group' in activeRoute && activeRoute.group != null) {
       setGroupLastActivePaths(prev => ({
         ...prev,
-        [activeRoute.group!.key]: activeUrl,
+        [activeRoute.group!.key]: effectiveActiveUrl,
       }))
     }
   }
@@ -122,15 +214,15 @@ export default function MainHeader() {
   const activeKey = useMemo(() => {
     const activeRoute = RouteList.find(route => {
       if ('group' in route && route.group != null) {
-        return route.group.items.some(item => item.path === activeUrl)
+        return route.group.items.some(item => item.path === effectiveActiveUrl)
       }
-      return route.path === activeUrl
+      return route.path === effectiveActiveUrl
     })
     if (activeRoute != null && 'group' in activeRoute && activeRoute.group != null) {
       return activeRoute.group.key
     }
-    return activeRoute?.path ?? activeUrl
-  }, [activeUrl])
+    return activeRoute?.path ?? effectiveActiveUrl
+  }, [effectiveActiveUrl])
 
   const isSubmenuOpen = useMemo(() => {
     return RouteList.some(
@@ -139,15 +231,6 @@ export default function MainHeader() {
   }, [hoveredPath])
 
   const indicatorStyle = useIndicatorPosition(activeKey, refs)
-
-  const handleLinkClick = (e: React.MouseEvent, disabled?: boolean) => {
-    if (disabled === true) {
-      e.preventDefault()
-      toast('Coming soon...', {
-        position: 'top-left',
-      })
-    }
-  }
 
   const handleMouseEnter = (path: string) => {
     if (timeoutRef.current != null) {
@@ -211,7 +294,7 @@ export default function MainHeader() {
               const mainPath = route.group.mainPath ?? route.group.items[0].path
 
               const effectivePath =
-                route.group.items.find(item => item.path === activeUrl)?.path ??
+                route.group.items.find(item => item.path === effectiveActiveUrl)?.path ??
                 (lastActivePath != null && route.group.items.some(i => i.path === lastActivePath)
                   ? lastActivePath
                   : null) ??
@@ -231,9 +314,8 @@ export default function MainHeader() {
                   onMouseEnter={() => handleMouseEnter(route.group.key)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <Link
-                    href={effectivePath}
-                    onClick={e => handleLinkClick(e, route.group.disabled)}
+                  <NavItem
+                    item={currentItem}
                     className={cn(
                       'block cursor-pointer transition-colors',
                       isGroupActive
@@ -255,7 +337,7 @@ export default function MainHeader() {
                       </AnimatePresence>
                       <HoverBackground isVisible={!isGroupActive && isGroupHovered} />
                     </div>
-                  </Link>
+                  </NavItem>
                 </div>
               )
             }
@@ -264,13 +346,12 @@ export default function MainHeader() {
             const pathName = route.pathName
 
             return (
-              <Link
+              <NavItem
                 key={path}
-                href={path}
-                ref={el => {
+                item={route}
+                elRef={el => {
                   if (el != null) refs.current.set(path, el)
                 }}
-                onClick={e => handleLinkClick(e, route.disabled)}
                 className={cn(
                   'relative z-10 px-2 transition-colors md:px-4',
                   path === activeKey
@@ -282,7 +363,7 @@ export default function MainHeader() {
               >
                 <h2>{pathName}</h2>
                 <HoverBackground isVisible={hoveredPath !== activeKey && hoveredPath === path} />
-              </Link>
+              </NavItem>
             )
           })}
 
@@ -330,25 +411,23 @@ export default function MainHeader() {
                     className="flex justify-around px-8 md:px-12"
                   >
                     {activeGroupRoute.group.items.map(item => (
-                      <Link
+                      <NavItem
                         key={item.path}
-                        href={item.path}
-                        onClick={e =>
-                          handleLinkClick(
-                            e,
+                        item={{
+                          ...item,
+                          disabled:
                             (activeGroupRoute.group.disabled ?? false) || (item.disabled ?? false),
-                          )
-                        }
+                        }}
                         className={cn(
                           'rounded-lg px-4 py-2 transition-colors',
                           'hover:underline',
-                          item.path === activeUrl
+                          item.path === effectiveActiveUrl
                             ? 'text-clear-sky-active-text font-bold'
                             : 'text-neutral-600 dark:text-neutral-400',
                         )}
                       >
                         {item.pathName}
-                      </Link>
+                      </NavItem>
                     ))}
                   </motion.div>
                 </AnimatePresence>

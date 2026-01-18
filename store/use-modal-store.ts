@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type IModalType =
+export type IModalType =
   | 'deleteArticleModal'
   | 'editTagModal'
   | 'deleteTagModal'
@@ -8,9 +8,10 @@ type IModalType =
   | 'deleteEchoModal'
   | 'editEchoModal'
   | 'createTagModal'
+  | 'loginModal'
   | null
 
-interface IModalStore {
+type IModalStore = {
   modalType: IModalType
   payload: unknown
   setModalOpen: (modalType: IModalType, payload?: unknown) => void
