@@ -30,11 +30,11 @@ const ExternalLinks: { name: string; url: string }[] = [
 export const ContactMe: FC<ComponentProps<'div'>> = () => {
   return (
     <main className="flex w-full flex-col items-center justify-center gap-2 md:gap-4">
-      <h3>社交网络</h3>
+      <h3>联系</h3>
       <p className="flex gap-4 underline">
         {ExternalLinks.map(link => (
           <Link
-            className="hover:text-clear-sky-primary dark:hover:text-emerald-300"
+            className="hover:text-clear-sky-indicator text-clear-sky-primary dark:text-[#888888] dark:hover:text-white"
             href={link.url}
             key={link.url}
             target="_blank"
