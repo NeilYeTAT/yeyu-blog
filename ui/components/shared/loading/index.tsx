@@ -2,6 +2,7 @@
 // * import from  https://examples.motion.dev/react/loading-ripple
 'use client'
 
+import type { Transition } from 'motion/react'
 import { motion } from 'motion/react'
 
 export default function Loading() {
@@ -10,7 +11,7 @@ export default function Loading() {
     opacity: [1, 0],
   }
 
-  const transition = {
+  const transition: Transition = {
     duration: 2,
     repeat: Infinity,
     ease: 'easeOut',

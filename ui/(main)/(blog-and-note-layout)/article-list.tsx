@@ -1,24 +1,25 @@
 import type { TagType } from '@prisma/client'
+import type { Variants } from 'motion/react'
 import type { ComponentProps, FC } from 'react'
 import * as motion from 'motion/react-client'
 import type { BlogListItem } from '@/actions/blogs/type'
 import type { NoteListItem } from '@/actions/notes/type'
 import { ArticleLink } from './article-link'
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
-    y: [30, -8, 0],
+    y: [30, -8, 0] as number[],
     transition: {
-      type: 'tween',
+      type: 'tween' as const,
       ease: 'easeInOut',
       duration: 0.8,
     },
   },
 }
 
-const listVariants = {
+const listVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
