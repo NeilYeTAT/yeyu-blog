@@ -1,5 +1,6 @@
 'use client'
 
+import type { NavGroup, RouteItem } from './constant'
 import type { ComponentProps, FC } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
@@ -9,92 +10,9 @@ import { toast } from 'sonner'
 import { useIndicatorPosition } from '@/lib/hooks/animation'
 import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
-import type { IModalType } from '@/store/use-modal-store'
 import { useModalStore } from '@/store/use-modal-store'
-import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
-
-export type NavRoute = {
-  path: string
-  pathName: string
-  disabled?: boolean
-  type?: 'link' | 'button'
-  modal?: IModalType
-}
-
-export type NavGroup = {
-  key: string
-  mainPath?: string
-  disabled?: boolean
-  items: [NavRoute, ...NavRoute[]]
-}
-
-export type RouteItem = (NavRoute & { group?: never }) | { group: NavGroup }
-
-const RouteList: RouteItem[] = [
-  {
-    path: '/',
-    pathName: '首页',
-  },
-  {
-    group: {
-      key: 'hand note',
-      mainPath: '/blog',
-      items: [
-        {
-          path: '/note',
-          pathName: '笔记',
-        },
-        {
-          path: '/blog',
-          pathName: '日志',
-        },
-      ],
-    },
-  },
-  {
-    group: {
-      key: 'refer',
-      mainPath: '/refer',
-      disabled: true,
-      items: [
-        {
-          path: '/refer',
-          pathName: '参考',
-          disabled: true,
-        },
-        {
-          path: '/tool',
-          pathName: '工具',
-          disabled: true,
-        },
-      ],
-    },
-  },
-  {
-    path: '/about',
-    pathName: '关于',
-  },
-  // TODO: login
-  {
-    group: {
-      key: 'more',
-      mainPath: '/login',
-      items: [
-        {
-          path: '/login',
-          pathName: '登录',
-          type: 'button',
-          modal: 'loginModal',
-        },
-        {
-          path: '/todo',
-          pathName: 'TODO',
-          disabled: true,
-        },
-      ],
-    },
-  },
-]
+import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
+import { navigationConfig, type NavRoute } from './constant'
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -165,7 +83,7 @@ const NavItem: FC<
   )
 }
 
-export default function MainHeader() {
+export default function Header() {
   const pathname = usePathname()
   const activeUrl = getActiveMainPath(pathname)
   const { modalType, onModalClose } = useModalStore()
@@ -180,9 +98,11 @@ export default function MainHeader() {
 
   const effectiveActiveUrl = useMemo(() => {
     if (modalType != null) {
-      const modalRoute = RouteList.flatMap(route =>
-        'group' in route && route.group != null ? route.group.items : [route as NavRoute],
-      ).find(route => route.modal === modalType)
+      const modalRoute = navigationConfig
+        .flatMap(route =>
+          'group' in route && route.group != null ? route.group.items : [route as NavRoute],
+        )
+        .find(route => route.modal === modalType)
 
       if (modalRoute != null) return modalRoute.path
     }
@@ -195,7 +115,7 @@ export default function MainHeader() {
   if (effectiveActiveUrl !== prevActiveUrl) {
     setPrevActiveUrl(effectiveActiveUrl)
 
-    const activeRoute = RouteList.find(
+    const activeRoute = navigationConfig.find(
       route =>
         'group' in route &&
         route.group != null &&
@@ -211,7 +131,7 @@ export default function MainHeader() {
   }
 
   const activeKey = useMemo(() => {
-    const activeRoute = RouteList.find(route => {
+    const activeRoute = navigationConfig.find(route => {
       if ('group' in route && route.group != null) {
         return route.group.items.some(item => item.path === effectiveActiveUrl)
       }
@@ -225,7 +145,7 @@ export default function MainHeader() {
   }, [effectiveActiveUrl])
 
   const isSubmenuOpen = useMemo(() => {
-    return RouteList.some(
+    return navigationConfig.some(
       route => 'group' in route && route.group != null && route.group.key === hoveredPath,
     )
   }, [hoveredPath])
@@ -238,8 +158,8 @@ export default function MainHeader() {
       timeoutRef.current = null
     }
 
-    const newIndex = RouteList.findIndex(r => 'group' in r && r.group?.key === path)
-    const oldIndex = RouteList.findIndex(r => 'group' in r && r.group?.key === hoveredPath)
+    const newIndex = navigationConfig.findIndex(r => 'group' in r && r.group?.key === path)
+    const oldIndex = navigationConfig.findIndex(r => 'group' in r && r.group?.key === hoveredPath)
 
     if (newIndex !== -1 && oldIndex !== -1 && newIndex !== oldIndex) {
       setDirection(newIndex > oldIndex ? 1 : -1)
@@ -256,7 +176,7 @@ export default function MainHeader() {
   }
 
   const activeGroupRoute = useMemo(() => {
-    return RouteList.find(
+    return navigationConfig.find(
       route => 'group' in route && route.group != null && route.group.key === hoveredPath,
     ) as (RouteItem & { group: NavGroup }) | undefined
   }, [hoveredPath])
@@ -285,7 +205,7 @@ export default function MainHeader() {
         )}
       >
         <nav className="flex h-full items-center justify-between text-sm text-nowrap md:text-xl dark:text-neutral-400">
-          {RouteList.map(route => {
+          {navigationConfig.map(route => {
             if ('group' in route && route.group != null) {
               const isGroupActive = route.group.key === activeKey
               const isGroupHovered = hoveredPath === route.group.key

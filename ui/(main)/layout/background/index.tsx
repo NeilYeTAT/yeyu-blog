@@ -1,14 +1,14 @@
 'use client'
 
 // * thanks https://hypercolor.dev/
-import type { ComponentProps, FC } from 'react'
+import type { FC } from 'react'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 // * thanks https://www.mshr.app/mesh/1727202711374
 import '@/lib/styles/background-animate.css'
 import { ArtPlum } from './art-plum'
 
-export const Background: FC<ComponentProps<'div'>> = () => {
+export const Background: FC = () => {
   const { resolvedTheme } = useTransitionTheme()
   if (resolvedTheme === 'light') {
     return (
