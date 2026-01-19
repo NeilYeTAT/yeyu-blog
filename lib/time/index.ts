@@ -31,8 +31,8 @@ export function prettyDateTime(date: number | Date) {
   return dayjs(date).tz(SHANGHAI).locale('zh-cn').format('YY年M月D日 H时 m分')
 }
 
-export function toZhDay(date: number | Date) {
-  return dayjs(date).tz(SHANGHAI).locale('zh-cn').format('YYYY年MM月DD日')
+export function toDisplayDate(date: number | Date) {
+  return dayjs(date).tz(SHANGHAI).locale('en').format('MMM DD, YYYY')
 }
 
 export function getRemainingDaysOfYear(): number {

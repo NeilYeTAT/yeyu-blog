@@ -3,7 +3,7 @@ import { TagType } from '@prisma/client'
 import Link from 'next/link'
 import type { BlogListItem } from '@/actions/blogs/type'
 import type { NoteListItem } from '@/actions/notes/type'
-import { toZhDay } from '@/lib/time'
+import { toDisplayDate } from '@/lib/time'
 import { cn } from '@/lib/utils/common/shadcn'
 import ScaleUnderline from '@/ui/components/shared/scale-underline'
 
@@ -27,7 +27,7 @@ export const ArticleLink: FC<{
         <ScaleUnderline className="bg-clear-sky-indicator dark:bg-white" />
       </h2>
       <time className="group-hover:text-clear-sky-indicator shrink-0 text-sm font-light text-gray-400 dark:group-hover:text-white">
-        {toZhDay(item.createdAt)}
+        {toDisplayDate(item.createdAt)}
       </time>
     </Link>
   )

@@ -1,4 +1,4 @@
-import { toZhDay } from '@/lib/time'
+import { toDisplayDate } from '@/lib/time'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
 
 export default function ArticleDisplayHeader({
@@ -24,7 +24,9 @@ export default function ArticleDisplayHeader({
           ))}
         </p>
 
-        <time className="border-b-foreground border-b border-dashed">{toZhDay(createdAt)}</time>
+        <time className="border-b-foreground border-b border-dashed">
+          {toDisplayDate(createdAt)}
+        </time>
       </section>
     </header>
   )
