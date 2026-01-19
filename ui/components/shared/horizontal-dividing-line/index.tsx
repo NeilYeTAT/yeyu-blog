@@ -2,22 +2,16 @@
 
 import { motion, useAnimationFrame, useMotionValue } from 'motion/react'
 import { useState } from 'react'
-import Mandala from '@/config/svg/mandala'
 import { useTransitionTheme } from '@/lib/hooks/animation'
+import { FlowerIcon } from './flower-icon'
 
 // * 拖拽两边移动距离阈值，超过触发
 // * 移动端拉不了多少...所以调低点，虽然会让 pc 端很容易触发
 // * 25 年底才发现，半年前的自己是傻逼了，不知道可以响应式判断嘛...
 const THRESHOLD = 100
 
-export default function HorizontalDividingLine({
-  fill = '#6FC3C4',
-  dividerColor = '',
-}: {
-  fill?: string
-  dividerColor?: string
-}) {
-  const { setTransitionTheme } = useTransitionTheme()
+export default function HorizontalDividingLine() {
+  const { resolvedTheme, setTransitionTheme } = useTransitionTheme()
   const rotate = useMotionValue(0)
   const [duration, setDuration] = useState(4)
 
@@ -25,12 +19,13 @@ export default function HorizontalDividingLine({
     rotate.set(rotate.get() + (360 * delta) / (duration * 1000))
   })
 
-  const borderColor = dividerColor !== '' ? dividerColor : undefined
+  const borderColor = resolvedTheme === 'light' ? 'var(--clear-sky-primary)' : '#edededcc'
+  const fill = resolvedTheme === 'light' ? '#6FC3C4' : '#edededcc'
 
   return (
     <div className="relative flex w-full items-center justify-center">
       <hr
-        className="dark:border-accent absolute left-0 w-[45%] border-dashed border-indigo-500"
+        className="dark:border-accent absolute left-0 w-[45%] border-dashed"
         style={{ borderColor }}
       />
       <motion.div
@@ -51,7 +46,7 @@ export default function HorizontalDividingLine({
           }
         }}
       >
-        <Mandala className="size-10 cursor-grabbing" fill={fill} />
+        <FlowerIcon fill={fill} />
       </motion.div>
       <hr
         className="dark:border-accent absolute right-0 w-[45%] border-dashed border-indigo-500"

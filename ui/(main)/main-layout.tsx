@@ -19,7 +19,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">
             <main className="flex flex-1 flex-col">{children}</main>
 
-            <HorizontalDividingLine dividerColor="var(--clear-sky-primary)" />
+            <HorizontalDividingLine />
             <ContactMe />
           </MaxWidthWrapper>
 

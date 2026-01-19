@@ -1,4 +1,6 @@
-function Mandala({ className, fill = '#40B2AF' }: { className?: string; fill?: string }) {
+import type { ComponentProps, FC } from 'react'
+
+export const FlowerIcon: FC<ComponentProps<'svg'>> = ({ className, fill = '#40B2AF' }) => {
   return (
     <svg
       className={className}
@@ -19,5 +21,3 @@ function Mandala({ className, fill = '#40B2AF' }: { className?: string; fill?: s
     </svg>
   )
 }
-
-export default Mandala
