@@ -1,18 +1,17 @@
 'use client'
 
 import type { NavGroup, RouteItem } from './constant'
-import type { ComponentProps, FC } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { toast } from 'sonner'
 import { useIndicatorPosition } from '@/lib/hooks/animation'
 import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalStore } from '@/store/use-modal-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
 import { navigationConfig, type NavRoute } from './constant'
+import { HoverBackground } from './hover-background'
+import { NavItem } from './nav-item'
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -27,60 +26,6 @@ const slideVariants = {
     x: direction === 0 ? 0 : direction < 0 ? 20 : -20,
     opacity: 0,
   }),
-}
-
-const NavItem: FC<
-  {
-    item: NavRoute
-    elRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>
-  } & Omit<ComponentProps<'a'>, 'href' | 'ref'>
-> = ({ item, className, children, elRef, ...props }) => {
-  const isButton = item.type === 'button'
-  const setModalOpen = useModalStore(s => s.setModalOpen)
-
-  if (isButton) {
-    return (
-      <button
-        ref={elRef as React.Ref<HTMLButtonElement>}
-        className={className}
-        type="button"
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          if (item.disabled === true) {
-            e.preventDefault()
-            toast('Coming soon...', {
-              position: 'top-left',
-            })
-            return
-          }
-          if (item.modal != null) {
-            setModalOpen(item.modal)
-          }
-        }}
-      >
-        {children}
-      </button>
-    )
-  }
-
-  return (
-    <Link
-      ref={elRef as React.Ref<HTMLAnchorElement>}
-      href={item.path}
-      className={className}
-      {...props}
-      onClick={e => {
-        if (item.disabled === true) {
-          e.preventDefault()
-          toast('Coming soon...', {
-            position: 'top-left',
-          })
-          return
-        }
-      }}
-    >
-      {children}
-    </Link>
-  )
 }
 
 export default function Header() {
@@ -359,26 +304,5 @@ export default function Header() {
         </nav>
       </MaxWidthWrapper>
     </header>
-  )
-}
-
-function HoverBackground({ isVisible }: { isVisible: boolean }) {
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          layoutId="hoverBackground"
-          className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-white/60 shadow-sm dark:bg-neutral-800"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            type: 'spring',
-            stiffness: 300,
-            damping: 30,
-          }}
-        />
-      )}
-    </AnimatePresence>
   )
 }
