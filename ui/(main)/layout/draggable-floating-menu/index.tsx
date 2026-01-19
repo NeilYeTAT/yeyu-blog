@@ -5,10 +5,10 @@ import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
+import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useBackgroundMusicStore } from '@/store/use-background-music-store'
-import avatar from './assets/img/haibaraai.webp'
 import { icons } from './constant'
 
 const menuRadius = 70

@@ -3,9 +3,9 @@ import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-l
 import { Toaster } from '@/ui/shadcn/sonner'
 import { MainModalProvider } from '../components/provider/main-modal-provider'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
-import { DraggableFloatingMenu } from './(home)/draggable-floating-menu'
 import { Background } from './layout/background'
 import { ContactMe } from './layout/contact-me'
+import { DraggableFloatingMenu } from './layout/draggable-floating-menu'
 import Header from './layout/header'
 import StartUpMotion from './layout/start-up-motion'
 

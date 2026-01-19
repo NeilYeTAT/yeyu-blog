@@ -1,6 +1,6 @@
 'use client'
 
-import type { Point } from './constant'
+import type { Point } from '../layout/draggable-floating-menu/constant'
 import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -9,7 +9,7 @@ import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { typedEntries } from '@/lib/utils/typed'
 import { useBackgroundMusicStore } from '@/store/use-background-music-store'
-import { icons, type IconsId } from './constant'
+import { icons, type IconsId } from '../layout/draggable-floating-menu/constant'
 
 export default function YeAvatar() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
