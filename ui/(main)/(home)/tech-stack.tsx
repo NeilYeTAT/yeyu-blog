@@ -8,18 +8,19 @@ import {
   useMotionValue,
   useSpring,
 } from 'motion/react'
-import Image from 'next/image'
 import { useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { HoverCard } from '@/ui/components/shared/hover-card'
 // * svg
-import GolangIcon from './assets/svg/golang-icon.svg'
-import NestjsIcon from './assets/svg/nestjs-icon.svg'
-import NextjsIcon from './assets/svg/nextjs-icon.svg'
-import ReactIcon from './assets/svg/react-icon.svg'
-import TailwindcssIcon from './assets/svg/tailwindcss-icon.svg'
-import TypeScriptIcon from './assets/svg/typescript-icon.svg'
-import VimIcon from './assets/svg/vim-icon.svg'
+import {
+  GolangIcon,
+  NestjsIcon,
+  NextjsIcon,
+  ReactIcon,
+  TailwindcssIcon,
+  TypeScriptIcon,
+  VimIcon,
+} from './assets/svg'
 
 type TechItem = {
   key: string
@@ -32,35 +33,35 @@ type TechItem = {
 const techStackData: TechItem[] = [
   {
     key: 'ts',
-    component: <Image src={TypeScriptIcon} alt="TypeScript" className="size-full" />,
+    component: <TypeScriptIcon className="size-full" />,
     name: 'TypeScript',
     insight: '最喜欢的编程语言，选择 ts 全栈开发，让 ts 再次伟大🙌🏻',
     color: '#3178c6',
   },
   {
     key: 'react',
-    component: <Image src={ReactIcon} alt="React" className="size-full" />,
+    component: <ReactIcon className="size-full" />,
     name: 'React',
     insight: 'jsx/tsx 语法顶级，但 useEffect 确实不好用，也容易被人滥用性能优化的那些 hook😅',
     color: '#61dafb',
   },
   {
     key: 'tailwindcss',
-    component: <Image src={TailwindcssIcon} alt="Tailwind CSS" className="size-full" />,
+    component: <TailwindcssIcon className="size-full" />,
     name: 'Tailwind CSS',
     insight: '神中神👍🏻，没有 tailwindcss 根本不想写前端',
     color: '#38bdf8',
   },
   {
     key: 'next',
-    component: <Image src={NextjsIcon} alt="Next.js" className="size-full dark:invert" />,
+    component: <NextjsIcon className="size-full dark:invert" />,
     name: 'Next.js',
     insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
     color: '#000000',
   },
   {
     key: 'go',
-    component: <Image src={GolangIcon} alt="Go" className="size-full" />,
+    component: <GolangIcon className="size-full" />,
     name: 'Go',
     insight:
       '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
@@ -68,14 +69,14 @@ const techStackData: TechItem[] = [
   },
   {
     key: 'nest',
-    component: <Image src={NestjsIcon} alt="NestJS" className="size-full" />,
+    component: <NestjsIcon className="size-full" />,
     name: 'NestJS',
     insight: '还在学习中...暂时还觉得挺优雅',
     color: '#e0234e',
   },
   {
     key: 'vim',
-    component: <Image src={VimIcon} alt="Vim" className="size-full" />,
+    component: <VimIcon className="size-full" />,
     name: 'Vim',
     insight: '编辑器之神，虽然我是 vscode + vim 插件，不够纯粹🥹',
     color: '#019733',
