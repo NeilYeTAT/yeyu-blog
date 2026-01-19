@@ -60,7 +60,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
       setTransitionTheme('light', { direction: 'left', duration: 300 })
       playSoundEffect()
     } else if (id === 'br') {
-      setTransitionTheme('dark', { direction: 'left', duration: 300 })
+      setTransitionTheme('dark', { direction: 'right', duration: 300 })
       playSoundEffect()
     } else if (id === 'tl') {
       pause()

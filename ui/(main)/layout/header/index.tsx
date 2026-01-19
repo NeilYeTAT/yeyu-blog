@@ -289,7 +289,7 @@ export default function Header() {
                           'rounded-lg px-4 py-2 transition-colors',
                           'hover:underline',
                           item.path === effectiveActiveUrl
-                            ? 'text-clear-sky-active-text font-bold'
+                            ? 'text-primary font-bold'
                             : 'text-neutral-600 dark:text-neutral-400',
                         )}
                       >

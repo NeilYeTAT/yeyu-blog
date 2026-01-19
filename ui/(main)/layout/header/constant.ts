@@ -57,11 +57,7 @@ export const navigationConfig: RouteItem[] = [
       ],
     },
   },
-  {
-    path: '/about',
-    pathName: '关于',
-  },
-  // TODO: login
+  // TODO: web3 login
   {
     group: {
       key: 'more',
@@ -75,10 +71,14 @@ export const navigationConfig: RouteItem[] = [
         },
         {
           path: '/todo',
-          pathName: 'TODO',
+          pathName: '等待',
           disabled: true,
         },
       ],
     },
+  },
+  {
+    path: '/about',
+    pathName: '关于',
   },
 ]
