@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils/common/shadcn'
 import { HoverCard } from '@/ui/components/shared/hover-card'
 // * svg
 import {
-  GolangIcon,
+  // GolangIcon,
   NestjsIcon,
   NextjsIcon,
   ReactIcon,
@@ -35,50 +35,49 @@ const techStackData: TechItem[] = [
     key: 'ts',
     component: <TypeScriptIcon className="size-full" />,
     name: 'TypeScript',
-    insight: '最喜欢的编程语言，选择 ts 全栈开发，让 ts 再次伟大🙌🏻',
+    insight: '最喜欢的编程语言 ⸜( ^ ᵕ ^ )⸝♡',
     color: '#3178c6',
   },
   {
     key: 'react',
     component: <ReactIcon className="size-full" />,
     name: 'React',
-    insight: 'jsx/tsx 语法顶级，但 useEffect 确实不好用，也容易被人滥用性能优化的那些 hook😅',
+    insight: `tsx/jsx 语法顶级 ⸜(꒪'꒳'꒪)⸝`,
     color: '#61dafb',
   },
   {
     key: 'tailwindcss',
     component: <TailwindcssIcon className="size-full" />,
     name: 'Tailwind CSS',
-    insight: '神中神👍🏻，没有 tailwindcss 根本不想写前端',
+    insight: '神中神中神 ( ˶ｰ̀֊ｰ́ )੭',
     color: '#38bdf8',
   },
   {
     key: 'next',
     component: <NextjsIcon className="size-full dark:invert" />,
     name: 'Next.js',
-    insight: 'MacBook air m4 24g 都顶不住，你他妈的怎么能这么卡🤬',
+    insight: '开发时的性能问题和偶尔的漏洞有点坑 ( •ᴗ•̥ ˳ )',
     color: '#000000',
   },
-  {
-    key: 'go',
-    component: <GolangIcon className="size-full" />,
-    name: 'Go',
-    insight:
-      '哥们当年差点就去转 Go 后端了，不过现在暂时先选择放弃 Go 了，语法丑陋得一批🥹，但是我很喜欢',
-    color: '#00add8',
-  },
+  // {
+  //   key: 'go',
+  //   component: <GolangIcon className="size-full" />,
+  //   name: 'Go',
+  //   insight: '语法丑陋，但我也忘完了 (´•ω•̥`)',
+  //   color: '#00add8',
+  // },
   {
     key: 'nest',
     component: <NestjsIcon className="size-full" />,
     name: 'NestJS',
-    insight: '还在学习中...暂时还觉得挺优雅',
+    insight: '架构整洁合理 ( •̀-•́ゞ)',
     color: '#e0234e',
   },
   {
     key: 'vim',
     component: <VimIcon className="size-full" />,
     name: 'Vim',
-    insight: '编辑器之神，虽然我是 vscode + vim 插件，不够纯粹🥹',
+    insight: `配合 vscode 使用很爽 ･ᴗ･ )੭''`,
     color: '#019733',
   },
 ]
@@ -132,7 +131,7 @@ function TechStack() {
                   setHoveredItem(null)
                 }}
                 className={cn(
-                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_0.75rem_#1babbb] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]`,
+                  `absolute left-1/2 z-10 size-16 -translate-x-1/2 drop-shadow-[0_0_10px_#1babbb] transition hover:cursor-pointer md:size-32 dark:drop-shadow-[0_0_10px_#c0c0c0]`,
                 )}
                 style={{
                   rotate: i * (360 / techStackData.length),
