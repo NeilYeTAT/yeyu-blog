@@ -28,6 +28,7 @@ const listVariants = {
   },
 }
 
+// TODO: 大括号样式
 export const ArticleList: FC<
   ComponentProps<'div'> & {
     items: BlogListItem[] | NoteListItem[]
@@ -38,21 +39,56 @@ export const ArticleList: FC<
     return <p className="m-auto">虚无。</p>
   }
 
+  // * 虽然数据库返回的数据已经有序了，但是做个保险吧
+  // * 毕竟服务端渲染好了，到时候这块是静态渲染的，性能问题也不大
+  const sortedItems = [...items].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )
+
+  const groupedItems = sortedItems.reduce(
+    (acc, item) => {
+      const year = new Date(item.createdAt).getFullYear()
+      acc[year] ??= []
+      acc[year].push(item)
+      return acc
+    },
+    {} as Record<number, typeof items>,
+  )
+
+  const sortedYears = Object.keys(groupedItems)
+    .map(Number)
+    .sort((a, b) => b - a)
+
   return (
     <motion.div
-      className="group/list flex flex-col"
+      className="group/list flex flex-col gap-10"
       initial="hidden"
       animate="visible"
       variants={listVariants}
     >
-      {items.map(v => (
-        <motion.div
-          variants={itemVariants}
-          key={v.id}
-          className="transition-opacity group-hover/list:opacity-50! hover:opacity-100!"
-          whileHover={{ scale: 1.01, transition: { type: 'spring', stiffness: 200, damping: 25 } }}
-        >
-          <ArticleLink item={v} type={type} />
+      {sortedYears.map(year => (
+        <motion.div key={year} className="flex flex-col gap-1" variants={listVariants}>
+          <motion.h3
+            variants={itemVariants}
+            className="text-muted-foreground/30 ml-2 text-2xl font-bold select-none"
+          >
+            # {year}
+          </motion.h3>
+          <div className="flex flex-col">
+            {groupedItems[year].map(v => (
+              <motion.div
+                variants={itemVariants}
+                key={v.id}
+                className="transition-opacity group-hover/list:opacity-50! hover:opacity-100!"
+                whileHover={{
+                  scale: 1.01,
+                  transition: { type: 'spring', stiffness: 200, damping: 25 },
+                }}
+              >
+                <ArticleLink item={v} type={type} />
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       ))}
     </motion.div>
