@@ -111,7 +111,7 @@ export default function YeAvatar() {
       {/* 摸摸头~ */}
       <motion.figure
         // TODO: config color
-        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]"
+        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[#7AB2B2] dark:active:drop-shadow-[#c0c0c0]"
         whileTap={{ scale: 0.99, rotate: 1 }}
         drag
         dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -133,7 +133,7 @@ export default function YeAvatar() {
             setTransitionTheme('light', { direction: 'left', duration: 300 })
             playSoundEffect()
           } else if (activeIcon === 'br') {
-            setTransitionTheme('dark', { direction: 'left', duration: 300 })
+            setTransitionTheme('dark', { direction: 'right', duration: 300 })
             playSoundEffect()
           } else if (activeIcon === 'tl') {
             pause()
@@ -151,7 +151,7 @@ export default function YeAvatar() {
           placeholder="blur"
           priority
         />
-        <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-neutral-800 dark:ring-offset-black" />
+        <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-white dark:ring-offset-black" />
       </motion.figure>
     </div>
   )
