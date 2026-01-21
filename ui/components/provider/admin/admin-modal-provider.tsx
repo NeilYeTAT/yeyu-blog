@@ -8,7 +8,7 @@ import DeleteTagModal from '@/ui/components/modal/delete-tag-modal'
 import EditEchoModal from '@/ui/components/modal/edit-echo-modal'
 import EditTagModal from '@/ui/components/modal/edit-tag-modal'
 
-export function ModalProvider({ children }: { children: React.ReactNode }) {
+export function AdminModalProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
