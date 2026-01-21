@@ -5,7 +5,7 @@ import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
 import { useChainId, useChains, useConnect, useConnections, useConnectors } from 'wagmi'
 import { disconnect } from 'wagmi/actions'
-import { signIn } from '@/lib/auth/client'
+import { signIn, signOut, useSession } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/common/shadcn'
 import { wagmiConfig } from '@/lib/wagmi/wagmi-config'
 import { useModalStore } from '@/store/use-modal-store'
@@ -33,19 +33,24 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
   const address = connection?.accounts[0]
   const currentChain = chains.find(c => c.id === chainId)
 
+  const { data: session } = useSession()
+  const isUserLoggedIn = session?.user !== undefined && session?.user !== null
+
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
       <DialogContent className="bg-clear-sky-background/80 rounded-xl backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
         <DialogHeader className="">
           <DialogTitle className="text-center text-xl font-bold">
-            {isConnected ? '钱包信息' : '登录 (ゝ∀･)'}
+            {isConnected || isUserLoggedIn ? '用户信息' : '登录 (ゝ∀･)'}
           </DialogTitle>
         </DialogHeader>
 
         <main
           className={cn(
             'grid gap-4 font-mono',
-            !isConnected && connectors.length > 0 ? 'grid-cols-2' : 'grid-cols-1',
+            !isConnected && !isUserLoggedIn && connectors.length > 0
+              ? 'grid-cols-2'
+              : 'grid-cols-1',
           )}
         >
           {isConnected ? (
@@ -65,6 +70,34 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 className="mt-2 w-full"
               >
                 断开连接
+              </Button>
+            </div>
+          ) : isUserLoggedIn ? (
+            <div className="flex flex-col items-center justify-center gap-6 py-2">
+              <div className="flex flex-col items-center gap-2">
+                {session.user.image !== null &&
+                session.user.image !== undefined &&
+                session.user.image !== '' ? (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name ?? 'User Avatar'}
+                    width={64}
+                    height={64}
+                    className="rounded-full border-2 border-white/20 shadow-sm"
+                  />
+                ) : null}
+                <div className="space-y-1 text-center">
+                  <p className="text-lg font-medium">{session.user.name}</p>
+                  <p className="text-muted-foreground text-sm">{session.user.email}</p>
+                </div>
+              </div>
+
+              <Button
+                variant="destructive"
+                onClick={async () => await signOut()}
+                className="mt-2 w-full"
+              >
+                退出登录
               </Button>
             </div>
           ) : (
