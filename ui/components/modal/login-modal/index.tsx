@@ -1,11 +1,15 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import { Wallet2 } from 'lucide-react'
+import { Loader2, Wallet2 } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { SiweMessage } from 'siwe'
 import { useChainId, useChains, useConnect, useConnections, useConnectors } from 'wagmi'
-import { disconnect } from 'wagmi/actions'
-import { signIn, signOut, useSession } from '@/lib/auth/client'
+import { disconnect, signMessage } from 'wagmi/actions'
+import { ADMIN_WALLET_ADDRESS } from '@/config/constant'
+import { authClient, signIn, signOut, useSession } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/common/shadcn'
 import { wagmiConfig } from '@/lib/wagmi/wagmi-config'
 import { useModalStore } from '@/store/use-modal-store'
@@ -15,11 +19,15 @@ import { GitHubIcon } from './github-icon'
 
 // TODO: 钱包签名认证
 // TODO: 全局状态管理存储钱包登录状态 ？
+// TODO: 默认需要签名一次的，现在简单一点先直接连接钱包，要登录才需要签名
+// TODO: 这里还有一个bug，github 登录后，钱包连接后，然后断开钱包，样式有点问题！
+// TODO: 之后再说吧，累了，在改 bug 要猝死了🥲
 export const LoginModal: FC<ComponentProps<'div'>> = () => {
   const { modalType, onModalClose } = useModalStore()
   const isModalOpen = modalType === 'loginModal'
   const connectors = useConnectors().filter(v => v.id !== 'injected')
   const { mutate: connect, isPending } = useConnect()
+  const router = useRouter()
 
   const connections = useConnections()
   const chainId = useChainId()
@@ -35,6 +43,73 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
 
   const { data: session } = useSession()
   const isUserLoggedIn = session?.user !== undefined && session?.user !== null
+
+  const [isSigningIn, setIsSigningIn] = useState(false)
+
+  // TODO: 普通用户登录后也要签名一次，然后存储身份信息，给予权限
+  // * 现在仅使用钱包来登录后端
+  const isAdmin =
+    ADMIN_WALLET_ADDRESS !== undefined &&
+    address !== undefined &&
+    address.toLowerCase() === ADMIN_WALLET_ADDRESS
+
+  const handleSignIn = async () => {
+    // TODO: toast，才发觉原生的 toast 样式已经不太干净了，样式需要重写一下再添加 toast
+    if (address === undefined) {
+      return
+    }
+
+    // TODO: 当前会签名验证成功，然后跳转再验证，应该签名一步就失败
+    if (!isAdmin) {
+      return
+    }
+
+    setIsSigningIn(true)
+
+    try {
+      const { data: nonceData, error: nonceError } = await authClient.siwe.nonce({
+        walletAddress: address,
+        chainId,
+      })
+
+      if (nonceError !== null || nonceData === null) {
+        setIsSigningIn(false)
+        return
+      }
+
+      const siweMessage = new SiweMessage({
+        domain: window.location.host,
+        address,
+        statement: 'Sign in with Ethereum to the useyeyu.cc',
+        uri: window.location.origin,
+        version: '1',
+        chainId,
+        nonce: nonceData.nonce,
+      })
+
+      const message = siweMessage.prepareMessage()
+      const signature = await signMessage(wagmiConfig, { message })
+
+      const { data: verifyData, error: verifyError } = await authClient.siwe.verify({
+        message,
+        signature,
+        walletAddress: address,
+        chainId,
+      })
+
+      if (verifyError !== null || verifyData === null) {
+        setIsSigningIn(false)
+        return
+      }
+
+      onModalClose()
+      router.push('/admin')
+    } catch {
+      //
+    } finally {
+      setIsSigningIn(false)
+    }
+  }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
@@ -57,36 +132,48 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
             <div className="flex flex-col items-center justify-center gap-6 py-2">
               <div className="space-y-1 text-center">
                 <p className="text-muted-foreground text-xs">当前网络</p>
-                <p className="font-medium">{currentChain?.name ?? 'Unknown Chain'}</p>
+                <p className="">{currentChain?.name ?? 'Unknown Chain'}</p>
               </div>
               <div className="space-y-1 text-center">
                 <p className="text-muted-foreground text-xs">钱包地址</p>
                 <p className="text-sm font-medium break-all">{address}</p>
               </div>
 
-              <Button
-                variant="destructive"
-                onClick={async () => await disconnect(wagmiConfig)}
-                className="mt-2 w-full"
-              >
-                断开连接
-              </Button>
+              <div className="flex w-full flex-col gap-2">
+                {isAdmin && (
+                  <Button onClick={handleSignIn} disabled={isSigningIn} className="w-full">
+                    {isSigningIn ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        少女折寿中...
+                      </>
+                    ) : (
+                      '签名登录'
+                    )}
+                  </Button>
+                )}
+                <Button
+                  variant="destructive"
+                  onClick={async () => await disconnect(wagmiConfig)}
+                  className="w-full"
+                >
+                  断开连接
+                </Button>
+              </div>
             </div>
           ) : isUserLoggedIn ? (
             <div className="flex flex-col items-center justify-center gap-6 py-2">
               <div className="flex flex-col items-center gap-2">
-                {session.user.image !== null &&
-                session.user.image !== undefined &&
-                session.user.image !== '' ? (
+                {session.user.image != null ? (
                   <Image
                     src={session.user.image}
                     alt={session.user.name ?? 'User Avatar'}
                     width={64}
                     height={64}
-                    className="rounded-full border-2 border-white/20 shadow-sm"
+                    className="rounded-full shadow-sm"
                   />
                 ) : null}
-                <div className="space-y-1 text-center">
+                <div className="space-y-1 text-center text-wrap">
                   <p className="text-lg font-medium">{session.user.name}</p>
                   <p className="text-muted-foreground text-sm">{session.user.email}</p>
                 </div>

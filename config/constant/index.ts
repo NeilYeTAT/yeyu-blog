@@ -6,6 +6,10 @@ import type { Metadata } from 'next'
 // ! 需要去 .env 中配置
 export const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',')
 
+// * -- 可选，管理员钱包地址，配置了才能通过钱包签名登录 --
+// ! 需要去 .env 中配置
+export const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.toLowerCase()
+
 // * 元数据，SEO，网页关键字。。。
 export const metadata: Metadata = {
   title: `叶鱼 | 业余`,

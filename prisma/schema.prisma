@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id              String          @id
+  name            String
+  email           String          @unique
+  emailVerified   Boolean         @default(false)
+  image           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  walletAddresses WalletAddress[]
 
   @@map("user")
 }
@@ -69,6 +70,18 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@map("verification")
+}
+
+model WalletAddress {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address   String
+  chainId   Int
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("walletAddress")
 }
 
 // * 数字手动同步到 config/constant/index.ts 文件中，如果没必要，不建议修改
