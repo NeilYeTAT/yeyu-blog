@@ -1,5 +1,5 @@
 import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '@/lib/wagmi/wagmi-config'
+import { wagmiConfig } from '@/lib/core'
 
 // TODO: 没必要放在 global，之后再想办法抽取
 export default function WalletProvider({ children }: { children: React.ReactNode }) {
