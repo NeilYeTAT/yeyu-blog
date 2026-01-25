@@ -1,33 +1,3 @@
-import { transformerCopyButton } from '@rehype-pretty/transformers'
-import rehypePrettyCode from 'rehype-pretty-code'
-import rehypeSlug from 'rehype-slug'
-import rehypeStringify from 'rehype-stringify'
-import remarkGfm from 'remark-gfm'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import { unified } from 'unified'
-
-// * markdown文档渲染配置
-export const processor = unified()
-  .use(remarkParse)
-  .use(remarkGfm)
-  .use(remarkRehype)
-  .use(rehypeSlug)
-  .use(rehypePrettyCode, {
-    // ! 这里写没用，需要再去 globals.css 中去写一下名字，不然打包压缩会报错
-    theme: {
-      dark: 'aurora-x',
-      light: 'github-light',
-    },
-    transformers: [
-      transformerCopyButton({
-        visibility: 'hover',
-        feedbackDuration: 3_000,
-      }),
-    ],
-  })
-  .use(rehypeStringify)
-
 // * markdown 主题配置
 // * 这里抽出来定义整个 markdown 渲染的主题, 主要还是标题的大小和颜色问题🥹
 // * 这里必须要设置成 className 才有 tailwind 的智能提示提示🥺, 先写完主题再换变量名算了

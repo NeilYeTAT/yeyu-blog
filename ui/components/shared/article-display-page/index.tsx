@@ -1,5 +1,5 @@
 import * as motion from 'motion/react-client'
-import { customMarkdownTheme } from '@/lib/markdown'
+import { customMarkdownTheme } from '@/lib/core/markdown'
 import ArticleDisplayHeader from './internal/article-display-header'
 import { type Heading, PostToc } from './internal/post-toc'
 
