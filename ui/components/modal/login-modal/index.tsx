@@ -1,27 +1,28 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import { Loader2, Wallet2 } from 'lucide-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { SiweMessage } from 'siwe'
 import { useChainId, useChains, useConnect, useConnections, useConnectors } from 'wagmi'
 import { disconnect, signMessage } from 'wagmi/actions'
 import { ADMIN_WALLET_ADDRESS } from '@/config/constant'
-import { authClient, signIn, signOut, useSession } from '@/lib/auth/client'
+import { authClient, signIn, signOut } from '@/lib/auth/client'
 import { isEmailLoggedIn, isWalletLoggedIn } from '@/lib/auth/utils'
 import { cn } from '@/lib/utils/common/shadcn'
 import { wagmiConfig } from '@/lib/wagmi/wagmi-config'
 import { useModalStore } from '@/store/use-modal-store'
+import Loading from '@/ui/components/shared/loading'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { GitHubIcon } from './github-icon'
 
 // TODO: 钱包签名认证
 // TODO: 全局状态管理存储钱包登录状态 ？
-// TODO: 默认需要签名一次的，现在简单一点先直接连接钱包，要登录才需要签名
-// TODO: 这里还有一个bug，github 登录后，钱包连接后，然后断开钱包，样式有点问题！
 // TODO: 之后再说吧，累了，在改 bug 要猝死了🥲
 export const LoginModal: FC<ComponentProps<'div'>> = () => {
   const { modalType, onModalClose } = useModalStore()
@@ -42,76 +43,84 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
   const address = connection?.accounts[0]
   const currentChain = chains.find(c => c.id === chainId)
 
-  const { data: session } = useSession()
-  const isWalletUser = isWalletLoggedIn({ data: session })
-  const isGithubUser = isEmailLoggedIn({ data: session })
-
-  const [isSigningIn, setIsSigningIn] = useState(false)
+  // TODO: 封装一层
+  const queryClient = useQueryClient()
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data } = await authClient.getSession()
+      return data
+    },
+  })
+  const isWalletUser = isWalletLoggedIn({ data: session ?? null })
+  const isGithubUser = isEmailLoggedIn({ data: session ?? null })
 
   // TODO: 普通用户登录后也要签名一次，然后存储身份信息，给予权限
   // * 现在仅使用钱包来登录后端
-  const isAdmin =
+
+  // TODO: 抽取
+  const isSessionAdmin =
     ADMIN_WALLET_ADDRESS !== undefined &&
-    address !== undefined &&
-    address.toLowerCase() === ADMIN_WALLET_ADDRESS
+    session?.user?.name !== undefined &&
+    session.user.name.toLowerCase() === ADMIN_WALLET_ADDRESS.toLowerCase()
 
-  const handleSignIn = async () => {
-    // TODO: toast，才发觉原生的 toast 样式已经不太干净了，样式需要重写一下再添加 toast
-    if (address === undefined) {
-      return
-    }
+  const handleSignIn = useCallback(
+    async (params?: { address: string; chainId: number }) => {
+      const walletAddress = params?.address ?? address
+      const currentChainId = params?.chainId ?? chainId
 
-    // TODO: 当前会签名验证成功，然后跳转再验证，应该签名一步就失败
-    if (!isAdmin) {
-      return
-    }
-
-    setIsSigningIn(true)
-
-    try {
-      const { data: nonceData, error: nonceError } = await authClient.siwe.nonce({
-        walletAddress: address,
-        chainId,
-      })
-
-      if (nonceError !== null || nonceData === null) {
-        setIsSigningIn(false)
+      // TODO: toast，才发觉原生的 toast 样式已经不太干净了，样式需要重写一下再添加 toast
+      if (walletAddress === undefined) {
         return
       }
 
-      const siweMessage = new SiweMessage({
-        domain: window.location.host,
-        address,
-        statement: 'Sign in with Ethereum to the useyeyu.cc',
-        uri: window.location.origin,
-        version: '1',
-        chainId,
-        nonce: nonceData.nonce,
-      })
+      try {
+        const { data: nonceData, error: nonceError } = await authClient.siwe.nonce({
+          walletAddress,
+          chainId: currentChainId,
+        })
 
-      const message = siweMessage.prepareMessage()
-      const signature = await signMessage(wagmiConfig, { message })
+        if (nonceError !== null || nonceData === null) {
+          await disconnect(wagmiConfig)
+          return
+        }
 
-      const { data: verifyData, error: verifyError } = await authClient.siwe.verify({
-        message,
-        signature,
-        walletAddress: address,
-        chainId,
-      })
+        const siweMessage = new SiweMessage({
+          domain: window.location.host,
+          address: walletAddress,
+          statement: 'Sign in with Ethereum to the useyeyu.cc',
+          uri: window.location.origin,
+          version: '1',
+          chainId: currentChainId,
+          nonce: nonceData.nonce,
+        })
 
-      if (verifyError !== null || verifyData === null) {
-        setIsSigningIn(false)
-        return
+        const message = siweMessage.prepareMessage()
+        const signature = await signMessage(wagmiConfig, { message })
+
+        const { data: verifyData, error: verifyError } = await authClient.siwe.verify({
+          message,
+          signature,
+          walletAddress,
+          chainId: currentChainId,
+        })
+
+        if (verifyError !== null || verifyData === null) {
+          await disconnect(wagmiConfig)
+          return
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ['session'] })
+        router.refresh()
+      } catch {
+        await disconnect(wagmiConfig)
+      } finally {
+        //
+        await disconnect(wagmiConfig)
       }
-
-      onModalClose()
-      router.push('/admin')
-    } catch {
-      //
-    } finally {
-      setIsSigningIn(false)
-    }
-  }
+    },
+    [address, chainId, queryClient, router],
+  )
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
@@ -150,7 +159,12 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
 
               <Button
                 variant="destructive"
-                onClick={async () => await signOut()}
+                onClick={async () => {
+                  await disconnect(wagmiConfig).catch(() => {})
+                  await signOut()
+                  await queryClient.invalidateQueries({ queryKey: ['session'] })
+                  router.refresh()
+                }}
                 className="mt-2 w-full"
               >
                 退出登录
@@ -163,13 +177,27 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 <p className="text-sm font-medium break-all">{session?.user?.name}</p>
               </div>
 
-              <Button
-                variant="destructive"
-                onClick={async () => await signOut()}
-                className="mt-2 w-full"
-              >
-                退出登录
-              </Button>
+              <div className="flex w-full flex-col gap-2">
+                {isSessionAdmin && (
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/admin" onClick={onModalClose}>
+                      进入后台
+                    </Link>
+                  </Button>
+                )}
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    await disconnect(wagmiConfig).catch(() => {})
+                    await signOut()
+                    await queryClient.invalidateQueries({ queryKey: ['session'] })
+                    router.refresh()
+                  }}
+                  className="w-full"
+                >
+                  退出登录
+                </Button>
+              </div>
             </div>
           ) : isConnected ? (
             <div className="flex flex-col items-center justify-center gap-6 py-2">
@@ -177,31 +205,9 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 <p className="text-muted-foreground text-xs">当前网络</p>
                 <p className="">{currentChain?.name ?? 'Unknown Chain'}</p>
               </div>
-              <div className="space-y-1 text-center">
-                <p className="text-muted-foreground text-xs">钱包地址</p>
-                <p className="text-sm font-medium break-all">{address}</p>
-              </div>
-
-              <div className="flex w-full flex-col gap-2">
-                {isAdmin && (
-                  <Button onClick={handleSignIn} disabled={isSigningIn} className="w-full">
-                    {isSigningIn ? (
-                      <>
-                        <Loader2 className="size-4 animate-spin" />
-                        少女折寿中...
-                      </>
-                    ) : (
-                      '签名登录'
-                    )}
-                  </Button>
-                )}
-                <Button
-                  variant="destructive"
-                  onClick={async () => await disconnect(wagmiConfig)}
-                  className="w-full"
-                >
-                  断开连接
-                </Button>
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Loading />
+                <p className="text-muted-foreground text-sm">少女折寿中...</p>
               </div>
             </div>
           ) : (
@@ -224,7 +230,16 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                   key={connector.uid}
                   type="button"
                   className="flex cursor-pointer items-center justify-baseline px-3 text-base"
-                  onClick={() => connect({ connector })}
+                  onClick={() =>
+                    connect(
+                      { connector },
+                      {
+                        onSuccess: data => {
+                          handleSignIn({ address: data.accounts[0], chainId: data.chainId })
+                        },
+                      },
+                    )
+                  }
                   disabled={isPending}
                 >
                   {typeof connector.icon === 'string' ? (
