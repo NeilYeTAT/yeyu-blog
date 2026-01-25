@@ -1,5 +1,5 @@
+import type { useSession } from './client'
 import { isAddress } from 'viem'
-import type { useSession } from '@/lib/auth/client'
 
 // * 0x42e49a294a253f38af8d690d27884d3eb8154444@http://localhost:3000
 export const isWalletEmail = (email: string) => {
@@ -7,14 +7,6 @@ export const isWalletEmail = (email: string) => {
   if (at <= 0) return false
   const local = email.slice(0, at)
   return isAddress(local)
-}
-
-// * 0x42e49a294a253f38af8d690d27884d3eb8154444@http://localhost:3000
-export const getWalletAddressFromEmail = (email: string) => {
-  const at = email.indexOf('@')
-  if (at <= 0) return null
-  const local = email.slice(0, at)
-  return isAddress(local) ? local : null
 }
 
 export const isWalletLoggedIn = ({

@@ -3,7 +3,7 @@
 import type { CreateEchoDTO, UpdateEchoDTO } from './type'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/db'
-import { requireAdmin } from '@/lib/auth'
+import { requireAdmin } from '@/lib/core/auth/guard'
 
 export async function createEcho(values: CreateEchoDTO) {
   await requireAdmin()

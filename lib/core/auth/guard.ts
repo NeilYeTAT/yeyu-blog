@@ -3,7 +3,7 @@ import { isAddress } from 'viem'
 import { auth } from '@/auth'
 import { ADMIN_EMAILS, ADMIN_WALLET_ADDRESS } from '@/config/constant'
 
-export async function noPermission() {
+export const noPermission = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -35,7 +35,8 @@ export async function noPermission() {
   return true
 }
 
-export async function requireAdmin() {
+// TODO: remove it, use global error handler
+export const requireAdmin = async () => {
   if (await noPermission()) {
     throw new Error('权限不够喵~')
   }

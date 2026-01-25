@@ -1,7 +1,7 @@
 import type { FileRouter } from 'uploadthing/next'
 import { createUploadthing } from 'uploadthing/next'
 import { UploadThingError } from 'uploadthing/server'
-import { noPermission } from '@/lib/auth'
+import { noPermission } from '@/lib/core/auth/guard'
 
 const f = createUploadthing()
 

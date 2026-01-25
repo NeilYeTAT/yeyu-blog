@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/db'
-import { requireAdmin } from '@/lib/auth'
+import { requireAdmin } from '@/lib/core/auth/guard'
 import { processor } from '@/lib/markdown'
 import type {
   ArticleDTO,

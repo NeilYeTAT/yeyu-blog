@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { noPermission } from '@/lib/auth'
+import { noPermission } from '@/lib/core/auth/guard'
 import AdminNavbar from '@/modules/admin/layout/admin-layout-header'
 import AdminProvider from '@/ui/components/provider/admin'
 import { Toaster } from '@/ui/shadcn/sonner'
