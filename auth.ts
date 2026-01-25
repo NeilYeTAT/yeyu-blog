@@ -23,7 +23,7 @@ export const auth = betterAuth({
     siwe({
       domain,
       getNonce: async () => {
-        return await generateNonce()
+        return generateNonce()
       },
       verifyMessage: async ({ message, signature, address }) => {
         const checksumAddress = getAddress(address)
