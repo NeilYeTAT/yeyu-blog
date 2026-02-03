@@ -4,7 +4,7 @@ import Link from 'next/link'
 const ExternalLinks: { name: string; url: string }[] = [
   {
     name: 'GitHub',
-    url: 'https://github.com/NeilYeTAT',
+    url: 'https://github.com/yeyuqwer',
   },
   {
     name: 'bilibili',
