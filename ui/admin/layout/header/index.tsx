@@ -1,37 +1,16 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { getActiveAdminPath } from '@/lib/url'
 import { Button } from '@/ui/shadcn/button'
 import { ModeToggle } from '@/ui/shadcn/mode-toggle'
-import AdminLogo from './internal/admin-logo'
-import AvatarDropdownMenu from './internal/avatar-dropdown-menu'
+import { AdminLogo } from './admin-logo'
+import AvatarDropdownMenu from './avatar-dropdown-menu'
+import { AdminRoutes } from './constant'
 
-const AdminRoutes = [
-  {
-    path: '/admin',
-    pathName: '首页',
-  },
-  {
-    path: '/admin/blog',
-    pathName: '博客',
-  },
-  {
-    path: '/admin/note',
-    pathName: '笔记',
-  },
-  {
-    path: '/admin/tag',
-    pathName: '标签',
-  },
-  {
-    path: '/admin/echo',
-    pathName: '引用',
-  },
-] as const
-
-function AdminNavbar() {
+export const AdminNavbar: FC<ComponentProps<'div'>> = () => {
   const pathname = usePathname()
   const activeUrl = getActiveAdminPath(pathname)
 
@@ -60,5 +39,3 @@ function AdminNavbar() {
     </header>
   )
 }
-
-export default AdminNavbar
