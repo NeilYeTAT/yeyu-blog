@@ -1,4 +1,4 @@
-import AdminEchoPage from '@/modules/admin/page/admin-echo-page'
+import { AdminEchoPage } from '@/ui/admin/echo'
 
 export default async function Page() {
   return <AdminEchoPage />

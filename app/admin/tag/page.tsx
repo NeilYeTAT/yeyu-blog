@@ -1,4 +1,4 @@
-import AdminTagPage from '@/modules/admin/page/admin-tag-page'
+import { AdminTagPage } from '@/ui/admin/tag'
 
 export default function Page() {
   return <AdminTagPage />

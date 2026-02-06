@@ -1,4 +1,4 @@
-import AdminNotePage from '@/modules/admin/page/admin-note-page'
+import { AdminNotePage } from '@/ui/admin/note'
 
 export default function Page() {
   return <AdminNotePage />

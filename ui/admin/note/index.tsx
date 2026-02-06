@@ -1,15 +1,16 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getNoteList, getNotesBySelectedTagName, getQueryNotes } from '@/actions/notes'
 import { getNoteTags } from '@/actions/tags'
 import Loading from '@/ui/components/shared/loading'
-import NoteListTable from './internal/note-list-table'
-import NoteSearch from './internal/note-search'
-import { NoteTagsContainer } from './internal/note-tags-container'
+import NoteListTable from './note-list-table'
+import NoteSearch from './note-search'
+import { NoteTagsContainer } from './note-tags-container'
 
-export default function AdminNotePage() {
+export const AdminNotePage: FC<ComponentProps<'main'>> = () => {
   const [query, setQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 

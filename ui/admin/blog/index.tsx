@@ -1,15 +1,16 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getBlogList, getBlogsBySelectedTagName, getQueryBlog } from '@/actions/blogs'
 import { getBlogTags } from '@/actions/tags'
 import Loading from '@/ui/components/shared/loading'
-import BlogListTable from './internal/blog-list-table'
-import BlogSearch from './internal/blog-search'
-import { BlogTagsContainer } from './internal/blog-tags-container'
+import BlogListTable from './blog-list-table'
+import BlogSearch from './blog-search'
+import { BlogTagsContainer } from './blog-tags-container'
 
-export default function AdminBlogPage() {
+export const AdminBlogPage: FC<ComponentProps<'div'>> = () => {
   const [query, setQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 

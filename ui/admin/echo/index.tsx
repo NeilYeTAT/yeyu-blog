@@ -1,13 +1,14 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getAllEchos, getQueryEchos } from '@/actions/echos'
 import Loading from '@/ui/components/shared/loading'
-import EchoListTable from './internal/echo-list-table'
-import EchoSearch from './internal/echo-search'
+import EchoListTable from './echo-list-table'
+import EchoSearch from './echo-search'
 
-export default function AdminEchoPage() {
+export const AdminEchoPage: FC<ComponentProps<'main'>> = () => {
   const [query, setQuery] = useState('')
   const { isPending, data } = useQuery({
     queryKey: ['echo-list', query],

@@ -1,12 +1,13 @@
 'use client'
 
+import type { ComponentProps, FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getAllTags, getQueryTags } from '@/actions/tags'
-import TagListTable from './internal/tag-list-table'
-import TagSearch from './internal/tag-search'
+import TagListTable from './tag-list-table'
+import TagSearch from './tag-search'
 
-export default function AdminTagPage() {
+export const AdminTagPage: FC<ComponentProps<'main'>> = () => {
   const [query, setQuery] = useState('')
   const { isPending, data } = useQuery({
     queryKey: ['tags', query],

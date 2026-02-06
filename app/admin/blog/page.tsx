@@ -1,4 +1,4 @@
-import AdminBlogPage from '@/modules/admin/page/admin-blog-page'
+import { AdminBlogPage } from '@/ui/admin/blog'
 
 export default function Page() {
   return <AdminBlogPage />
