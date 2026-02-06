@@ -19,6 +19,13 @@ export const columns: ColumnDef<Echo>[] = [
         </span>
       )
     },
+    cell: ({ row }) => {
+      return (
+        <div className="max-w-100 truncate" title={row.original.content}>
+          {row.original.content}
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'reference',

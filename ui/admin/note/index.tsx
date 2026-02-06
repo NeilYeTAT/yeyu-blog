@@ -6,8 +6,9 @@ import { useState } from 'react'
 import { getNoteList, getNotesBySelectedTagName, getQueryNotes } from '@/actions/notes'
 import { getNoteTags } from '@/actions/tags'
 import Loading from '@/ui/components/shared/loading'
-import NoteListTable from './note-list-table'
+import { DataTable } from '../components/table/data-table'
 import NoteSearch from './note-search'
+import { columns } from './note-table-column'
 import { NoteTagsContainer } from './note-tags-container'
 
 export const AdminNotePage: FC<ComponentProps<'main'>> = () => {
@@ -40,7 +41,7 @@ export const AdminNotePage: FC<ComponentProps<'main'>> = () => {
       {noteListPending || noteTagsPending ? (
         <Loading />
       ) : (
-        <NoteListTable noteList={noteList ?? []} />
+        <DataTable columns={columns} data={noteList ?? []} />
       )}
     </main>
   )

@@ -8,43 +8,48 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 import { DataTablePagination } from '@/ui/components/shared/pagination'
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/ui/shadcn/table'
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([{ desc: true, id: 'createdAt' }])
+  const [sorting, setSorting] = useState<SortingState>([{ desc: true, id: 'count' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15,
   })
-
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    // * 分页
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    // * 排序
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     state: {
       sorting,
       pagination,
     },
-    meta: {},
   })
 
   return (
-    <div>
+    <motion.div
+      className="h-full"
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        type: 'spring',
+        stiffness: 120,
+        damping: 20,
+      }}
+    >
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader className="dark:bg-card bg-gray-100">
@@ -85,8 +90,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </TableBody>
         </Table>
       </div>
-      {/* 分页按扭 */}
       <DataTablePagination table={table} />
-    </div>
+    </motion.div>
   )
 }

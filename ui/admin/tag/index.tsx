@@ -4,8 +4,10 @@ import type { ComponentProps, FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getAllTags, getQueryTags } from '@/actions/tags'
-import TagListTable from './tag-list-table'
+import Loading from '@/ui/components/shared/loading'
+import { DataTable } from '../components/table/data-table'
 import TagSearch from './tag-search'
+import { columns } from './tag-table-column'
 
 export const AdminTagPage: FC<ComponentProps<'main'>> = () => {
   const [query, setQuery] = useState('')
@@ -18,7 +20,7 @@ export const AdminTagPage: FC<ComponentProps<'main'>> = () => {
   return (
     <main className="flex w-full flex-col gap-2">
       <TagSearch setQuery={setQuery} />
-      <TagListTable data={data ?? []} isPending={isPending} />
+      {isPending ? <Loading /> : <DataTable columns={columns} data={data ?? []} />}
     </main>
   )
 }

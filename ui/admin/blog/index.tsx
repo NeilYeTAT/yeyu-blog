@@ -6,8 +6,9 @@ import { useState } from 'react'
 import { getBlogList, getBlogsBySelectedTagName, getQueryBlog } from '@/actions/blogs'
 import { getBlogTags } from '@/actions/tags'
 import Loading from '@/ui/components/shared/loading'
-import BlogListTable from './blog-list-table'
+import { DataTable } from '../components/table/data-table'
 import BlogSearch from './blog-search'
+import { columns } from './blog-table-column'
 import { BlogTagsContainer } from './blog-tags-container'
 
 export const AdminBlogPage: FC<ComponentProps<'div'>> = () => {
@@ -40,7 +41,7 @@ export const AdminBlogPage: FC<ComponentProps<'div'>> = () => {
       {blogListPending || blogTagsPending ? (
         <Loading />
       ) : (
-        <BlogListTable blogList={blogList ?? []} />
+        <DataTable columns={columns} data={blogList ?? []} />
       )}
     </main>
   )

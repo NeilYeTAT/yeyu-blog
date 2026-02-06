@@ -5,8 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { getAllEchos, getQueryEchos } from '@/actions/echos'
 import Loading from '@/ui/components/shared/loading'
-import EchoListTable from './echo-list-table'
+import { DataTable } from '../components/table/data-table'
 import EchoSearch from './echo-search'
+import { columns } from './echo-table-column'
 
 export const AdminEchoPage: FC<ComponentProps<'main'>> = () => {
   const [query, setQuery] = useState('')
@@ -19,7 +20,7 @@ export const AdminEchoPage: FC<ComponentProps<'main'>> = () => {
     <main className="flex w-full flex-col gap-2">
       <EchoSearch setQuery={setQuery} />
 
-      {isPending ? <Loading /> : <EchoListTable echoList={data ?? []} />}
+      {isPending ? <Loading /> : <DataTable columns={columns} data={data ?? []} />}
     </main>
   )
 }
