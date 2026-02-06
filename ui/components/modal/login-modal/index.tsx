@@ -1,6 +1,7 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
+import type { Address } from 'viem'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
@@ -15,6 +16,7 @@ import { authClient, isEmailLoggedIn, isWalletLoggedIn, signIn, signOut } from '
 import { wagmiConfig } from '@/lib/core'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalStore } from '@/store/use-modal-store'
+import { AccountIcon } from '@/ui/components/shared/account-icon'
 import Loading from '@/ui/components/shared/loading'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
@@ -171,9 +173,15 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
             </div>
           ) : isWalletUser ? (
             <div className="flex flex-col items-center justify-center gap-6 py-2">
-              <div className="space-y-1 text-center">
-                <p className="text-muted-foreground text-xs">钱包地址</p>
-                <p className="text-sm font-medium break-all">{session?.user?.name}</p>
+              <div className="flex flex-col items-center gap-2">
+                <AccountIcon
+                  account={session?.user?.name as Address}
+                  className="size-16 rounded-full shadow-sm"
+                />
+                <div className="space-y-1 text-center">
+                  <p className="text-muted-foreground text-xs">钱包地址</p>
+                  <p className="text-sm font-medium break-all">{session?.user?.name}</p>
+                </div>
               </div>
 
               <div className="flex w-full flex-col gap-2">
