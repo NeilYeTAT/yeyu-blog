@@ -5,6 +5,7 @@ import type { ComponentProps, FC } from 'react'
 import type { Address } from 'viem'
 import { LogOut } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { isWalletLoggedIn, signOut, useSession } from '@/lib/core'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import YeYuAvatar from '@/ui/components/shared/yeyu-avatar'
@@ -18,6 +19,7 @@ import {
 } from '@/ui/shadcn/dropdown-menu'
 
 export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenuPrimitive.Root>> = () => {
+  const router = useRouter()
   const { data: session } = useSession()
   const isWallet = isWalletLoggedIn({ data: session })
   const address = isWallet ? (session?.user?.name as Address) : undefined
@@ -60,8 +62,9 @@ export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenuPrimitive.
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer"
-          onClick={() => {
-            signOut()
+          onClick={async () => {
+            await signOut()
+            router.push('/')
           }}
         >
           <LogOut />
