@@ -7,7 +7,7 @@ import { processor } from '@/lib/core/markdown'
 import type {
   ArticleDTO,
   UpdateArticleDTO,
-} from '@/ui/components/shared/admin-article-edit-page/type'
+} from '@/ui/admin/components/admin-article-edit-page/type'
 
 export async function createBlog(values: ArticleDTO) {
   await requireAdmin()

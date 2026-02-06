@@ -1,6 +1,11 @@
 import { z } from 'zod'
-import { ARTICLE_TITLE_MAX_LENGTH } from '@/config/constant'
-import { REGEX } from '@/lib/regex'
+import { ARTICLE_TITLE_MAX_LENGTH } from '../../constant'
+// * import from https://github.com/aifuxi/fuxiaochen/blob/master/constants/regex.ts
+
+const REGEX = {
+  SLUG: /^[a-z0-9-]+$/,
+  PURE_NUMBERS: /\d+/g,
+}
 
 export const ArticleSchema = z.object({
   title: z

@@ -2,6 +2,7 @@
 
 import type { ArticleDTO } from './type'
 import type { Blog, BlogTag, Note, NoteTag } from '@prisma/client'
+import type { FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TagType } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -18,18 +19,14 @@ import { Combobox } from '@/ui/shadcn/combobox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
 import { Input } from '@/ui/shadcn/input'
 import { Switch } from '@/ui/shadcn/switch'
-import MarkdownEditor from './internal/markdown-editor'
+import MarkdownEditor from './markdown-editor'
 import { ArticleSchema } from './type'
 
-export default function AdminArticleEditPage({
-  article,
-  relatedArticleTagNames,
-  allTags,
-}: {
+export const AdminArticleEditPage: FC<{
   article: Blog | Note | null
   relatedArticleTagNames?: string[]
   allTags: BlogTag[] | NoteTag[]
-}) {
+}> = ({ article, relatedArticleTagNames, allTags }) => {
   const router = useRouter()
   const { setModalOpen } = useModalStore()
   const pathname = usePathname()

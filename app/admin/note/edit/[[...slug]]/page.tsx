@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { getRawNoteBySlug } from '@/actions/notes'
 import { getNoteTags } from '@/actions/tags'
 import { requireAdmin } from '@/lib/core/auth/guard'
-import AdminArticleEditPage from '@/ui/components/shared/admin-article-edit-page'
+import { AdminArticleEditPage } from '@/ui/admin/components/admin-article-edit-page'
 
 export default async function Page({
   params,
