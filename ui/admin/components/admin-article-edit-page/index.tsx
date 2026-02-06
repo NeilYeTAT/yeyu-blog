@@ -7,12 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { TagType } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { File, Loader2 } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { createBlog, updateBlogById } from '@/actions/blogs'
 import { createNote, updateNoteById } from '@/actions/notes'
-import { parseEditPageTypeFromUrl } from '@/lib/url'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Combobox } from '@/ui/shadcn/combobox'
@@ -22,35 +21,46 @@ import { Switch } from '@/ui/shadcn/switch'
 import MarkdownEditor from './markdown-editor'
 import { ArticleSchema } from './type'
 
+// * 策略模式~
+const STRATEGIES = {
+  [TagType.BLOG]: {
+    create: createBlog,
+    update: updateBlogById,
+    queryKey: 'blog-list',
+    path: 'blog',
+  },
+  [TagType.NOTE]: {
+    create: createNote,
+    update: updateNoteById,
+    queryKey: 'note-list',
+    path: 'note',
+  },
+}
+
 export const AdminArticleEditPage: FC<{
   article: Blog | Note | null
   relatedArticleTagNames?: string[]
   allTags: BlogTag[] | NoteTag[]
-}> = ({ article, relatedArticleTagNames, allTags }) => {
+  type: TagType
+}> = ({ article, relatedArticleTagNames, allTags, type }) => {
   const router = useRouter()
   const { setModalOpen } = useModalStore()
-  const pathname = usePathname()
-  const editPageType = parseEditPageTypeFromUrl(pathname)
+  const strategy = STRATEGIES[type]
 
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: ArticleDTO) => updateArticle(values, editPageType, article?.id),
+    mutationFn: async (values: ArticleDTO) => {
+      if (article?.id != null) {
+        return strategy.update({ ...values, id: article.id })
+      }
+      return strategy.create(values)
+    },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['tags'] })
-
-      switch (editPageType) {
-        case TagType.BLOG:
-          queryClient.invalidateQueries({ queryKey: ['blog-list'] })
-          break
-        case TagType.NOTE:
-          queryClient.invalidateQueries({ queryKey: ['note-list'] })
-          break
-        default:
-          throw new Error(`文章类型错误`)
-      }
+      queryClient.invalidateQueries({ queryKey: [strategy.queryKey] })
 
       toast.success('保存成功')
-      router.push(`/admin/${editPageType.toLowerCase()}/edit/${variables.slug}`)
+      router.push(`/admin/${strategy.path}/edit/${variables.slug}`)
     },
     onError: error => {
       if (error instanceof Error) {
@@ -73,13 +83,12 @@ export const AdminArticleEditPage: FC<{
     mode: 'onBlur',
   })
 
-  async function onSubmit(values: ArticleDTO) {
-    mutate(values)
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8 pb-44">
+      <form
+        onSubmit={form.handleSubmit(values => mutate(values))}
+        className="w-full space-y-8 pb-44"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -198,30 +207,4 @@ export const AdminArticleEditPage: FC<{
       </form>
     </Form>
   )
-}
-
-async function updateArticle(values: ArticleDTO, editPageType: TagType, id: number | undefined) {
-  if (id != null) {
-    switch (editPageType) {
-      case TagType.BLOG:
-        await updateBlogById({ ...values, id })
-        break
-      case TagType.NOTE:
-        await updateNoteById({ ...values, id })
-        break
-      default:
-        throw new Error(`文章类型错误`)
-    }
-  } else {
-    switch (editPageType) {
-      case TagType.BLOG:
-        await createBlog(values)
-        break
-      case TagType.NOTE:
-        await createNote(values)
-        break
-      default:
-        throw new Error(`文章类型错误`)
-    }
-  }
 }

@@ -1,3 +1,4 @@
+import { TagType } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { getRawNoteBySlug } from '@/actions/notes'
 import { getNoteTags } from '@/actions/tags'
@@ -29,6 +30,7 @@ export default async function Page({
       article={article}
       relatedArticleTagNames={relatedArticleTagNames}
       allTags={noteTags}
+      type={TagType.NOTE}
     />
   )
 }

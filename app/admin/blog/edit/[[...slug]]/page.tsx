@@ -1,3 +1,4 @@
+import { TagType } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { getRawBlogBySlug } from '@/actions/blogs'
 import { getBlogTags } from '@/actions/tags'
@@ -28,6 +29,7 @@ export default async function Page({
       article={article}
       relatedArticleTagNames={relatedBlogTagNames}
       allTags={blogTags}
+      type={TagType.BLOG}
     />
   )
 }
