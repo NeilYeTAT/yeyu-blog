@@ -1,0 +1,48 @@
+name: dependabot automerge (patch only)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    if: >
+      github.actor == 'dependabot[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'dependencies')
+    runs-on: ubuntu-latest
+    steps:
+      - name: fetch dependabot metadata
+        id: meta
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # * only semver patch (x.y.z -> x.y.z+1)
+      - name: check version rule (patch only)
+        id: rule
+        run: |
+          echo "update_type=${{ steps.meta.outputs.update-type }}"
+          echo "from_version=${{ steps.meta.outputs.previous-version }}"
+          echo "to_version=${{ steps.meta.outputs.new-version }}"
+
+          UPDATE_TYPE="${{ steps.meta.outputs.update-type }}"
+
+          if [ "$UPDATE_TYPE" = "version-update:semver-patch" ]; then
+            echo "allowed=true" >> $GITHUB_OUTPUT
+            echo "allowed=true"
+          else
+            echo "allowed=false" >> $GITHUB_OUTPUT
+            echo "allowed=false"
+          fi
+
+      # * auto merge
+      - name: enable auto-merge
+        if: steps.rule.outputs.allowed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ github.event.pull_request.html_url }}" --auto --squash

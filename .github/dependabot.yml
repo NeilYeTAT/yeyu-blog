@@ -1,4 +1,6 @@
 version: 2
+enable-beta-ecosystems: true
+
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
@@ -10,3 +12,6 @@ updates:
     commit-message:
       prefix: 'chore'
       include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'automerge-candidate'
