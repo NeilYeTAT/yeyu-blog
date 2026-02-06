@@ -1,8 +1,9 @@
+import type { ComponentProps, FC } from 'react'
 import * as motion from 'motion/react-client'
 import { getRemainingDaysOfYear, getTodayDayInfo, getYearProgress } from '@/lib/time'
-import Greeting from './internal/greeting'
+import { Greeting } from './greeting'
 
-export default function AdminHomePage() {
+export const AdminHomePage: FC<ComponentProps<'div'>> = () => {
   const { year, dayOfYear } = getTodayDayInfo()
 
   return (
