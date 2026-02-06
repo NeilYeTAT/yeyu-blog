@@ -7,7 +7,7 @@ import { getActiveAdminPath } from '@/lib/url'
 import { Button } from '@/ui/shadcn/button'
 import { ModeToggle } from '@/ui/shadcn/mode-toggle'
 import { AdminLogo } from './admin-logo'
-import AvatarDropdownMenu from './avatar-dropdown-menu'
+import { AvatarDropdownMenu } from './avatar-dropdown-menu'
 import { AdminRoutes } from './constant'
 
 export const AdminNavbar: FC<ComponentProps<'div'>> = () => {

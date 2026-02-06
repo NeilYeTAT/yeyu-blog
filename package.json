@@ -25,6 +25,7 @@
     "@bytemd/plugin-highlight-ssr": "^1.22.0",
     "@bytemd/plugin-medium-zoom": "^1.22.0",
     "@bytemd/react": "^1.22.0",
+    "@cfx-kit/wallet-avatar": "^0.0.5",
     "@giscus/react": "^3.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.19.2",

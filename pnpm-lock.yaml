@@ -26,6 +26,9 @@ importers:
       '@bytemd/react':
         specifier: ^1.22.0
         version: 1.22.0(react@19.2.3)
+      '@cfx-kit/wallet-avatar':
+        specifier: ^0.0.5
+        version: 0.0.5
       '@giscus/react':
         specifier: ^3.1.0
         version: 3.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -416,6 +419,9 @@ packages:
     resolution: {integrity: sha512-hkpTykLNMSgkmbokdPXpvOdRaNila+902x0rSMUy4H88wBZJ1Cw9GOi6LTogjb6vu9G7OjFyL0+QuSTOPwRf4A==}
     peerDependencies:
       react: '*'
+
+  '@cfx-kit/wallet-avatar@0.0.5':
+    resolution: {integrity: sha512-qQjAxtkAWAG2YCUEffFmySVRwFquYCk3fH62dEv0IKnuTHZeqbqmlTgsXPvNUqBo4wPRZt0J4IxxFhykTvFfbA==}
 
   '@commitlint/cli@20.4.0':
     resolution: {integrity: sha512-2lqrFrYNxjKxgMqeYiO3zNM14XN9v72/5xIJyvdLw7sHEGlfg6sweW01PGNWiqZa6/AuZwsb0uzkgWJy6F4N2w==}
@@ -1717,6 +1723,9 @@ packages:
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
+
+  '@types/mersenne-twister@1.1.7':
+    resolution: {integrity: sha512-WC4CfMTR59ov9HxLxLg5bjgbX/MljzC9yEp+x8LJze9Y58hTVz6fuNdojxzE8shzQDWoe4id6rhgi4Sfk1G4Wg==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -3638,6 +3647,9 @@ packages:
   merge@2.1.1:
     resolution: {integrity: sha512-jz+Cfrg9GWOZbQAnDQ4hlVnQky+341Yk5ru8bZSe6sIDTCIg8n9i/u7hSQGSVOF3C7lH6mGtqjkiT9G4wFLL0w==}
 
+  mersenne-twister@1.1.0:
+    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
+
   micromark-core-commonmark@1.1.0:
     resolution: {integrity: sha512-BgHO1aRbolh2hcrzL2d1La37V0Aoz73ymF8rAcKnohLy93titmv62E0gP8Hrx9PKcKrqCZ1BbLGbP3bEhoXYlw==}
 
@@ -5200,6 +5212,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@cfx-kit/wallet-avatar@0.0.5':
+    dependencies:
+      '@types/mersenne-twister': 1.1.7
+      mersenne-twister: 1.1.0
+
   '@commitlint/cli@20.4.0(@types/node@25.0.9)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 20.4.0
@@ -6393,6 +6410,8 @@ snapshots:
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
+
+  '@types/mersenne-twister@1.1.7': {}
 
   '@types/ms@2.1.0': {}
 
@@ -8627,6 +8646,8 @@ snapshots:
   merge2@1.4.1: {}
 
   merge@2.1.1: {}
+
+  mersenne-twister@1.1.0: {}
 
   micromark-core-commonmark@1.1.0:
     dependencies:
