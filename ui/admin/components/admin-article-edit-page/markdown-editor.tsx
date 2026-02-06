@@ -1,62 +1,105 @@
-import type { BytemdPlugin, EditorProps } from 'bytemd'
-import breaks from '@bytemd/plugin-breaks'
-import gfm from '@bytemd/plugin-gfm'
-import gfm_zhHans from '@bytemd/plugin-gfm/lib/locales/zh_Hans.json'
-import highlightSsr from '@bytemd/plugin-highlight-ssr'
-import mediumZoom from '@bytemd/plugin-medium-zoom'
-import { Editor } from '@bytemd/react'
-import zh_Hans from 'bytemd/locales/zh_Hans.json'
-import { common } from 'lowlight'
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { genUploader } from 'uploadthing/client'
-import 'highlight.js/styles/tokyo-night-dark.css'
-import 'bytemd/dist/index.css'
 
-const plugins: BytemdPlugin[] = [
-  gfm({ locale: gfm_zhHans }),
-  highlightSsr({
-    languages: {
-      ...common,
-    },
-  }),
-  breaks(),
-  mediumZoom(),
-]
+// * 高亮代码块
+// TODO: 准备移除 rehype-pretty-code ?
+import './hljs-theme.css'
 
-const handleUploadImages: EditorProps['uploadImages'] = async files => {
-  if (files == null || files.length === 0) {
-    toast.error('请先选择图片')
-    return []
-  }
+import { customMarkdownTheme } from '@/lib/core/markdown'
+import { simpleProcessor } from '@/lib/core/markdown/simple-processor'
+import { useUploadThing } from './uploadthing'
 
-  const { uploadFiles } = genUploader()
-
-  const uploadPromise = uploadFiles('imageUploader', { files })
-
-  const response = await toast.promise(uploadPromise, {
-    loading: '图片上传中...',
-    success: '图片上传成功',
-    error: '图片上传失败',
-  })
-
-  return response.unwrap()
-}
-
+// TODO: 样式重写吧...
 export default function MarkdownEditor({
   value,
   onChange,
 }: {
   value: string
-  onChange: () => void
+  onChange: (value: string) => void
 }) {
+  const [html, setHtml] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const { startUpload, isUploading } = useUploadThing('imageUploader', {
+    onClientUploadComplete: res => {
+      if (res.length > 0) {
+        const imgUrl = res[0].url
+        const markdownImage = `![](${imgUrl})`
+        insertText(markdownImage)
+        toast.success('图片上传成功')
+      }
+    },
+    onUploadError: error => {
+      toast.error(`上传失败: ${error.message}`)
+    },
+  })
+
+  const insertText = (text: string) => {
+    const textarea = textareaRef.current
+    if (textarea === null) return
+
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const newValue = value.substring(0, start) + text + value.substring(end)
+
+    onChange(newValue)
+
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(start + text.length, start + text.length)
+    }, 0)
+  }
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData.items
+    const files: File[] = []
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile()
+        if (file !== null) files.push(file)
+      }
+    }
+    if (files.length > 0) {
+      e.preventDefault()
+      toast.info('正在上传图片...')
+      await startUpload(files)
+    }
+  }
+
+  const handleDrop = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault()
+    const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'))
+    if (files.length > 0) {
+      toast.info('正在上传图片...')
+      await startUpload(files)
+    }
+  }
+
+  useEffect(() => {
+    const render = async () => {
+      const file = await simpleProcessor.process(value)
+      setHtml(String(file))
+    }
+    render()
+  }, [value])
+
   return (
-    <div id="content-editor">
-      <Editor
+    <div className="bg-background flex h-[800px] w-full flex-row gap-2 rounded-md border p-2 shadow-sm">
+      <textarea
+        ref={textareaRef}
+        className={`bg-muted/30 focus:ring-primary h-full w-1/2 resize-none rounded-md border p-4 focus:ring-2 focus:outline-none ${isUploading ? 'cursor-not-allowed opacity-50' : ''}`}
         value={value}
-        onChange={onChange}
-        locale={zh_Hans}
-        plugins={plugins}
-        uploadImages={handleUploadImages}
+        onChange={e => onChange(e.target.value)}
+        onPaste={handlePaste}
+        onDrop={handleDrop}
+        disabled={isUploading}
+        placeholder="在此输入 Markdown... (支持粘贴/拖拽上传图片)"
+      />
+      <div
+        className={`h-full w-1/2 overflow-y-auto rounded-md border p-4 ${customMarkdownTheme}`}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
   )
