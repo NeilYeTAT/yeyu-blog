@@ -1,15 +1,15 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
 @plugin "@tailwindcss/typography";
 
 /* * 感谢工具 https://chinese-font.netlify.app/zh-cn/online-split/ */
-@import './font/LXGWWenKaiMono-Regular/result.css';
-@import './font/LXGWWenKaiMono-Medium/result.css';
+@import "./font/LXGWWenKaiMono-Regular/result.css";
+@import "./font/LXGWWenKaiMono-Medium/result.css";
 
-@import './shadcn.css';
+@import "./shadcn.css";
 
-@import './clear-sky.css';
+@import "./clear-sky.css";
 
-@import './custom.css';
+@import "./custom.css";

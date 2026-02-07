@@ -34,7 +34,7 @@ export const ContactMe: FC<ComponentProps<'div'>> = () => {
       <p className="flex gap-4 underline">
         {ExternalLinks.map(link => (
           <Link
-            className="hover:text-clear-sky-indicator text-clear-sky-primary dark:text-[#888888] dark:hover:text-white"
+            className="text-clear-sky-primary hover:text-clear-sky-indicator dark:text-[#888888] dark:hover:text-white"
             href={link.url}
             key={link.url}
             target="_blank"

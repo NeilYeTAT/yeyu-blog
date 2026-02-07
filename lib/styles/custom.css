@@ -1,5 +1,5 @@
 @theme inline {
-  --font-ye-font: 'LXGW WenKai Mono';
+  --font-ye-font: "LXGW WenKai Mono";
 
   /* 麻了, 找半天 bug, 结果是没有加 分号... */
   /* ! 这里有两个问题, 做个记录 */
@@ -7,12 +7,12 @@
   /* ! 2. @keyframes 必须放到最后, 要不然编辑器颜色为白色... */
 
   /* * 自定义动画 */
-  --animate-ye-ping-one-dot-one: 'ye-keyframes-ping-one-dot-one' 1.1s
-    cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-ye-ping-one-dot-one: "ye-keyframes-ping-one-dot-one" 1.1s cubic-bezier(0, 0, 0.2, 1)
+    infinite;
 
   --animate-ye-spin-slowly: spin 24s linear infinite;
 
-  @keyframes 'ye-keyframes-ping-one-dot-one' {
+  @keyframes "ye-keyframes-ping-one-dot-one" {
     75%,
     100% {
       transform: scale(1.1);
@@ -32,19 +32,19 @@ body::-webkit-scrollbar-thumb {
 
 /* * markdown 渲染时的代码主题 */
 /* ! 这里的 data-theme='${ }' lib/markdown/index.ts 中的主题名 */
-code[data-theme*='github-light'],
-code[data-theme*='github-light'] span,
-pre[data-theme*='github-light'],
-figure[data-theme*='github-light'] {
+code[data-theme*="github-light"],
+code[data-theme*="github-light"] span,
+pre[data-theme*="github-light"],
+figure[data-theme*="github-light"] {
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);
 }
 
-html.dark [data-theme*='aurora-x'],
-html.dark code[data-theme*='aurora-x'],
-html.dark code[data-theme*='aurora-x'] span,
-html.dark pre[data-theme*='aurora-x'],
-html.dark figure[data-theme*='aurora-x'] {
+html.dark [data-theme*="aurora-x"],
+html.dark code[data-theme*="aurora-x"],
+html.dark code[data-theme*="aurora-x"] span,
+html.dark pre[data-theme*="aurora-x"],
+html.dark figure[data-theme*="aurora-x"] {
   color: var(--shiki-dark);
   background-color: var(--shiki-dark-bg);
 }

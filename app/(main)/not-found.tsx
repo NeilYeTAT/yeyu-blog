@@ -9,7 +9,7 @@ export default function NotFound() {
   return (
     <div className="m-auto flex flex-col items-center justify-center gap-4">
       <motion.h2
-        className="text-5xl font-bold text-purple-600 dark:text-emerald-300"
+        className="font-bold text-5xl text-purple-600 dark:text-emerald-300"
         initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 1.2, ease: 'easeOut' }}

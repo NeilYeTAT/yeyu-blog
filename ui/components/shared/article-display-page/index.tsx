@@ -6,8 +6,9 @@ import { type Heading, PostToc } from './internal/post-toc'
 function extractHeadings(html: string): Heading[] {
   const regex = /<h([1-6])(?:[^>]*id="([^"]*)")?[^>]*>(.*?)<\/h\1>/g
   const headings: Heading[] = []
-  let match
-  while ((match = regex.exec(html)) !== null) {
+  const matches = html.matchAll(regex)
+
+  for (const match of matches) {
     headings.push({
       level: parseInt(match[1]),
       id: match[2] ?? '',

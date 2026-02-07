@@ -1,8 +1,12 @@
 {
   "prettier.enable": false,
   // Built-in settings
-  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports.biome": "explicit",
+    "quickfix.biome": "explicit"
+  },
+  "editor.defaultFormatter": "biomejs.biome",
   "editor.formatOnSave": true,
   "editor.quickSuggestions": { "strings": true },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
@@ -11,7 +15,6 @@
   "typescript.preferences.quoteStyle": "single",
 
   // Extensions settings
-  "eslint.workingDirectories": [{ "mode": "auto" }],
   "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName", "classNames"],
   "tailwindCSS.experimental.classRegex": [
     [

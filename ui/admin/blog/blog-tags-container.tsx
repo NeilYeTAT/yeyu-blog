@@ -2,12 +2,12 @@
 
 import type { BlogTag } from '@prisma/client'
 import type { Dispatch, SetStateAction } from 'react'
+import type { CarouselApi } from '@/ui/shadcn/carousel'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { BlogTagItemToggle } from '@/ui/components/shared/tag-item-toggle'
 import { Carousel, CarouselContent, CarouselItem } from '@/ui/shadcn/carousel'
-import type { CarouselApi } from '@/ui/shadcn/carousel'
 
 export function BlogTagsContainer({
   blogTagList,
@@ -60,7 +60,7 @@ export function BlogTagsContainer({
       />
       <CarouselContent className="w-fit max-w-[calc(100vw-4rem)] shrink-0">
         {blogTags.length === 0 ? (
-          <CarouselItem className="text-muted-foreground m-auto">没有标签 (｡•́︿•̀｡)</CarouselItem>
+          <CarouselItem className="m-auto text-muted-foreground">没有标签 (｡•́︿•̀｡)</CarouselItem>
         ) : (
           blogTags.map((tag, i) => (
             <CarouselItem className="basis-auto" key={tag.toLowerCase()}>

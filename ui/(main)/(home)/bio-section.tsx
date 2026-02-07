@@ -2,7 +2,7 @@ export default function BioSection() {
   return (
     <section className="flex flex-col gap-4 px-4 text-center">
       <h1>
-        你好! 我是 <span className="text-clear-sky-primary font-bold">叶鱼 (*´∪`)</span>
+        你好! 我是 <span className="font-bold text-clear-sky-primary">叶鱼 (*´∪`)</span>
       </h1>
       <p>
         一位还在学习前端开发的大四学

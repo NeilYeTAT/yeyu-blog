@@ -25,7 +25,7 @@ export default function HorizontalDividingLine() {
   return (
     <div className="relative flex w-full items-center justify-center">
       <hr
-        className="dark:border-accent absolute left-0 w-[45%] border-dashed"
+        className="absolute left-0 w-[45%] border-dashed dark:border-accent"
         style={{ borderColor }}
       />
       <motion.div
@@ -49,7 +49,7 @@ export default function HorizontalDividingLine() {
         <FlowerIcon fill={fill} />
       </motion.div>
       <hr
-        className="dark:border-accent absolute right-0 w-[45%] border-dashed border-indigo-500"
+        className="absolute right-0 w-[45%] border-indigo-500 border-dashed dark:border-accent"
         style={{ borderColor }}
       />
     </div>

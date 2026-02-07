@@ -9,7 +9,7 @@ import { getActiveMainPath } from '@/lib/url'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalStore } from '@/store/use-modal-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
-import { navigationConfig, type NavRoute } from './constant'
+import { type NavRoute, navigationConfig } from './constant'
 import { HoverBackground } from './hover-background'
 import { NavItem } from './nav-item'
 
@@ -37,6 +37,7 @@ export default function Header() {
   const [direction, setDirection] = useState(0)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <TEMP TODO>
   useEffect(() => {
     onModalClose()
   }, [pathname, onModalClose])
@@ -142,14 +143,14 @@ export default function Header() {
       <MaxWidthWrapper
         className={cn(
           // TODO: config other colors
-          'bg-clear-sky-background/80 h-full rounded-full backdrop-blur-sm dark:bg-black/70',
+          'h-full rounded-full bg-clear-sky-background/80 backdrop-blur-sm dark:bg-black/70',
           'px-2.5 py-1 md:px-3 md:py-2',
           'border border-[#00000011] dark:border-white/10',
           'shadow-[0px_4px_10px_0px_#0000001A]',
           'w-full',
         )}
       >
-        <nav className="flex h-full items-center justify-between text-sm text-nowrap md:text-xl dark:text-neutral-400">
+        <nav className="flex h-full items-center justify-between text-nowrap text-sm md:text-xl dark:text-neutral-400">
           {navigationConfig.map(route => {
             if ('group' in route && route.group != null) {
               const isGroupActive = route.group.key === activeKey
@@ -184,7 +185,7 @@ export default function Header() {
                     className={cn(
                       'block cursor-pointer transition-colors',
                       isGroupActive
-                        ? 'text-clear-sky-active-text font-bold dark:text-black'
+                        ? 'font-bold text-clear-sky-active-text dark:text-black'
                         : 'dark:hover:text-neutral-200',
                     )}
                   >
@@ -220,7 +221,7 @@ export default function Header() {
                 className={cn(
                   'relative z-10 block transition-colors',
                   path === activeKey
-                    ? 'text-clear-sky-active-text font-bold dark:text-black'
+                    ? 'font-bold text-clear-sky-active-text dark:text-black'
                     : 'dark:hover:text-neutral-200',
                 )}
                 onMouseEnter={() => handleMouseEnter(path)}
@@ -235,7 +236,7 @@ export default function Header() {
           })}
 
           <motion.div
-            className="bg-clear-sky-indicator absolute top-1/2 -translate-y-1/2 rounded-full shadow-md dark:bg-white"
+            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-clear-sky-indicator shadow-md dark:bg-white"
             animate={indicatorStyle}
             transition={{
               type: 'spring',
@@ -289,7 +290,7 @@ export default function Header() {
                           'rounded-lg px-4 py-2 transition-colors',
                           'hover:underline',
                           item.path === effectiveActiveUrl
-                            ? 'text-primary font-bold'
+                            ? 'font-bold text-primary'
                             : 'text-neutral-600 dark:text-neutral-400',
                         )}
                       >

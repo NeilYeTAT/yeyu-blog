@@ -136,7 +136,7 @@ export const PostToc: FC<{
         >
           <motion.div
             layout="position"
-            className="flex max-w-75 items-center justify-between gap-1 truncate text-sm font-medium"
+            className="flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm"
           >
             <figure className="sticky top-6 flex items-center justify-center">
               <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
@@ -171,7 +171,7 @@ export const PostToc: FC<{
           <motion.div
             layout="position"
             animate={{ rotate: isExpanded ? 180 : 0 }}
-            className="text-muted-foreground ml-2"
+            className="ml-2 text-muted-foreground"
           >
             {isExpanded ? (
               <TextAlignJustify className="size-4" />
@@ -189,7 +189,7 @@ export const PostToc: FC<{
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="max-h-[60vh] overflow-x-hidden overflow-y-auto border-t border-black/5 dark:border-white/5"
+              className="max-h-[60vh] overflow-y-auto overflow-x-hidden border-black/5 border-t dark:border-white/5"
             >
               <ul className="flex flex-col gap-1 p-2">
                 {headings.map(heading => (
@@ -200,8 +200,8 @@ export const PostToc: FC<{
                       className={cn(
                         'block truncate rounded-md px-2 py-1.5 text-sm transition-colors',
                         activeId === heading.id
-                          ? 'text-foreground bg-black/5 font-medium dark:bg-white/10'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5',
+                          ? 'bg-black/5 font-medium text-foreground dark:bg-white/10'
+                          : 'text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5',
                       )}
                     >
                       {heading.text}

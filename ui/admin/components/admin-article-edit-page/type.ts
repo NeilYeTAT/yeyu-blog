@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { ARTICLE_TITLE_MAX_LENGTH } from '../../constant'
+
 // * import from https://github.com/aifuxi/fuxiaochen/blob/master/constants/regex.ts
 
 const REGEX = {

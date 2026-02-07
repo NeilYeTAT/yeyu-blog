@@ -1,6 +1,6 @@
+import type { getAllTags } from '@/actions/tags'
 import { TagType } from '@prisma/client'
 import { z } from 'zod'
-import type { getAllTags } from '@/actions/tags'
 import { TAG_NAME_MAX_LENGTH } from '@/ui/admin/constant'
 
 export const CreateTagSchema = z.object({

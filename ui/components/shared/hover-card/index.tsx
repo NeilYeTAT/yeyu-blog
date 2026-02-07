@@ -20,7 +20,7 @@ export const HoverCard: FC<
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            'border-border/50 bg-background/80 absolute top-0 right-0 z-50 w-64 rounded-xl border p-4 shadow-xl backdrop-blur-md',
+            'absolute top-0 right-0 z-50 w-64 rounded-xl border border-border/50 bg-background/80 p-4 shadow-xl backdrop-blur-md',
             className,
           )}
           style={{ borderColor: color, ...style }}
@@ -30,7 +30,7 @@ export const HoverCard: FC<
             {icon != null ? (
               <div className="flex size-8 items-center justify-center">{icon}</div>
             ) : null}
-            <h3 className="text-lg font-bold">{title}</h3>
+            <h3 className="font-bold text-lg">{title}</h3>
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
         </motion.div>

@@ -12,8 +12,14 @@ import { SiweMessage } from 'siwe'
 import { useChainId, useChains, useConnect, useConnections, useConnectors } from 'wagmi'
 import { disconnect, signMessage } from 'wagmi/actions'
 import { ADMIN_WALLET_ADDRESS } from '@/config/constant'
-import { authClient, isEmailLoggedIn, isWalletLoggedIn, signIn, signOut } from '@/lib/core'
-import { wagmiConfig } from '@/lib/core'
+import {
+  authClient,
+  isEmailLoggedIn,
+  isWalletLoggedIn,
+  signIn,
+  signOut,
+  wagmiConfig,
+} from '@/lib/core'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalStore } from '@/store/use-modal-store'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
@@ -125,9 +131,9 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
-      <DialogContent className="bg-clear-sky-background/80 rounded-xl backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
+      <DialogContent className="rounded-xl bg-clear-sky-background/80 backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
         <DialogHeader className="">
-          <DialogTitle className="text-center text-xl font-bold">
+          <DialogTitle className="text-center font-bold text-xl">
             {isConnected || isGithubUser || isWalletUser ? '用户信息' : '登录 (ゝ∀･)'}
           </DialogTitle>
         </DialogHeader>
@@ -152,8 +158,8 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                     className="rounded-full shadow-sm"
                   />
                 ) : null}
-                <div className="space-y-1 text-center text-wrap">
-                  <p className="text-lg font-medium">{session?.user?.name}</p>
+                <div className="space-y-1 text-wrap text-center">
+                  <p className="font-medium text-lg">{session?.user?.name}</p>
                   <p className="text-muted-foreground text-sm">{session?.user?.email}</p>
                 </div>
               </div>
@@ -161,7 +167,7 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
               <Button
                 variant="destructive"
                 onClick={async () => {
-                  await disconnect(wagmiConfig).catch(() => {})
+                  await disconnect(wagmiConfig).catch()
                   await signOut()
                   await queryClient.invalidateQueries({ queryKey: ['session'] })
                   router.refresh()
@@ -180,7 +186,7 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 />
                 <div className="space-y-1 text-center">
                   <p className="text-muted-foreground text-xs">钱包地址</p>
-                  <p className="text-sm font-medium break-all">{session?.user?.name}</p>
+                  <p className="break-all font-medium text-sm">{session?.user?.name}</p>
                 </div>
               </div>
 
@@ -195,7 +201,7 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 <Button
                   variant="destructive"
                   onClick={async () => {
-                    await disconnect(wagmiConfig).catch(() => {})
+                    await disconnect(wagmiConfig).catch()
                     await signOut()
                     await queryClient.invalidateQueries({ queryKey: ['session'] })
                     router.refresh()
@@ -236,7 +242,7 @@ export const LoginModal: FC<ComponentProps<'div'>> = () => {
                 <Button
                   key={connector.uid}
                   type="button"
-                  className="flex cursor-pointer items-center justify-baseline px-3 text-base"
+                  className="justify-baseline flex cursor-pointer items-center px-3 text-base"
                   onClick={() =>
                     connect(
                       { connector },

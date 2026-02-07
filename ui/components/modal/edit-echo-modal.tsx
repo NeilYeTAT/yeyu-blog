@@ -1,12 +1,12 @@
 'use client'
 
+import type { UpdateEchoDTO } from '@/actions/echos/type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { updateEchoById } from '@/actions/echos'
-import type { UpdateEchoDTO } from '@/actions/echos/type'
 import { UpdateEchoSchema } from '@/actions/echos/type'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
@@ -40,6 +40,7 @@ export default function EditEchoModal() {
     mode: 'onBlur',
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <TEMP TODO>
   useEffect(() => {
     if (isModalOpen) {
       form.reset(initialValues)

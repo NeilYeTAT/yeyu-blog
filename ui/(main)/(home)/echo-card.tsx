@@ -21,7 +21,7 @@ export default function EchoCard({ allPublishedEcho }: { allPublishedEcho: Echo[
       </p>
       <footer
         suppressHydrationWarning
-        className="ml-auto text-sm font-thin text-pink-600 drop-shadow-[0_0_0.75rem_#1babbb] dark:text-white dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+        className="ml-auto font-thin text-pink-600 text-sm drop-shadow-[0_0_0.75rem_#1babbb] dark:text-white dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
       >
         「{echo?.reference ?? '无名。'}」
       </footer>

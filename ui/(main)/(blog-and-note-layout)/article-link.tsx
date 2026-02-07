@@ -1,8 +1,8 @@
 import type { FC } from 'react'
-import { TagType } from '@prisma/client'
-import Link from 'next/link'
 import type { BlogListItem } from '@/actions/blogs/type'
 import type { NoteListItem } from '@/actions/notes/type'
+import { TagType } from '@prisma/client'
+import Link from 'next/link'
 import { toDisplayDate } from '@/lib/time'
 import { cn } from '@/lib/utils/common/shadcn'
 import ScaleUnderline from '@/ui/components/shared/scale-underline'
@@ -26,7 +26,7 @@ export const ArticleLink: FC<{
         {item.title}
         <ScaleUnderline className="bg-clear-sky-indicator dark:bg-white" />
       </h2>
-      <time className="group-hover:text-clear-sky-indicator shrink-0 text-sm font-light text-gray-400 dark:group-hover:text-white">
+      <time className="shrink-0 font-light text-gray-400 text-sm group-hover:text-clear-sky-indicator dark:group-hover:text-white">
         {toDisplayDate(item.createdAt)}
       </time>
     </Link>

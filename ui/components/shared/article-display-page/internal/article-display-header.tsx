@@ -13,7 +13,7 @@ export default function ArticleDisplayHeader({
   return (
     <header className="flex flex-col items-center justify-center gap-1">
       {/* TODO: extract */}
-      <h1 className="text-3xl font-extrabold text-[#e64553] md:text-4xl dark:text-[#ff757f]">
+      <h1 className="font-extrabold text-3xl text-[#e64553] md:text-4xl dark:text-[#ff757f]">
         {title}
       </h1>
 
@@ -24,7 +24,7 @@ export default function ArticleDisplayHeader({
           ))}
         </p>
 
-        <time className="border-b-foreground border-b border-dashed">
+        <time className="border-b border-b-foreground border-dashed">
           {toDisplayDate(createdAt)}
         </time>
       </section>

@@ -1,5 +1,5 @@
-import type { NavRoute } from './constant'
 import type { ComponentProps, FC } from 'react'
+import type { NavRoute } from './constant'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useModalStore } from '@/store/use-modal-store'

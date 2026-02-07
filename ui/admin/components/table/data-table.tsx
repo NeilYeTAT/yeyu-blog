@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     >
       <div className="overflow-hidden rounded-md border">
         <Table>
-          <TableHeader className="dark:bg-card bg-gray-100">
+          <TableHeader className="bg-gray-100 dark:bg-card">
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {

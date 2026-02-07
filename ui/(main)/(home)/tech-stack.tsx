@@ -2,8 +2,8 @@
 
 import type { JSX } from 'react'
 import {
-  motion,
   type MotionStyle,
+  motion,
   useAnimationFrame,
   useMotionValue,
   useSpring,
@@ -105,8 +105,8 @@ function TechStack() {
         color={hoveredItem?.color}
         className="absolute top-0 right-4 hidden md:block"
       />
-      <div className="flex h-35 justify-center overflow-hidden mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] md:mt-20 md:h-70">
-        <div className="flex w-full justify-center mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] pt-10">
+      <div className="mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] flex h-35 justify-center overflow-hidden md:mt-20 md:h-70">
+        <div className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] flex w-full justify-center pt-10">
           <motion.section
             style={
               {

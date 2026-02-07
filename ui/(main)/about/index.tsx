@@ -42,7 +42,7 @@ export default function AboutPage() {
       <Section>
         <p>嗨, 你好呀~👋🏻</p>
         <h2>
-          你可以叫我, <span className="text-clear-sky-indicator font-bold">叶鱼</span> (●´ω｀●)ゞ
+          你可以叫我, <span className="font-bold text-clear-sky-indicator">叶鱼</span> (●´ω｀●)ゞ
         </h2>
         <p>一位业余的前端开发者 _(:3 ⌒ﾞ)_</p>
         <p>目前人还在上海活着 (¦3[▓▓]</p>
@@ -83,8 +83,7 @@ export default function AboutPage() {
         <p>最终花了 7499 买了华硕天选 3</p>
         <p>
           第一次接触电脑, 下载
-          <q>steam游戏中心</q>
-          🥹
+          <q>steam游戏中心</q>🥹
         </p>
         <p>
           第一次尝试编程， <code>print('Hello, World!')</code>
@@ -92,7 +91,7 @@ export default function AboutPage() {
         <p>非常感谢那个教会我使用电脑和教我编程的老师了</p>
         <Link href="https://space.bilibili.com/19658621" target="_blank" className="">
           (❀╹◡╹) =&gt;{' '}
-          <span className="text-clear-sky-indicator hover:text-clear-sky-primary text-xl">
+          <span className="text-clear-sky-indicator text-xl hover:text-clear-sky-primary">
             Frank
           </span>
         </Link>
@@ -112,7 +111,7 @@ export default function AboutPage() {
           <Link
             href="https://dazidazi.com"
             target="_blank"
-            className="text-clear-sky-indicator hover:text-clear-sky-primary my-0"
+            className="my-0 text-clear-sky-indicator hover:text-clear-sky-primary"
           >
             这个
           </Link>

@@ -9,7 +9,7 @@ import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { typedEntries } from '@/lib/utils/typed'
 import { useBackgroundMusicStore } from '@/store/use-background-music-store'
-import { icons, type IconsId } from '../layout/draggable-floating-menu/constant'
+import { type IconsId, icons } from '../layout/draggable-floating-menu/constant'
 
 export default function YeAvatar() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
@@ -98,7 +98,7 @@ export default function YeAvatar() {
                   )}
                 >
                   {activeIcon === id && (
-                    <span className="animate-ye-ping-one-dot-one ring-clear-sky-indicator absolute inset-0 rounded-full ring-2 ring-offset-2 ring-offset-[#7ac7b9] dark:ring-white dark:ring-offset-black" />
+                    <span className="absolute inset-0 animate-ye-ping-one-dot-one rounded-full ring-2 ring-clear-sky-indicator ring-offset-2 ring-offset-[#7ac7b9] dark:ring-white dark:ring-offset-black" />
                   )}
                   <Icon className="relative z-10 size-5" />
                 </motion.div>
@@ -151,7 +151,7 @@ export default function YeAvatar() {
           placeholder="blur"
           priority
         />
-        <span className="animate-ye-ping-one-dot-one absolute top-0 left-0 size-full rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-white dark:ring-offset-black" />
+        <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-[#7ac7b9] ring-offset-1 dark:ring-white dark:ring-offset-black" />
       </motion.figure>
     </div>
   )

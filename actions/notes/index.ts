@@ -1,13 +1,13 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-import { prisma } from '@/db'
-import { requireAdmin } from '@/lib/core/auth/guard'
-import { processor } from '@/lib/core/markdown'
 import type {
   ArticleDTO,
   UpdateArticleDTO,
 } from '@/ui/admin/components/admin-article-edit-page/type'
+import { revalidatePath } from 'next/cache'
+import { prisma } from '@/db'
+import { requireAdmin } from '@/lib/core/auth/guard'
+import { processor } from '@/lib/core/markdown'
 
 export async function createNote(values: ArticleDTO) {
   await requireAdmin()

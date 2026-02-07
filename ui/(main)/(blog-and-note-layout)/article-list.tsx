@@ -1,9 +1,9 @@
 import type { TagType } from '@prisma/client'
 import type { Variants } from 'motion/react'
 import type { ComponentProps, FC } from 'react'
-import * as motion from 'motion/react-client'
 import type { BlogListItem } from '@/actions/blogs/type'
 import type { NoteListItem } from '@/actions/notes/type'
+import * as motion from 'motion/react-client'
 import { ArticleLink } from './article-link'
 
 const itemVariants: Variants = {
@@ -71,7 +71,7 @@ export const ArticleList: FC<
         <motion.div key={year} className="flex flex-col gap-1" variants={listVariants}>
           <motion.h3
             variants={itemVariants}
-            className="text-muted-foreground/30 ml-2 text-2xl font-bold select-none"
+            className="ml-2 select-none font-bold text-2xl text-muted-foreground/30"
           >
             # {year}
           </motion.h3>
@@ -80,7 +80,7 @@ export const ArticleList: FC<
               <motion.div
                 variants={itemVariants}
                 key={v.id}
-                className="transition-opacity group-hover/list:opacity-50! hover:opacity-100!"
+                className="transition-opacity hover:opacity-100! group-hover/list:opacity-50!"
                 whileHover={{
                   scale: 1.01,
                   transition: { type: 'spring', stiffness: 200, damping: 25 },

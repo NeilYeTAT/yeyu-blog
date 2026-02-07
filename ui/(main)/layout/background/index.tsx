@@ -35,7 +35,7 @@ export const Background: FC = () => {
         <div
           className={cn(
             'pointer-events-none fixed top-0 left-0 -z-10 min-h-screen w-screen',
-            'opacity-25 filter-[url(#grain)]',
+            'filter-[url(#grain)] opacity-25',
           )}
         />
       </>
@@ -48,7 +48,7 @@ export const Background: FC = () => {
       <div
         className={cn(
           'pointer-events-none fixed top-0 left-0 -z-10 min-h-screen w-screen',
-          'opacity-25 filter-[url(#grain)]',
+          'filter-[url(#grain)] opacity-25',
         )}
       />
     </>

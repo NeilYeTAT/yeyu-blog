@@ -24,6 +24,7 @@ export default function StartUpMotion() {
     })
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <TEMP TODO>
   useEffect(() => {
     animate(scaleY, [0, 1, 0.7, 0], {
       duration: 2,
@@ -62,7 +63,7 @@ export default function StartUpMotion() {
         />
         {/* 淡入淡出效果 */}
         <motion.div
-          className="pointer-events-none fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl leading-none text-purple-300"
+          className="pointer-events-none fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl text-purple-300 leading-none"
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{
             opacity: [0, 1, 1, 0],

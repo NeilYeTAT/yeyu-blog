@@ -9,7 +9,7 @@ export default function NotFound() {
   return (
     <div className="m-auto flex h-screen w-screen flex-col items-center justify-center gap-4">
       <motion.h2
-        className="text-5xl font-bold text-purple-500 dark:text-emerald-300"
+        className="font-bold text-5xl text-purple-500 dark:text-emerald-300"
         initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 1.2, ease: 'easeOut' }}
@@ -32,7 +32,7 @@ export default function NotFound() {
         <button
           type="button"
           onClick={() => router.back()}
-          className="cursor-pointer text-lg font-bold text-indigo-600 hover:underline dark:text-indigo-400"
+          className="cursor-pointer font-bold text-indigo-600 text-lg hover:underline dark:text-indigo-400"
         >
           回到过去
         </button>
