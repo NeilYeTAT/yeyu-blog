@@ -4,21 +4,28 @@ import { siwe } from 'better-auth/plugins'
 import { generateNonce } from 'siwe'
 import { getAddress, verifyMessage as verifyViemMessage } from 'viem'
 import { prisma } from '@/db'
+import { getServerEnv } from '@/env'
 
-const siteUrl = process.env.SITE_URL
+const env = getServerEnv()
+const siteUrl = env.SITE_URL
 const domain = siteUrl !== undefined && siteUrl !== '' ? new URL(siteUrl).host : 'localhost:3000'
+
+const githubAuthConfig =
+  env.GITHUB_CLIENT_ID != null && env.GITHUB_CLIENT_SECRET != null
+    ? {
+        github: {
+          clientId: env.GITHUB_CLIENT_ID,
+          clientSecret: env.GITHUB_CLIENT_SECRET,
+        },
+      }
+    : {}
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    },
-  },
-  trustedOrigins: siteUrl !== undefined && siteUrl !== '' ? [siteUrl] : ['http://localhost:3000'],
+  socialProviders: githubAuthConfig,
+  trustedOrigins: siteUrl != null && siteUrl !== '' ? [siteUrl] : ['http://localhost:3000'],
   plugins: [
     siwe({
       domain,
