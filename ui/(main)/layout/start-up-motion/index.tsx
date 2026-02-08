@@ -3,8 +3,10 @@
 import { animate, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import { useEffect } from 'react'
 import { INITIAL_WELCOME_TEXT } from '@/config/constant'
+import { useStartupStore } from '@/store/use-startup-store'
 
 export default function StartUpMotion() {
+  const { setAnimationComplete } = useStartupStore()
   const scaleY = useMotionValue(0)
 
   const toLeft = useMotionValue('0%')
@@ -15,6 +17,7 @@ export default function StartUpMotion() {
       duration: 0.8,
       ease: [0.65, 0, 0.35, 1],
       delay: 0.1,
+      onComplete: () => setAnimationComplete(true),
     })
 
     animate(toRight, '100%', {

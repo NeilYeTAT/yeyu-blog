@@ -9,6 +9,7 @@ import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/lib/hooks/animation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useBackgroundMusicStore } from '@/store/use-background-music-store'
+import { useStartupStore } from '@/store/use-startup-store'
 import { icons } from './constant'
 
 const menuRadius = 70
@@ -18,6 +19,7 @@ const menuAngles = [157.5, 112.5, 67.5, 22.5]
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const pathname = usePathname()
+  const { isAnimationComplete } = useStartupStore()
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
   const { isPlaying, play, pause } = useBackgroundMusicStore()
   const [isOpen, setIsOpen] = useState(false)
@@ -86,12 +88,16 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
         whileTap={{ scale: 0.95 }}
         initial={{ scale: 0.2, y: 100, opacity: 0 }}
-        animate={{
-          scale: 1,
-          y: 0,
-          opacity: 1,
-          transition: { type: 'spring', stiffness: 260, damping: 20 },
-        }}
+        animate={
+          isAnimationComplete
+            ? {
+                scale: 1,
+                y: 0,
+                opacity: 1,
+                transition: { type: 'spring', stiffness: 260, damping: 20 },
+              }
+            : { scale: 0.2, y: 100, opacity: 0, transition: { duration: 0 } }
+        }
         className={cn(
           'fixed bottom-20 left-1/2 z-50 -ml-6 cursor-grab active:cursor-grabbing',
           className,

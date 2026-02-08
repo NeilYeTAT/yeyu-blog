@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useScroll } from 'motion/react'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useStartupStore } from '@/store/use-startup-store'
 
 export type Heading = {
   level: number
@@ -38,6 +39,7 @@ const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
 export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
+  const { isAnimationComplete } = useStartupStore()
   const [activeId, setActiveId] = useState<string>('')
   const [isExpanded, setIsExpanded] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -120,10 +122,21 @@ export const PostToc: FC<{
         'max-w-[90vw]',
         isExpanded ? 'rounded-2xl' : 'rounded-full',
       )}
-      initial={{ width: 300 }}
-      animate={{
-        width: isExpanded ? 360 : 300,
-      }}
+      initial={{ width: 300, y: 100, opacity: 0 }}
+      animate={
+        isAnimationComplete
+          ? {
+              width: isExpanded ? 360 : 300,
+              y: 0,
+              opacity: 1,
+            }
+          : {
+              width: 300,
+              y: 100,
+              opacity: 0,
+              transition: { duration: 0 },
+            }
+      }
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       <motion.div layout="position" className="flex flex-col">
