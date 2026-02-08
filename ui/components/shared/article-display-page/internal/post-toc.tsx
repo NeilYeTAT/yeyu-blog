@@ -14,6 +14,21 @@ export type Heading = {
   id: string
 }
 
+const variants = {
+  enter: (direction: number) => ({
+    y: direction * 20,
+    opacity: 0,
+  }),
+  center: {
+    y: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    y: direction * -20,
+    opacity: 0,
+  }),
+}
+
 const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
   const ref = useRef(container)
   const { scrollYProgress } = useScroll({
@@ -47,6 +62,18 @@ export const PostToc: FC<{
   const lenis = useLenis()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const hasScrolledRef = useRef(false)
+
+  const prevActiveIdRef = useRef(activeId)
+  const directionRef = useRef(1)
+
+  if (activeId !== prevActiveIdRef.current) {
+    const currentIndex = headings.findIndex(h => h.id === activeId)
+    const prevIndex = headings.findIndex(h => h.id === prevActiveIdRef.current)
+    if (prevIndex !== -1 && currentIndex !== -1) {
+      directionRef.current = currentIndex > prevIndex ? 1 : -1
+    }
+    prevActiveIdRef.current = activeId
+  }
 
   useEffect(() => {
     if (isExpanded) {
@@ -173,11 +200,8 @@ export const PostToc: FC<{
           )}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <motion.div
-            layout="position"
-            className="flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm"
-          >
-            <figure className="sticky top-6 flex items-center justify-center">
+          <motion.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
+            <figure className="flex items-center justify-center">
               <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
                 {/* background */}
                 <circle
@@ -205,7 +229,20 @@ export const PostToc: FC<{
                 )}
               </svg>
             </figure>
-            <span>{activeHeading?.text ?? '目录'}</span>
+            <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
+              <motion.span
+                key={activeHeading?.id}
+                custom={directionRef.current}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                className="block truncate"
+              >
+                {activeHeading?.text ?? '目录'}
+              </motion.span>
+            </AnimatePresence>
           </motion.div>
           <motion.div
             layout="position"
