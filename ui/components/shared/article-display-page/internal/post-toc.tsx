@@ -164,134 +164,150 @@ export const PostToc: FC<{
   }
 
   return createPortal(
-    <motion.div
-      layout
-      className={cn(
-        'fixed bottom-8 left-1/2 z-50 -translate-x-1/2',
-        'bg-clear-sky-background/80 backdrop-blur-sm dark:bg-black/70',
-        'border border-[#00000011] dark:border-white/10',
-        'shadow-[0px_4px_10px_0px_#0000001A]',
-        'overflow-hidden',
-        'max-w-[90vw]',
-        isExpanded ? 'rounded-2xl' : 'rounded-full',
-      )}
-      initial={{ width: 300, y: 100, opacity: 0 }}
-      animate={
-        isAnimationComplete
-          ? {
-              width: isExpanded ? 360 : 300,
-              y: 0,
-              opacity: 1,
-            }
-          : {
-              width: 300,
-              y: 100,
-              opacity: 0,
-              transition: { duration: 0 },
-            }
-      }
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-    >
-      <motion.div layout="position" className="flex flex-col">
-        <div
-          className={cn(
-            'flex cursor-pointer items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5',
-            'px-2 py-1',
-          )}
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <motion.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
-            <figure className="flex items-center justify-center">
-              <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
-                {/* background */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="36"
-                  pathLength="1"
-                  className="fill-none stroke-black/10 dark:stroke-white/10"
-                  strokeWidth="4"
-                />
-
-                {/* progress */}
-                {articleContent != null ? (
-                  <TocProgressCircle container={articleContent} />
-                ) : (
-                  <motion.circle
+    <>
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm dark:bg-black/40"
+            onClick={() => setIsExpanded(false)}
+          />
+        )}
+      </AnimatePresence>
+      <motion.div
+        layout
+        className={cn(
+          'fixed bottom-8 left-1/2 z-50 -translate-x-1/2',
+          'bg-clear-sky-background/80 backdrop-blur-sm dark:bg-black/70',
+          'border border-[#00000011] dark:border-white/10',
+          'shadow-[0px_4px_10px_0px_#0000001A]',
+          'overflow-hidden',
+          'max-w-[90vw]',
+          isExpanded ? 'rounded-2xl' : 'rounded-full',
+        )}
+        initial={{ width: 300, y: 100, opacity: 0 }}
+        animate={
+          isAnimationComplete
+            ? {
+                width: isExpanded ? 360 : 300,
+                y: 0,
+                opacity: 1,
+              }
+            : {
+                width: 300,
+                y: 100,
+                opacity: 0,
+                transition: { duration: 0 },
+              }
+        }
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      >
+        <motion.div layout="position" className="flex flex-col">
+          <div
+            className={cn(
+              'flex cursor-pointer items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5',
+              'px-2 py-1',
+            )}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <motion.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
+              <figure className="flex items-center justify-center">
+                <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
+                  {/* background */}
+                  <circle
                     cx="50"
                     cy="50"
                     r="36"
                     pathLength="1"
-                    className="fill-none stroke-black/70 dark:stroke-white/70"
+                    className="fill-none stroke-black/10 dark:stroke-white/10"
                     strokeWidth="4"
-                    style={{ pathLength: 0 }}
                   />
-                )}
-              </svg>
-            </figure>
-            <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
-              <motion.span
-                key={activeHeading?.id}
-                custom={directionRef.current}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="block truncate"
-              >
-                {activeHeading?.text ?? '目录'}
-              </motion.span>
-            </AnimatePresence>
-          </motion.div>
-          <motion.div
-            layout="position"
-            animate={{ rotate: isExpanded ? 180 : 0 }}
-            className="ml-2 text-muted-foreground"
-          >
-            {isExpanded ? (
-              <TextAlignJustify className="size-4" />
-            ) : (
-              <ChevronDown className="size-4" />
-            )}
-          </motion.div>
-        </div>
 
-        {/* expanded list */}
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              ref={scrollContainerRef}
-              className="relative max-h-[60vh] overflow-y-auto overflow-x-hidden overscroll-contain border-black/5 border-t dark:border-white/5 [&::-webkit-scrollbar-track]:bg-transparent"
-              data-lenis-prevent
-            >
-              <ul className="flex flex-col gap-1 p-2">
-                {headings.map(heading => (
-                  <li key={heading.id} style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}>
-                    <a
-                      href={`#${heading.id}`}
-                      onClick={e => handleLinkClick(e, heading.id)}
-                      className={cn(
-                        'block truncate rounded-md px-2 py-1.5 text-sm transition-colors',
-                        activeId === heading.id
-                          ? 'bg-black/5 font-medium text-foreground dark:bg-white/10'
-                          : 'text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5',
-                      )}
-                    >
-                      {heading.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                  {/* progress */}
+                  {articleContent != null ? (
+                    <TocProgressCircle container={articleContent} />
+                  ) : (
+                    <motion.circle
+                      cx="50"
+                      cy="50"
+                      r="36"
+                      pathLength="1"
+                      className="fill-none stroke-black/70 dark:stroke-white/70"
+                      strokeWidth="4"
+                      style={{ pathLength: 0 }}
+                    />
+                  )}
+                </svg>
+              </figure>
+              <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
+                <motion.span
+                  key={activeHeading?.id}
+                  custom={directionRef.current}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  className="block truncate"
+                >
+                  {activeHeading?.text ?? '目录'}
+                </motion.span>
+              </AnimatePresence>
             </motion.div>
-          )}
-        </AnimatePresence>
+            <motion.div
+              layout="position"
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              className="ml-2 text-muted-foreground"
+            >
+              {isExpanded ? (
+                <TextAlignJustify className="size-4" />
+              ) : (
+                <ChevronDown className="size-4" />
+              )}
+            </motion.div>
+          </div>
+
+          {/* expanded list */}
+          <AnimatePresence>
+            {isExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                ref={scrollContainerRef}
+                className="relative max-h-[60vh] overflow-y-auto overflow-x-hidden overscroll-contain border-black/5 border-t dark:border-white/5 [&::-webkit-scrollbar-track]:bg-transparent"
+                data-lenis-prevent
+              >
+                <ul className="flex flex-col gap-1 p-2">
+                  {headings.map(heading => (
+                    <li
+                      key={heading.id}
+                      style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}
+                    >
+                      <a
+                        href={`#${heading.id}`}
+                        onClick={e => handleLinkClick(e, heading.id)}
+                        className={cn(
+                          'block truncate rounded-md px-2 py-1.5 text-sm transition-colors',
+                          activeId === heading.id
+                            ? 'bg-black/5 font-medium text-foreground dark:bg-white/10'
+                            : 'text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5',
+                        )}
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </motion.div>
-    </motion.div>,
+    </>,
     document.body,
   )
 }
