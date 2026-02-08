@@ -45,6 +45,32 @@ export const PostToc: FC<{
   const [mounted, setMounted] = useState(false)
   const [articleContent, setArticleContent] = useState<HTMLElement | null>(null)
   const lenis = useLenis()
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const hasScrolledRef = useRef(false)
+
+  useEffect(() => {
+    if (isExpanded) {
+      if (!hasScrolledRef.current && scrollContainerRef.current && activeId) {
+        const activeLink = scrollContainerRef.current.querySelector<HTMLAnchorElement>(
+          `a[href="#${activeId}"]`,
+        )
+        if (activeLink) {
+          const container = scrollContainerRef.current
+          const top = activeLink.offsetTop
+          const linkHeight = activeLink.clientHeight
+          const containerHeight = Math.min(container.scrollHeight, window.innerHeight * 0.6)
+
+          container.scrollTo({
+            top: top - containerHeight / 2 + linkHeight / 2,
+            behavior: 'instant',
+          })
+          hasScrolledRef.current = true
+        }
+      }
+    } else {
+      hasScrolledRef.current = false
+    }
+  }, [isExpanded, activeId])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -202,7 +228,9 @@ export const PostToc: FC<{
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="max-h-[60vh] overflow-y-auto overflow-x-hidden border-black/5 border-t dark:border-white/5"
+              ref={scrollContainerRef}
+              className="relative max-h-[60vh] overflow-y-auto overflow-x-hidden overscroll-contain border-black/5 border-t dark:border-white/5 [&::-webkit-scrollbar-track]:bg-transparent"
+              data-lenis-prevent
             >
               <ul className="flex flex-col gap-1 p-2">
                 {headings.map(heading => (
