@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:no": "next dev",
+    "dev": "next dev",
     "prebuild": "rm -rf .next/cache",
     "build": "next build",
     "start": "next start",
