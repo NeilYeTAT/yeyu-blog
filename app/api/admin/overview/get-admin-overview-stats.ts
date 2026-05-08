@@ -1,18 +1,8 @@
 import 'server-only'
 
+import type { AdminOverviewStats } from '@/lib/api/admin'
 import { prisma } from '@/prisma/instance'
 import { getAdminPendingCount } from '../pending-count/get-admin-pending-count'
-
-export type AdminOverviewStats = {
-  blogCount: number
-  noteCount: number
-  blogDraftCount: number
-  noteDraftCount: number
-  draftCount: number
-  commentPendingCount: number
-  friendLinkPendingCount: number
-  pendingCount: number
-}
 
 export async function getAdminOverviewStats(): Promise<AdminOverviewStats> {
   const [blogGroups, noteGroups, pendingCount] = await Promise.all([

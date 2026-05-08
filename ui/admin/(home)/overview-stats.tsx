@@ -1,7 +1,35 @@
-import { getAdminOverviewStats } from '@/app/api/admin/overview/get-admin-overview-stats'
+'use client'
 
-export async function OverviewStats() {
-  const data = await getAdminOverviewStats()
+import { useAdminOverviewStatsQuery } from '@/hooks/api/admin'
+
+const overviewStatLabels = ['博客', '笔记', '草稿', '待处理']
+
+export function OverviewStats() {
+  const overviewStatsQuery = useAdminOverviewStatsQuery()
+
+  if (overviewStatsQuery.isPending) {
+    return (
+      <section className="grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
+        {overviewStatLabels.map(label => (
+          <article
+            key={label}
+            className="rounded-lg border border-zinc-200 bg-white/50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/50"
+          >
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{label}</p>
+            <div className="mt-2 h-6 w-10 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+            <div className="mt-2 h-3 w-20 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+          </article>
+        ))}
+      </section>
+    )
+  }
+
+  if (overviewStatsQuery.isError) {
+    throw overviewStatsQuery.error
+  }
+
+  const data = overviewStatsQuery.data
+
   const stats = [
     { label: '博客', value: data.blogCount, description: `${data.blogDraftCount} 篇草稿` },
     { label: '笔记', value: data.noteCount, description: `${data.noteDraftCount} 篇草稿` },

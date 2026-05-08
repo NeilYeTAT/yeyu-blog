@@ -2,7 +2,7 @@
 
 import type { ComponentProps, FC } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useAdminPendingCountQuery } from '@/hooks/api/admin'
 import { formatPendingCount } from '@/lib/utils/common/format-pending-count'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -14,7 +14,6 @@ import { AdminRoutes } from './constant'
 
 export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
   const pathname = usePathname()
-  const router = useRouter()
   const { data: pendingCountData } = useAdminPendingCountQuery()
 
   const pendingCountByPath: Partial<Record<(typeof AdminRoutes)[number]['path'], number>> = {
@@ -41,16 +40,7 @@ export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
                 variant={isActive ? 'default' : 'ghost'}
                 size="sm"
               >
-                <Link
-                  href={route.path}
-                  prefetch={false}
-                  onFocus={() => {
-                    router.prefetch(route.path)
-                  }}
-                  onPointerEnter={() => {
-                    router.prefetch(route.path)
-                  }}
-                >
+                <Link href={route.path} prefetch={false}>
                   {route.pathName}
                 </Link>
               </Button>
