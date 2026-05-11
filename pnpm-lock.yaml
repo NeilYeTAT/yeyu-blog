@@ -196,8 +196,8 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
       czg:
-        specifier: 1.13.1-beta.1
-        version: 1.13.1-beta.1
+        specifier: 1.13.1
+        version: 1.13.1
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
@@ -2292,8 +2292,8 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  czg@1.13.1-beta.1:
-    resolution: {integrity: sha512-rx9Mk/yqAPOl98qAfxqxwDz8cTQERhT1nEZcea1pBmys3N6Rmd0chdj/+Hvw5p9c4SYYTfJWKO5pfpy+LMglwA==}
+  czg@1.13.1:
+    resolution: {integrity: sha512-mCfY4bCAMAdaFSlrQwtUTChzFAv59kD/y2leX5+C7X9inu0mt/VkHT7gkbzwcToh26oJaOaYPA9lcXUX92/6cw==}
     engines: {node: '>=v12.20.0'}
     hasBin: true
 
@@ -5567,7 +5567,7 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  czg@1.13.1-beta.1: {}
+  czg@1.13.1: {}
 
   dayjs@1.11.20: {}
 
