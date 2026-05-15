@@ -2,7 +2,7 @@
 
 import type { Heading } from './utils'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
-import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
+import { AnimatePresence, domMax, LazyMotion, m, useScroll, useTransform } from 'motion/react'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -43,7 +43,7 @@ const ArticleBottomShadow = ({
   if (!visible) return null
 
   return (
-    <motion.div
+    <m.div
       aria-hidden
       className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-24 select-none bg-[linear-gradient(transparent,rgb(249,250,250))] backdrop-blur-[16px] [-webkit-mask-image:linear-gradient(to_top,rgb(249,250,250)_50%,transparent)] [mask-image:linear-gradient(to_top,rgb(249,250,250)_50%,transparent)] dark:bg-[linear-gradient(transparent,rgb(9,9,11))] dark:[-webkit-mask-image:linear-gradient(to_top,rgb(9,9,11)_50%,transparent)] dark:[mask-image:linear-gradient(to_top,rgb(9,9,11)_50%,transparent)]"
       style={{ opacity: shadowOpacity }}
@@ -59,7 +59,7 @@ const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
   })
 
   return (
-    <motion.circle
+    <m.circle
       cx="50"
       cy="50"
       r={tocProgressRadius}
@@ -100,9 +100,9 @@ export const PostToc: FC<{
   useEffect(() => {
     if (isExpanded) {
       if (!hasScrolledRef.current && scrollContainerRef.current && activeId) {
-        const activeLink = scrollContainerRef.current.querySelector<HTMLAnchorElement>(
-          `a[href="#${activeId}"]`,
-        )
+        const activeLink = Array.from(
+          scrollContainerRef.current.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
+        ).find(link => link.hash.slice(1) === activeId)
         if (activeLink) {
           const container = scrollContainerRef.current
           const top = activeLink.offsetTop
@@ -165,24 +165,26 @@ export const PostToc: FC<{
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.scrollY - headerOffset
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
-
       setActiveId(id)
       setIsExpanded(false)
+
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+      })
     }
   }
 
   return createPortal(
-    <>
+    <LazyMotion features={domMax}>
       {articleContent != null ? (
         <ArticleBottomShadow container={articleContent} visible={isAnimationComplete} />
       ) : null}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -191,7 +193,7 @@ export const PostToc: FC<{
           />
         )}
       </AnimatePresence>
-      <motion.div
+      <m.div
         layout
         className={cn(
           'fixed bottom-8 left-1/2 z-50 -translate-x-1/2',
@@ -219,8 +221,8 @@ export const PostToc: FC<{
         }
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <motion.div layout="position" className="flex flex-col">
-          <motion.button
+        <m.div layout="position" className="flex flex-col">
+          <m.button
             layout="position"
             type="button"
             aria-expanded={isExpanded}
@@ -231,7 +233,7 @@ export const PostToc: FC<{
             )}
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            <motion.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
+            <m.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
               <figure className="flex items-center justify-center">
                 <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
                   {/* background */}
@@ -248,7 +250,7 @@ export const PostToc: FC<{
                   {articleContent != null ? (
                     <TocProgressCircle container={articleContent} />
                   ) : (
-                    <motion.circle
+                    <m.circle
                       cx="50"
                       cy="50"
                       r={tocProgressRadius}
@@ -262,7 +264,7 @@ export const PostToc: FC<{
                 </svg>
               </figure>
               <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
-                <motion.span
+                <m.span
                   key={activeHeading?.id}
                   custom={directionRef.current}
                   variants={variants}
@@ -273,10 +275,10 @@ export const PostToc: FC<{
                   className="block truncate"
                 >
                   {activeHeading?.text ?? '目录'}
-                </motion.span>
+                </m.span>
               </AnimatePresence>
-            </motion.div>
-            <motion.div
+            </m.div>
+            <m.div
               layout="position"
               animate={{ rotate: isExpanded ? 180 : 0 }}
               className="ml-2 text-muted-foreground"
@@ -286,13 +288,13 @@ export const PostToc: FC<{
               ) : (
                 <ChevronDown className="size-4" />
               )}
-            </motion.div>
-          </motion.button>
+            </m.div>
+          </m.button>
 
           {/* expanded list */}
           <AnimatePresence>
             {isExpanded && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
@@ -321,12 +323,12 @@ export const PostToc: FC<{
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
-        </motion.div>
-      </motion.div>
-    </>,
+        </m.div>
+      </m.div>
+    </LazyMotion>,
     document.body,
   )
 }

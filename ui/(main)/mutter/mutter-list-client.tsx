@@ -31,7 +31,7 @@ export function MutterListClient({
   total: number
 }) {
   const [likedMutterIds, setLikedMutterIds] = useState<number[]>([])
-  const [likeCounts, setLikeCounts] = useState<Record<number, number>>(
+  const [likeCounts, setLikeCounts] = useState<Record<number, number>>(() =>
     Object.fromEntries(initialMutters.map(item => [item.id, item.likeCount])),
   )
   const loadMoreRef = useRef<HTMLDivElement>(null)
@@ -71,18 +71,20 @@ export function MutterListClient({
       : null
   const mutters = useMemo(() => {
     const existingIds = new Set<number>()
+    const nextMutters: typeof initialMutters = []
 
-    return data.pages
-      .flatMap(page => page.list)
-      .filter(item => {
+    for (const page of data.pages) {
+      for (const item of page.list) {
         if (existingIds.has(item.id)) {
-          return false
+          continue
         }
 
         existingIds.add(item.id)
+        nextMutters.push(item)
+      }
+    }
 
-        return true
-      })
+    return nextMutters
   }, [data.pages])
 
   useEffect(() => {
@@ -150,7 +152,7 @@ export function MutterListClient({
     >
       <motion.ul className="flex flex-col gap-4" variants={listVariants}>
         {mutters.map((item, index) => {
-          const createdAt = new Date(item.createdAt)
+          const createdAt = Date.parse(item.createdAt)
           const relativeDate = toRelativeDate(createdAt)
           const isLiked = likedMutterIds.includes(item.id)
           const likeCount = likeCounts[item.id] ?? item.likeCount
@@ -167,8 +169,9 @@ export function MutterListClient({
 
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <time
-                  dateTime={createdAt.toISOString()}
+                  dateTime={item.createdAt}
                   title={prettyDateTime(createdAt)}
+                  suppressHydrationWarning
                   className="font-mono text-[11px] text-zinc-500 uppercase tracking-[0.12em] dark:text-zinc-400"
                 >
                   {relativeDate}

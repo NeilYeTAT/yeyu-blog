@@ -1,7 +1,14 @@
 'use client'
 
 import type { Point } from '../layout/draggable-floating-menu/constant'
-import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
+import {
+  AnimatePresence,
+  domMax,
+  LazyMotion,
+  m,
+  useMotionValue,
+  useMotionValueEvent,
+} from 'motion/react'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
@@ -70,92 +77,94 @@ export default function YeAvatar() {
   useMotionValueEvent(y, 'change', latest => checkProximity(x.get(), latest))
 
   return (
-    <div className="relative">
-      <AnimatePresence>
-        {isDragging && (
-          <>
-            {icons.map(({ id, Icon, className, initial }) => {
-              const isFunctionActive =
-                (id === 'tl' && !isPlaying) ||
-                (id === 'tr' && isPlaying) ||
-                (id === 'bl' && resolvedTheme === 'light') ||
-                (id === 'br' && resolvedTheme === 'dark')
+    <LazyMotion features={domMax}>
+      <div className="relative">
+        <AnimatePresence>
+          {isDragging && (
+            <>
+              {icons.map(({ id, Icon, className, initial }) => {
+                const isFunctionActive =
+                  (id === 'tl' && !isPlaying) ||
+                  (id === 'tr' && isPlaying) ||
+                  (id === 'bl' && resolvedTheme === 'light') ||
+                  (id === 'br' && resolvedTheme === 'dark')
 
-              return (
-                <FloatingMenuActionButton
-                  key={id}
-                  initial={{ opacity: 0, scale: 0.95, ...initial }}
-                  animate={{
-                    opacity: 1,
-                    scale: activeIcon === id ? 1.2 : 1,
-                    x: 0,
-                    y: 0,
-                  }}
-                  exit={{ opacity: 0, scale: 0.95, ...initial }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className={`absolute z-50 ${className}`}
-                  isActive={activeIcon === id || isFunctionActive}
-                  showPing={activeIcon === id}
-                >
-                  <Icon
-                    className="relative z-10 size-5"
+                return (
+                  <FloatingMenuActionButton
+                    key={id}
+                    initial={{ opacity: 0, scale: 0.95, ...initial }}
+                    animate={{
+                      opacity: 1,
+                      scale: activeIcon === id ? 1.2 : 1,
+                      x: 0,
+                      y: 0,
+                    }}
+                    exit={{ opacity: 0, scale: 0.95, ...initial }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className={`absolute z-50 ${className}`}
                     isActive={activeIcon === id || isFunctionActive}
-                    size={20}
-                  />
-                </FloatingMenuActionButton>
-              )
-            })}
-          </>
-        )}
-      </AnimatePresence>
+                    showPing={activeIcon === id}
+                  >
+                    <Icon
+                      className="relative z-10 size-5"
+                      isActive={activeIcon === id || isFunctionActive}
+                      size={20}
+                    />
+                  </FloatingMenuActionButton>
+                )
+              })}
+            </>
+          )}
+        </AnimatePresence>
 
-      {/* 摸摸头~ */}
-      <motion.figure
-        // TODO: config color
-        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
-        whileTap={{ scale: 0.99, rotate: 1 }}
-        drag
-        dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        dragTransition={{ bounceStiffness: 500, bounceDamping: 15 }}
-        dragElastic={0.25}
-        onPointerDown={() => setIsDragging(true)}
-        onPointerUp={() => setIsDragging(false)}
-        onDragEnd={() => {
-          const selected = activeIconRef.current
+        {/* 摸摸头~ */}
+        <m.figure
+          // TODO: config color
+          className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
+          whileTap={{ scale: 0.99, rotate: 1 }}
+          drag
+          dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          dragTransition={{ bounceStiffness: 500, bounceDamping: 15 }}
+          dragElastic={0.25}
+          onPointerDown={() => setIsDragging(true)}
+          onPointerUp={() => setIsDragging(false)}
+          onDragEnd={() => {
+            const selected = activeIconRef.current
 
-          if (selected === 'bl') {
-            setTransitionTheme('light', { direction: 'left', duration: 300 })
-            playSoundEffect()
-          } else if (selected === 'br') {
-            setTransitionTheme('dark', { direction: 'right', duration: 300 })
-            playSoundEffect()
-          } else if (selected === 'tl') {
-            pause()
-          } else if (selected === 'tr') {
-            play()
-            playSoundEffect()
-          } else if (selected === 'lm') {
-            setModalOpen('selectThemeModal')
-            playSoundEffect()
-          }
+            if (selected === 'bl') {
+              setTransitionTheme('light', { direction: 'left', duration: 300 })
+              playSoundEffect()
+            } else if (selected === 'br') {
+              setTransitionTheme('dark', { direction: 'right', duration: 300 })
+              playSoundEffect()
+            } else if (selected === 'tl') {
+              pause()
+            } else if (selected === 'tr') {
+              play()
+              playSoundEffect()
+            } else if (selected === 'lm') {
+              setModalOpen('selectThemeModal')
+              playSoundEffect()
+            }
 
-          setIsDragging(false)
-          setActiveIcon(null)
-          activeIconRef.current = null
-        }}
-        style={{ x, y }}
-      >
-        <Image
-          src={avatar}
-          alt="avatar"
-          className="w-44 rounded-full md:w-52"
-          sizes="(min-width: 768px) 13rem, 11rem"
-          placeholder="blur"
-          preload
-          fetchPriority="high"
-        />
-        <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-400 ring-offset-1 dark:ring-white dark:ring-offset-black" />
-      </motion.figure>
-    </div>
+            setIsDragging(false)
+            setActiveIcon(null)
+            activeIconRef.current = null
+          }}
+          style={{ x, y }}
+        >
+          <Image
+            src={avatar}
+            alt="avatar"
+            className="w-44 rounded-full md:w-52"
+            sizes="(min-width: 768px) 13rem, 11rem"
+            placeholder="blur"
+            preload
+            fetchPriority="high"
+          />
+          <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-400 ring-offset-1 dark:ring-white dark:ring-offset-black" />
+        </m.figure>
+      </div>
+    </LazyMotion>
   )
 }

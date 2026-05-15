@@ -168,9 +168,9 @@ export const MutterList: FC<
       ) : (
         <ul className="w-full space-y-2">
           {mutters.map(item => {
-            const createdAt = new Date(item.createdAt)
-            const updatedAt = new Date(item.updatedAt)
-            const isEdited = updatedAt.getTime() > createdAt.getTime()
+            const createdAt = Date.parse(item.createdAt)
+            const updatedAt = Date.parse(item.updatedAt)
+            const isEdited = updatedAt > createdAt
             const displayAt = isEdited ? updatedAt : createdAt
             const blocks = getMutterListContentBlocks(item.content)
 

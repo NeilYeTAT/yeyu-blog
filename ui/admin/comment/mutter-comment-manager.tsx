@@ -3,7 +3,7 @@
 import type { ComponentProps, FC } from 'react'
 import type { AdminMutterCommentRecord, MutterCommentState } from '@/lib/api/mutter-comment'
 import { Check, RefreshCcw, Search, Trash2, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useReducer } from 'react'
 import { sileo } from 'sileo'
 import {
   useAdminMutterCommentDeleteMutation,
@@ -46,15 +46,82 @@ const commentStateBadgeVariantMap: Record<
   REJECTED: 'destructive',
 }
 
-export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
-  const [draftQuery, setDraftQuery] = useState('')
-  const [draftMutterId, setDraftMutterId] = useState('')
-  const [draftState, setDraftState] = useState<'all' | 'deleted' | MutterCommentState>('PENDING')
+type MutterCommentFilterState = {
+  deletingComment: AdminMutterCommentRecord | null
+  draftMutterId: string
+  draftQuery: string
+  draftState: 'all' | 'deleted' | MutterCommentState
+  mutterIdInput: string
+  query: string
+  state: 'all' | 'deleted' | MutterCommentState
+}
 
-  const [query, setQuery] = useState('')
-  const [mutterIdInput, setMutterIdInput] = useState('')
-  const [state, setState] = useState<'all' | 'deleted' | MutterCommentState>('PENDING')
-  const [deletingComment, setDeletingComment] = useState<AdminMutterCommentRecord | null>(null)
+const initialMutterCommentFilterState: MutterCommentFilterState = {
+  deletingComment: null,
+  draftMutterId: '',
+  draftQuery: '',
+  draftState: 'PENDING',
+  mutterIdInput: '',
+  query: '',
+  state: 'PENDING',
+}
+
+type MutterCommentFilterAction =
+  | { type: 'applyFilters' }
+  | { type: 'setDeletingComment'; deletingComment: AdminMutterCommentRecord | null }
+  | { type: 'setDraftMutterId'; draftMutterId: string }
+  | { type: 'setDraftQuery'; draftQuery: string }
+  | { type: 'setDraftState'; draftState: 'all' | 'deleted' | MutterCommentState }
+
+function mutterCommentFilterReducer(
+  state: MutterCommentFilterState,
+  action: MutterCommentFilterAction,
+): MutterCommentFilterState {
+  switch (action.type) {
+    case 'applyFilters':
+      return {
+        ...state,
+        query: state.draftQuery.trim(),
+        mutterIdInput: state.draftMutterId.trim(),
+        state: state.draftState,
+      }
+    case 'setDeletingComment':
+      return {
+        ...state,
+        deletingComment: action.deletingComment,
+      }
+    case 'setDraftMutterId':
+      return {
+        ...state,
+        draftMutterId: action.draftMutterId,
+      }
+    case 'setDraftQuery':
+      return {
+        ...state,
+        draftQuery: action.draftQuery,
+      }
+    case 'setDraftState': {
+      const query = state.draftQuery.trim()
+      const mutterIdInput = state.draftMutterId.trim()
+
+      return {
+        ...state,
+        draftState: action.draftState,
+        query,
+        mutterIdInput,
+        state: action.draftState,
+      }
+    }
+  }
+}
+
+export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
+  const [filterState, dispatch] = useReducer(
+    mutterCommentFilterReducer,
+    initialMutterCommentFilterState,
+  )
+  const { deletingComment, draftMutterId, draftQuery, draftState, mutterIdInput, query, state } =
+    filterState
 
   const parsedMutterId = useMemo(() => {
     if (mutterIdInput.trim().length === 0) {
@@ -83,9 +150,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
     useAdminMutterCommentRestoreMutation()
 
   const applyFilters = () => {
-    setQuery(draftQuery.trim())
-    setMutterIdInput(draftMutterId.trim())
-    setState(draftState)
+    dispatch({ type: 'applyFilters' })
   }
 
   const handleUpdateState = (id: number, nextState: MutterCommentState) => {
@@ -115,7 +180,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
       { id: deletingComment.id },
       {
         onSuccess: () => {
-          setDeletingComment(null)
+          dispatch({ type: 'setDeletingComment', deletingComment: null })
           sileo.success({ title: '评论已删除。' })
         },
         onError: error => {
@@ -147,7 +212,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
           placeholder="搜索评论内容..."
           value={draftQuery}
           onChange={event => {
-            setDraftQuery(event.target.value)
+            dispatch({ type: 'setDraftQuery', draftQuery: event.target.value })
           }}
           onKeyDown={event => {
             if (event.key === 'Enter') {
@@ -160,7 +225,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
           placeholder="Mutter ID"
           value={draftMutterId}
           onChange={event => {
-            setDraftMutterId(event.target.value)
+            dispatch({ type: 'setDraftMutterId', draftMutterId: event.target.value })
           }}
           onKeyDown={event => {
             if (event.key === 'Enter') {
@@ -172,10 +237,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
           value={draftState}
           onValueChange={value => {
             const nextState = value as 'all' | 'deleted' | MutterCommentState
-            setDraftState(nextState)
-            setQuery(draftQuery.trim())
-            setMutterIdInput(draftMutterId.trim())
-            setState(nextState)
+            dispatch({ type: 'setDraftState', draftState: nextState })
           }}
         >
           <SelectTrigger className="w-40">
@@ -224,7 +286,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
                       {comment.mutter.content}
                     </p>
                     <time className="mt-1 block text-muted-foreground text-xs">
-                      {prettyDateTime(new Date(comment.createdAt))}
+                      {prettyDateTime(Date.parse(comment.createdAt))}
                     </time>
                   </div>
 
@@ -292,7 +354,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
                         className="cursor-pointer"
                         disabled={isDeletingComment}
                         onClick={() => {
-                          setDeletingComment(comment)
+                          dispatch({ type: 'setDeletingComment', deletingComment: comment })
                         }}
                       >
                         <Trash2 className="size-4" />
@@ -310,7 +372,7 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
       <ConfirmDialog
         open={deletingComment != null}
         onClose={() => {
-          setDeletingComment(null)
+          dispatch({ type: 'setDeletingComment', deletingComment: null })
         }}
         onConfirm={handleDelete}
         title="确定要删除这条评论吗？"

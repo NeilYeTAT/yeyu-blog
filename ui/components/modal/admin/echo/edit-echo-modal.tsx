@@ -2,7 +2,7 @@
 
 import type { UpdateEchoDTO } from '@/lib/api/echo'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useEchoUpdateMutation } from '@/hooks/api/echo'
@@ -23,12 +23,15 @@ export default function EditEchoModal() {
 
   const { id, content, isPublished, reference } = payload != null ? (payload as UpdateEchoDTO) : {}
 
-  const initialValues: UpdateEchoDTO = {
-    content: content ?? '',
-    reference: reference ?? '',
-    isPublished: isPublished ?? true,
-    id: id!,
-  }
+  const initialValues = useMemo<UpdateEchoDTO>(
+    () => ({
+      content: content ?? '',
+      reference: reference ?? '',
+      isPublished: isPublished ?? true,
+      id: id!,
+    }),
+    [content, id, isPublished, reference],
+  )
 
   const form = useForm<UpdateEchoDTO>({
     resolver: zodResolver(updateEchoSchema),
@@ -38,15 +41,9 @@ export default function EditEchoModal() {
       isPublished: true,
       id: id!,
     },
+    values: isModalOpen ? initialValues : undefined,
     mode: 'onBlur',
   })
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <TEMP TODO>
-  useEffect(() => {
-    if (isModalOpen) {
-      form.reset(initialValues)
-    }
-  }, [isModalOpen, form])
   const { mutate: updateEcho, isPending } = useEchoUpdateMutation()
 
   function onSubmit(values: UpdateEchoDTO) {

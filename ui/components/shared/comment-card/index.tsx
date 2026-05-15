@@ -87,14 +87,16 @@ export default function CommentCard({
           ) : null}
 
           <CommentList
-            isPending={isCommentPending}
+            status={{
+              isCreatingComment,
+              isDeletingComment,
+              isLoggedIn,
+              isPending: isCommentPending,
+            }}
             commentTree={commentTree}
             sessionUserId={sessionUserId}
-            isLoggedIn={isLoggedIn}
             activeReplyCommentId={activeReplyCommentId}
             replyContent={replyContent}
-            isCreatingComment={isCreatingComment}
-            isDeletingComment={isDeletingComment}
             sessionAvatarProps={sessionAvatarProps}
             onReplyClick={handleReplyClick}
             onReplyCancel={cancelReply}

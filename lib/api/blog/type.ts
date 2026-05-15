@@ -43,5 +43,3 @@ export type RawBlogRecord = {
   updatedAt: Date | string
   tags: BlogTagRecord[]
 }
-
-export type PublishedBlogDetailRecord = RawBlogRecord

@@ -3,14 +3,11 @@ import Loading from '../loading'
 import { CommentThreadItem } from './comment-thread-item'
 
 export function CommentList({
-  isPending,
+  status,
   commentTree,
   sessionUserId,
-  isLoggedIn,
   activeReplyCommentId,
   replyContent,
-  isCreatingComment,
-  isDeletingComment,
   sessionAvatarProps,
   onReplyClick,
   onReplyCancel,
@@ -18,14 +15,16 @@ export function CommentList({
   onReplySubmit,
   onDeleteClick,
 }: {
-  isPending: boolean
+  status: {
+    isCreatingComment: boolean
+    isDeletingComment: boolean
+    isLoggedIn: boolean
+    isPending: boolean
+  }
   commentTree: CommentTreeNode[]
   sessionUserId?: string
-  isLoggedIn: boolean
   activeReplyCommentId: number | null
   replyContent: string
-  isCreatingComment: boolean
-  isDeletingComment: boolean
   sessionAvatarProps: SessionAvatarProps
   onReplyClick: (commentId: number) => void
   onReplyCancel: () => void
@@ -33,7 +32,7 @@ export function CommentList({
   onReplySubmit: (commentId: number) => void
   onDeleteClick: (comment: CommentTreeNode) => void
 }) {
-  if (isPending) {
+  if (status.isPending) {
     return (
       <div className="flex min-h-24 items-center justify-center">
         <Loading />
@@ -57,11 +56,11 @@ export function CommentList({
           comment={comment}
           depth={0}
           sessionUserId={sessionUserId}
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={status.isLoggedIn}
           activeReplyCommentId={activeReplyCommentId}
           replyContent={replyContent}
-          isCreatingComment={isCreatingComment}
-          isDeletingComment={isDeletingComment}
+          isCreatingComment={status.isCreatingComment}
+          isDeletingComment={status.isDeletingComment}
           sessionAvatarProps={sessionAvatarProps}
           onReplyClick={onReplyClick}
           onReplyCancel={onReplyCancel}

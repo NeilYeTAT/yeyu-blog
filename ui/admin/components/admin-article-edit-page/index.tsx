@@ -77,7 +77,7 @@ export const AdminArticleEditPage: FC<{
   relatedArticleTagNames?: string[]
   type: TagType
 }> = ({ article, relatedArticleTagNames, type }) => {
-  const router = useRouter()
+  const { push } = useRouter()
   const setModalOpen = useModalStore(s => s.setModalOpen)
   const strategy = strategies[type]
   const { data: blogTags } = useBlogTagsQuery({
@@ -107,7 +107,7 @@ export const AdminArticleEditPage: FC<{
       }
 
       sileo.success({ title: '保存成功' })
-      router.push(`/admin/${strategy.path}/edit/${variables.slug}`)
+      push(`/admin/${strategy.path}/edit/${variables.slug}`)
     },
     onError: error => {
       sileo.error({ title: `保存失败 ${error.message}` })

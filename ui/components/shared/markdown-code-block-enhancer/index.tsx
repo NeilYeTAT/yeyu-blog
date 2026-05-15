@@ -1,7 +1,7 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { CopyButton } from '@/ui/shadcn/copy-button'
 
@@ -16,24 +16,41 @@ type CopyTargetState = {
   targets: CopyTarget[]
 }
 
+type CopyTargetAction =
+  | { type: 'clear' }
+  | { type: 'sync'; signature: string; targets: CopyTarget[] }
+
+const initialCopyTargetState: CopyTargetState = {
+  signature: '',
+  targets: [],
+}
+
+function copyTargetReducer(state: CopyTargetState, action: CopyTargetAction): CopyTargetState {
+  switch (action.type) {
+    case 'clear':
+      return initialCopyTargetState
+    case 'sync':
+      return action.signature === state.signature
+        ? state
+        : {
+            signature: action.signature,
+            targets: action.targets,
+          }
+  }
+}
+
 export const MarkdownCodeBlockEnhancer: FC<
   ComponentProps<'div'> & {
     rootSelector: string
   }
 > = ({ rootSelector }) => {
-  const [copyTargetState, setCopyTargetState] = useState<CopyTargetState>({
-    signature: '',
-    targets: [],
-  })
+  const [copyTargetState, dispatch] = useReducer(copyTargetReducer, initialCopyTargetState)
   const nextCopyRootIdRef = useRef(0)
 
   useEffect(() => {
     const root = document.querySelector<HTMLElement>(rootSelector)
     if (root == null) {
-      setCopyTargetState({
-        signature: '',
-        targets: [],
-      })
+      dispatch({ type: 'clear' })
       return
     }
 
@@ -77,14 +94,7 @@ export const MarkdownCodeBlockEnhancer: FC<
         .map(target => `${target.id}:${target.content}`)
         .join('\u0000')
 
-      setCopyTargetState(previousState =>
-        nextSignature === previousState.signature
-          ? previousState
-          : {
-              signature: nextSignature,
-              targets: nextTargets,
-            },
-      )
+      dispatch({ type: 'sync', signature: nextSignature, targets: nextTargets })
     }
 
     const handleRootClick = (event: MouseEvent) => {
@@ -122,10 +132,7 @@ export const MarkdownCodeBlockEnhancer: FC<
     return () => {
       observer.disconnect()
       root.removeEventListener('click', handleRootClick)
-      setCopyTargetState({
-        signature: '',
-        targets: [],
-      })
+      dispatch({ type: 'clear' })
     }
   }, [rootSelector])
 

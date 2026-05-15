@@ -43,5 +43,3 @@ export type RawNoteRecord = {
   updatedAt: Date | string
   tags: NoteTagRecord[]
 }
-
-export type PublishedNoteDetailRecord = RawNoteRecord
