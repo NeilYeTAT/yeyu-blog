@@ -1,7 +1,7 @@
 'use client'
 
 import { animate, motion, useMotionValue } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
 
 const initialWelcomeText = '业余'
@@ -14,7 +14,7 @@ const welcomeTextChars = initialWelcomeText.split('')
 
 export default function StartUpMotion() {
   const setAnimationComplete = useStartupStore(s => s.setAnimationComplete)
-  const [isVisible, setIsVisible] = useState(true)
+  const rootRef = useRef<HTMLDivElement>(null)
   const scaleY = useMotionValue(0)
 
   const toLeft = useMotionValue('0%')
@@ -38,7 +38,7 @@ export default function StartUpMotion() {
       ease: smoothEase,
       delay: panelDelay,
       onComplete: () => {
-        setIsVisible(false)
+        rootRef.current?.setAttribute('hidden', '')
       },
     })
 
@@ -54,12 +54,8 @@ export default function StartUpMotion() {
     }
   }, [scaleY, setAnimationComplete, toLeft, toRight])
 
-  if (!isVisible) {
-    return null
-  }
-
   return (
-    <>
+    <div ref={rootRef}>
       <motion.span
         className="pointer-events-none fixed top-2/3 left-1/2 z-110 h-screen w-px -translate-x-1/2 bg-white will-change-transform"
         style={{ scaleY }}
@@ -109,6 +105,6 @@ export default function StartUpMotion() {
         className="pointer-events-none fixed top-0 right-0 z-100 h-dvh w-1/2 bg-linear-to-l from-[#22177A] to-[#000957] will-change-transform [backface-visibility:hidden]"
         style={{ x: toRight }}
       />
-    </>
+    </div>
   )
 }

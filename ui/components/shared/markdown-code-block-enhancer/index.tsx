@@ -11,20 +11,29 @@ type CopyTarget = {
   id: string
 }
 
+type CopyTargetState = {
+  signature: string
+  targets: CopyTarget[]
+}
+
 export const MarkdownCodeBlockEnhancer: FC<
   ComponentProps<'div'> & {
     rootSelector: string
   }
 > = ({ rootSelector }) => {
-  const [copyTargets, setCopyTargets] = useState<CopyTarget[]>([])
+  const [copyTargetState, setCopyTargetState] = useState<CopyTargetState>({
+    signature: '',
+    targets: [],
+  })
   const nextCopyRootIdRef = useRef(0)
-  const signatureRef = useRef('')
 
   useEffect(() => {
     const root = document.querySelector<HTMLElement>(rootSelector)
     if (root == null) {
-      signatureRef.current = ''
-      setCopyTargets([])
+      setCopyTargetState({
+        signature: '',
+        targets: [],
+      })
       return
     }
 
@@ -67,10 +76,15 @@ export const MarkdownCodeBlockEnhancer: FC<
       const nextSignature = nextTargets
         .map(target => `${target.id}:${target.content}`)
         .join('\u0000')
-      if (nextSignature === signatureRef.current) return
 
-      signatureRef.current = nextSignature
-      setCopyTargets(nextTargets)
+      setCopyTargetState(previousState =>
+        nextSignature === previousState.signature
+          ? previousState
+          : {
+              signature: nextSignature,
+              targets: nextTargets,
+            },
+      )
     }
 
     const handleRootClick = (event: MouseEvent) => {
@@ -108,14 +122,16 @@ export const MarkdownCodeBlockEnhancer: FC<
     return () => {
       observer.disconnect()
       root.removeEventListener('click', handleRootClick)
-      signatureRef.current = ''
-      setCopyTargets([])
+      setCopyTargetState({
+        signature: '',
+        targets: [],
+      })
     }
   }, [rootSelector])
 
   return (
     <>
-      {copyTargets.map(target =>
+      {copyTargetState.targets.map(target =>
         createPortal(
           <CopyButton
             content={target.content}

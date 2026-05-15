@@ -4,7 +4,7 @@ import type { ComponentProps, FC } from 'react'
 import type { AdminCommentRecord, CommentState, CommentTargetType } from '@/lib/api/comment'
 import { Check, RefreshCcw, Search, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useMemo, useReducer } from 'react'
 import { sileo } from 'sileo'
 import {
   useAdminCommentDeleteMutation,
@@ -61,17 +61,108 @@ const targetTypeLabelMap: Record<CommentTargetType, string> = {
   NOTE: '笔记',
 }
 
-export const CommentManager: FC<ComponentProps<'main'>> = () => {
-  const [draftQuery, setDraftQuery] = useState('')
-  const [draftTargetId, setDraftTargetId] = useState('')
-  const [draftTargetType, setDraftTargetType] = useState<'all' | CommentTargetType>('all')
-  const [draftState, setDraftState] = useState<'all' | 'deleted' | CommentState>('PENDING')
+type CommentFilterState = {
+  deletingComment: AdminCommentRecord | null
+  draftQuery: string
+  draftState: 'all' | 'deleted' | CommentState
+  draftTargetId: string
+  draftTargetType: 'all' | CommentTargetType
+  query: string
+  state: 'all' | 'deleted' | CommentState
+  targetIdInput: string
+  targetType: 'all' | CommentTargetType
+}
 
-  const [query, setQuery] = useState('')
-  const [targetIdInput, setTargetIdInput] = useState('')
-  const [targetType, setTargetType] = useState<'all' | CommentTargetType>('all')
-  const [state, setState] = useState<'all' | 'deleted' | CommentState>('PENDING')
-  const [deletingComment, setDeletingComment] = useState<AdminCommentRecord | null>(null)
+const initialCommentFilterState: CommentFilterState = {
+  deletingComment: null,
+  draftQuery: '',
+  draftState: 'PENDING',
+  draftTargetId: '',
+  draftTargetType: 'all',
+  query: '',
+  state: 'PENDING',
+  targetIdInput: '',
+  targetType: 'all',
+}
+
+type CommentFilterAction =
+  | { type: 'applyFilters' }
+  | { type: 'setDeletingComment'; deletingComment: AdminCommentRecord | null }
+  | { type: 'setDraftQuery'; draftQuery: string }
+  | { type: 'setDraftState'; draftState: 'all' | 'deleted' | CommentState }
+  | { type: 'setDraftTargetId'; draftTargetId: string }
+  | { type: 'setDraftTargetType'; draftTargetType: 'all' | CommentTargetType }
+
+function commentFilterReducer(
+  state: CommentFilterState,
+  action: CommentFilterAction,
+): CommentFilterState {
+  switch (action.type) {
+    case 'applyFilters':
+      return {
+        ...state,
+        query: state.draftQuery.trim(),
+        targetIdInput: state.draftTargetId.trim(),
+        targetType: state.draftTargetType,
+        state: state.draftState,
+      }
+    case 'setDeletingComment':
+      return {
+        ...state,
+        deletingComment: action.deletingComment,
+      }
+    case 'setDraftQuery':
+      return {
+        ...state,
+        draftQuery: action.draftQuery,
+      }
+    case 'setDraftState': {
+      const query = state.draftQuery.trim()
+      const targetIdInput = state.draftTargetId.trim()
+
+      return {
+        ...state,
+        draftState: action.draftState,
+        query,
+        targetIdInput,
+        targetType: state.draftTargetType,
+        state: action.draftState,
+      }
+    }
+    case 'setDraftTargetId':
+      return {
+        ...state,
+        draftTargetId: action.draftTargetId,
+      }
+    case 'setDraftTargetType': {
+      const query = state.draftQuery.trim()
+      const targetIdInput = state.draftTargetId.trim()
+
+      return {
+        ...state,
+        draftTargetType: action.draftTargetType,
+        query,
+        targetIdInput,
+        targetType: action.draftTargetType,
+        state: state.draftState,
+      }
+    }
+  }
+}
+
+export const CommentManager: FC<ComponentProps<'main'>> = () => {
+  const [filterState, dispatch] = useReducer(commentFilterReducer, initialCommentFilterState)
+  const {
+    deletingComment,
+    draftQuery,
+    draftState,
+    draftTargetId,
+    draftTargetType,
+    query,
+    state,
+    targetIdInput,
+    targetType,
+  } = filterState
 
   const parsedTargetId = useMemo(() => {
     if (targetIdInput.trim().length === 0) {
@@ -99,10 +190,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
   const { mutate: restoreById, isPending: isRestoringComment } = useAdminCommentRestoreMutation()
 
   const applyFilters = () => {
-    setQuery(draftQuery.trim())
-    setTargetIdInput(draftTargetId.trim())
-    setTargetType(draftTargetType)
-    setState(draftState)
+    dispatch({ type: 'applyFilters' })
   }
 
   const handleUpdateState = (id: number, nextState: CommentState) => {
@@ -132,7 +220,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
       { id: deletingComment.id },
       {
         onSuccess: () => {
-          setDeletingComment(null)
+          dispatch({ type: 'setDeletingComment', deletingComment: null })
           sileo.success({ title: '评论已删除。' })
         },
         onError: error => {
@@ -164,7 +252,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
           placeholder="搜索评论内容..."
           value={draftQuery}
           onChange={event => {
-            setDraftQuery(event.target.value)
+            dispatch({ type: 'setDraftQuery', draftQuery: event.target.value })
           }}
           onKeyDown={event => {
             if (event.key === 'Enter') {
@@ -177,7 +265,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
           placeholder="文章 ID"
           value={draftTargetId}
           onChange={event => {
-            setDraftTargetId(event.target.value)
+            dispatch({ type: 'setDraftTargetId', draftTargetId: event.target.value })
           }}
           onKeyDown={event => {
             if (event.key === 'Enter') {
@@ -188,12 +276,10 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
         <Select
           value={draftTargetType}
           onValueChange={value => {
-            const nextTargetType = value as 'all' | CommentTargetType
-            setDraftTargetType(nextTargetType)
-            setQuery(draftQuery.trim())
-            setTargetIdInput(draftTargetId.trim())
-            setTargetType(nextTargetType)
-            setState(draftState)
+            dispatch({
+              type: 'setDraftTargetType',
+              draftTargetType: value as 'all' | CommentTargetType,
+            })
           }}
         >
           <SelectTrigger className="w-40">
@@ -210,12 +296,10 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
         <Select
           value={draftState}
           onValueChange={value => {
-            const nextState = value as 'all' | 'deleted' | CommentState
-            setDraftState(nextState)
-            setQuery(draftQuery.trim())
-            setTargetIdInput(draftTargetId.trim())
-            setTargetType(draftTargetType)
-            setState(nextState)
+            dispatch({
+              type: 'setDraftState',
+              draftState: value as 'all' | 'deleted' | CommentState,
+            })
           }}
         >
           <SelectTrigger className="w-40">
@@ -352,7 +436,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
                         className="cursor-pointer"
                         disabled={isDeletingComment}
                         onClick={() => {
-                          setDeletingComment(comment)
+                          dispatch({ type: 'setDeletingComment', deletingComment: comment })
                         }}
                       >
                         <Trash2 className="size-4" />
@@ -370,7 +454,7 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
       <ConfirmDialog
         open={deletingComment != null}
         onClose={() => {
-          setDeletingComment(null)
+          dispatch({ type: 'setDeletingComment', deletingComment: null })
         }}
         onConfirm={handleDelete}
         title="确定要删除这条评论吗？"

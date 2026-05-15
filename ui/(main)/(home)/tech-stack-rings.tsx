@@ -47,7 +47,7 @@ export function TechStackRings({
       <motion.div style={{ rotate: rotation }} className="absolute inset-0">
         {outerItems.map((item, i) => (
           <motion.div
-            key={`outer-${item.key}`}
+            key={`outer-${item.key}-${i.toString()}`}
             onHoverStart={stopRotation}
             onHoverEnd={startRotation}
             className="absolute left-1/2 z-10 size-12 -translate-x-1/2 transition md:size-24"
@@ -70,7 +70,7 @@ export function TechStackRings({
       >
         {innerItems.map((item, i) => (
           <motion.div
-            key={`inner-${item.key}`}
+            key={`inner-${item.key}-${i.toString()}`}
             onHoverStart={stopRotation}
             onHoverEnd={startRotation}
             className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 transition md:size-[5rem]"
