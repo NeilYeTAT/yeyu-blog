@@ -26,6 +26,3 @@ export const ArticleSchema = z.object({
 })
 
 export type ArticleDTO = z.infer<typeof ArticleSchema>
-export type UpdateArticleDTO = ArticleDTO & {
-  id: number
-}

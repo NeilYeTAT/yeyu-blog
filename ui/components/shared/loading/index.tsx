@@ -18,6 +18,7 @@ const loadingConfig = {
 }
 
 const particleIndexes = Array.from({ length: loadingConfig.particleCount }, (_, index) => index)
+const particleKeys = particleIndexes.map(index => `loading-particle-${index}`)
 
 function normalizeProgress(progress: number) {
   return ((progress % 1) + 1) % 1
@@ -141,7 +142,7 @@ export default function Loading() {
           />
           {particleIndexes.map(index => (
             <circle
-              key={index}
+              key={particleKeys[index]}
               ref={node => {
                 circleRefs.current[index] = node
               }}

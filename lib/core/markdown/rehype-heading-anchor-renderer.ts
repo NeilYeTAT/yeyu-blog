@@ -1,4 +1,4 @@
-const HEADING_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+const headingTags = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
 
 type NodeLike = {
   type: string
@@ -61,7 +61,7 @@ const decorateHeading = (headingNode: ElementLike): ElementLike => {
 
 const walkAndDecorate = (parent: ParentLike): void => {
   parent.children = parent.children.map(child => {
-    if (isElement(child) && HEADING_TAGS.has(child.tagName)) {
+    if (isElement(child) && headingTags.has(child.tagName)) {
       return decorateHeading(child)
     }
 

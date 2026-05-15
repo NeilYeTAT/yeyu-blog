@@ -5,8 +5,8 @@ import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
 import { updateCommentConfigSchema } from './type'
 
-const SITE_COMMENT_CONFIG_ID = 1
-const DEFAULT_SITE_COMMENT_CONFIG = {
+const siteCommentConfigId = 1
+const defaultSiteCommentConfig = {
   autoApproveEmailUsers: true,
   autoApproveWalletUsers: false,
 }
@@ -25,11 +25,11 @@ export const GET = withResponse(async () => {
   try {
     config = await prisma.siteCommentConfig.upsert({
       where: {
-        id: SITE_COMMENT_CONFIG_ID,
+        id: siteCommentConfigId,
       },
       create: {
-        id: SITE_COMMENT_CONFIG_ID,
-        ...DEFAULT_SITE_COMMENT_CONFIG,
+        id: siteCommentConfigId,
+        ...defaultSiteCommentConfig,
       },
       update: {},
     })
@@ -63,10 +63,10 @@ export const PATCH = withResponse(async request => {
   try {
     updated = await prisma.siteCommentConfig.upsert({
       where: {
-        id: SITE_COMMENT_CONFIG_ID,
+        id: siteCommentConfigId,
       },
       create: {
-        id: SITE_COMMENT_CONFIG_ID,
+        id: siteCommentConfigId,
         ...payload,
       },
       update: payload,

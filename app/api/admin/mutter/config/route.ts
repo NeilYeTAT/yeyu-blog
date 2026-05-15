@@ -6,8 +6,8 @@ import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
 import { updateMutterCommentConfigSchema } from './type'
 
-const MUTTER_COMMENT_CONFIG_ID = 1
-const DEFAULT_MUTTER_COMMENT_CONFIG = {
+const mutterCommentConfigId = 1
+const defaultMutterCommentConfig = {
   autoApproveEmailUsers: true,
   autoApproveWalletUsers: false,
 }
@@ -17,11 +17,11 @@ export const GET = withResponse(async () => {
 
   const config = await prisma.mutterCommentConfig.upsert({
     where: {
-      id: MUTTER_COMMENT_CONFIG_ID,
+      id: mutterCommentConfigId,
     },
     create: {
-      id: MUTTER_COMMENT_CONFIG_ID,
-      ...DEFAULT_MUTTER_COMMENT_CONFIG,
+      id: mutterCommentConfigId,
+      ...defaultMutterCommentConfig,
     },
     update: {},
   })
@@ -45,10 +45,10 @@ export const PATCH = withResponse(async request => {
 
   const updated = await prisma.mutterCommentConfig.upsert({
     where: {
-      id: MUTTER_COMMENT_CONFIG_ID,
+      id: mutterCommentConfigId,
     },
     create: {
-      id: MUTTER_COMMENT_CONFIG_ID,
+      id: mutterCommentConfigId,
       ...payload,
     },
     update: payload,

@@ -247,10 +247,12 @@ export const GET = withResponse(async request => {
 })
 
 export const POST = withResponse(async request => {
-  const user = await requireSignedInUser()
-  const config = await getSiteCommentPolicy()
+  const [user, config, body] = await Promise.all([
+    requireSignedInUser(),
+    getSiteCommentPolicy(),
+    readJsonBody(request),
+  ])
 
-  const body = await readJsonBody(request)
   const parseResult = createCommentSchema.safeParse(body)
 
   if (!parseResult.success) {

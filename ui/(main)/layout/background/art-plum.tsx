@@ -77,8 +77,8 @@ export const ArtPlum = () => {
       // out of bounds
       if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100) return
 
-      const MIN_BRANCH = 30
-      const rate = counter.value <= MIN_BRANCH ? 0.8 : 0.5
+      const minBranch = 30
+      const rate = counter.value <= minBranch ? 0.8 : 0.5
 
       // left branch
       if (random() < rate) stepsRef.current.push(() => step(nx, ny, rad1, counter))

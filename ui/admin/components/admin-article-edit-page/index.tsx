@@ -23,7 +23,7 @@ import MarkdownEditor from './markdown-editor'
 import { ArticleSchema } from './type'
 
 // * 策略模式~
-const STRATEGIES = {
+const strategies = {
   [TagType.BLOG]: {
     create: createBlog,
     update: updateBlog,
@@ -79,7 +79,7 @@ export const AdminArticleEditPage: FC<{
 }> = ({ article, relatedArticleTagNames, type }) => {
   const router = useRouter()
   const setModalOpen = useModalStore(s => s.setModalOpen)
-  const strategy = STRATEGIES[type]
+  const strategy = strategies[type]
   const { data: blogTags } = useBlogTagsQuery({
     enabled: type === TagType.BLOG,
   })

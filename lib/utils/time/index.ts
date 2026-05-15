@@ -5,10 +5,10 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-const SHANGHAI = 'Asia/Shanghai'
+const shanghai = 'Asia/Shanghai'
 
 export function sayHi() {
-  const hour = dayjs().tz(SHANGHAI).hour()
+  const hour = dayjs().tz(shanghai).hour()
 
   if (hour < 6) {
     return '凌晨不好喵...'
@@ -28,12 +28,12 @@ export function sayHi() {
 }
 
 export function prettyDateTime(date: number | Date) {
-  return dayjs(date).tz(SHANGHAI).locale('zh-cn').format('YY年M月D日 H时 m分')
+  return dayjs(date).tz(shanghai).locale('zh-cn').format('YY年M月D日 H时 m分')
 }
 
 export function toRelativeDate(date: number | Date) {
-  const now = dayjs().tz(SHANGHAI)
-  const target = dayjs(date).tz(SHANGHAI)
+  const now = dayjs().tz(shanghai)
+  const target = dayjs(date).tz(shanghai)
   const diff = now.valueOf() - target.valueOf()
 
   if (diff <= 0) return '刚刚'
@@ -59,17 +59,17 @@ export function toRelativeDate(date: number | Date) {
 }
 
 export function toDisplayDate(date: number | Date) {
-  return dayjs(date).tz(SHANGHAI).locale('en').format('MMM DD, YYYY')
+  return dayjs(date).tz(shanghai).locale('en').format('MMM DD, YYYY')
 }
 
 export function getRemainingDaysOfYear(): number {
-  const endOfYear = dayjs().tz(SHANGHAI).endOf('year')
-  const now = dayjs().tz(SHANGHAI)
+  const endOfYear = dayjs().tz(shanghai).endOf('year')
+  const now = dayjs().tz(shanghai)
   return endOfYear.diff(now, 'day')
 }
 
 export function getYearProgress(): { passed: number; remaining: number } {
-  const now = dayjs().tz(SHANGHAI)
+  const now = dayjs().tz(shanghai)
   const startOfYear = now.startOf('year')
   const endOfYear = now.endOf('year')
 
@@ -86,7 +86,7 @@ export function getYearProgress(): { passed: number; remaining: number } {
 }
 
 export function getTodayDayInfo(): { year: number; dayOfYear: number } {
-  const now = dayjs().tz(SHANGHAI)
+  const now = dayjs().tz(shanghai)
   const startOfYear = now.startOf('year')
   const dayOfYear = now.diff(startOfYear, 'day') + 1
 
