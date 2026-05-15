@@ -1,6 +1,6 @@
-import type { ComponentProps, FC } from 'react'
 import type { NavRoute } from './types'
 import Link from 'next/link'
+import { type ComponentProps, type FC, startTransition } from 'react'
 import { sileo } from 'sileo'
 import { useModalStore } from '@/store/use-modal-store'
 
@@ -26,8 +26,12 @@ export const NavItem: FC<
             sileo.info({ title: 'Coming soon...' })
             return
           }
-          if (item.modal != null) {
-            setModalOpen(item.modal)
+          const modalType = item.modal
+
+          if (modalType != null) {
+            startTransition(() => {
+              setModalOpen(modalType)
+            })
           }
         }}
       >

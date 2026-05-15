@@ -3,7 +3,14 @@
 import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment'
 import { LogIn, MessageCircle, Trash2 } from 'lucide-react'
 import Image from 'next/image'
-import { type ComponentProps, type FC, type ReactNode, useMemo, useState } from 'react'
+import {
+  type ComponentProps,
+  type FC,
+  type ReactNode,
+  startTransition,
+  useMemo,
+  useState,
+} from 'react'
 import { siGithub, siGoogle } from 'simple-icons'
 import { type Address, isAddress } from 'viem'
 import avatar from '@/config/img/avatar.webp'
@@ -420,7 +427,9 @@ export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
                   type="button"
                   className="h-10 w-full cursor-pointer rounded-xl bg-theme-indicator text-theme-active-text shadow-none hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35"
                   onClick={() => {
-                    setModalOpen('loginModal')
+                    startTransition(() => {
+                      setModalOpen('loginModal')
+                    })
                   }}
                 >
                   <LogIn className="size-4" />

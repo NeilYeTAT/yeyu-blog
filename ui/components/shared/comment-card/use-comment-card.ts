@@ -1,6 +1,6 @@
 import type { CommentTargetType } from '@/lib/api/comment'
 import type { CommentTreeNode } from './type'
-import { useMemo, useState } from 'react'
+import { startTransition, useMemo, useState } from 'react'
 import { type Address, isAddress } from 'viem'
 import {
   useCommentDeleteMutation,
@@ -60,7 +60,9 @@ export function useCommentCard({
   )
 
   const openLoginModal = () => {
-    setModalOpen('loginModal')
+    startTransition(() => {
+      setModalOpen('loginModal')
+    })
   }
 
   const submitComment = ({
