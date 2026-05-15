@@ -67,16 +67,19 @@ export async function getSiteCommentTargetMap(
     targetId: number
   }>,
 ) {
-  const blogIds = [
-    ...new Set(
-      targets.filter(target => target.targetType === 'BLOG').map(target => target.targetId),
-    ),
-  ]
-  const noteIds = [
-    ...new Set(
-      targets.filter(target => target.targetType === 'NOTE').map(target => target.targetId),
-    ),
-  ]
+  const blogIdSet = new Set<number>()
+  const noteIdSet = new Set<number>()
+
+  for (const target of targets) {
+    if (target.targetType === 'BLOG') {
+      blogIdSet.add(target.targetId)
+    } else if (target.targetType === 'NOTE') {
+      noteIdSet.add(target.targetId)
+    }
+  }
+
+  const blogIds = Array.from(blogIdSet)
+  const noteIds = Array.from(noteIdSet)
 
   const [blogs, notes] = await Promise.all([
     blogIds.length === 0

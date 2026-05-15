@@ -220,9 +220,13 @@ export const PostToc: FC<{
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <motion.div layout="position" className="flex flex-col">
-          <div
+          <motion.button
+            layout="position"
+            type="button"
+            aria-expanded={isExpanded}
+            aria-label="切换文章目录"
             className={cn(
-              'flex cursor-pointer items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5',
+              'flex w-full cursor-pointer items-center justify-between border-0 bg-transparent text-left text-inherit transition-colors hover:bg-black/5 dark:hover:bg-white/5',
               'px-2 py-1',
             )}
             onClick={() => setIsExpanded(!isExpanded)}
@@ -283,7 +287,7 @@ export const PostToc: FC<{
                 <ChevronDown className="size-4" />
               )}
             </motion.div>
-          </div>
+          </motion.button>
 
           {/* expanded list */}
           <AnimatePresence>

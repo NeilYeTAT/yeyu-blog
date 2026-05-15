@@ -34,7 +34,7 @@ export function TwitterTweetCard({ id }: { id: string }) {
   }, [renderTweet])
 
   return (
-    <div className="mx-auto w-full max-w-[320px] overflow-hidden rounded-xl border border-zinc-200 bg-white px-1.5 py-1.5 dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="mx-auto w-full max-w-[320px] overflow-hidden rounded-xl border border-zinc-200 bg-white p-1.5 dark:border-zinc-800 dark:bg-zinc-950">
       <div ref={rootRef} className="[&_iframe]:!mx-auto min-h-[96px]" />
       <Script
         id="twitter-widgets-script"

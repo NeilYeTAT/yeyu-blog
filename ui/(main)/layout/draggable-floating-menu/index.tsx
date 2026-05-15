@@ -129,8 +129,11 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         )}
         {...props}
       >
-        <div
-          className="relative flex size-12 items-center justify-center overflow-hidden rounded-full border border-white/70 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
+        <button
+          type="button"
+          aria-expanded={isOpen}
+          aria-label="打开快捷菜单"
+          className="relative flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
           onClick={() => setIsOpen(!isOpen)}
         >
           <motion.span
@@ -178,7 +181,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           />
           <span className="absolute inset-[2px] rounded-full bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.72)_0%,rgba(255,255,255,0.16)_38%,transparent_70%)] dark:bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.03)_36%,transparent_68%)]" />
           <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-400 ring-offset-1 ring-offset-background dark:ring-theme-600 dark:ring-offset-black" />
-        </div>
+        </button>
 
         <AnimatePresence>
           {isOpen && (
@@ -198,14 +201,14 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
                 return (
                   <FloatingMenuActionButton
                     key={id}
-                    initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.95, x: 0, y: 0 }}
                     animate={{
                       opacity: 1,
                       scale: 1,
                       x,
                       y,
                     }}
-                    exit={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, x: 0, y: 0 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     className="absolute top-1 left-1 cursor-pointer"
                     isActive={isFunctionActive}

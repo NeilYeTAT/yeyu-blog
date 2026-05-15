@@ -44,7 +44,7 @@ export const ArticleList: FC<
 
   // * 虽然数据库返回的数据已经有序了，但是做个保险吧
   // * 毕竟服务端渲染好了，到时候这块是静态渲染的，性能问题也不大
-  const sortedItems = [...items].sort(
+  const sortedItems = items.toSorted(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   )
 
@@ -73,7 +73,7 @@ export const ArticleList: FC<
         <motion.div key={year} className="flex flex-col gap-1" variants={listVariants}>
           <motion.h3
             variants={itemVariants}
-            className="ml-2 select-none font-bold text-2xl text-muted-foreground/30"
+            className="ml-2 select-none font-semibold text-2xl text-muted-foreground/30"
           >
             # {year}
           </motion.h3>

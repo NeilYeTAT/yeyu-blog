@@ -14,7 +14,6 @@ export function CommentComposer({
   submitLabel,
   helperText,
   sessionAvatarProps,
-  autoFocus = false,
   onCancel,
   title,
 }: {
@@ -26,7 +25,6 @@ export function CommentComposer({
   submitLabel: string
   helperText: string
   sessionAvatarProps: SessionAvatarProps
-  autoFocus?: boolean
   onCancel?: () => void
   title?: string
 }) {
@@ -45,7 +43,6 @@ export function CommentComposer({
         <Textarea
           placeholder={placeholder}
           value={value}
-          autoFocus={autoFocus}
           onChange={event => {
             onChange(event.target.value)
           }}

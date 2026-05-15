@@ -8,15 +8,17 @@ export function useAdminMutterCommentStateMutation() {
   return useMutation({
     mutationFn: updateMutterComment,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['admin-mutter-comment-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: adminPendingCountQueryKey,
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-mutter-comment-list'],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['admin-mutter-comment-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: adminPendingCountQueryKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['public-mutter-comment-list'],
+        }),
+      ])
     },
   })
 }

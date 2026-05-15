@@ -84,14 +84,14 @@ export default function YeAvatar() {
               return (
                 <FloatingMenuActionButton
                   key={id}
-                  initial={{ opacity: 0, scale: 0, ...initial }}
+                  initial={{ opacity: 0, scale: 0.95, ...initial }}
                   animate={{
                     opacity: 1,
                     scale: activeIcon === id ? 1.2 : 1,
                     x: 0,
                     y: 0,
                   }}
-                  exit={{ opacity: 0, scale: 0, ...initial }}
+                  exit={{ opacity: 0, scale: 0.95, ...initial }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   className={`absolute z-50 ${className}`}
                   isActive={activeIcon === id || isFunctionActive}

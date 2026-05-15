@@ -17,7 +17,13 @@ export type GetNotesResponse = {
 
 export async function getNotes(params: GetNotesParams = {}) {
   const { q, tagNames, take = 15, skip = 0 } = params
-  const normalizedTagNames = tagNames?.map(value => value.trim()).filter(value => value.length > 0)
+  const normalizedTagNames = tagNames?.reduce<string[]>((acc, value) => {
+    const tagName = value.trim()
+    if (tagName.length > 0) {
+      acc.push(tagName)
+    }
+    return acc
+  }, [])
 
   return await apiRequest<GetNotesResponse>({
     url: 'admin/note',

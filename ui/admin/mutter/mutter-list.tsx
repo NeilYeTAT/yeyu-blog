@@ -228,11 +228,11 @@ export const MutterList: FC<
                 </section>
 
                 <div className="flex flex-col gap-2 pr-22 text-sm leading-6">
-                  {blocks.map((block, index) => {
+                  {blocks.map(block => {
                     if (block.kind === 'text') {
                       return (
                         <p
-                          key={`text-${index}`}
+                          key={`text-${block.value}`}
                           className={`wrap-break-word whitespace-pre-wrap ${
                             item.isPublished ? '' : 'text-muted-foreground line-through'
                           }`}
@@ -245,7 +245,7 @@ export const MutterList: FC<
                     if (block.kind === 'link') {
                       return (
                         <MutterLink
-                          key={`link-${block.href}-${index}`}
+                          key={`link-${block.href}`}
                           faviconUrl={block.faviconUrl}
                           href={block.href}
                           isPublished={item.isPublished}

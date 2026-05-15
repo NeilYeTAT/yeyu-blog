@@ -48,11 +48,7 @@ export const GET = withResponse(async request => {
 
   return {
     name: song.name ?? '网易云音乐',
-    artist:
-      song.artists
-        ?.map(item => item.name)
-        .filter(Boolean)
-        .join(' / ') ?? '',
+    artist: song.artists?.flatMap(item => (item.name != null ? [item.name] : [])).join(' / ') ?? '',
     album: song.album?.name ?? '',
     cover: song.album?.picUrl?.replace(/^http:\/\//, 'https://') ?? '',
   }

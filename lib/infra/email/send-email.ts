@@ -28,10 +28,13 @@ const getEnvValue = (value?: string | null) => {
 const getSmtpPassword = () => getEnvValue(serverEnv.SMTP_PASS)?.replace(/\s/g, '')
 
 const splitEmailList = (value?: string | null) =>
-  (value ?? '')
-    .split(',')
-    .map(email => email.trim())
-    .filter(isDeliverableEmail)
+  (value ?? '').split(',').reduce<string[]>((acc, email) => {
+    const normalizedEmail = email.trim()
+    if (isDeliverableEmail(normalizedEmail)) {
+      acc.push(normalizedEmail)
+    }
+    return acc
+  }, [])
 
 export const isDeliverableEmail = (email?: string | null) =>
   email != null && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
@@ -39,15 +42,20 @@ export const isDeliverableEmail = (email?: string | null) =>
 const getNotificationRecipients = () => splitEmailList(serverEnv.MAIL_TO)
 
 const getMissingEmailConfigKeys = () =>
-  [
-    ['SMTP_HOST', getEnvValue(serverEnv.SMTP_HOST)],
-    ['SMTP_PORT', getEnvValue(serverEnv.SMTP_PORT)],
-    ['SMTP_USER', getEnvValue(serverEnv.SMTP_USER)],
-    ['SMTP_PASS', getSmtpPassword()],
-    ['MAIL_FROM', getEnvValue(serverEnv.MAIL_FROM)],
-  ]
-    .filter(([, value]) => value == null)
-    .map(([key]) => key)
+  (
+    [
+      ['SMTP_HOST', getEnvValue(serverEnv.SMTP_HOST)],
+      ['SMTP_PORT', getEnvValue(serverEnv.SMTP_PORT)],
+      ['SMTP_USER', getEnvValue(serverEnv.SMTP_USER)],
+      ['SMTP_PASS', getSmtpPassword()],
+      ['MAIL_FROM', getEnvValue(serverEnv.MAIL_FROM)],
+    ] satisfies Array<[string, string | undefined]>
+  ).reduce<string[]>((acc, [key, value]) => {
+    if (value == null) {
+      acc.push(key)
+    }
+    return acc
+  }, [])
 
 const isEmailEnabled = () => getMissingEmailConfigKeys().length === 0
 
@@ -99,7 +107,12 @@ export async function sendEmail({
     }
   }
 
-  const normalizedRecipients = (Array.isArray(to) ? to : [to]).filter(isDeliverableEmail)
+  const normalizedRecipients = (Array.isArray(to) ? to : [to]).reduce<string[]>((acc, email) => {
+    if (isDeliverableEmail(email)) {
+      acc.push(email)
+    }
+    return acc
+  }, [])
 
   if (normalizedRecipients.length === 0) {
     return {

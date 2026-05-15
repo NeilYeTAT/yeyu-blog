@@ -16,21 +16,27 @@ function parseTagNames(rawTagNames: string | undefined) {
     return []
   }
 
-  return rawTagNames
-    .split(',')
-    .map(value => value.trim())
-    .filter(value => value.length > 0)
+  return rawTagNames.split(',').reduce<string[]>((acc, value) => {
+    const tagName = value.trim()
+    if (tagName.length > 0) {
+      acc.push(tagName)
+    }
+    return acc
+  }, [])
 }
 
 function revalidateNotePaths(...slugs: Array<string | undefined>) {
   revalidatePath('/note')
   revalidatePath('/admin/note')
 
-  const uniqueSlugs = new Set(
-    slugs
-      .map(slug => slug?.trim())
-      .filter((slug): slug is string => slug != null && slug.length > 0),
-  )
+  const uniqueSlugs = new Set<string>()
+
+  for (const slug of slugs) {
+    const normalizedSlug = slug?.trim()
+    if (normalizedSlug != null && normalizedSlug.length > 0) {
+      uniqueSlugs.add(normalizedSlug)
+    }
+  }
 
   for (const slug of uniqueSlugs) {
     revalidatePath(`/note/${encodeURIComponent(slug)}`)

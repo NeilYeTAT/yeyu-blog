@@ -14,15 +14,17 @@ export function useCommentDeleteMutation() {
       }),
     onSuccess: async (_data, variables) => {
       sileo.success({ title: '评论已删除' })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-comment-list', variables.targetType, variables.targetId],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['admin-comment-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: adminPendingCountQueryKey,
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['public-comment-list', variables.targetType, variables.targetId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['admin-comment-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: adminPendingCountQueryKey,
+        }),
+      ])
     },
     onError: () => {
       sileo.error({ title: '评论删除失败' })

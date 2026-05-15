@@ -18,6 +18,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { ScrollArea } from './scroll-area'
@@ -79,6 +80,7 @@ export const Combobox = React.forwardRef(
   (props: ComboboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const [open, setOpen] = React.useState(false)
     const [search, setSearch] = React.useState('')
+    const listId = React.useId()
 
     const tagMap = React.useMemo(() => {
       return new Map<string, string>(
@@ -98,6 +100,7 @@ export const Combobox = React.forwardRef(
           <Button
             role="combobox"
             variant="outline"
+            aria-controls={listId}
             aria-expanded={open}
             className="inline-flex size-full justify-between whitespace-normal hover:bg-secondary/20 active:scale-100"
           >
@@ -133,7 +136,7 @@ export const Combobox = React.forwardRef(
               {props.multiple && (
                 <X
                   className={cn(
-                    'ml-2 h-4 w-4 opacity-50 hover:opacity-80 transition-opacity',
+                    'ml-2 size-4 opacity-50 hover:opacity-80 transition-opacity',
                   )}
                   onClick={e => {
                     props.onValueChange?.([])
@@ -145,7 +148,7 @@ export const Combobox = React.forwardRef(
               )}
               <ChevronDown
                 className={cn(
-                  'ml-2 h-4 w-4 shrink-0 rotate-0 opacity-50 transition-transform',
+                  'ml-2 size-4 shrink-0 rotate-0 opacity-50 transition-transform',
                   open && 'rotate-180',
                 )}
               />
@@ -163,47 +166,49 @@ export const Combobox = React.forwardRef(
               placeholder={props.searchPlaceholder ?? '请输入要搜索的内容'}
             />
             <CommandEmpty>{props.emptyText ?? 'No results found'}</CommandEmpty>
-            <CommandGroup>
-              <ScrollArea>
-                <div className="max-h-60">
-                  {filteredOptions.map(option => (
-                    <CommandItem
-                      key={option.value}
-                      value={option.value.toLowerCase().trim()}
-                      onSelect={selectedValue => {
-                        const option = props.options.find(
-                          option =>
-                            option.value.toLowerCase().trim() === selectedValue,
-                        )
+            <CommandList id={listId}>
+              <CommandGroup>
+                <ScrollArea>
+                  <div className="max-h-60">
+                    {filteredOptions.map(option => (
+                      <CommandItem
+                        key={option.value}
+                        value={option.value.toLowerCase().trim()}
+                        onSelect={selectedValue => {
+                          const option = props.options.find(
+                            option =>
+                              option.value.toLowerCase().trim() === selectedValue,
+                          )
 
-                        if (!option) return null
+                          if (!option) return null
 
-                        if (props.multiple) {
-                          handleMultipleSelect(props, option)
-                        } else {
-                          handleSingleSelect(props, option)
+                          if (props.multiple) {
+                            handleMultipleSelect(props, option)
+                          } else {
+                            handleSingleSelect(props, option)
 
-                          setOpen(false)
-                        }
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          'mr-2 text-base opacity-0',
-                          !props.multiple &&
-                            props.value === option.value &&
-                            'opacity-100',
-                          props.multiple &&
-                            props.value?.includes(option.value) &&
-                            'opacity-100',
-                        )}
-                      />
-                      {option.label}
-                    </CommandItem>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CommandGroup>
+                            setOpen(false)
+                          }
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            'mr-2 text-base opacity-0',
+                            !props.multiple &&
+                              props.value === option.value &&
+                              'opacity-100',
+                            props.multiple &&
+                              props.value?.includes(option.value) &&
+                              'opacity-100',
+                          )}
+                        />
+                        {option.label}
+                      </CommandItem>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CommandGroup>
+            </CommandList>
           </Command>
         </PopoverContent>
       </Popover>

@@ -12,15 +12,17 @@ export function useAdminCommentRestoreMutation() {
         isDeleted: false,
       }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['admin-comment-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: adminPendingCountQueryKey,
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-comment-list'],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['admin-comment-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: adminPendingCountQueryKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['public-comment-list'],
+        }),
+      ])
     },
   })
 }

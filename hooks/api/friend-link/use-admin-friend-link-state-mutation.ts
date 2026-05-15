@@ -8,15 +8,17 @@ export function useAdminFriendLinkStateMutation() {
   return useMutation({
     mutationFn: updateFriendLink,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['admin-friend-link-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: adminPendingCountQueryKey,
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-friend-link-list'],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['admin-friend-link-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: adminPendingCountQueryKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['public-friend-link-list'],
+        }),
+      ])
     },
   })
 }

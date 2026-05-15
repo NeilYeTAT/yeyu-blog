@@ -60,14 +60,14 @@ export function DataTable<TData, TValue>({
     >
       <div className="min-h-0 min-w-0 flex-1 overflow-auto [scrollbar-color:rgba(113,113,122,0.45)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-500/45 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-400/35 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-[3px]">
         <Table containerClassName="overflow-visible">
-          <TableHeader className="bg-gray-100 dark:bg-card">
+          <TableHeader className="bg-zinc-100 dark:bg-card">
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="sticky top-0 z-20 bg-gray-100 text-gray-500 shadow-[0_1px_0_var(--border)] dark:bg-card dark:text-gray-200"
+                      className="sticky top-0 z-20 bg-zinc-100 text-zinc-500 shadow-[0_1px_0_var(--border)] dark:bg-card dark:text-zinc-200"
                     >
                       {header.isPlaceholder
                         ? null

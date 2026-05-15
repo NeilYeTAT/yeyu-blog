@@ -9,32 +9,28 @@ export function MutterContent({ content }: { content: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {blocks.map((block, index) => {
+      {blocks.map(block => {
         if (block.kind === 'text') {
           return (
-            <p key={`text-${index}`} className="wrap-break-word whitespace-pre-wrap">
+            <p key={`text-${block.value}`} className="wrap-break-word whitespace-pre-wrap">
               {block.value}
             </p>
           )
         }
 
         if (block.kind === 'twitter') {
-          return <TwitterTweetCard key={`twitter-${block.id}-${index}`} id={block.id} />
+          return <TwitterTweetCard key={`twitter-${block.id}`} id={block.id} />
         }
 
         if (block.kind === 'neteaseMusic') {
           return (
-            <NeteaseMusicCard
-              key={`netease-music-${block.id}-${index}`}
-              href={block.href}
-              id={block.id}
-            />
+            <NeteaseMusicCard key={`netease-music-${block.id}`} href={block.href} id={block.id} />
           )
         }
 
         return (
           <GenericLinkCard
-            key={`link-${block.hostname}-${index}`}
+            key={`link-${block.href}`}
             faviconUrl={block.faviconUrl}
             href={block.href}
             hostname={block.hostname}

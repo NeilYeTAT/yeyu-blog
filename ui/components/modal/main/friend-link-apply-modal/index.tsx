@@ -61,8 +61,12 @@ const friendLinkApplyFields = [
 }[]
 
 const friendLinkSiteInfo = friendLinkApplyFields
-  .filter(field => field.name !== 'email')
-  .map(field => `${field.label}：${field.placeholder}`)
+  .reduce<string[]>((acc, field) => {
+    if (field.name !== 'email') {
+      acc.push(`${field.label}：${field.placeholder}`)
+    }
+    return acc
+  }, [])
   .join('\n')
 
 export const FriendLinkApplyModal: FC<

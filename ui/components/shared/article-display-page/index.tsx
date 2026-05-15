@@ -41,7 +41,7 @@ export default function ArticleDisplayPage({
           <header className="flex flex-col items-center justify-center gap-3 text-center">
             <h1
               id={titleId || undefined}
-              className="text-balance font-bold text-3xl text-zinc-950 leading-tight md:text-4xl dark:text-zinc-50"
+              className="text-balance font-semibold text-3xl text-zinc-950 leading-tight md:text-4xl dark:text-zinc-50"
               dangerouslySetInnerHTML={{ __html: titleHtml }}
             />
 

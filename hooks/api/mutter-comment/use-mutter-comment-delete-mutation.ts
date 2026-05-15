@@ -13,18 +13,20 @@ export function useMutterCommentDeleteMutation() {
       }),
     onSuccess: async (_data, variables) => {
       sileo.success({ title: '评论已删除' })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-mutter-comment-list', variables.mutterId],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['public-mutter-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['admin-mutter-comment-list'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: adminPendingCountQueryKey,
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['public-mutter-comment-list', variables.mutterId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['public-mutter-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['admin-mutter-comment-list'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: adminPendingCountQueryKey,
+        }),
+      ])
     },
     onError: () => {
       sileo.error({ title: '评论删除失败' })

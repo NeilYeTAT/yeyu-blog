@@ -167,7 +167,6 @@ export function CommentThreadItem({
             <div className="mt-3 border-zinc-200/70 border-t pt-3 dark:border-zinc-800/70">
               <CommentComposer
                 value={replyContent}
-                autoFocus
                 isSubmitting={isCreatingComment}
                 sessionAvatarProps={sessionAvatarProps}
                 submitLabel="回复"

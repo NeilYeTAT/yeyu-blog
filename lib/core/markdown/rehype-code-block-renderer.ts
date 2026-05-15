@@ -1,4 +1,4 @@
-const LANGUAGE_PREFIXES = ['language-', 'lang-'] as const
+const languagePrefixes = ['language-', 'lang-'] as const
 
 type NodeLike = {
   type: string
@@ -23,17 +23,21 @@ const isElement = (node: unknown): node is ElementLike => {
 
 const toClassNameList = (value: unknown): string[] => {
   if (Array.isArray(value)) {
-    return value
-      .flatMap(item => String(item).split(/\s+/))
-      .map(item => item.trim())
-      .filter(Boolean)
+    return value.flatMap(item =>
+      String(item)
+        .split(/\s+/)
+        .flatMap(className => {
+          const normalizedClassName = className.trim()
+          return normalizedClassName.length > 0 ? [normalizedClassName] : []
+        }),
+    )
   }
 
   if (typeof value === 'string') {
-    return value
-      .split(/\s+/)
-      .map(item => item.trim())
-      .filter(Boolean)
+    return value.split(/\s+/).flatMap(className => {
+      const normalizedClassName = className.trim()
+      return normalizedClassName.length > 0 ? [normalizedClassName] : []
+    })
   }
 
   return []
@@ -56,7 +60,7 @@ const readPropertyAsString = (
 
 const extractLanguageFromClasses = (classes: string[]): string | null => {
   for (const className of classes) {
-    for (const prefix of LANGUAGE_PREFIXES) {
+    for (const prefix of languagePrefixes) {
       if (className.startsWith(prefix) && className.length > prefix.length) {
         return className.slice(prefix.length)
       }

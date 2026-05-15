@@ -113,10 +113,10 @@ export function CommentContent({ content }: { content: string }) {
 
   return (
     <div className="mt-2 flex flex-col gap-2 text-sm leading-6">
-      {blocks.map((block, index) => {
+      {blocks.map(block => {
         if (block.kind === 'text') {
           return (
-            <p key={`text-${index}`} className="wrap-break-word whitespace-pre-wrap">
+            <p key={`text-${block.value}`} className="wrap-break-word whitespace-pre-wrap">
               {block.value}
             </p>
           )
@@ -125,7 +125,7 @@ export function CommentContent({ content }: { content: string }) {
         if (block.kind === 'link') {
           return (
             <CommentLink
-              key={`link-${block.href}-${index}`}
+              key={`link-${block.href}`}
               faviconUrl={block.faviconUrl}
               href={block.href}
               label={block.label}

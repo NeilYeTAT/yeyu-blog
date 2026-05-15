@@ -4,10 +4,13 @@ import { auth } from '@/auth'
 import { clientEnv } from '@/config/env/client-env'
 import { BadRequestError } from '@/lib/common/errors/request'
 
-const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',')
-  .map(email => email.trim())
-  .map(email => email.toLowerCase())
-  .filter(email => email.length > 0)
+const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',').reduce<string[]>((acc, email) => {
+  const normalizedEmail = email.trim().toLowerCase()
+  if (normalizedEmail.length > 0) {
+    acc.push(normalizedEmail)
+  }
+  return acc
+}, [])
 
 export const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
 

@@ -13,7 +13,7 @@ export const columns: ColumnDef<EchoRecord>[] = [
     accessorKey: 'content',
     header: () => {
       return (
-        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
+        <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-200">
           <TypeIcon className="size-4" />
           内容
         </span>
@@ -31,7 +31,7 @@ export const columns: ColumnDef<EchoRecord>[] = [
     accessorKey: 'reference',
     header: () => {
       return (
-        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
+        <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-200">
           <Quote className="size-4" />
           来源
         </span>
@@ -46,7 +46,7 @@ export const columns: ColumnDef<EchoRecord>[] = [
     accessorKey: 'isPublished',
     header: () => {
       return (
-        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
+        <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-200">
           <Eye className="size-4" />
           是否发布
         </span>
@@ -88,7 +88,7 @@ export const columns: ColumnDef<EchoRecord>[] = [
     accessorKey: 'actions',
     header: () => {
       return (
-        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-200">
+        <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-200">
           <Wrench className="size-4" />
           操作
         </span>
