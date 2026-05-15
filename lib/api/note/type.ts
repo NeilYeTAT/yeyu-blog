@@ -8,10 +8,6 @@ export type CreateNoteDTO = {
   content: string
 }
 
-export type UpdateNoteDTO = CreateNoteDTO & {
-  id: number
-}
-
 export type UpdateNoteParams = {
   id: number
   title?: string
@@ -21,7 +17,7 @@ export type UpdateNoteParams = {
   content?: string
 }
 
-export type NoteTagRecord = {
+type NoteTagRecord = {
   id: number
   tagName: string
   tagType: TagType

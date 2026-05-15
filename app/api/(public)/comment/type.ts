@@ -1,8 +1,6 @@
 import { z } from 'zod'
 
-export const siteCommentTargetTypeSchema = z.enum(['BLOG', 'NOTE'])
-
-export const siteCommentStateSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
+const siteCommentTargetTypeSchema = z.enum(['BLOG', 'NOTE'])
 
 export const getPublicCommentsQuerySchema = z.object({
   targetType: siteCommentTargetTypeSchema,

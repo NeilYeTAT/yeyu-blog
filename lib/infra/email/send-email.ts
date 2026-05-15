@@ -36,7 +36,7 @@ const splitEmailList = (value?: string | null) =>
     return acc
   }, [])
 
-export const isDeliverableEmail = (email?: string | null) =>
+const isDeliverableEmail = (email?: string | null) =>
   email != null && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
 
 const getNotificationRecipients = () => splitEmailList(serverEnv.MAIL_TO)

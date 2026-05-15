@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-export const siteCommentTargetTypeSchema = z.enum(['BLOG', 'NOTE'])
+const siteCommentTargetTypeSchema = z.enum(['BLOG', 'NOTE'])
 
-export const siteCommentStateSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
+const siteCommentStateSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
 
 export const getAdminCommentsQuerySchema = z.object({
   q: z.string().trim().optional(),
@@ -17,12 +17,12 @@ export const getAdminCommentsQuerySchema = z.object({
   skip: z.coerce.number().int().min(0).default(0),
 })
 
-export const updateCommentStateSchema = z.object({
+const updateCommentStateSchema = z.object({
   id: z.number().int().positive({ message: 'Invalid id.' }),
   state: siteCommentStateSchema,
 })
 
-export const restoreCommentSchema = z.object({
+const restoreCommentSchema = z.object({
   id: z.number().int().positive({ message: 'Invalid id.' }),
   isDeleted: z.literal(false),
 })

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAdminOverviewStats } from '@/lib/api/admin'
 
-export const adminOverviewStatsQueryKey = ['admin-overview-stats'] as const
+const adminOverviewStatsQueryKey = ['admin-overview-stats'] as const
 
 export function useAdminOverviewStatsQuery() {
   return useQuery({

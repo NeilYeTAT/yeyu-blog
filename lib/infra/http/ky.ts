@@ -6,7 +6,7 @@ export type HttpRequestParams = Options & {
   url?: string
 }
 
-export async function httpRequest<T = unknown>(params: HttpRequestParams): Promise<T> {
+async function httpRequest<T = unknown>(params: HttpRequestParams): Promise<T> {
   try {
     const { url, ...rest } = params
     const response = await ky(url ?? '', { retry: 0, timeout: 30_000, ...rest })

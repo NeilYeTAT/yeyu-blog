@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const friendLinkStateSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
+const friendLinkStateSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
 
 const friendLinkNameSchema = z
   .string()

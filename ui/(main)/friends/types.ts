@@ -6,7 +6,7 @@ export type Friend = {
   siteUrl: string
 }
 
-export type PlaneItemBase = {
+type PlaneItemBase = {
   id: string
   x: number
   y: number
@@ -14,13 +14,13 @@ export type PlaneItemBase = {
   scale: number
 }
 
-export type FriendPlaneItem = Omit<Friend, 'id'> &
+type FriendPlaneItem = Omit<Friend, 'id'> &
   PlaneItemBase & {
     friendLinkId: number
     type: 'friend'
   }
 
-export type ApplyPlaneItem = PlaneItemBase & {
+type ApplyPlaneItem = PlaneItemBase & {
   type: 'apply'
 }
 

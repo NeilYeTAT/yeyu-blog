@@ -1,7 +1,7 @@
 import type { Friend, PlaneMotion, PlaneOffset, PlaneSize, PlaneVelocity } from './types'
 import { defaultPlaneMotion, planeHeight, planeLayout, planeWidth } from './constants'
 
-export const normalizeOffset = (value: number, size: number) => {
+const normalizeOffset = (value: number, size: number) => {
   let nextValue = value % size
 
   if (nextValue > size / 2) {
@@ -15,8 +15,7 @@ export const normalizeOffset = (value: number, size: number) => {
   return nextValue
 }
 
-export const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max)
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
 
 export const getPlaneTransform = (
   { x, y }: PlaneOffset,

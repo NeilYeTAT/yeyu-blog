@@ -99,7 +99,7 @@ export const flatNavRoutes = navigationConfig.flatMap(route =>
   isNavGroupRoute(route) ? route.group.items : [route],
 )
 
-export const navGroupRoutes = navigationConfig.filter(isNavGroupRoute)
+const navGroupRoutes = navigationConfig.filter(isNavGroupRoute)
 
 export const navGroupIndexMap = new Map<string, number>(
   navGroupRoutes.map((route, index) => [route.group.key, index] as const),

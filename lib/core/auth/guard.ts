@@ -12,7 +12,7 @@ const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',').reduce<string[
   return acc
 }, [])
 
-export const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
+const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
 
 const isAdminWalletAddress = (walletAddress?: string | null) =>
   walletAddress !== null &&

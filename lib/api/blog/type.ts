@@ -8,10 +8,6 @@ export type CreateBlogDTO = {
   content: string
 }
 
-export type UpdateBlogDTO = CreateBlogDTO & {
-  id: number
-}
-
 export type UpdateBlogParams = {
   id: number
   title?: string
@@ -21,7 +17,7 @@ export type UpdateBlogParams = {
   content?: string
 }
 
-export type BlogTagRecord = {
+type BlogTagRecord = {
   id: number
   tagName: string
   tagType: TagType

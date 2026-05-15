@@ -102,10 +102,6 @@ const getBrowserWindow = () => {
   }
 }
 
-export const getAnnouncedWalletProvider = (event: Event) => {
-  return getAnnouncedWallet(event)?.provider
-}
-
 export const getAnnouncedWallet = (event: Event) => {
   const customEvent = event as CustomEvent<AnnouncedWalletDetail>
   const { info, provider } = customEvent.detail ?? {}
@@ -125,7 +121,7 @@ export const getAnnouncedWallet = (event: Event) => {
   } satisfies InjectedWallet
 }
 
-export const getLegacyInjectedWallet = ({
+const getLegacyInjectedWallet = ({
   index,
   provider,
 }: {
@@ -158,7 +154,7 @@ export const getInjectedWallets = () => {
   return providers.map((provider, index) => getLegacyInjectedWallet({ index, provider }))
 }
 
-export const getInjectedWalletProvider = () => getInjectedWallets()[0]?.provider
+const getInjectedWalletProvider = () => getInjectedWallets()[0]?.provider
 
 export const hasInjectedWallet = () => getInjectedWallets().length > 0
 

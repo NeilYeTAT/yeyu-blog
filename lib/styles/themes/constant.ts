@@ -1,4 +1,4 @@
-export const brandThemeAttribute = 'data-brand-theme'
+const brandThemeAttribute = 'data-brand-theme'
 
 export const brandThemeOptions = [
   {
@@ -42,18 +42,18 @@ export type BrandThemeId = (typeof brandThemeOptions)[number]['id']
 
 export const defaultBrandTheme: BrandThemeId = 'mint'
 
-export const brandThemeIds = brandThemeOptions.map(option => option.id)
+const brandThemeIds = brandThemeOptions.map(option => option.id)
 
 export function getRandomBrandTheme(): BrandThemeId {
   const randomIndex = Math.floor(Math.random() * brandThemeIds.length)
   return brandThemeIds[randomIndex]!
 }
 
-export function isBrandThemeId(value: string | null): value is BrandThemeId {
+function isBrandThemeId(value: string | null): value is BrandThemeId {
   return value != null && brandThemeIds.includes(value as BrandThemeId)
 }
 
-export function getDomBrandTheme(): BrandThemeId | null {
+function getDomBrandTheme(): BrandThemeId | null {
   if (typeof document === 'undefined') return null
   const raw = document.documentElement.getAttribute(brandThemeAttribute)
   return isBrandThemeId(raw) ? raw : null

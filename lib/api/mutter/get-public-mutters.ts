@@ -1,6 +1,6 @@
 import { apiRequest } from '@/lib/infra/http/ky'
 
-export type PublicMutterRecord = {
+type PublicMutterRecord = {
   id: number
   content: string
   likeCount: number
