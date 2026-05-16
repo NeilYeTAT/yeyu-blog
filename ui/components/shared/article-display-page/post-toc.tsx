@@ -3,7 +3,7 @@
 import type { Heading } from './utils'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
 import { AnimatePresence, domMax, LazyMotion, m, useScroll, useTransform } from 'motion/react'
-import { type FC, useEffect, useRef, useState } from 'react'
+import { type FC, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useStartupStore } from '@/store/use-startup-store'
@@ -25,6 +25,41 @@ const variants = {
 
 const tocProgressRadius = 34
 const tocProgressStrokeWidth = 10
+const emptyPortalState: {
+  articleContent: HTMLElement | null
+  container: HTMLElement | null
+} = {
+  articleContent: null,
+  container: null,
+}
+
+let portalStateSnapshot = emptyPortalState
+
+const subscribePortalState = (onStoreChange: () => void) => {
+  const frame = requestAnimationFrame(onStoreChange)
+  return () => cancelAnimationFrame(frame)
+}
+
+const getPortalStateSnapshot = () => {
+  const articleContent = document.getElementById('article-content')
+  const container = document.body
+
+  if (
+    portalStateSnapshot.articleContent === articleContent &&
+    portalStateSnapshot.container === container
+  ) {
+    return portalStateSnapshot
+  }
+
+  portalStateSnapshot = {
+    articleContent,
+    container,
+  }
+
+  return portalStateSnapshot
+}
+
+const getServerPortalStateSnapshot = () => emptyPortalState
 
 const ArticleBottomShadow = ({
   container,
@@ -38,14 +73,14 @@ const ArticleBottomShadow = ({
     target: ref,
     offset: ['start start', 'end end'],
   })
-  const shadowOpacity = useTransform(scrollYProgress, [0, 0.84, 0.96, 1], [0.95, 0.95, 0.3, 0])
+  const shadowOpacity = useTransform(scrollYProgress, [0, 0.84, 0.96, 1], [0.46, 0.46, 0.16, 0])
 
   if (!visible) return null
 
   return (
     <m.div
       aria-hidden
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-24 select-none bg-[linear-gradient(transparent,rgb(249,250,250))] backdrop-blur-[16px] [-webkit-mask-image:linear-gradient(to_top,rgb(249,250,250)_50%,transparent)] [mask-image:linear-gradient(to_top,rgb(249,250,250)_50%,transparent)] dark:bg-[linear-gradient(transparent,rgb(9,9,11))] dark:[-webkit-mask-image:linear-gradient(to_top,rgb(9,9,11)_50%,transparent)] dark:[mask-image:linear-gradient(to_top,rgb(9,9,11)_50%,transparent)]"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-16 select-none bg-[linear-gradient(transparent,rgb(249,250,250))] backdrop-blur-[10px] [-webkit-mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] [mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] dark:bg-[linear-gradient(transparent,rgb(9,9,11))] dark:[-webkit-mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)] dark:[mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)]"
       style={{ opacity: shadowOpacity }}
     />
   )
@@ -80,10 +115,12 @@ export const PostToc: FC<{
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
   const [activeId, setActiveId] = useState<string>('')
   const [isExpanded, setIsExpanded] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const [articleContent, setArticleContent] = useState<HTMLElement | null>(null)
+  const portalState = useSyncExternalStore(
+    subscribePortalState,
+    getPortalStateSnapshot,
+    getServerPortalStateSnapshot,
+  )
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const hasScrolledRef = useRef(false)
 
   const prevActiveIdRef = useRef(activeId)
   const directionRef = useRef(1)
@@ -98,39 +135,7 @@ export const PostToc: FC<{
   }
 
   useEffect(() => {
-    if (isExpanded) {
-      if (!hasScrolledRef.current && scrollContainerRef.current && activeId) {
-        const activeLink = Array.from(
-          scrollContainerRef.current.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
-        ).find(link => link.hash.slice(1) === activeId)
-        if (activeLink) {
-          const container = scrollContainerRef.current
-          const top = activeLink.offsetTop
-          const linkHeight = activeLink.clientHeight
-          const containerHeight = Math.min(container.scrollHeight, window.innerHeight * 0.6)
-
-          container.scrollTo({
-            top: top - containerHeight / 2 + linkHeight / 2,
-            behavior: 'instant',
-          })
-          hasScrolledRef.current = true
-        }
-      }
-    } else {
-      hasScrolledRef.current = false
-    }
-  }, [isExpanded, activeId])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true)
-      setArticleContent(document.getElementById('article-content'))
-    }, 0)
-    return () => clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
+    if (headings.length === 0) return
 
     const observer = new IntersectionObserver(
       entries => {
@@ -149,12 +154,42 @@ export const PostToc: FC<{
     })
 
     return () => observer.disconnect()
-  }, [headings, mounted])
+  }, [headings])
 
   if (headings.length === 0) return null
-  if (!mounted) return null
+  if (portalState.container == null) return null
 
+  const { articleContent, container } = portalState
   const activeHeading = headings.find(h => h.id === activeId) ?? headings[0]
+
+  const scrollActiveLinkIntoView = () => {
+    if (scrollContainerRef.current == null || activeId === '') return
+
+    const activeLink = Array.from(
+      scrollContainerRef.current.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
+    ).find(link => link.hash.slice(1) === activeId)
+    if (activeLink == null) return
+
+    const container = scrollContainerRef.current
+    const top = activeLink.offsetTop
+    const linkHeight = activeLink.clientHeight
+    const containerHeight = Math.min(container.scrollHeight, window.innerHeight * 0.6)
+
+    container.scrollTo({
+      top: top - containerHeight / 2 + linkHeight / 2,
+      behavior: 'instant',
+    })
+  }
+
+  const handleTocToggleClick = () => {
+    if (isExpanded) {
+      setIsExpanded(false)
+      return
+    }
+
+    setIsExpanded(true)
+    requestAnimationFrame(scrollActiveLinkIntoView)
+  }
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
@@ -231,7 +266,7 @@ export const PostToc: FC<{
               'flex w-full cursor-pointer items-center justify-between border-0 bg-transparent text-left text-inherit transition-colors hover:bg-black/5 dark:hover:bg-white/5',
               'px-2 py-1',
             )}
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleTocToggleClick}
           >
             <m.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
               <figure className="flex items-center justify-center">
@@ -329,6 +364,6 @@ export const PostToc: FC<{
         </m.div>
       </m.div>
     </LazyMotion>,
-    document.body,
+    container,
   )
 }

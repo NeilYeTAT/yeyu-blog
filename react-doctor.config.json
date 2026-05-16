@@ -1,7 +1,13 @@
 {
   "ignore": {
     "rules": ["react/no-danger", "jsx-a11y/no-autofocus"],
-    "files": ["src/generated/**", "ui/shadcn/**", "lib/core/sound/**"],
+    "files": [
+      "src/generated/**",
+      "ui/shadcn/**",
+      "lib/core/sound/**",
+      "next-sitemap.config.js",
+      "prisma/schema.prisma"
+    ],
     "overrides": [
       {
         "files": ["components/modules/diff/**"],
