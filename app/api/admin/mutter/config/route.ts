@@ -1,6 +1,6 @@
 import { revalidatePath } from 'next/cache'
 import { BadRequestError } from '@/lib/common/errors/request'
-import { requireAdmin } from '@/lib/core/auth/guard'
+import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
@@ -13,7 +13,9 @@ const defaultMutterCommentConfig = {
 }
 
 export const GET = withResponse(async () => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const config = await prisma.mutterCommentConfig.upsert({
     where: {
@@ -32,7 +34,9 @@ export const GET = withResponse(async () => {
 })
 
 export const PATCH = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const body = await readJsonBody(request)
   const parseResult = updateMutterCommentConfigSchema.safeParse(body)

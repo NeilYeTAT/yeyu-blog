@@ -9,7 +9,8 @@ import {
   useMutterCommentMutation,
   usePublicMutterCommentQuery,
 } from '@/hooks/api/mutter-comment'
-import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn, useSession } from '@/lib/core/auth'
+import { useSession } from '@/lib/core/auth/client'
+import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalStore } from '@/store/use-modal-store'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'

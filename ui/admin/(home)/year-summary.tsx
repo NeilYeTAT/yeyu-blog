@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { getRemainingDaysOfYear, getYearProgress } from '@/lib/utils/time'
+import { getRemainingDaysOfYear, getYearProgress } from '@/lib/utils/common/time'
 
 export const YearSummary: FC<{ year: number; dayOfYear: number }> = ({ year, dayOfYear }) => (
   <section className="text-center text-lg">

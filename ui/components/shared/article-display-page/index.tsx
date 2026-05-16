@@ -1,6 +1,6 @@
 import * as motion from 'motion/react-client'
 import { customMarkdownTheme } from '@/lib/core/markdown/markdown-style'
-import { toDisplayDate } from '@/lib/utils/time'
+import { toDisplayDate } from '@/lib/utils/common/time'
 import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-block-enhancer'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
 import { ArticleImageLoadEnhancer } from './article-image-load-enhancer'

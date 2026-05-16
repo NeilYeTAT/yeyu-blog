@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import avatar from '@/config/img/avatar.webp'
-import { prettyDateTime, toRelativeDate } from '@/lib/utils/time'
+import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
 
 export function MutterCommentSource({
   values,

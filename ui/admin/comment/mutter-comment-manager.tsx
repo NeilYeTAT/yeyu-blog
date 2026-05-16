@@ -11,7 +11,7 @@ import {
   useAdminMutterCommentRestoreMutation,
   useAdminMutterCommentStateMutation,
 } from '@/hooks/api/mutter-comment'
-import { prettyDateTime } from '@/lib/utils/time'
+import { prettyDateTime } from '@/lib/utils/common/time'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 import Loading from '@/ui/components/shared/loading'
 import { Badge } from '@/ui/shadcn/badge'

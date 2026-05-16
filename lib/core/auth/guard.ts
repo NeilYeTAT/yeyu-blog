@@ -59,15 +59,7 @@ export const noPermission = async () => {
   return !isAdminUser(session.user)
 }
 
-export const requireAdmin = async () => {
-  if (await noPermission()) {
-    throw new BadRequestError('Insufficient permissions.')
-  }
-}
-
-export type SessionUser = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>['user']
-
-export const requireSignedInUser = async (): Promise<SessionUser> => {
+export const requireSignedInUser = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   })

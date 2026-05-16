@@ -7,7 +7,8 @@ import {
   useCommentMutation,
   usePublicCommentQuery,
 } from '@/hooks/api/comment'
-import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn, useSession } from '@/lib/core/auth'
+import { useSession } from '@/lib/core/auth/client'
+import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalStore } from '@/store/use-modal-store'
 import { maxCommentLength } from './constant'
 import { buildCommentTree } from './helper'

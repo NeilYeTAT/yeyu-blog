@@ -4,7 +4,7 @@ import {
   getSiteCommentTargetMap,
 } from '@/lib/api/comment/target'
 import { BadRequestError } from '@/lib/common/errors/request'
-import { isAdminUser, isWalletSessionUser, requireAdmin } from '@/lib/core/auth/guard'
+import { isAdminUser, isWalletSessionUser, noPermission } from '@/lib/core/auth/guard'
 import { notifyCommentAuthorReply } from '@/lib/infra/email/notifications'
 import { sendEmailInBackground } from '@/lib/infra/email/send-email'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
@@ -77,7 +77,9 @@ const isMissingTableError = (error: unknown) =>
   (error as { code?: unknown }).code === 'P2021'
 
 export const GET = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const queryResult = getAdminCommentsQuerySchema.safeParse({
     q: request.nextUrl.searchParams.get('q') ?? undefined,
@@ -158,7 +160,9 @@ export const GET = withResponse(async request => {
 })
 
 export const PATCH = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const body = await readJsonBody(request)
   const parseResult = updateCommentSchema.safeParse(body)
@@ -280,7 +284,9 @@ export const PATCH = withResponse(async request => {
 })
 
 export const DELETE = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const queryResult = deleteCommentQuerySchema.safeParse({
     id: request.nextUrl.searchParams.get('id') ?? undefined,

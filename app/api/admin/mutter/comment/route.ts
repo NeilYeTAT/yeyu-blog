@@ -1,6 +1,6 @@
 import { revalidatePath } from 'next/cache'
 import { BadRequestError } from '@/lib/common/errors/request'
-import { requireAdmin } from '@/lib/core/auth/guard'
+import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
@@ -11,7 +11,9 @@ import {
 } from './type'
 
 export const GET = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const queryResult = getAdminMutterCommentsQuerySchema.safeParse({
     q: request.nextUrl.searchParams.get('q') ?? undefined,
@@ -79,7 +81,9 @@ export const GET = withResponse(async request => {
 })
 
 export const PATCH = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const body = await readJsonBody(request)
   const parseResult = updateMutterCommentSchema.safeParse(body)
@@ -138,7 +142,9 @@ export const PATCH = withResponse(async request => {
 })
 
 export const DELETE = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const queryResult = deleteMutterCommentQuerySchema.safeParse({
     id: request.nextUrl.searchParams.get('id') ?? undefined,

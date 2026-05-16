@@ -1,6 +1,6 @@
 import type { ComponentProps, FC } from 'react'
 import * as motion from 'motion/react-client'
-import { getTodayDayInfo } from '@/lib/utils/time'
+import { getTodayDayInfo } from '@/lib/utils/common/time'
 import { OverviewStats } from './overview-stats'
 import { YearCalendar } from './year-calendar'
 import { YearSummary } from './year-summary'

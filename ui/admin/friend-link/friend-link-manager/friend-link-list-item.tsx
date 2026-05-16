@@ -2,7 +2,7 @@ import type { AdminFriendLinkRecord, FriendLinkState } from '@/lib/api/friend-li
 import { Check, ExternalLink, Mail, Pencil, RefreshCcw, Trash2, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { prettyDateTime } from '@/lib/utils/time'
+import { prettyDateTime } from '@/lib/utils/common/time'
 import { Badge } from '@/ui/shadcn/badge'
 import { Button } from '@/ui/shadcn/button'
 import { friendLinkStateBadgeVariantMap, friendLinkStateLabelMap } from './constants'

@@ -4,7 +4,7 @@ import type { NoteListItem } from '@/lib/api/note'
 import { TagType } from '@prisma/client'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'
-import { toDisplayDate } from '@/lib/utils/time'
+import { toDisplayDate } from '@/lib/utils/common/time'
 import ScaleUnderline from '@/ui/components/shared/scale-underline'
 
 export const ArticleLink: FC<{

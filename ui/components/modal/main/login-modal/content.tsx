@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useHasInjectedWallet } from '@/hooks/web3'
-import { isEmailLoggedIn, isWalletLoggedIn, useSession } from '@/lib/core/auth'
+import { useSession } from '@/lib/core/auth/client'
+import { isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { cn } from '@/lib/utils/common/shadcn'
 import { DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { LoginPanel } from './login-panel'

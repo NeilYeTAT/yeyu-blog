@@ -1,7 +1,7 @@
 import type { AdminCommentRecord, CommentState } from '@/lib/api/comment'
 import { Check, RefreshCcw, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
-import { prettyDateTime } from '@/lib/utils/time'
+import { prettyDateTime } from '@/lib/utils/common/time'
 import { Badge } from '@/ui/shadcn/badge'
 import { Button } from '@/ui/shadcn/button'
 import { CommentContent } from '../comment-content'

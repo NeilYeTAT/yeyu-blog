@@ -1,5 +1,5 @@
 import { BadRequestError } from '@/lib/common/errors/request'
-import { requireAdmin } from '@/lib/core/auth/guard'
+import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
@@ -18,7 +18,9 @@ const isMissingTableError = (error: unknown) =>
   (error as { code?: unknown }).code === 'P2021'
 
 export const GET = withResponse(async () => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   let config: Awaited<ReturnType<typeof prisma.siteCommentConfig.upsert>>
 
@@ -47,7 +49,9 @@ export const GET = withResponse(async () => {
 })
 
 export const PATCH = withResponse(async request => {
-  await requireAdmin()
+  if (await noPermission()) {
+    throw new BadRequestError('Insufficient permissions.')
+  }
 
   const body = await readJsonBody(request)
   const parseResult = updateCommentConfigSchema.safeParse(body)

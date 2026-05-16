@@ -1,7 +1,7 @@
 import type { CommentTreeNode, SessionAvatarProps } from './type'
 import { CornerUpLeft, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
-import { prettyDateTime, toRelativeDate } from '@/lib/utils/time'
+import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
 import { Button } from '@/ui/shadcn/button'
 import { CommentAuthorAvatar } from './comment-avatar'
 import { CommentComposer } from './comment-composer'
