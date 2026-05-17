@@ -1,4 +1,4 @@
-import * as motion from 'motion/react-client'
+import * as m from 'motion/react-m'
 import { customMarkdownTheme } from '@/lib/core/markdown/markdown-style'
 import { toDisplayDate } from '@/lib/utils/common/time'
 import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-block-enhancer'
@@ -21,7 +21,7 @@ export default function ArticleDisplayPage({
 
   return (
     <div className="z-10 min-h-screen backdrop-blur-[1px]">
-      <motion.article
+      <m.article
         className="flex max-w-3xl flex-1 flex-col gap-4 rounded-sm px-6 py-2"
         initial={{
           opacity: 0,
@@ -79,7 +79,7 @@ export default function ArticleDisplayPage({
         <ArticleImageLoadEnhancer rootSelector="#article-content" />
         <MarkdownCodeBlockEnhancer rootSelector="#article-content" />
         <PostToc headings={headings} />
-      </motion.article>
+      </m.article>
     </div>
   )
 }

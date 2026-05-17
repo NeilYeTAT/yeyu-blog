@@ -1,5 +1,5 @@
 import type { ComponentProps, FC } from 'react'
-import * as motion from 'motion/react-client'
+import * as m from 'motion/react-m'
 import { getTodayDayInfo } from '@/lib/utils/common/time'
 import { OverviewStats } from './overview-stats'
 import { YearCalendar } from './year-calendar'
@@ -9,7 +9,7 @@ export const AdminHomePage: FC<ComponentProps<'div'>> = () => {
   const { year, dayOfYear } = getTodayDayInfo()
 
   return (
-    <motion.main
+    <m.main
       className="m-auto flex w-full flex-col items-center justify-center gap-8"
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -22,6 +22,6 @@ export const AdminHomePage: FC<ComponentProps<'div'>> = () => {
       <YearSummary year={year} dayOfYear={dayOfYear} />
       <OverviewStats />
       <YearCalendar year={year} dayOfYear={dayOfYear} />
-    </motion.main>
+    </m.main>
   )
 }

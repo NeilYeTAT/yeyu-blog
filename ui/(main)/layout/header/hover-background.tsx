@@ -1,5 +1,6 @@
 import type { FC } from 'react'
-import { AnimatePresence, m } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 
 export const HoverBackground: FC<{ isVisible: boolean }> = ({ isVisible }) => {
   return (

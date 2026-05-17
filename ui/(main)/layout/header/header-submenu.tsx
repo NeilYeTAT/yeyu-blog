@@ -1,6 +1,7 @@
 import type { useHeaderActiveRoute } from './hooks/use-header-active-route'
 import type { useHeaderSubmenu } from './hooks/use-header-submenu'
-import { AnimatePresence, m } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 import { cn } from '@/lib/utils/common/shadcn'
 import { activeTextShadowClass, inactiveTextShadowClass, slideVariants } from './constant'
 import { NavItem } from './nav-item'

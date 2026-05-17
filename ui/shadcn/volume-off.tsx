@@ -2,7 +2,8 @@
 
 // TODO: wait to pr
 import type { Variants } from "motion/react";
-import { motion, useAnimation } from "motion/react";
+import { useAnimation } from "motion/react";
+import * as m from "motion/react-m";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 
@@ -107,7 +108,7 @@ const VolumeOffIcon = forwardRef<VolumeOffIconHandle, VolumeOffIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <motion.path
+          <m.path
             animate={controls}
             d="m7 7-.587.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298V11"
             initial="normal"
@@ -119,7 +120,7 @@ const VolumeOffIcon = forwardRef<VolumeOffIconHandle, VolumeOffIconProps>(
             "m2 2 20 20",
             "M9.828 4.172A.686.686 0 0 1 11 4.657v.686",
           ].map((d, index) => (
-            <motion.path
+            <m.path
               animate={controls}
               custom={index + 1}
               d={d}

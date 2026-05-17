@@ -1,7 +1,8 @@
 'use client'
 
 import type { HTMLMotionProps } from 'motion/react'
-import { AnimatePresence, domMax, LazyMotion, m } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 import { usePathname } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { useTransitionTheme } from '@/hooks/animation'
@@ -100,7 +101,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
   }
 
   return (
-    <LazyMotion features={domMax}>
+    <>
       <div
         ref={constraintsRef}
         className="pointer-events-none fixed top-24 right-20 bottom-4 left-20"
@@ -225,6 +226,6 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           )}
         </AnimatePresence>
       </m.div>
-    </LazyMotion>
+    </>
   )
 }

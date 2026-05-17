@@ -3,7 +3,8 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Check, Copy } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
+import * as m from 'motion/react-m';
 import { cn } from '@/lib/utils/common/shadcn';
 
 const copyButtonVariants = cva(
@@ -109,7 +110,7 @@ function CopyButton({
     >
       <AnimatePresence mode="wait" initial={false}>
         {copied ? (
-          <motion.span
+          <m.span
             key="check"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -118,9 +119,9 @@ function CopyButton({
             className="inline-flex items-center justify-center"
           >
             <Check />
-          </motion.span>
+          </m.span>
         ) : (
-          <motion.span
+          <m.span
             key="copy"
             initial={{ y: 2, scale: 0.92, opacity: 0 }}
             animate={{ y: 0, scale: 1, opacity: 1 }}
@@ -129,7 +130,7 @@ function CopyButton({
             className="inline-flex items-center justify-center"
           >
             <Copy />
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
     </button>

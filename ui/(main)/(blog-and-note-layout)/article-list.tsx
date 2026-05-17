@@ -3,7 +3,7 @@ import type { Variants } from 'motion/react'
 import type { ComponentProps, FC } from 'react'
 import type { BlogListItem } from '@/lib/api/blog'
 import type { NoteListItem } from '@/lib/api/note'
-import * as motion from 'motion/react-client'
+import * as m from 'motion/react-m'
 import { ArticleLink } from './article-link'
 
 const itemVariants: Variants = {
@@ -63,23 +63,23 @@ export const ArticleList: FC<
     .sort((a, b) => b - a)
 
   return (
-    <motion.div
+    <m.div
       className="group/list flex flex-col gap-10"
       initial="hidden"
       animate="visible"
       variants={listVariants}
     >
       {sortedYears.map(year => (
-        <motion.div key={year} className="flex flex-col gap-1" variants={listVariants}>
-          <motion.h3
+        <m.div key={year} className="flex flex-col gap-1" variants={listVariants}>
+          <m.h3
             variants={itemVariants}
             className="ml-2 select-none font-semibold text-2xl text-muted-foreground/30"
           >
             # {year}
-          </motion.h3>
+          </m.h3>
           <div className="flex flex-col">
             {groupedItems[year].map(v => (
-              <motion.div
+              <m.div
                 variants={itemVariants}
                 key={v.id}
                 className="transition-opacity hover:opacity-100! group-hover/list:opacity-50!"
@@ -89,11 +89,11 @@ export const ArticleList: FC<
                 }}
               >
                 <ArticleLink item={v} type={type} />
-              </motion.div>
+              </m.div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       ))}
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,7 +1,8 @@
 'use client'
 
+import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import { domAnimation, LazyMotion, m, type Variants } from 'motion/react'
+import * as m from 'motion/react-m'
 import { useStartupStore } from '@/store/use-startup-store'
 
 const containerVariants: Variants = {
@@ -45,16 +46,14 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
 
   return (
-    <LazyMotion features={domAnimation}>
-      <m.main
-        className="flex w-full flex-col items-center justify-center gap-4 pt-16 pb-4"
-        initial="hidden"
-        animate={isAnimationComplete ? 'visible' : 'hidden'}
-        variants={containerVariants}
-      >
-        {children}
-      </m.main>
-    </LazyMotion>
+    <m.main
+      className="flex w-full flex-col items-center justify-center gap-4 pt-16 pb-4"
+      initial="hidden"
+      animate={isAnimationComplete ? 'visible' : 'hidden'}
+      variants={containerVariants}
+    >
+      {children}
+    </m.main>
   )
 }
 

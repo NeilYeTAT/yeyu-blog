@@ -2,7 +2,7 @@
 
 import type { HTMLMotionProps } from 'motion/react'
 import type { ReactNode } from 'react'
-import { m } from 'motion/react'
+import * as m from 'motion/react-m'
 import { cn } from '@/lib/utils/common/shadcn'
 
 export function FloatingMenuActionButton({

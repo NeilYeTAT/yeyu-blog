@@ -1,15 +1,8 @@
 'use client'
 
 import type { CSSProperties, ReactNode } from 'react'
-import {
-  domAnimation,
-  LazyMotion,
-  m,
-  useAnimationFrame,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from 'motion/react'
+import { useAnimationFrame, useMotionValue, useSpring, useTransform } from 'motion/react'
+import * as m from 'motion/react-m'
 
 export function TechStackRings({
   outerItems,
@@ -52,47 +45,45 @@ export function TechStackRings({
       }
       className="relative rounded-full [--min-r:176px] [--s:64px] [--view-w:100vw] md:[--min-r:344px] md:[--s:128px] md:[--view-w:64rem]"
     >
-      <LazyMotion features={domAnimation}>
-        <m.div style={{ rotate: rotation }} className="absolute inset-0">
-          {outerItems.map((item, i) => (
-            <m.div
-              key={`outer-${item.key}-${i.toString()}`}
-              onHoverStart={stopRotation}
-              onHoverEnd={startRotation}
-              className="absolute left-1/2 z-10 size-12 -translate-x-1/2 transition md:size-24"
-              style={{
-                rotate: i * (360 / outerItems.length),
-                transformOrigin: 'center var(--outer-r)',
-              }}
-            >
-              {item.component}
-            </m.div>
-          ))}
-        </m.div>
-        <m.div
-          style={{
-            rotate: reverseRotation,
-            width: 'calc(var(--inner-r) * 2)',
-            height: 'calc(var(--inner-r) * 2)',
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          {innerItems.map((item, i) => (
-            <m.div
-              key={`inner-${item.key}-${i.toString()}`}
-              onHoverStart={stopRotation}
-              onHoverEnd={startRotation}
-              className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 transition md:size-[5rem]"
-              style={{
-                rotate: i * (360 / innerItems.length),
-                transformOrigin: 'center var(--inner-r)',
-              }}
-            >
-              {item.component}
-            </m.div>
-          ))}
-        </m.div>
-      </LazyMotion>
+      <m.div style={{ rotate: rotation }} className="absolute inset-0">
+        {outerItems.map((item, i) => (
+          <m.div
+            key={`outer-${item.key}-${i.toString()}`}
+            onHoverStart={stopRotation}
+            onHoverEnd={startRotation}
+            className="absolute left-1/2 z-10 size-12 -translate-x-1/2 transition md:size-24"
+            style={{
+              rotate: i * (360 / outerItems.length),
+              transformOrigin: 'center var(--outer-r)',
+            }}
+          >
+            {item.component}
+          </m.div>
+        ))}
+      </m.div>
+      <m.div
+        style={{
+          rotate: reverseRotation,
+          width: 'calc(var(--inner-r) * 2)',
+          height: 'calc(var(--inner-r) * 2)',
+        }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        {innerItems.map((item, i) => (
+          <m.div
+            key={`inner-${item.key}-${i.toString()}`}
+            onHoverStart={stopRotation}
+            onHoverEnd={startRotation}
+            className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 transition md:size-[5rem]"
+            style={{
+              rotate: i * (360 / innerItems.length),
+              transformOrigin: 'center var(--inner-r)',
+            }}
+          >
+            {item.component}
+          </m.div>
+        ))}
+      </m.div>
     </section>
   )
 }

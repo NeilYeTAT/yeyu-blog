@@ -2,7 +2,8 @@
 
 import type { Heading } from './utils'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
-import { AnimatePresence, domMax, LazyMotion, m, useScroll, useTransform } from 'motion/react'
+import { AnimatePresence, useScroll, useTransform } from 'motion/react'
+import * as m from 'motion/react-m'
 import { type FC, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -213,7 +214,7 @@ export const PostToc: FC<{
   }
 
   return createPortal(
-    <LazyMotion features={domMax}>
+    <>
       {articleContent != null ? (
         <ArticleBottomShadow container={articleContent} visible={isAnimationComplete} />
       ) : null}
@@ -363,7 +364,7 @@ export const PostToc: FC<{
           </AnimatePresence>
         </m.div>
       </m.div>
-    </LazyMotion>,
+    </>,
     container,
   )
 }

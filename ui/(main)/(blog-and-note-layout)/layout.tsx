@@ -1,5 +1,5 @@
 import type React from 'react'
-import * as motion from 'motion/react-client'
+import * as m from 'motion/react-m'
 
 const containerVariants = {
   hidden: {},
@@ -12,7 +12,7 @@ const containerVariants = {
 
 export default function BlogAndNoteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <motion.main
+    <m.main
       className="flex flex-col px-4"
       initial="hidden"
       animate="visible"
@@ -21,6 +21,6 @@ export default function BlogAndNoteLayout({ children }: { children: React.ReactN
       viewport={{ once: true, amount: 0.3 }}
     >
       {children}
-    </motion.main>
+    </m.main>
   )
 }

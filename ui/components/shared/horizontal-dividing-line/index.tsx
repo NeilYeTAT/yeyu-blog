@@ -1,6 +1,7 @@
 'use client'
 
-import { domMax, LazyMotion, m, useAnimationFrame, useMotionValue } from 'motion/react'
+import { useAnimationFrame, useMotionValue } from 'motion/react'
+import * as m from 'motion/react-m'
 import { useRef } from 'react'
 import { useTransitionTheme } from '@/hooks/animation'
 import { FlowerIcon } from './flower-icon'
@@ -22,31 +23,29 @@ export default function HorizontalDividingLine() {
   return (
     <div className="relative flex w-full items-center justify-center">
       <hr className="absolute left-0 w-[45%] border-theme-indicator border-dashed dark:border-accent-foreground" />
-      <LazyMotion features={domMax}>
-        <m.div
-          style={{ rotate }}
-          drag="x"
-          dragDirectionLock
-          dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-          dragTransition={{ bounceStiffness: 500, bounceDamping: 15 }}
-          dragElastic={0.15}
-          whileDrag={{ cursor: 'grabbing' }}
-          onDragStart={() => {
-            durationRef.current = 0.8
-          }}
-          onDragEnd={(_, info) => {
-            durationRef.current = 4
-            if (info.offset.x < -threshold) {
-              setTransitionTheme('light', { direction: 'left' })
-            } else if (info.offset.x > threshold) {
-              setTransitionTheme('dark', { direction: 'right' })
-            }
-          }}
-          className="cursor-grab"
-        >
-          <FlowerIcon className="text-theme-indicator dark:text-accent-foreground" />
-        </m.div>
-      </LazyMotion>
+      <m.div
+        style={{ rotate }}
+        drag="x"
+        dragDirectionLock
+        dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+        dragTransition={{ bounceStiffness: 500, bounceDamping: 15 }}
+        dragElastic={0.15}
+        whileDrag={{ cursor: 'grabbing' }}
+        onDragStart={() => {
+          durationRef.current = 0.8
+        }}
+        onDragEnd={(_, info) => {
+          durationRef.current = 4
+          if (info.offset.x < -threshold) {
+            setTransitionTheme('light', { direction: 'left' })
+          } else if (info.offset.x > threshold) {
+            setTransitionTheme('dark', { direction: 'right' })
+          }
+        }}
+        className="cursor-grab"
+      >
+        <FlowerIcon className="text-theme-indicator dark:text-accent-foreground" />
+      </m.div>
       <hr className="absolute right-0 w-[45%] border-theme-indicator border-dashed dark:border-accent-foreground" />
     </div>
   )
