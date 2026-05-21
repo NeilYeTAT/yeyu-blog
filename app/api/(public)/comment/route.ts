@@ -10,7 +10,11 @@ import { sendEmailInBackground } from '@/lib/infra/email/send-email'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { createCommentSchema, deleteCommentQuerySchema, getPublicCommentsQuerySchema } from './type'
+import {
+  createCommentSchema,
+  deleteCommentQuerySchema,
+  getPublicCommentsQuerySchema,
+} from './schema'
 
 const siteCommentConfigId = 1
 const defaultSiteCommentConfig = {

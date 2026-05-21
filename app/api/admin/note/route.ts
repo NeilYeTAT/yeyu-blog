@@ -9,7 +9,7 @@ import {
   deleteNoteQuerySchema,
   getNotesQuerySchema,
   updateNoteSchema,
-} from './type'
+} from './schema'
 
 function parseTagNames(rawTagNames: string | undefined) {
   if (rawTagNames == null || rawTagNames.length === 0) {

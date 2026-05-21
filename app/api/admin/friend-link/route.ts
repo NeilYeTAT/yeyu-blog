@@ -13,7 +13,7 @@ import {
   deleteFriendLinkQuerySchema,
   getAdminFriendLinksQuerySchema,
   updateFriendLinkSchema,
-} from './type'
+} from './schema'
 
 export const GET = withResponse(async request => {
   if (await noPermission()) {

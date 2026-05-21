@@ -1,7 +1,7 @@
 import { getRandomPublicEcho } from '@/lib/api/echo/get-random-public-echo'
 import { BadRequestError } from '@/lib/common/errors/request'
 import { withResponse } from '@/lib/infra/http/with-response'
-import { getPublicEchosQuerySchema } from './type'
+import { getPublicEchosQuerySchema } from './schema'
 
 export const GET = withResponse(async request => {
   const queryResult = getPublicEchosQuerySchema.safeParse({

@@ -5,7 +5,7 @@ import { sendEmailInBackground } from '@/lib/infra/email/send-email'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { createFriendLinkSchema, getPublicFriendLinksQuerySchema } from './type'
+import { createFriendLinkSchema, getPublicFriendLinksQuerySchema } from './schema'
 
 export const GET = withResponse(async request => {
   const queryResult = getPublicFriendLinksQuerySchema.safeParse({

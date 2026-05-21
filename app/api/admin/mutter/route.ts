@@ -9,7 +9,7 @@ import {
   deleteMutterQuerySchema,
   getMuttersQuerySchema,
   updateMutterSchema,
-} from './type'
+} from './schema'
 
 export const GET = withResponse(async request => {
   if (await noPermission()) {

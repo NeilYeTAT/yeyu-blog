@@ -10,7 +10,7 @@ import {
   createMutterCommentSchema,
   deleteMutterCommentQuerySchema,
   getPublicMutterCommentsQuerySchema,
-} from './type'
+} from './schema'
 
 const mutterCommentConfigId = 1
 const defaultMutterCommentConfig = {

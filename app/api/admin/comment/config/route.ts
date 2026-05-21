@@ -3,7 +3,7 @@ import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { updateCommentConfigSchema } from './type'
+import { updateCommentConfigSchema } from './schema'
 
 const siteCommentConfigId = 1
 const defaultSiteCommentConfig = {

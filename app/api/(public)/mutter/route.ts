@@ -1,7 +1,7 @@
 import { BadRequestError } from '@/lib/common/errors/request'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { getPublicMuttersQuerySchema } from './type'
+import { getPublicMuttersQuerySchema } from './schema'
 
 export const GET = withResponse(async request => {
   const queryResult = getPublicMuttersQuerySchema.safeParse({

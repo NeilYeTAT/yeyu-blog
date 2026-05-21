@@ -10,7 +10,11 @@ import { sendEmailInBackground } from '@/lib/infra/email/send-email'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { deleteCommentQuerySchema, getAdminCommentsQuerySchema, updateCommentSchema } from './type'
+import {
+  deleteCommentQuerySchema,
+  getAdminCommentsQuerySchema,
+  updateCommentSchema,
+} from './schema'
 
 type AdminCommentUserRecord = {
   id: string

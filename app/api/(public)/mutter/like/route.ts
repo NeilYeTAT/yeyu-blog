@@ -3,7 +3,7 @@ import { BadRequestError } from '@/lib/common/errors/request'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { likeMutterSchema } from './type'
+import { likeMutterSchema } from './schema'
 
 export const POST = withResponse(async request => {
   const body = await readJsonBody(request)

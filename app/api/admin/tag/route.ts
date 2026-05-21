@@ -4,7 +4,12 @@ import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
-import { createTagSchema, deleteTagQuerySchema, getTagsQuerySchema, updateTagSchema } from './type'
+import {
+  createTagSchema,
+  deleteTagQuerySchema,
+  getTagsQuerySchema,
+  updateTagSchema,
+} from './schema'
 
 export const GET = withResponse(async request => {
   if (await noPermission()) {
