@@ -1,24 +1,20 @@
 import type { ReactNode } from 'react'
-import {
-  GitHubActionsIcon,
-  GitIcon,
-  NeovimIcon,
-  ObsidianIcon,
-  PrismaIcon,
-  ShadcnuiIcon,
-  VimIcon,
-} from './assets/svg/inner-ring'
+import { GitIcon } from './assets/svg/inner-ring/git-icon'
+import { GitHubActionsIcon } from './assets/svg/inner-ring/github-actions-icon'
+import { NeovimIcon } from './assets/svg/inner-ring/neovim-icon'
+import { ObsidianIcon } from './assets/svg/inner-ring/obsidian-icon'
+import { PrismaIcon } from './assets/svg/inner-ring/prisma-icon'
+import { ShadcnuiIcon } from './assets/svg/inner-ring/shadcnui-icon'
+import { VimIcon } from './assets/svg/inner-ring/vim-icon'
 // * svg
-import {
-  NestjsIcon,
-  NextjsIcon,
-  NodejsIcon,
-  ReactIcon,
-  ReactQueryIcon,
-  TailwindcssIcon,
-  TypeScriptIcon,
-  WagmiIcon,
-} from './assets/svg/outer-ring'
+import { NestjsIcon } from './assets/svg/outer-ring/nestjs-icon'
+import { NextjsIcon } from './assets/svg/outer-ring/nextjs-icon'
+import { NodejsIcon } from './assets/svg/outer-ring/nodejs-icon'
+import { ReactIcon } from './assets/svg/outer-ring/react-icon'
+import { ReactQueryIcon } from './assets/svg/outer-ring/react-query-icon'
+import { TailwindcssIcon } from './assets/svg/outer-ring/tailwindcss-icon'
+import { TypeScriptIcon } from './assets/svg/outer-ring/typescript-icon'
+import { WagmiIcon } from './assets/svg/outer-ring/wagmi-icon'
 import { TechStackRings } from './tech-stack-rings'
 
 const outerRingTechStackData = [

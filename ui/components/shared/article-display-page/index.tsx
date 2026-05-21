@@ -5,7 +5,8 @@ import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
 import { ArticleImageLoadEnhancer } from './article-image-load-enhancer'
 import { PostToc } from './post-toc'
-import { extractHeadings, extractTitleAndBody } from './utils'
+import { extractHeadings } from './utils/extract-headings'
+import { extractTitleAndBody } from './utils/extract-title-and-body'
 
 export default function ArticleDisplayPage({
   createdAt,

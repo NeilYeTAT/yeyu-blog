@@ -1,6 +1,6 @@
 'use client'
 
-import type { Heading } from './utils'
+import type { Heading } from './utils/extract-headings'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
 import { AnimatePresence, useScroll, useTransform } from 'motion/react'
 import * as m from 'motion/react-m'
