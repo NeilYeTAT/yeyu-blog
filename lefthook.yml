@@ -1,0 +1,11 @@
+pre-commit:
+  commands:
+    typecheck:
+      run: pnpm ts:check
+    lintStaged:
+      run: pnpm lint-staged
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}

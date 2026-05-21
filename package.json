@@ -12,7 +12,7 @@
     "lint:fix": "biome check --max-diagnostics=100 --write .",
     "postinstall": "prisma generate --config ./prisma/prisma.config.ts",
     "postbuild": "next-sitemap",
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "commit": "czg",
     "qwer": "czg"
   },
@@ -84,7 +84,7 @@
     "@types/react-dom": "^19.2.3",
     "czg": "^1.13.1",
     "dotenv-cli": "^11.0.0",
-    "husky": "^9.1.7",
+    "lefthook": "^2.1.8",
     "lint-staged": "^17.0.5",
     "next-sitemap": "^4.2.3",
     "prisma": "^7.8.0",
