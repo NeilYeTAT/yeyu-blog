@@ -4,7 +4,7 @@ import { lazy, Suspense } from 'react'
 import { useModalStore } from '@/store/use-modal-store'
 import { LoginModal } from '@/ui/components/modal/main/login-modal'
 import Loading from '@/ui/components/shared/loading'
-import { Dialog, DialogContent } from '@/ui/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/ui/shadcn/dialog'
 
 const SelectThemeModal = lazy(() =>
   import('@/ui/components/modal/main/select-theme-modal').then(mod => ({
@@ -29,6 +29,7 @@ const MainModalLoading = () => {
 
   return (
     <Dialog open onOpenChange={closeModal}>
+      <DialogTitle />
       <DialogContent className="rounded-xl bg-theme-background/80 backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
         <Loading />
       </DialogContent>
@@ -36,13 +37,7 @@ const MainModalLoading = () => {
   )
 }
 
-export function MainModalProvider({
-  children,
-  friendLinkEmailPlaceholder,
-}: {
-  children: React.ReactNode
-  friendLinkEmailPlaceholder?: string
-}) {
+export function MainModalProvider({ children }: { children: React.ReactNode }) {
   const modalType = useModalStore(s => s.modalType)
 
   return (
@@ -52,9 +47,7 @@ export function MainModalProvider({
         {modalType === 'loginModal' ? <LoginModal /> : null}
         {modalType === 'selectThemeModal' ? <SelectThemeModal /> : null}
         {modalType === 'mutterCommentModal' ? <MutterCommentModal /> : null}
-        {modalType === 'friendLinkApplyModal' ? (
-          <FriendLinkApplyModal emailPlaceholder={friendLinkEmailPlaceholder} />
-        ) : null}
+        {modalType === 'friendLinkApplyModal' ? <FriendLinkApplyModal /> : null}
       </Suspense>
     </>
   )

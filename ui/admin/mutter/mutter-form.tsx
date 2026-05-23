@@ -1,4 +1,4 @@
-import { type FC, type FormEvent, useEffect, useState } from 'react'
+import { type FC, type SyntheticEvent, useEffect, useState } from 'react'
 import { sileo } from 'sileo'
 import { useMutterMutation } from '@/hooks/api/mutter'
 import { useModalStore } from '@/store/use-modal-store'
@@ -54,7 +54,7 @@ export const MutterForm: FC<MutterFormProps> = ({ editingMutter, clearEditingMut
     )
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault()
     if (!canSubmit || isCreating) return
 

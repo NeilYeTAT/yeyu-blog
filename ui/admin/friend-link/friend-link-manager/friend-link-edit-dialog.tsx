@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+import type { SyntheticEvent } from 'react'
 import type { AdminFriendLinkRecord } from '@/lib/api/friend-link'
 import type { FriendLinkEditForm } from './types'
 import { Button } from '@/ui/shadcn/button'
@@ -20,7 +20,7 @@ export function FriendLinkEditDialog({
   isUpdatingFriendLink: boolean
   onClose: () => void
   onEditFormValueChange: (name: keyof FriendLinkEditForm, value: string) => void
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
+  onSubmit: (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void
 }) {
   return (
     <Dialog

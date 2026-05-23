@@ -1,6 +1,6 @@
 'use client'
 
-import type { ComponentProps, FC, FormEvent } from 'react'
+import type { ComponentProps, FC, SyntheticEvent } from 'react'
 import type { CreateFriendLinkParams } from '@/lib/api/friend-link'
 import { useEffect, useRef, useState } from 'react'
 import { useFriendLinkMutation } from '@/hooks/api/friend-link'
@@ -20,60 +20,9 @@ import {
 import { Input } from '@/ui/shadcn/input'
 import { Label } from '@/ui/shadcn/label'
 import { SendIcon, type SendIconHandle } from '@/ui/shadcn/send'
+import { friendLinkApplyFields, friendLinkSiteInfo } from './constant'
 
-const friendLinkApplyFields = [
-  {
-    name: 'name',
-    label: '站点名称',
-    placeholder: `叶鱼 & 业余`,
-    type: 'text',
-  },
-  {
-    name: 'email',
-    label: '联系邮箱（可选，仅用于通知）',
-    type: 'email',
-    required: false,
-  },
-  {
-    name: 'description',
-    label: '站点描述',
-    placeholder: '业余全栈开发',
-    type: 'text',
-  },
-  {
-    name: 'avatarUrl',
-    label: '头像地址',
-    placeholder: 'https://avatars.githubusercontent.com/u/140394258',
-    type: 'url',
-  },
-  {
-    name: 'siteUrl',
-    label: '站点地址',
-    placeholder: 'https://www.useyeyu.cc/',
-    type: 'url',
-  },
-] satisfies {
-  name: keyof CreateFriendLinkParams
-  label: string
-  placeholder?: string
-  required?: boolean
-  type?: ComponentProps<'input'>['type']
-}[]
-
-const friendLinkSiteInfo = friendLinkApplyFields
-  .reduce<string[]>((acc, field) => {
-    if (field.name !== 'email') {
-      acc.push(`${field.label}：${field.placeholder}`)
-    }
-    return acc
-  }, [])
-  .join('\n')
-
-export const FriendLinkApplyModal: FC<
-  ComponentProps<'div'> & {
-    emailPlaceholder?: string
-  }
-> = ({ emailPlaceholder }) => {
+export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
   const modalType = useModalStore(s => s.modalType)
   const closeModal = useModalStore(s => s.closeModal)
   const isModalOpen = modalType === 'friendLinkApplyModal'
@@ -104,7 +53,7 @@ export const FriendLinkApplyModal: FC<
     }, 2000)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault()
 
     const form = event.currentTarget
@@ -127,8 +76,8 @@ export const FriendLinkApplyModal: FC<
 
   return (
     <Dialog open={isModalOpen} onOpenChange={closeModal}>
-      <DialogContent className="max-h-[88vh] overflow-hidden rounded-xl border-black/10 bg-theme-background/80 p-0 shadow-[0_18px_54px_rgba(15,23,42,0.10)] backdrop-blur-xl sm:max-w-[500px] dark:border-white/10 dark:bg-black/70 dark:shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
-        <div className="max-h-[88vh] overflow-y-auto p-6 [scrollbar-color:rgba(113,113,122,0.45)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-500/45 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-400/35 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-[3px]">
+      <DialogContent className="max-h-[88vh] overflow-hidden rounded-xl border-black/10 bg-theme-background/80 p-0 shadow-[0_18px_54px_rgba(15,23,42,0.10)] backdrop-blur-xl sm:max-w-125 dark:border-white/10 dark:bg-black/70 dark:shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
+        <div className="scrollbar-thin max-h-[88vh] overflow-y-auto p-6 [scrollbar-color:rgba(113,113,122,0.45)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-500/45 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-400/35 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-0.75">
           <DialogHeader className="items-center gap-2 border-black/10 border-b px-8 pb-5 text-center dark:border-white/10">
             <DialogTitle className="font-bold text-xl text-zinc-900 tracking-normal dark:text-zinc-100">
               申请友链
@@ -143,7 +92,6 @@ export const FriendLinkApplyModal: FC<
             <div className="grid gap-4">
               {friendLinkApplyFields.map(field => {
                 const fieldId = `friend-link-apply-${field.name}`
-                const placeholder = field.name === 'email' ? emailPlaceholder : field.placeholder
 
                 return (
                   <div key={field.name} className="grid gap-2">
@@ -158,7 +106,7 @@ export const FriendLinkApplyModal: FC<
                       name={field.name}
                       type={field.type}
                       required={field.required ?? true}
-                      placeholder={placeholder}
+                      placeholder={field.placeholder}
                       className="h-10 rounded-xl border-black/10 bg-theme-background/65 text-sm shadow-none placeholder:text-zinc-400 focus-visible:border-zinc-400 focus-visible:ring-zinc-400/25 dark:border-white/10 dark:bg-zinc-900/70 dark:focus-visible:border-zinc-500 dark:focus-visible:ring-zinc-500/25 dark:placeholder:text-zinc-500"
                     />
                   </div>

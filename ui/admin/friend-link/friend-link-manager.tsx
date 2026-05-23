@@ -1,6 +1,6 @@
 'use client'
 
-import type { ComponentProps, FC, FormEvent } from 'react'
+import type { ComponentProps, FC, SyntheticEvent } from 'react'
 import type { AdminFriendLinkRecord, FriendLinkState } from '@/lib/api/friend-link'
 import type { FriendLinkEditForm, FriendLinkStateFilter } from './friend-link-manager/types'
 import { useReducer } from 'react'
@@ -157,7 +157,7 @@ export const FriendLinkManager: FC<ComponentProps<'main'>> = () => {
     dispatch({ type: 'closeEditModal' })
   }
 
-  const handleEditSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleEditSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault()
 
     if (editingFriendLink == null) {
