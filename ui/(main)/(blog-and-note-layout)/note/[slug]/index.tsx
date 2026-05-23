@@ -2,8 +2,8 @@ import type { ComponentProps, FC } from 'react'
 import { notFound } from 'next/navigation'
 import { processor } from '@/lib/core/markdown/processor'
 import { prisma } from '@/prisma/instance'
-import ArticleDisplayPage from '@/ui/components/shared/article-display-page'
-import CommentCard from '@/ui/components/shared/comment-card'
+import ArticleDisplayPage from '@/ui/(main)/(blog-and-note-layout)/article-display-page'
+import CommentCard from '@/ui/(main)/(blog-and-note-layout)/comment-card'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 
 export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({ slug }) => {

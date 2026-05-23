@@ -10,8 +10,8 @@ import {
 } from '@tanstack/react-table'
 import * as m from 'motion/react-m'
 import { useState } from 'react'
-import { DataTablePagination } from '@/ui/components/shared/pagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/ui/shadcn/table'
+import { DataTablePagination } from './data-table-pagination'
 
 const emptyData: never[] = []
 

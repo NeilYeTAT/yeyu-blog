@@ -1,5 +1,5 @@
 import type { CommentTreeNode, SessionAvatarProps } from './type'
-import Loading from '../loading'
+import Loading from '@/ui/components/shared/loading'
 import { CommentThreadItem } from './comment-thread-item'
 
 export function CommentList({

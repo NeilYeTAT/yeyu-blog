@@ -5,7 +5,7 @@ import { TagType } from '@prisma/client'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'
 import { toDisplayDate } from '@/lib/utils/common/time'
-import ScaleUnderline from '@/ui/components/shared/scale-underline'
+import { ScaleUnderline } from './scale-underline'
 
 export const ArticleLink: FC<{
   item: BlogListItem | NoteListItem
@@ -24,7 +24,7 @@ export const ArticleLink: FC<{
     >
       <h2 className="group relative truncate">
         {item.title}
-        <ScaleUnderline className="bg-theme-indicator dark:bg-white" />
+        <ScaleUnderline />
       </h2>
       <time className="shrink-0 text-sm text-zinc-400 group-hover:text-theme-indicator dark:group-hover:text-white">
         {toDisplayDate(Date.parse(String(item.createdAt)))}

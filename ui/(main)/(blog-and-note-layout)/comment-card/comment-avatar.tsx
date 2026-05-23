@@ -3,7 +3,7 @@ import type { CommentAuthorLike, SessionAvatarProps } from './type'
 import Image from 'next/image'
 import { siGithub, siGoogle } from 'simple-icons'
 import avatar from '@/config/img/avatar.webp'
-import { AccountIcon } from '../account-icon'
+import { AccountIcon } from '@/ui/components/shared/account-icon'
 import {
   getCommentAddress,
   getCommentAvatar,
