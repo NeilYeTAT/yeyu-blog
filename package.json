@@ -80,7 +80,7 @@
     "@types/node": "^25.9.0",
     "@types/nodemailer": "^8.0.0",
     "@types/pg": "^8.20.0",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "czg": "^1.13.1",
     "dotenv-cli": "^11.0.0",
