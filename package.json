@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
-    "@commitlint/cli": "^21.0.1",
+    "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.1",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/typography": "^0.5.19",
