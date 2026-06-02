@@ -67,7 +67,7 @@
     "tailwindcss-animate": "^1.0.7",
     "unified": "^11.0.5",
     "uploadthing": "^7.7.4",
-    "viem": "~2.51.0",
+    "viem": "~2.52.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"
   },
