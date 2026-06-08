@@ -144,8 +144,8 @@ importers:
         specifier: ^0.1.5
         version: 0.1.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       simple-icons:
-        specifier: ^16.22.0
-        version: 16.22.0
+        specifier: ^16.23.0
+        version: 16.23.0
       siwe:
         specifier: ^3.0.0
         version: 3.0.0(ethers@6.16.0)
@@ -3669,8 +3669,8 @@ packages:
       react: '>=18'
       react-dom: '>=18'
 
-  simple-icons@16.22.0:
-    resolution: {integrity: sha512-/raPcEWh89R2O2IMmHum6W2dF99NNX3yWikVXKUalkDIWz3Rw/S2S+oDPTgJcIGsRh+25m0y8vj4aBaV/KPz3Q==}
+  simple-icons@16.23.0:
+    resolution: {integrity: sha512-08MaTpxj9zGYUIe38tfELYkaHiGE1YgbrbXmTBf+GPxi5mEqLSORQqOXrP0QKPdaFuzEDSmW5o4xkbLlFhmdCw==}
     engines: {node: '>=0.12.18'}
 
   siwe@3.0.0:
@@ -7422,7 +7422,7 @@ snapshots:
     transitivePeerDependencies:
       - '@emotion/is-prop-valid'
 
-  simple-icons@16.22.0: {}
+  simple-icons@16.23.0: {}
 
   siwe@3.0.0(ethers@6.16.0):
     dependencies:
