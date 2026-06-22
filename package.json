@@ -85,7 +85,7 @@
     "czg": "^1.13.1",
     "dotenv-cli": "^11.0.0",
     "lefthook": "^2.1.9",
-    "lint-staged": "^17.0.7",
+    "lint-staged": "^17.0.8",
     "next-sitemap": "^4.2.3",
     "prisma": "^7.8.0",
     "tailwindcss": "^4.3.1",
