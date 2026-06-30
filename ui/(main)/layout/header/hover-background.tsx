@@ -1,12 +1,11 @@
 import type { FC } from 'react'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion } from 'motion/react'
 
 export const HoverBackground: FC<{ isVisible: boolean }> = ({ isVisible }) => {
   return (
     <AnimatePresence>
       {isVisible && (
-        <m.div
+        <motion.div
           layoutId="hoverBackground"
           className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-white/60 shadow-sm dark:bg-neutral-800"
           initial={{ opacity: 0 }}

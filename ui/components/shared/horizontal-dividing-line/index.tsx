@@ -1,7 +1,6 @@
 'use client'
 
-import { useAnimationFrame, useMotionValue } from 'motion/react'
-import * as m from 'motion/react-m'
+import { motion, useAnimationFrame, useMotionValue } from 'motion/react'
 import { useRef } from 'react'
 import { useTransitionTheme } from '@/hooks/animation'
 import { FlowerIcon } from './flower-icon'
@@ -23,7 +22,7 @@ export default function HorizontalDividingLine() {
   return (
     <div className="relative flex w-full items-center justify-center">
       <hr className="absolute left-0 w-[45%] border-theme-indicator border-dashed dark:border-accent-foreground" />
-      <m.div
+      <motion.div
         style={{ rotate }}
         drag="x"
         dragDirectionLock
@@ -45,7 +44,7 @@ export default function HorizontalDividingLine() {
         className="cursor-grab"
       >
         <FlowerIcon className="text-theme-indicator dark:text-accent-foreground" />
-      </m.div>
+      </motion.div>
       <hr className="absolute right-0 w-[45%] border-theme-indicator border-dashed dark:border-accent-foreground" />
     </div>
   )

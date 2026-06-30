@@ -1,9 +1,7 @@
 "use client";
 
 // TODO: wait to pr
-import type { Variants } from "motion/react";
-import { useAnimation } from "motion/react";
-import * as m from "motion/react-m";
+import { motion, useAnimation, type Variants } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 
@@ -110,7 +108,7 @@ const PaletteIcon = forwardRef<PaletteIconHandle, PaletteIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <m.g
+          <motion.g
             animate={controls}
             initial="normal"
             style={{ transformOrigin: "12px 12px" }}
@@ -123,7 +121,7 @@ const PaletteIcon = forwardRef<PaletteIconHandle, PaletteIconProps>(
               { cx: "6.5", cy: "12.5" },
               { cx: "8.5", cy: "7.5" },
             ].map(({ cx, cy }, index) => (
-              <m.circle
+              <motion.circle
                 animate={controls}
                 custom={index + 1}
                 cx={cx}
@@ -135,7 +133,7 @@ const PaletteIcon = forwardRef<PaletteIconHandle, PaletteIconProps>(
                 variants={swatchVariants}
               />
             ))}
-          </m.g>
+          </motion.g>
         </svg>
       </div>
     );

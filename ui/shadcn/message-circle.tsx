@@ -1,8 +1,6 @@
 "use client";
 
-import type { Variants } from "motion/react";
-import { useAnimation } from "motion/react";
-import * as m from "motion/react-m";
+import { motion, useAnimation, type Variants } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
@@ -84,7 +82,7 @@ const MessageCircleIcon = forwardRef<
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <m.svg
+      <motion.svg
         animate={controls}
         fill="none"
         height={size}
@@ -98,7 +96,7 @@ const MessageCircleIcon = forwardRef<
         xmlns="http://www.w3.org/2000/svg"
       >
         <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-      </m.svg>
+      </motion.svg>
     </div>
   );
 });

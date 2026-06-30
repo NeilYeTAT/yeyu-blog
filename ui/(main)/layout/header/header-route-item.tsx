@@ -2,8 +2,7 @@ import type { useHeaderActiveRoute } from './hooks/use-header-active-route'
 import type { useHeaderIndicator } from './hooks/use-header-indicator'
 import type { useHeaderSubmenu } from './hooks/use-header-submenu'
 import type { RouteItem } from './types'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { activeTextShadowClass, inactiveTextShadowClass, isNavGroupRoute } from './constant'
 import { HoverBackground } from './hover-background'
@@ -43,7 +42,7 @@ export function HeaderRouteItem({
         >
           <div className="relative px-2 md:px-4">
             <AnimatePresence mode="wait" initial={false}>
-              <m.h2
+              <motion.h2
                 key={currentItem.pathName}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -51,7 +50,7 @@ export function HeaderRouteItem({
                 transition={{ duration: 0.15 }}
               >
                 {currentItem.pathName}
-              </m.h2>
+              </motion.h2>
             </AnimatePresence>
             <HoverBackground isVisible={!isGroupActive && isGroupHovered} />
           </div>

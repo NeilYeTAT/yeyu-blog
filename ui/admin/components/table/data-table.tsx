@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import * as m from 'motion/react-m'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/ui/shadcn/table'
 import { DataTablePagination } from './data-table-pagination'
@@ -50,7 +50,7 @@ export function DataTable<TData, TValue>({
   const rows = table.getRowModel().rows
 
   return (
-    <m.div
+    <motion.div
       className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-lg border bg-zinc-50/70 dark:bg-zinc-950/50"
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -105,6 +105,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </m.div>
+    </motion.div>
   )
 }

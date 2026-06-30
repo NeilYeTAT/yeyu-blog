@@ -3,7 +3,7 @@
 import type { BlogTag } from '@prisma/client'
 import type { Dispatch, SetStateAction } from 'react'
 import type { CarouselApi } from '@/ui/shadcn/carousel'
-import * as m from 'motion/react-m'
+import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { BlogTagItemToggle } from '@/ui/admin/components/tag-item-toggle'
@@ -66,7 +66,7 @@ export function BlogTagsContainer({
         ) : (
           blogTags.map((tag, i) => (
             <CarouselItem className="basis-auto" key={tag.toLowerCase()}>
-              <m.div
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{
                   opacity: 1,
@@ -81,7 +81,7 @@ export function BlogTagsContainer({
                 }}
               >
                 <BlogTagItemToggle tag={tag} setSelectedTags={setSelectedTags} />
-              </m.div>
+              </motion.div>
             </CarouselItem>
           ))
         )}

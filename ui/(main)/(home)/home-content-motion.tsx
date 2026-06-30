@@ -1,8 +1,7 @@
 'use client'
 
-import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import * as m from 'motion/react-m'
+import { motion, type Variants } from 'motion/react'
 import { useStartupStore } from '@/store/use-startup-store'
 
 const containerVariants: Variants = {
@@ -46,37 +45,37 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
 
   return (
-    <m.main
+    <motion.main
       className="flex w-full flex-col items-center justify-center gap-4 pt-16 pb-4"
       initial="hidden"
       animate={isAnimationComplete ? 'visible' : 'hidden'}
       variants={containerVariants}
     >
       {children}
-    </m.main>
+    </motion.main>
   )
 }
 
 export function HomeAvatarMotion({ children }: { children: ReactNode }) {
   return (
-    <m.div variants={avatarVariants} className="flex w-full justify-center">
+    <motion.div variants={avatarVariants} className="flex w-full justify-center">
       {children}
-    </m.div>
+    </motion.div>
   )
 }
 
 export function HomeBioMotion({ children }: { children: ReactNode }) {
   return (
-    <m.div variants={bioVariants} className="flex w-full justify-center">
+    <motion.div variants={bioVariants} className="flex w-full justify-center">
       {children}
-    </m.div>
+    </motion.div>
   )
 }
 
 export function HomeFadeMotion({ children }: { children: ReactNode }) {
   return (
-    <m.div variants={fadeVariants} className="flex w-full justify-center">
+    <motion.div variants={fadeVariants} className="flex w-full justify-center">
       {children}
-    </m.div>
+    </motion.div>
   )
 }

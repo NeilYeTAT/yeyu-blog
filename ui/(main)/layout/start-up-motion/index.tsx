@@ -1,7 +1,6 @@
 'use client'
 
-import { animate, useMotionValue } from 'motion/react'
-import * as m from 'motion/react-m'
+import { animate, motion, useMotionValue } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
 
@@ -57,16 +56,16 @@ export default function StartUpMotion() {
 
   return (
     <div ref={rootRef}>
-      <m.span
+      <motion.span
         className="pointer-events-none fixed top-2/3 left-1/2 z-110 h-screen w-px -translate-x-1/2 bg-white will-change-transform"
         style={{ scaleY }}
       />
-      <m.span
+      <motion.span
         className="pointer-events-none fixed bottom-2/3 left-1/2 z-110 h-screen w-px -translate-x-1/2 bg-white will-change-transform"
         style={{ scaleY }}
       />
 
-      <m.div
+      <motion.div
         className="pointer-events-none fixed top-1/2 left-1/2 z-110 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl text-purple-200 leading-none will-change-[transform,opacity]"
         initial={{ opacity: 0, y: 12, scale: 0.96 }}
         animate={{
@@ -81,7 +80,7 @@ export default function StartUpMotion() {
         }}
       >
         {welcomeTextChars.map((char, index) => (
-          <m.span
+          <motion.span
             key={`${index.toString()}-${char}`}
             className="will-change-[transform,opacity]"
             initial={{ opacity: 0, y: 10 }}
@@ -94,15 +93,15 @@ export default function StartUpMotion() {
             }}
           >
             {char}
-          </m.span>
+          </motion.span>
         ))}
-      </m.div>
+      </motion.div>
 
-      <m.span
+      <motion.span
         className="pointer-events-none fixed top-0 left-0 z-100 h-dvh w-1/2 bg-linear-to-r from-[#22177A] to-[#000957] will-change-transform [backface-visibility:hidden]"
         style={{ x: toLeft }}
       />
-      <m.span
+      <motion.span
         className="pointer-events-none fixed top-0 right-0 z-100 h-dvh w-1/2 bg-linear-to-l from-[#22177A] to-[#000957] will-change-transform [backface-visibility:hidden]"
         style={{ x: toRight }}
       />

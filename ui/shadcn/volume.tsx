@@ -1,8 +1,6 @@
 "use client";
 
-import type { Variants } from "motion/react";
-import { useAnimation } from "motion/react";
-import * as m from "motion/react-m";
+import { motion, useAnimation, type Variants } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 
@@ -107,7 +105,7 @@ const VolumeIcon = forwardRef<VolumeIconHandle, VolumeIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <m.path
+          <motion.path
             animate={controls}
             d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"
             initial="normal"
@@ -117,7 +115,7 @@ const VolumeIcon = forwardRef<VolumeIconHandle, VolumeIconProps>(
             "M16 9a5 5 0 0 1 0 6",
             "M19.364 18.364a9 9 0 0 0 0-12.728",
           ].map((d, index) => (
-            <m.path
+            <motion.path
               animate={controls}
               custom={index + 1}
               d={d}

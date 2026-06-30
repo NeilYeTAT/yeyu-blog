@@ -1,7 +1,6 @@
 import type { useHeaderActiveRoute } from './hooks/use-header-active-route'
 import type { useHeaderSubmenu } from './hooks/use-header-submenu'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { activeTextShadowClass, inactiveTextShadowClass, slideVariants } from './constant'
 import { NavItem } from './nav-item'
@@ -18,7 +17,7 @@ export function HeaderSubmenu({
   return (
     <AnimatePresence>
       {activeGroupRoute != null && (
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
@@ -32,7 +31,7 @@ export function HeaderSubmenu({
           {...submenu.panelProps}
         >
           <AnimatePresence mode="popLayout" custom={direction}>
-            <m.div
+            <motion.div
               key={activeGroupRoute.group.key}
               custom={direction}
               variants={slideVariants}
@@ -60,9 +59,9 @@ export function HeaderSubmenu({
                   {item.pathName}
                 </NavItem>
               ))}
-            </m.div>
+            </motion.div>
           </AnimatePresence>
-        </m.div>
+        </motion.div>
       )}
     </AnimatePresence>
   )

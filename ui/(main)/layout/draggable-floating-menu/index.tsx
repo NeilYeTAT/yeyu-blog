@@ -1,8 +1,6 @@
 'use client'
 
-import type { HTMLMotionProps } from 'motion/react'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react'
 import { usePathname } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { useTransitionTheme } from '@/hooks/animation'
@@ -106,7 +104,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         ref={constraintsRef}
         className="pointer-events-none fixed top-24 right-20 bottom-4 left-20"
       />
-      <m.div
+      <motion.div
         ref={containerRef}
         drag
         dragConstraints={constraintsRef}
@@ -137,7 +135,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           className="relative flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <m.span
+          <motion.span
             className="absolute inset-0 rounded-full bg-[linear-gradient(145deg,color-mix(in_srgb,var(--theme-indicator)_48%,white)_0%,color-mix(in_srgb,var(--theme-300)_62%,white)_38%,color-mix(in_srgb,var(--theme-200)_82%,white)_72%,color-mix(in_srgb,var(--theme-400)_56%,white)_100%)] dark:bg-[linear-gradient(145deg,color-mix(in_srgb,var(--theme-500)_34%,rgb(63_63_70))_0%,color-mix(in_srgb,var(--theme-400)_30%,rgb(82_82_91))_42%,color-mix(in_srgb,var(--theme-300)_24%,rgb(63_63_70))_74%,color-mix(in_srgb,var(--theme-600)_38%,rgb(39_39_42))_100%)]"
             animate={{
               backgroundPosition: ['16% 24%', '80% 36%', '28% 78%', '72% 64%', '16% 24%'],
@@ -150,7 +148,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
             }}
             style={{ backgroundSize: '230% 230%' }}
           />
-          <m.span
+          <motion.span
             className="absolute -top-2 -left-1 size-7 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.58)_0%,rgba(255,255,255,0.12)_52%,transparent_74%)] mix-blend-screen blur-[0.5px] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.025)_56%,transparent_78%)]"
             animate={{
               x: [0, 10 * goldenRatioInv, -14 * goldenRatioInvSquare, 8, 0],
@@ -165,7 +163,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
               times: flowTimesPrimary,
             }}
           />
-          <m.span
+          <motion.span
             className="absolute -right-3 bottom-0 size-8 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--theme-indicator)_34%,white)_0%,color-mix(in_srgb,var(--theme-300)_26%,white)_44%,transparent_72%)] mix-blend-screen blur-[0.5px] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.07)_0%,rgba(255,255,255,0.02)_42%,transparent_70%)]"
             animate={{
               x: [0, -9 * goldenRatioInv, 7, -11 * goldenRatioInvSquare, 0],
@@ -225,7 +223,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
             </>
           )}
         </AnimatePresence>
-      </m.div>
+      </motion.div>
     </>
   )
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useAnimation } from "motion/react";
-import * as m from "motion/react-m";
+import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
@@ -59,7 +58,7 @@ const HeartIcon = forwardRef<HeartIconHandle, HeartIconProps>(
         onMouseLeave={handleMouseLeave}
         {...props}
       >
-        <m.svg
+        <motion.svg
           animate={controls}
           fill="none"
           height={size}
@@ -80,7 +79,7 @@ const HeartIcon = forwardRef<HeartIconHandle, HeartIconProps>(
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-        </m.svg>
+        </motion.svg>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import * as m from 'motion/react-m'
+import * as motion from 'motion/react-client'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MaxWidthWrapper } from '@/ui/components/shared/max-width-wrapper'
 
@@ -30,7 +30,7 @@ export function AboutSection({ children, className }: { children: ReactNode; cla
   return (
     <section className="flex h-[calc(100dvh-100px)] w-full snap-center flex-col items-center justify-center p-4">
       <MaxWidthWrapper>
-        <m.div
+        <motion.div
           className={cn(
             'flex flex-col items-center justify-center gap-4 text-center md:text-lg',
             className,
@@ -41,12 +41,12 @@ export function AboutSection({ children, className }: { children: ReactNode; cla
           variants={sectionVariants}
         >
           {children}
-        </m.div>
+        </motion.div>
       </MaxWidthWrapper>
     </section>
   )
 }
 
 export function AboutLine({ children }: { children: ReactNode }) {
-  return <m.div variants={lineVariants}>{children}</m.div>
+  return <motion.div variants={lineVariants}>{children}</motion.div>
 }

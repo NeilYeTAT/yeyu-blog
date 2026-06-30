@@ -2,8 +2,7 @@
 
 import type { Heading } from './utils/extract-headings'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
-import { AnimatePresence, useScroll, useTransform } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
 import { type FC, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -79,7 +78,7 @@ const ArticleBottomShadow = ({
   if (!visible) return null
 
   return (
-    <m.div
+    <motion.div
       aria-hidden
       className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-16 select-none bg-[linear-gradient(transparent,rgb(249,250,250))] backdrop-blur-[10px] [-webkit-mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] [mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] dark:bg-[linear-gradient(transparent,rgb(9,9,11))] dark:[-webkit-mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)] dark:[mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)]"
       style={{ opacity: shadowOpacity }}
@@ -95,7 +94,7 @@ const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
   })
 
   return (
-    <m.circle
+    <motion.circle
       cx="50"
       cy="50"
       r={tocProgressRadius}
@@ -220,7 +219,7 @@ export const PostToc: FC<{
       ) : null}
       <AnimatePresence>
         {isExpanded && (
-          <m.div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -229,7 +228,7 @@ export const PostToc: FC<{
           />
         )}
       </AnimatePresence>
-      <m.div
+      <motion.div
         layout
         className={cn(
           'fixed bottom-8 left-1/2 z-50 -translate-x-1/2',
@@ -257,8 +256,8 @@ export const PostToc: FC<{
         }
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <m.div layout="position" className="flex flex-col">
-          <m.button
+        <motion.div layout="position" className="flex flex-col">
+          <motion.button
             layout="position"
             type="button"
             aria-expanded={isExpanded}
@@ -269,7 +268,7 @@ export const PostToc: FC<{
             )}
             onClick={handleTocToggleClick}
           >
-            <m.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
+            <motion.div className="relative flex max-w-75 items-center justify-between gap-1 truncate font-medium text-sm">
               <figure className="flex items-center justify-center">
                 <svg height={28} width={28} viewBox="0 0 100 100" className="-rotate-90">
                   {/* background */}
@@ -286,7 +285,7 @@ export const PostToc: FC<{
                   {articleContent != null ? (
                     <TocProgressCircle container={articleContent} />
                   ) : (
-                    <m.circle
+                    <motion.circle
                       cx="50"
                       cy="50"
                       r={tocProgressRadius}
@@ -300,7 +299,7 @@ export const PostToc: FC<{
                 </svg>
               </figure>
               <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
-                <m.span
+                <motion.span
                   key={activeHeading?.id}
                   custom={directionRef.current}
                   variants={variants}
@@ -311,10 +310,10 @@ export const PostToc: FC<{
                   className="block truncate"
                 >
                   {activeHeading?.text ?? '目录'}
-                </m.span>
+                </motion.span>
               </AnimatePresence>
-            </m.div>
-            <m.div
+            </motion.div>
+            <motion.div
               layout="position"
               animate={{ rotate: isExpanded ? 180 : 0 }}
               className="ml-2 text-muted-foreground"
@@ -324,13 +323,13 @@ export const PostToc: FC<{
               ) : (
                 <ChevronDown className="size-4" />
               )}
-            </m.div>
-          </m.button>
+            </motion.div>
+          </motion.button>
 
           {/* expanded list */}
           <AnimatePresence>
             {isExpanded && (
-              <m.div
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
@@ -359,11 +358,11 @@ export const PostToc: FC<{
                     </li>
                   ))}
                 </ul>
-              </m.div>
+              </motion.div>
             )}
           </AnimatePresence>
-        </m.div>
-      </m.div>
+        </motion.div>
+      </motion.div>
     </>,
     container,
   )

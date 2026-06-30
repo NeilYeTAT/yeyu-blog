@@ -1,7 +1,6 @@
 'use client'
 
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion } from 'motion/react'
 import { createPortal } from 'react-dom'
 import { useIsMounted } from '@/hooks/common'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -24,7 +23,7 @@ export default function Header() {
   const shouldShowHeader = isHeaderVisible || submenu.state.isOpen
 
   return (
-    <m.header
+    <motion.header
       className={cn(
         'sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center will-change-transform md:h-12 md:w-1/2 lg:w-5/12',
         !shouldShowHeader && 'pointer-events-none',
@@ -40,7 +39,7 @@ export default function Header() {
         createPortal(
           <AnimatePresence>
             {submenu.state.isOpen && (
-              <m.div
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -73,7 +72,7 @@ export default function Header() {
             />
           ))}
 
-          <m.div
+          <motion.div
             className="absolute top-1/2 -translate-y-1/2 rounded-full bg-theme-indicator shadow-md dark:bg-white"
             animate={indicator.style}
             transition={{
@@ -86,6 +85,6 @@ export default function Header() {
           <HeaderSubmenu activeRoute={activeRoute} submenu={submenu} />
         </nav>
       </MaxWidthWrapper>
-    </m.header>
+    </motion.header>
   )
 }

@@ -1,8 +1,7 @@
 'use client'
 
 import type { Point } from '../layout/draggable-floating-menu/constant'
-import { AnimatePresence, useMotionValue, useMotionValueEvent } from 'motion/react'
-import * as m from 'motion/react-m'
+import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
@@ -111,7 +110,7 @@ export default function YeAvatar() {
       </AnimatePresence>
 
       {/* 摸摸头~ */}
-      <m.figure
+      <motion.figure
         // TODO: config color
         className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
         whileTap={{ scale: 0.99, rotate: 1 }}
@@ -156,7 +155,7 @@ export default function YeAvatar() {
           fetchPriority="high"
         />
         <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-400 ring-offset-1 dark:ring-white dark:ring-offset-black" />
-      </m.figure>
+      </motion.figure>
     </div>
   )
 }

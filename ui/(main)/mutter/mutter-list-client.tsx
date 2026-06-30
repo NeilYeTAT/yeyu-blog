@@ -1,7 +1,7 @@
 'use client'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import * as m from 'motion/react-m'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
@@ -144,13 +144,13 @@ export function MutterListClient({
   }
 
   return (
-    <m.section
+    <motion.section
       className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-4 pb-10"
       initial="hidden"
       animate="visible"
       variants={listVariants}
     >
-      <m.ul className="flex flex-col gap-4" variants={listVariants}>
+      <motion.ul className="flex flex-col gap-4" variants={listVariants}>
         {mutters.map((item, index) => {
           const createdAt = Date.parse(item.createdAt)
           const relativeDate = toRelativeDate(createdAt)
@@ -159,7 +159,7 @@ export function MutterListClient({
           const isCommentActive = activeCommentPayload?.mutterId === item.id
 
           return (
-            <m.li key={item.id} className="flex items-start gap-3.5" variants={itemVariants}>
+            <motion.li key={item.id} className="flex items-start gap-3.5" variants={itemVariants}>
               <Image
                 src={avatar}
                 alt="avatar"
@@ -201,15 +201,15 @@ export function MutterListClient({
                   </footer>
                 </article>
               </div>
-            </m.li>
+            </motion.li>
           )
         })}
-      </m.ul>
+      </motion.ul>
       {hasNextPage ? (
         <div ref={loadMoreRef} className="flex h-28 items-center justify-center">
           {isFetchingNextPage ? <Loading /> : null}
         </div>
       ) : null}
-    </m.section>
+    </motion.section>
   )
 }
