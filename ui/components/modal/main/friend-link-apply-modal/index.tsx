@@ -28,29 +28,26 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
   const isModalOpen = modalType === 'friendLinkApplyModal'
   const sendIconRef = useRef<SendIconHandle>(null)
   const copyStatusIconRef = useRef<SendIconHandle>(null)
-  const copyResetTimerRef = useRef<number | null>(null)
-  const [isSiteInfoCopied, setIsSiteInfoCopied] = useState(false)
+  const [copyFeedbackVersion, setCopyFeedbackVersion] = useState(0)
+  const isCopied = copyFeedbackVersion > 0
   const { mutate: createFriendLink, isPending: isSubmitting } = useFriendLinkMutation()
 
   useEffect(() => {
+    if (copyFeedbackVersion === 0) return
+
+    const copyResetTimerId = window.setTimeout(() => {
+      setCopyFeedbackVersion(0)
+    }, 2000)
+
     return () => {
-      if (copyResetTimerRef.current !== null) {
-        window.clearTimeout(copyResetTimerRef.current)
-      }
+      window.clearTimeout(copyResetTimerId)
     }
-  }, [])
+  }, [copyFeedbackVersion])
 
   const handleCopySiteInfo = async () => {
     await copyToClipboard(friendLinkSiteInfo)
 
-    if (copyResetTimerRef.current !== null) {
-      window.clearTimeout(copyResetTimerRef.current)
-    }
-
-    setIsSiteInfoCopied(true)
-    copyResetTimerRef.current = window.setTimeout(() => {
-      setIsSiteInfoCopied(false)
-    }, 2000)
+    setCopyFeedbackVersion(currentCopyFeedbackVersion => currentCopyFeedbackVersion + 1)
   }
 
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
@@ -118,7 +115,7 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
               <Button
                 type="button"
                 variant="outline"
-                data-copied={isSiteInfoCopied ? 'true' : undefined}
+                data-copied={isCopied ? 'true' : undefined}
                 className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/25 px-4 text-zinc-600 shadow-none hover:bg-black/5 hover:text-zinc-900 data-[copied=true]:text-theme-indicator dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
                 onClick={() => {
                   void handleCopySiteInfo()
@@ -130,12 +127,12 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
                   copyStatusIconRef.current?.stopAnimation()
                 }}
               >
-                {isSiteInfoCopied ? (
+                {isCopied ? (
                   <CheckIcon ref={copyStatusIconRef} className="size-4" size={16} />
                 ) : (
                   <CopyIcon ref={copyStatusIconRef} className="size-4" size={16} />
                 )}
-                {isSiteInfoCopied ? '已复制' : '复制本站信息'}
+                {isCopied ? '已复制' : '复制本站信息'}
               </Button>
 
               <div className="flex flex-col-reverse gap-2 sm:flex-row">

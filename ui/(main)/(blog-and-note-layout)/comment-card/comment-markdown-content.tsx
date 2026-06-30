@@ -7,7 +7,7 @@ const sentencePunctuationPattern = /[，。！？；：、]/
 const trailingUrlTextPattern = /[),.;:!?，。！？；：、]+$/g
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src
 
-function CommentMarkdownText({ html }: { html: string }) {
+function CommentMarkdownText({ sanitizedHtml }: { sanitizedHtml: string }) {
   return (
     <div
       className={cn(
@@ -21,7 +21,7 @@ function CommentMarkdownText({ html }: { html: string }) {
         'prose-img:my-3 prose-pre:my-4 prose-pre:overflow-x-auto prose-img:rounded-md prose-pre:rounded-md',
         'dark:prose-a:text-[#f596aa] dark:prose-a:hover:text-[#f9a8d4]',
       )}
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />
   )
 }
@@ -137,7 +137,7 @@ function getCommentLinkBlocks(content: string) {
 
 export function CommentMarkdownContent({
   content,
-  htmlContent,
+  htmlContent: sanitizedHtmlContent,
 }: {
   content: string
   htmlContent: string
@@ -146,7 +146,7 @@ export function CommentMarkdownContent({
 
   return (
     <div className="flex flex-col gap-2">
-      <CommentMarkdownText html={htmlContent} />
+      <CommentMarkdownText sanitizedHtml={sanitizedHtmlContent} />
       {links.map(link => (
         <CommentLink
           key={link.href}

@@ -1,0 +1,12 @@
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+overrides:
+  "@types/node": 25.9.3
+  kysely: 0.28.17
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - esbuild
+  - msgpackr-extract
+  - prisma
+  - sharp

@@ -1,4 +1,4 @@
-import { type FC, type SyntheticEvent, useEffect, useState } from 'react'
+import { type FC, type SyntheticEvent, useState } from 'react'
 import { sileo } from 'sileo'
 import { useMutterMutation } from '@/hooks/api/mutter'
 import { useModalStore } from '@/store/use-modal-store'
@@ -10,30 +10,41 @@ import {
   InputGroupTextarea,
 } from '@/ui/shadcn/input-group'
 
-type MutterFormProps = {
+export const MutterForm: FC<{
   editingMutter: {
     id: number
     content: string
   } | null
   clearEditingMutter: () => void
+}> = ({ editingMutter, clearEditingMutter }) => {
+  const formKey =
+    editingMutter == null ? 'create' : `edit-${editingMutter.id}-${editingMutter.content}`
+
+  return (
+    <MutterFormFields
+      key={formKey}
+      editingMutter={editingMutter}
+      initialDraft={editingMutter?.content ?? ''}
+      clearEditingMutter={clearEditingMutter}
+    />
+  )
 }
 
-export const MutterForm: FC<MutterFormProps> = ({ editingMutter, clearEditingMutter }) => {
+const MutterFormFields: FC<{
+  editingMutter: {
+    id: number
+    content: string
+  } | null
+  initialDraft: string
+  clearEditingMutter: () => void
+}> = ({ editingMutter, initialDraft, clearEditingMutter }) => {
   const setModalOpen = useModalStore(s => s.setModalOpen)
-  const [draft, setDraft] = useState('')
+  const [draft, setDraft] = useState(initialDraft)
   const { mutate: createMutter, isPending: isCreating } = useMutterMutation()
   const trimmedDraft = draft.trim()
   const canSubmit = trimmedDraft.length > 0
   const isEditing = editingMutter != null
   const hasContentChanged = isEditing ? trimmedDraft !== editingMutter.content.trim() : false
-
-  useEffect(() => {
-    if (editingMutter == null) {
-      return
-    }
-
-    setDraft(editingMutter.content)
-  }, [editingMutter])
 
   const handleCreateMutter = () => {
     const content = trimmedDraft

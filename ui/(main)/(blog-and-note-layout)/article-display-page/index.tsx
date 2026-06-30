@@ -11,14 +11,18 @@ import { extractTitleAndBody } from './utils/extract-title-and-body'
 export default function ArticleDisplayPage({
   createdAt,
   tags,
-  content,
+  sanitizedContent,
 }: {
-  content: string
   createdAt: Date
+  sanitizedContent: string
   tags: string[]
 }) {
-  const headings = extractHeadings(content)
-  const { body, titleHtml, titleId } = extractTitleAndBody(content)
+  const headings = extractHeadings(sanitizedContent)
+  const {
+    body: sanitizedBody,
+    titleHtml: sanitizedTitleHtml,
+    titleId,
+  } = extractTitleAndBody(sanitizedContent)
 
   return (
     <div className="z-10 min-h-screen backdrop-blur-[1px]">
@@ -38,12 +42,12 @@ export default function ArticleDisplayPage({
           duration: 0.8,
         }}
       >
-        {titleHtml != null ? (
+        {sanitizedTitleHtml != null ? (
           <header className="flex flex-col items-center justify-center gap-3 text-center">
             <h1
               id={titleId || undefined}
               className="text-balance font-semibold text-3xl text-zinc-950 leading-tight md:text-4xl dark:text-zinc-50"
-              dangerouslySetInnerHTML={{ __html: titleHtml }}
+              dangerouslySetInnerHTML={{ __html: sanitizedTitleHtml }}
             />
 
             <section className="flex w-full flex-wrap items-center justify-center gap-2 text-xs text-zinc-600 md:text-sm dark:text-zinc-400">
@@ -75,7 +79,7 @@ export default function ArticleDisplayPage({
         <main
           id="article-content"
           className={customMarkdownTheme}
-          dangerouslySetInnerHTML={{ __html: body }}
+          dangerouslySetInnerHTML={{ __html: sanitizedBody }}
         />
         <ArticleImageLoadEnhancer rootSelector="#article-content" />
         <MarkdownCodeBlockEnhancer rootSelector="#article-content" />

@@ -23,10 +23,10 @@ export const BlogDetail: FC<
 
   if (blog == null || blog.content.length === 0) notFound()
 
-  const blogHTML = await processor.process(blog.content)
+  const sanitizedBlogHtml = await processor.process(blog.content)
   const article = {
     ...blog,
-    content: blogHTML.toString(),
+    content: sanitizedBlogHtml.toString(),
   }
 
   const { content, createdAt, tags, id } = article
@@ -35,7 +35,7 @@ export const BlogDetail: FC<
 
   return (
     <div className="flex flex-col gap-4">
-      <ArticleDisplayPage createdAt={createdAt} content={content} tags={tagNames} />
+      <ArticleDisplayPage createdAt={createdAt} sanitizedContent={content} tags={tagNames} />
       <HorizontalDividingLine />
       <CommentCard articleType="BLOG" articleId={id} />
     </div>

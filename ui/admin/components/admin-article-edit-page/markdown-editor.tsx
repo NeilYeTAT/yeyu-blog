@@ -18,7 +18,7 @@ export default function MarkdownEditor({
   onChange: (value: string) => void
   previewTitle?: string
 }) {
-  const [html, setHtml] = useState('')
+  const [sanitizedHtml, setSanitizedHtml] = useState('')
   const [isCompressing, setIsCompressing] = useState(false)
   const previewId = useId()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -97,18 +97,23 @@ export default function MarkdownEditor({
   }
 
   useEffect(() => {
-    const render = async () => {
-      const normalizedPreviewTitle = previewTitle?.trim() ?? ''
-      const previewHeading = normalizedPreviewTitle.length > 0 ? `# ${normalizedPreviewTitle}` : ''
-      const firstLine = value.split(/\r?\n/, 1)[0]?.trim() ?? ''
-      const hasMarkdownH1 = /^#\s+/.test(firstLine)
-      const markdownForPreview =
-        previewHeading.length > 0 && !hasMarkdownH1 ? `${previewHeading}\n\n${value}` : value
+    let isActive = true
+    const normalizedPreviewTitle = previewTitle?.trim() ?? ''
+    const previewHeading = normalizedPreviewTitle.length > 0 ? `# ${normalizedPreviewTitle}` : ''
+    const firstLine = value.split(/\r?\n/, 1)[0]?.trim() ?? ''
+    const hasMarkdownH1 = /^#\s+/.test(firstLine)
+    const markdownForPreview =
+      previewHeading.length > 0 && !hasMarkdownH1 ? `${previewHeading}\n\n${value}` : value
 
-      const file = await simpleProcessor.process(markdownForPreview)
-      setHtml(String(file))
+    void simpleProcessor.process(markdownForPreview).then(sanitizedFile => {
+      if (isActive) {
+        setSanitizedHtml(String(sanitizedFile))
+      }
+    })
+
+    return () => {
+      isActive = false
     }
-    render()
   }, [previewTitle, value])
 
   return (
@@ -121,12 +126,13 @@ export default function MarkdownEditor({
         onPaste={handlePaste}
         onDrop={handleDrop}
         disabled={isImageProcessing}
+        aria-label="Markdown 内容"
         placeholder="在此输入 Markdown... (支持粘贴/拖拽上传图片)"
       />
       <div
         id={previewId}
         className={`h-full w-1/2 overflow-y-auto rounded-md border p-4 ${customMarkdownTheme}`}
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
       />
       <MarkdownCodeBlockEnhancer rootSelector={`#${previewId}`} />
     </div>

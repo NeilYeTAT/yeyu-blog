@@ -1,4 +1,5 @@
 import rehypeHighlight from 'rehype-highlight'
+import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
 import remarkGfm from 'remark-gfm'
@@ -12,6 +13,7 @@ export const simpleProcessor = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(rehypeSanitize)
   .use(rehypeSlug)
   .use(rehypeHighlight, { detect: false })
   .use(rehypeCodeBlockRenderer as never)

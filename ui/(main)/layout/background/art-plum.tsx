@@ -12,7 +12,6 @@ const { random } = Math
 
 export const ArtPlum = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const requestRef = useRef<number | undefined>(undefined)
   const stepsRef = useRef<Array<() => void>>([])
   const prevStepsRef = useRef<Array<() => void>>([])
   const len = useRef(6)
@@ -21,6 +20,7 @@ export const ArtPlum = () => {
   useEffect(() => {
     const canvas = canvasRef.current
     if (canvas == null) return
+    let requestId: number | undefined
 
     const size = { width: window.innerWidth, height: window.innerHeight }
 
@@ -91,7 +91,7 @@ export const ArtPlum = () => {
 
     const frame = () => {
       if (performance.now() - lastTime < interval) {
-        requestRef.current = requestAnimationFrame(frame)
+        requestId = requestAnimationFrame(frame)
         return
       }
 
@@ -109,13 +109,13 @@ export const ArtPlum = () => {
         else i()
       })
 
-      requestRef.current = requestAnimationFrame(frame)
+      requestId = requestAnimationFrame(frame)
     }
 
     const randomMiddle = () => random() * 0.6 + 0.2
 
     const start = () => {
-      if (requestRef.current !== undefined) cancelAnimationFrame(requestRef.current)
+      if (requestId !== undefined) cancelAnimationFrame(requestId)
       ctx.clearRect(0, 0, width, height)
       ctx.lineWidth = 1
       ctx.strokeStyle = color
@@ -129,13 +129,13 @@ export const ArtPlum = () => {
       if (size.width < 500) stepsRef.current = stepsRef.current.slice(0, 2)
 
       stopped.current = false
-      requestRef.current = requestAnimationFrame(frame)
+      requestId = requestAnimationFrame(frame)
     }
 
     start()
 
     return () => {
-      if (requestRef.current !== undefined) cancelAnimationFrame(requestRef.current)
+      if (requestId !== undefined) cancelAnimationFrame(requestId)
     }
   }, [])
 

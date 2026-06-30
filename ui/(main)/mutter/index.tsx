@@ -1,11 +1,12 @@
 import { prisma } from '@/prisma/instance'
 import { MutterListClient } from './mutter-list-client'
 
+const pageSize = 10
+const where = {
+  isPublished: true,
+}
+
 export default async function MutterPage() {
-  const pageSize = 10
-  const where = {
-    isPublished: true,
-  }
   const [mutters, total] = await Promise.all([
     prisma.mutter.findMany({
       where,

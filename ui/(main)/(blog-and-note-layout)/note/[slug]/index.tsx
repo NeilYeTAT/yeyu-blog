@@ -19,10 +19,10 @@ export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({
 
   if (note == null || note.content.length === 0) notFound()
 
-  const noteHTML = await processor.process(note.content)
+  const sanitizedNoteHtml = await processor.process(note.content)
   const article = {
     ...note,
-    content: noteHTML.toString(),
+    content: sanitizedNoteHtml.toString(),
   }
 
   const { content, createdAt, tags, id } = article
@@ -30,7 +30,7 @@ export const NoteDetail: FC<ComponentProps<'div'> & { slug: string }> = async ({
 
   return (
     <div className="flex flex-col gap-4">
-      <ArticleDisplayPage createdAt={createdAt} content={content} tags={tagNames} />
+      <ArticleDisplayPage createdAt={createdAt} sanitizedContent={content} tags={tagNames} />
       <HorizontalDividingLine />
       <CommentCard articleType="NOTE" articleId={id} />
     </div>
