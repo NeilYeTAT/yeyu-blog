@@ -2,7 +2,7 @@ import type { ReactDoctorConfig } from 'react-doctor/api'
 
 export default {
   ignore: {
-    rules: ['react/no-danger', 'jsx-a11y/no-autofocus'],
+    rules: ['react/no-danger', 'jsx-a11y/no-autofocus', 'react-doctor/use-lazy-motion'],
     files: [
       'src/generated/**',
       'ui/shadcn/**',

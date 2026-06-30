@@ -1,8 +1,10 @@
-minimumReleaseAge: 10080
+minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+  - "@types/node"
 trustPolicy: no-downgrade
 blockExoticSubdeps: true
 overrides:
-  "@types/node": 25.9.3
+  "@types/node": 26.0.1
   kysely: 0.28.17
 onlyBuiltDependencies:
   - "@prisma/engines"
