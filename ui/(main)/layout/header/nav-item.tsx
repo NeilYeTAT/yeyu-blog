@@ -23,7 +23,10 @@ export const NavItem: FC<
           if (item.disabled === true) {
             e.preventDefault()
 
-            sileo.info({ title: 'Coming soon...' })
+            sileo.info({
+              title: 'Coming soon...',
+              description: 'One day...',
+            })
             return
           }
           const modalType = item.modal
@@ -49,7 +52,10 @@ export const NavItem: FC<
       onClick={e => {
         if (item.disabled === true) {
           e.preventDefault()
-          sileo.info({ title: 'Coming soon...' })
+          sileo.info({
+            title: 'Coming soon...',
+            description: 'One day...',
+          })
           return
         }
       }}

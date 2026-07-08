@@ -12,7 +12,7 @@ export default function GlobalProvider({ children }: { children: React.ReactNode
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <ReactQueryProvider>
           {children}
-          <Toaster position="top-center" />
+          <Toaster position="top-center" theme="system" />
         </ReactQueryProvider>
       </ThemeProvider>
     </>

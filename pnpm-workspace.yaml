@@ -1,7 +1,7 @@
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - "@types/node"
-trustPolicy: no-downgrade
+trustPolicy: off
 blockExoticSubdeps: true
 overrides:
   "@types/node": 26.0.1
@@ -12,3 +12,10 @@ onlyBuiltDependencies:
   - msgpackr-extract
   - prisma
   - sharp
+allowBuilds:
+  '@prisma/engines': true
+  esbuild: true
+  lefthook: true
+  msgpackr-extract: true
+  prisma: true
+  sharp: true
