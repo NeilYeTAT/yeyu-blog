@@ -1,8 +1,11 @@
-import type { ReactDoctorConfig } from 'react-doctor/api'
-
 export default {
   ignore: {
-    rules: ['react/no-danger', 'jsx-a11y/no-autofocus', 'react-doctor/use-lazy-motion'],
+    rules: [
+      'react/no-danger',
+      'jsx-a11y/no-autofocus',
+      'react-doctor/use-lazy-motion',
+      'react-doctor/require-pnpm-hardening',
+    ],
     files: [
       'src/generated/**',
       'ui/shadcn/**',
@@ -21,4 +24,4 @@ export default {
       },
     ],
   },
-} satisfies ReactDoctorConfig
+}

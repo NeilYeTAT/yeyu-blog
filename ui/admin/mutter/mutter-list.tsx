@@ -2,7 +2,7 @@
 
 import { Edit2, Eye, EyeOff, Trash } from 'lucide-react'
 import Image, { type ImageLoaderProps } from 'next/image'
-import { type ComponentProps, type FC, useState } from 'react'
+import { type ComponentProps, type FC, useMemo, useState } from 'react'
 import { sileo } from 'sileo'
 import { useMutterPublishMutation, useMutterQuery } from '@/hooks/api/mutter'
 import { prettyDateTime } from '@/lib/utils/common/time'
@@ -130,6 +130,7 @@ export const MutterList: FC<
   const { mutate: toggleMutterPublish } = useMutterPublishMutation()
   const [togglingMutterIds, setTogglingMutterIds] = useState<number[]>([])
   const mutters = data?.list ?? []
+  const togglingMutterIdSet = useMemo(() => new Set(togglingMutterIds), [togglingMutterIds])
 
   const handleTogglePublish = (id: number, isPublished: boolean) => {
     setTogglingMutterIds(previousIds =>
@@ -202,7 +203,7 @@ export const MutterList: FC<
                     size="icon-xs"
                     className="cursor-pointer"
                     aria-label={item.isPublished ? 'hide mutter' : 'show mutter'}
-                    disabled={togglingMutterIds.includes(item.id)}
+                    disabled={togglingMutterIdSet.has(item.id)}
                     onClick={() => {
                       handleTogglePublish(item.id, !item.isPublished)
                     }}

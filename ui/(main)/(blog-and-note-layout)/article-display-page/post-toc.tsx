@@ -219,11 +219,13 @@ export const PostToc: FC<{
       ) : null}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <motion.button
+            type="button"
+            aria-label="关闭文章目录"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm dark:bg-black/40"
+            className="fixed inset-0 z-40 cursor-default appearance-none border-0 bg-black/20 p-0 backdrop-blur-sm dark:bg-black/40"
             onClick={() => setIsExpanded(false)}
           />
         )}
@@ -237,18 +239,17 @@ export const PostToc: FC<{
           'shadow-[0_16px_46px_color-mix(in_srgb,var(--theme-400)_34%,transparent)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.58)]',
           'overflow-hidden',
           'max-w-[90vw]',
+          isExpanded ? 'w-[360px]' : 'w-[300px]',
           isExpanded ? 'rounded-2xl' : 'rounded-full',
         )}
-        initial={{ width: 300, y: 100, opacity: 0 }}
+        initial={{ y: 100, opacity: 0 }}
         animate={
           isAnimationComplete
             ? {
-                width: isExpanded ? 360 : 300,
                 y: 0,
                 opacity: 1,
               }
             : {
-                width: 300,
                 y: 100,
                 opacity: 0,
                 transition: { duration: 0 },
@@ -330,34 +331,38 @@ export const PostToc: FC<{
           <AnimatePresence>
             {isExpanded && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
+                initial={{ opacity: 0, gridTemplateRows: '0fr' }}
+                animate={{ opacity: 1, gridTemplateRows: '1fr' }}
+                exit={{ opacity: 0, gridTemplateRows: '0fr' }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                ref={scrollContainerRef}
-                className="relative max-h-[60vh] overflow-y-auto overflow-x-hidden overscroll-contain border-black/5 border-t dark:border-white/5 [&::-webkit-scrollbar-track]:bg-transparent"
+                className="grid border-black/5 border-t dark:border-white/5"
               >
-                <ul className="flex flex-col gap-1 p-2">
-                  {headings.map(heading => (
-                    <li
-                      key={heading.id}
-                      style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}
-                    >
-                      <a
-                        href={`#${heading.id}`}
-                        onClick={e => handleLinkClick(e, heading.id)}
-                        className={cn(
-                          'block truncate rounded-md px-2 py-1.5 text-sm transition-colors',
-                          activeId === heading.id
-                            ? 'bg-black/5 font-medium text-foreground dark:bg-white/10'
-                            : 'text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5',
-                        )}
+                <div
+                  ref={scrollContainerRef}
+                  className="relative max-h-[60vh] min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain [&::-webkit-scrollbar-track]:bg-transparent"
+                >
+                  <ul className="flex flex-col gap-1 p-2">
+                    {headings.map(heading => (
+                      <li
+                        key={heading.id}
+                        style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}
                       >
-                        {heading.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                        <a
+                          href={`#${heading.id}`}
+                          onClick={e => handleLinkClick(e, heading.id)}
+                          className={cn(
+                            'block truncate rounded-md px-2 py-1.5 text-sm transition-colors',
+                            activeId === heading.id
+                              ? 'bg-black/5 font-medium text-foreground dark:bg-white/10'
+                              : 'text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5',
+                          )}
+                        >
+                          {heading.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

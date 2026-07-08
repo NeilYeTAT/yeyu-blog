@@ -39,12 +39,14 @@ export default function Header() {
         createPortal(
           <AnimatePresence>
             {submenu.state.isOpen && (
-              <motion.div
+              <motion.button
+                type="button"
+                aria-label="关闭导航菜单"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 z-10 bg-black/5 backdrop-blur-xs dark:bg-black/20"
+                className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 backdrop-blur-xs dark:bg-black/20"
                 onClick={submenu.close}
               />
             )}

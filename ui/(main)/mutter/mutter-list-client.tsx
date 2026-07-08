@@ -86,6 +86,7 @@ export function MutterListClient({
 
     return nextMutters
   }, [data.pages])
+  const likedMutterIdSet = useMemo(() => new Set(likedMutterIds), [likedMutterIds])
 
   useEffect(() => {
     const element = loadMoreRef.current
@@ -115,7 +116,7 @@ export function MutterListClient({
   }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   const handleLike = async (id: number) => {
-    if (likedMutterIds.includes(id)) {
+    if (likedMutterIdSet.has(id)) {
       return
     }
 
@@ -154,7 +155,7 @@ export function MutterListClient({
         {mutters.map((item, index) => {
           const createdAt = Date.parse(item.createdAt)
           const relativeDate = toRelativeDate(createdAt)
-          const isLiked = likedMutterIds.includes(item.id)
+          const isLiked = likedMutterIdSet.has(item.id)
           const likeCount = likeCounts[item.id] ?? item.likeCount
           const isCommentActive = activeCommentPayload?.mutterId === item.id
 

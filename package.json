@@ -10,7 +10,7 @@
     "ts:check": "tsc --noEmit",
     "lint": "biome check --max-diagnostics=100 .",
     "lint:fix": "biome check --max-diagnostics=100 --write .",
-    "doctor": "react-doctor",
+    "doctor": "npx react-doctor@latest --verbose",
     "postinstall": "prisma generate --config ./prisma/prisma.config.ts",
     "postbuild": "next-sitemap",
     "prepare": "lefthook install",
@@ -87,7 +87,6 @@
     "lint-staged": "^17.0.8",
     "next-sitemap": "^4.2.3",
     "prisma": "^7.8.0",
-    "react-doctor": "^0.5.8",
     "tailwindcss": "^4.3.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
