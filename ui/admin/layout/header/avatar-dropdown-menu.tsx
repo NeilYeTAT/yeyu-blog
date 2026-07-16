@@ -1,6 +1,5 @@
 'use client'
 
-import type * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import type { ComponentProps, FC } from 'react'
 import type { Address } from 'viem'
 import { LogOut } from 'lucide-react'
@@ -23,7 +22,7 @@ import {
 const avatarPlaceholderClassName =
   'inline-flex size-8 shrink-0 overflow-hidden rounded-lg bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.74),transparent_38%),linear-gradient(135deg,#f4f4f5,#a1a1aa)] ring-1 ring-zinc-200/80 dark:bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.18),transparent_38%),linear-gradient(135deg,#27272a,#52525b)] dark:ring-zinc-700/80'
 
-export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenuPrimitive.Root>> = props => {
+export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenu>> = props => {
   const { push } = useRouter()
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false)
   const { data: session, isPending } = useSession()

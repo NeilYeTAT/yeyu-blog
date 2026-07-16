@@ -96,14 +96,17 @@ export const Combobox = React.forwardRef(
 
     return (
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            role="combobox"
-            variant="outline"
-            aria-controls={listId}
-            aria-expanded={open}
-            className="inline-flex size-full justify-between whitespace-normal hover:bg-secondary/20 active:scale-100"
-          >
+        <PopoverTrigger
+          render={
+            <Button
+              role="combobox"
+              variant="outline"
+              aria-controls={listId}
+              aria-expanded={open}
+              className="inline-flex size-full justify-between whitespace-normal hover:bg-secondary/20 active:scale-100"
+            />
+          }
+        >
             <div
               className={cn(
                 'w-full text-left font-normal text-muted-foreground flex flex-row flex-wrap gap-x-2 gap-y-1',
@@ -153,7 +156,6 @@ export const Combobox = React.forwardRef(
                 )}
               />
             </div>
-          </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="p-0">
           <Command shouldFilter={false}>

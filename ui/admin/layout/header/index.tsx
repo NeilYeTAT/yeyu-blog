@@ -35,14 +35,12 @@ export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
           return (
             <div key={route.path} className="relative inline-flex overflow-visible">
               <Button
-                asChild
+                render={<Link href={route.path} prefetch={false} />}
                 className={cn('rounded-lg text-base', shouldShowPendingBadge && 'pr-5')}
                 variant={isActive ? 'default' : 'ghost'}
                 size="sm"
               >
-                <Link href={route.path} prefetch={false}>
-                  {route.pathName}
-                </Link>
+                {route.pathName}
               </Button>
               {shouldShowPendingBadge ? (
                 <span className="pointer-events-none absolute right-0 bottom-0 z-10 inline-flex min-w-5 translate-x-1/3 translate-y-1/3 items-center justify-center rounded-full bg-destructive px-1.5 py-0.5 font-medium text-[10px] text-white leading-none shadow-xs">

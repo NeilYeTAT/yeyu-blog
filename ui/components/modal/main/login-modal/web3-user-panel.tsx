@@ -36,7 +36,7 @@ export const Web3UserPanel = () => {
       <div className="flex w-full flex-col gap-2">
         {isSessionAdmin && (
           <Button
-            asChild
+            render={<Link href="/admin" onClick={closeModal} />}
             className="h-10 w-full cursor-pointer rounded-xl bg-theme-indicator px-4 text-theme-active-text hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35"
             onMouseEnter={() => {
               adminIconRef.current?.startAnimation()
@@ -45,10 +45,8 @@ export const Web3UserPanel = () => {
               adminIconRef.current?.stopAnimation()
             }}
           >
-            <Link href="/admin" onClick={closeModal}>
-              <LayoutGridIcon ref={adminIconRef} className="size-4" size={16} />
-              进入后台
-            </Link>
+            <LayoutGridIcon ref={adminIconRef} className="size-4" size={16} />
+            进入后台
           </Button>
         )}
         <Button
