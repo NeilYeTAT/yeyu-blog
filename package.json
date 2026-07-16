@@ -82,5 +82,6 @@
     "tailwindcss": "^4.3.2",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3"
-  }
+  },
+  "packageManager": "pnpm@9.13.2"
 }
