@@ -142,14 +142,5 @@ export function useVisibilityAnimation({
     [animatePlaybackRate, syncPlayback],
   )
 
-  const setPlaybackRate = useCallback((playbackRate: number) => {
-    if (playbackRateFrameRef.current !== null) {
-      cancelAnimationFrame(playbackRateFrameRef.current)
-      playbackRateFrameRef.current = null
-    }
-    playbackRateRef.current = playbackRate
-    animationRef.current?.updatePlaybackRate(playbackRate)
-  }, [])
-
-  return { pause, play, setPlaybackRate }
+  return { pause, play }
 }

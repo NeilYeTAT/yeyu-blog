@@ -3,6 +3,7 @@
     infinite;
 
   --animate-ye-spin-slowly: spin 24s linear infinite;
+  --animate-ye-spin: spin 4s linear infinite;
 
   @keyframes "ye-keyframes-ping-one-dot-one" {
     75%,
