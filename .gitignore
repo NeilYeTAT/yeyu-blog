@@ -53,3 +53,6 @@ todo/
 
 # * dev seed
 scripts/
+
+# what fuck?
+.pnpm-store

@@ -2,18 +2,19 @@
 
 import { type ReactNode, useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
+import { startupPanelDuration } from '../layout/start-up-motion/constant'
 
 const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)'
-const enterDelay = 0
-const enterStagger = 300
+const enterDuration = startupPanelDuration * 1000
+const enterStagger = 280
 
 export function HomeMotionMain({ children }: { children: ReactNode }) {
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isPanelOpening = useStartupStore(s => s.isPanelOpening)
   const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const main = mainRef.current
-    if (!isAnimationComplete || main === null) return
+    if (!isPanelOpening || main === null) return
 
     const items = Array.from(main.querySelectorAll<HTMLElement>('[data-home-enter]'))
     main.style.opacity = '1'
@@ -29,6 +30,7 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
     const animations = items.map((item, index) => {
       const offset = item.dataset.homeEnter === 'avatar' ? '-50px' : '50px'
       const shouldTranslate = item.dataset.homeEnter !== 'fade'
+      const delay = index * enterStagger
       const animation = item.animate(
         [
           {
@@ -38,8 +40,8 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
           { opacity: 1, transform: 'translateY(0)' },
         ],
         {
-          duration: shouldTranslate ? 700 : 800,
-          delay: enterDelay + index * enterStagger,
+          duration: enterDuration - delay,
+          delay,
           easing: enterEase,
           fill: 'both',
         },
@@ -57,7 +59,7 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
     return () => {
       animations.forEach(animation => animation.cancel())
     }
-  }, [isAnimationComplete])
+  }, [isPanelOpening])
 
   return (
     <main
