@@ -6,7 +6,7 @@ export const inactiveTextShadowClass = '[text-shadow:0_0_0_transparent]'
 
 export const slideVariants = {
   enter: (direction: number) => ({
-    x: direction === 0 ? 0 : direction > 0 ? 20 : -20,
+    x: direction === 0 ? 0 : direction > 0 ? 16 : -16,
     opacity: 0,
   }),
   center: {
@@ -14,7 +14,7 @@ export const slideVariants = {
     opacity: 1,
   },
   exit: (direction: number) => ({
-    x: direction === 0 ? 0 : direction < 0 ? 20 : -20,
+    x: direction === 0 ? 0 : direction < 0 ? 16 : -16,
     opacity: 0,
   }),
 }

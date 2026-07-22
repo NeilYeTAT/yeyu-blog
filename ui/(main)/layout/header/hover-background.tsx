@@ -1,7 +1,9 @@
 import type { FC } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
 export const HoverBackground: FC<{ isVisible: boolean }> = ({ isVisible }) => {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -11,11 +13,14 @@ export const HoverBackground: FC<{ isVisible: boolean }> = ({ isVisible }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{
-            type: 'spring',
-            stiffness: 300,
-            damping: 30,
-          }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : {
+                  layout: { type: 'spring', stiffness: 450, damping: 38 },
+                  opacity: { duration: 0.1 },
+                }
+          }
         />
       )}
     </AnimatePresence>

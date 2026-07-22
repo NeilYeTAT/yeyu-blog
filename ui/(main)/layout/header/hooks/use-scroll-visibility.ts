@@ -1,65 +1,82 @@
 import { useEffect, useRef, useState } from 'react'
 
-const defaultVelocityThreshold = 0.45
-const defaultVelocitySmoothing = 0.25
+const defaultHideDistance = 32
+const defaultShowDistance = 12
 const defaultTopShowOffset = 24
 
 export const useScrollVisibility = (
-  options: { velocityThreshold?: number; velocitySmoothing?: number; topShowOffset?: number } = {},
+  options: { hideDistance?: number; showDistance?: number; topShowOffset?: number } = {},
 ) => {
   const {
-    velocityThreshold = defaultVelocityThreshold,
-    velocitySmoothing = defaultVelocitySmoothing,
+    hideDistance = defaultHideDistance,
+    showDistance = defaultShowDistance,
     topShowOffset = defaultTopShowOffset,
   } = options
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollYRef = useRef(0)
-  const lastTimestampRef = useRef(0)
-  const smoothedVelocityRef = useRef(0)
+  const directionRef = useRef<-1 | 0 | 1>(0)
+  const accumulatedDistanceRef = useRef(0)
+  const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY
-    lastTimestampRef.current = performance.now()
-    smoothedVelocityRef.current = 0
+    directionRef.current = 0
+    accumulatedDistanceRef.current = 0
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      const now = performance.now()
+    const updateVisibility = () => {
+      frameRef.current = null
+
+      const currentScrollY = Math.max(window.scrollY, 0)
       const delta = currentScrollY - lastScrollYRef.current
-      const elapsed = now - lastTimestampRef.current
 
       if (currentScrollY <= topShowOffset) {
         setIsVisible(prev => (prev ? prev : true))
-        smoothedVelocityRef.current = 0
+        directionRef.current = 0
+        accumulatedDistanceRef.current = 0
         lastScrollYRef.current = currentScrollY
-        lastTimestampRef.current = now
         return
       }
 
-      if (elapsed <= 0) {
-        lastScrollYRef.current = currentScrollY
-        lastTimestampRef.current = now
-        return
-      }
-
-      const instantVelocity = delta / elapsed
-      smoothedVelocityRef.current =
-        smoothedVelocityRef.current * (1 - velocitySmoothing) + instantVelocity * velocitySmoothing
-
-      if (Math.abs(smoothedVelocityRef.current) >= velocityThreshold) {
-        const nextVisible = smoothedVelocityRef.current < 0
-        setIsVisible(prev => (prev === nextVisible ? prev : nextVisible))
-      }
+      if (Math.abs(delta) < 1) return
 
       lastScrollYRef.current = currentScrollY
-      lastTimestampRef.current = now
+
+      const direction = delta > 0 ? 1 : -1
+
+      if (directionRef.current !== direction) {
+        directionRef.current = direction
+        accumulatedDistanceRef.current = Math.abs(delta)
+      } else {
+        accumulatedDistanceRef.current += Math.abs(delta)
+      }
+
+      if (direction > 0 && accumulatedDistanceRef.current >= hideDistance) {
+        setIsVisible(prev => (prev ? false : prev))
+        accumulatedDistanceRef.current = 0
+        return
+      }
+
+      if (direction < 0 && accumulatedDistanceRef.current >= showDistance) {
+        setIsVisible(prev => (prev ? prev : true))
+        accumulatedDistanceRef.current = 0
+      }
+    }
+
+    const handleScroll = () => {
+      if (frameRef.current != null) return
+
+      frameRef.current = window.requestAnimationFrame(updateVisibility)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
+
+      if (frameRef.current != null) {
+        window.cancelAnimationFrame(frameRef.current)
+      }
     }
-  }, [topShowOffset, velocitySmoothing, velocityThreshold])
+  }, [hideDistance, showDistance, topShowOffset])
 
   return isVisible
 }

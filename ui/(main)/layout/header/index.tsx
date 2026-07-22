@@ -1,7 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/react'
 import { createPortal } from 'react-dom'
 import { useIsMounted } from '@/hooks/common/use-is-mounted'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -12,36 +11,22 @@ import { isNavGroupRoute, navigationConfig } from './constant'
 import { HeaderRouteItem } from './header-route-item'
 import { HeaderSubmenu } from './header-submenu'
 import { useHeaderActiveRoute } from './hooks/use-header-active-route'
-import { useHeaderIndicator } from './hooks/use-header-indicator'
 import { useHeaderSubmenu } from './hooks/use-header-submenu'
 import { useScrollVisibility } from './hooks/use-scroll-visibility'
 
-const navigationRevealDelay = (startupPanelDuration * 1000) / 5
+const navigationRevealDelay = startupPanelDuration / 5
 
 export default function Header() {
   const isPanelOpening = useStartupStore(s => s.isPanelOpening)
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
-  const [isNavigationVisible, setNavigationVisible] = useState(isAnimationComplete)
   const isHeaderVisible = useScrollVisibility()
+  const shouldReduceMotion = useReducedMotion()
   const mounted = useIsMounted()
   const activeRoute = useHeaderActiveRoute()
   const submenu = useHeaderSubmenu()
-  const indicator = useHeaderIndicator(activeRoute.activeKey)
 
   const shouldShowHeader = isHeaderVisible || submenu.state.isOpen
-  const canInteractWithHeader = isAnimationComplete && isNavigationVisible && shouldShowHeader
-
-  useEffect(() => {
-    if (!isPanelOpening) return
-
-    const navigationRevealTimer = window.setTimeout(() => {
-      setNavigationVisible(true)
-    }, navigationRevealDelay)
-
-    return () => {
-      window.clearTimeout(navigationRevealTimer)
-    }
-  }, [isPanelOpening])
+  const canInteractWithHeader = isAnimationComplete && shouldShowHeader
 
   return (
     <motion.header
@@ -51,10 +36,16 @@ export default function Header() {
       )}
       initial={false}
       animate={{
-        y: shouldShowHeader ? 0 : '-140%',
+        y: shouldShowHeader || shouldReduceMotion ? 0 : '-140%',
         opacity: shouldShowHeader ? 1 : 0,
       }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0.12 }
+          : shouldShowHeader
+            ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
+            : { duration: 0.18, ease: [0.4, 0, 1, 1] }
+      }
     >
       {mounted &&
         createPortal(
@@ -66,7 +57,7 @@ export default function Header() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.14 }}
                 className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 backdrop-blur-xs dark:bg-black/20"
                 onClick={submenu.close}
               />
@@ -79,38 +70,47 @@ export default function Header() {
         className="pointer-events-none absolute top-0 left-1/2 h-full -translate-x-1/2 rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#0000001A] backdrop-blur-sm will-change-[width] dark:border-white/10 dark:bg-black/70"
         initial={false}
         animate={{ width: isPanelOpening ? '100%' : '4rem' }}
-        transition={{ duration: startupPanelDuration, ease: startupEase }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: startupPanelDuration, ease: startupEase }
+        }
       />
       <MaxWidthWrapper
-        aria-hidden={!isNavigationVisible}
-        className={cn(
-          'relative h-full w-full px-2.5 py-1 md:px-3 md:py-2',
-          !isNavigationVisible && 'invisible',
-        )}
+        aria-hidden={!canInteractWithHeader}
+        inert={!canInteractWithHeader}
+        className="relative h-full w-full px-2.5 py-1 md:px-3 md:py-2"
       >
-        <nav className="flex h-full items-center justify-between text-nowrap text-sm md:text-xl dark:text-neutral-400">
-          {navigationConfig.map(route => (
-            <HeaderRouteItem
-              key={isNavGroupRoute(route) ? route.group.key : route.path}
-              activeRoute={activeRoute}
-              indicator={indicator}
-              route={route}
-              submenu={submenu}
-            />
-          ))}
+        <motion.nav
+          className="flex h-full items-center justify-between text-nowrap text-sm md:text-xl dark:text-neutral-400"
+          initial={false}
+          animate={{
+            opacity: isPanelOpening ? 1 : 0,
+            y: isPanelOpening || shouldReduceMotion ? 0 : 4,
+          }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : {
+                  duration: 0.22,
+                  delay: isPanelOpening ? navigationRevealDelay : 0,
+                  ease: [0.22, 1, 0.36, 1],
+                }
+          }
+        >
+          <LayoutGroup id="header-navigation">
+            {navigationConfig.map(route => (
+              <HeaderRouteItem
+                key={isNavGroupRoute(route) ? route.group.key : route.path}
+                activeRoute={activeRoute}
+                route={route}
+                submenu={submenu}
+              />
+            ))}
 
-          <motion.div
-            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-theme-indicator shadow-md dark:bg-white"
-            animate={indicator.style}
-            transition={{
-              type: 'spring',
-              stiffness: 120,
-              damping: 16,
-            }}
-          />
-
-          <HeaderSubmenu activeRoute={activeRoute} submenu={submenu} />
-        </nav>
+            <HeaderSubmenu activeRoute={activeRoute} submenu={submenu} />
+          </LayoutGroup>
+        </motion.nav>
       </MaxWidthWrapper>
     </motion.header>
   )
