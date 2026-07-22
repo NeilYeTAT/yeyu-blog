@@ -15,6 +15,6 @@ export type GetMutterCommentConfigResponse = {
 export async function getMutterCommentConfig() {
   return await apiRequest<GetMutterCommentConfigResponse>({
     url: 'admin/mutter/config',
-    method: 'GET',
+    method: 'POST',
   })
 }

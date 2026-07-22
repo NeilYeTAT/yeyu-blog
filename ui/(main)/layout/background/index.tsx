@@ -14,7 +14,7 @@ export const Background: FC = () => {
   const { resolvedTheme } = useTransitionTheme()
 
   if (!mounted) {
-    return <div className="pointer-events-none fixed top-0 left-0 -z-20 min-h-screen w-screen" />
+    return <div className="pointer-events-none fixed top-0 left-0 -z-20 min-h-dvh w-screen" />
   }
 
   if (resolvedTheme === 'light') {
@@ -22,7 +22,7 @@ export const Background: FC = () => {
       <>
         <div
           className={cn(
-            'pointer-events-none fixed top-0 left-0 -z-20 min-h-screen w-screen',
+            'pointer-events-none fixed top-0 left-0 -z-20 min-h-dvh w-screen',
             'bg-hero-radial-light opacity-45',
             // * 得考虑一下要不要这个动画了，或者再修改一下？
             'animate-background-light',
@@ -41,7 +41,7 @@ export const Background: FC = () => {
         </svg>
         <div
           className={cn(
-            'pointer-events-none fixed top-0 left-0 -z-10 min-h-screen w-screen',
+            'pointer-events-none fixed top-0 left-0 -z-10 min-h-dvh w-screen',
             'filter-[url(#grain)] opacity-25',
           )}
         />
@@ -54,7 +54,7 @@ export const Background: FC = () => {
       <ArtPlum />
       <div
         className={cn(
-          'pointer-events-none fixed top-0 left-0 -z-10 min-h-screen w-screen',
+          'pointer-events-none fixed top-0 left-0 -z-10 min-h-dvh w-screen',
           'filter-[url(#grain)] opacity-25',
         )}
       />

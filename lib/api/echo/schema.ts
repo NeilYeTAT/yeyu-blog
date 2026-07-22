@@ -18,8 +18,7 @@ export const createEchoSchema = z.object({
   isPublished: z.boolean(),
 })
 
-export const updateEchoSchema = z
-  .object({
-    id: z.number(),
-  })
-  .merge(createEchoSchema)
+export const updateEchoSchema = z.object({
+  id: z.number(),
+  ...createEchoSchema.shape,
+})

@@ -70,7 +70,7 @@ export function TechStackRings({
       <div ref={outerRingRef} className="absolute inset-0">
         {outerItems.map((item, i) => (
           <div
-            key={`outer-${item.key}-${i.toString()}`}
+            key={`outer-${item.key}`}
             onMouseEnter={stopRotation}
             onMouseLeave={startRotation}
             className="absolute left-1/2 z-10 size-12 -translate-x-1/2 transition md:size-24"
@@ -93,7 +93,7 @@ export function TechStackRings({
         <div ref={innerRingRef} className="absolute inset-0">
           {innerItems.map((item, i) => (
             <div
-              key={`inner-${item.key}-${i.toString()}`}
+              key={`inner-${item.key}`}
               onMouseEnter={stopRotation}
               onMouseLeave={startRotation}
               className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 transition md:size-[5rem]"

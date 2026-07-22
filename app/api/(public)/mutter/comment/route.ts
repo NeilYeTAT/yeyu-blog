@@ -142,10 +142,11 @@ export const GET = withResponse(async request => {
 })
 
 export const POST = withResponse(async request => {
-  const user = await requireSignedInUser()
-  const config = await getMutterCommentPolicy()
-
-  const body = await readJsonBody(request)
+  const [user, config, body] = await Promise.all([
+    requireSignedInUser(),
+    getMutterCommentPolicy(),
+    readJsonBody(request),
+  ])
   const parseResult = createMutterCommentSchema.safeParse(body)
 
   if (!parseResult.success) {

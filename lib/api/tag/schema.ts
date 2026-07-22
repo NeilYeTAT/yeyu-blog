@@ -9,11 +9,10 @@ const tagNameSchema = z
 
 export const createTagSchema = z.object({
   tagName: tagNameSchema,
-  tagType: z.nativeEnum(TagType),
+  tagType: z.enum(TagType),
 })
 
-export const updateTagNameSchema = z
-  .object({
-    id: z.number(),
-  })
-  .merge(createTagSchema)
+export const updateTagNameSchema = z.object({
+  id: z.number(),
+  ...createTagSchema.shape,
+})

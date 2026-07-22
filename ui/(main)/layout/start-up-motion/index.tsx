@@ -5,9 +5,11 @@ import { useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
 import { startupEase, startupPanelDelay, startupPanelDuration } from './constant'
 
-const initialWelcomeText = '业余'
-const lineDuration = 1.56
-const welcomeTextChars = initialWelcomeText.split('')
+const lineDuration = 0.96
+const welcomeTextChars = [
+  { id: 'ye', value: '业' },
+  { id: 'yu', value: '余' },
+]
 
 export default function StartUpMotion() {
   const setPanelOpening = useStartupStore(s => s.setPanelOpening)
@@ -55,16 +57,16 @@ export default function StartUpMotion() {
   return (
     <div ref={rootRef}>
       <motion.span
-        className="pointer-events-none fixed top-2/3 left-1/2 z-110 h-screen w-px -translate-x-1/2 bg-white will-change-transform"
+        className="pointer-events-none fixed top-2/3 left-1/2 z-110 h-dvh w-px -translate-x-1/2 bg-white"
         style={{ scaleY }}
       />
       <motion.span
-        className="pointer-events-none fixed bottom-2/3 left-1/2 z-110 h-screen w-px -translate-x-1/2 bg-white will-change-transform"
+        className="pointer-events-none fixed bottom-2/3 left-1/2 z-110 h-dvh w-px -translate-x-1/2 bg-white"
         style={{ scaleY }}
       />
 
       <motion.div
-        className="pointer-events-none fixed top-1/2 left-1/2 z-110 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl text-purple-200 leading-none will-change-[transform,opacity]"
+        className="pointer-events-none fixed top-1/2 left-1/2 z-110 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-5xl text-purple-200 leading-none"
         initial={{ opacity: 0, y: 12, scale: 0.96 }}
         animate={{
           opacity: [0, 1, 1, 0],
@@ -72,35 +74,34 @@ export default function StartUpMotion() {
           scale: [0.96, 1, 1, 0.98],
         }}
         transition={{
-          duration: 1.86,
+          duration: 0.96,
           times: [0, 0.09, 0.66, 1],
           ease: startupEase,
         }}
       >
         {welcomeTextChars.map((char, index) => (
           <motion.span
-            key={`${index.toString()}-${char}`}
-            className="will-change-[transform,opacity]"
+            key={char.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -6] }}
             transition={{
-              duration: 1.68,
+              duration: 0.88,
               times: [0, 0.09, 0.72, 1],
               ease: startupEase,
               delay: index * 0.02,
             }}
           >
-            {char}
+            {char.value}
           </motion.span>
         ))}
       </motion.div>
 
       <motion.span
-        className="pointer-events-none fixed top-0 left-0 z-100 h-dvh w-1/2 bg-linear-to-r from-[#22177A] to-[#000957] will-change-transform [backface-visibility:hidden]"
+        className="pointer-events-none fixed top-0 left-0 z-100 h-dvh w-1/2 bg-linear-to-r from-[#22177A] to-[#000957] [backface-visibility:hidden]"
         style={{ x: toLeft }}
       />
       <motion.span
-        className="pointer-events-none fixed top-0 right-0 z-100 h-dvh w-1/2 bg-linear-to-l from-[#22177A] to-[#000957] will-change-transform [backface-visibility:hidden]"
+        className="pointer-events-none fixed top-0 right-0 z-100 h-dvh w-1/2 bg-linear-to-l from-[#22177A] to-[#000957] [backface-visibility:hidden]"
         style={{ x: toRight }}
       />
     </div>

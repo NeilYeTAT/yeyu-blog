@@ -15,6 +15,6 @@ export type GetCommentConfigResponse = {
 export async function getCommentConfig() {
   return await apiRequest<GetCommentConfigResponse>({
     url: 'admin/comment/config',
-    method: 'GET',
+    method: 'POST',
   })
 }

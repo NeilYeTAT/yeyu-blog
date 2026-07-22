@@ -1,6 +1,6 @@
 'use client'
 
-import type { CSSProperties, MouseEvent } from 'react'
+import type { AnimationEvent, CSSProperties, MouseEvent } from 'react'
 import type { PlaneItem } from '../types'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -51,6 +51,14 @@ const getItemStyle = (item: PlaneItem) => {
   } as CSSProperties
 }
 
+const handleAnimationStart = (event: AnimationEvent<HTMLDivElement>) => {
+  event.currentTarget.style.willChange = 'transform, opacity, filter'
+}
+
+const handleAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
+  event.currentTarget.style.willChange = ''
+}
+
 export function FriendAvatarItem({ item, onClick, setItemRef }: FriendAvatarItemProps) {
   const itemKey = item.id
   const setModalOpen = useModalStore(s => s.setModalOpen)
@@ -59,8 +67,10 @@ export function FriendAvatarItem({ item, onClick, setItemRef }: FriendAvatarItem
     return (
       <div
         ref={element => setItemRef(itemKey, element, item)}
-        className="friend-plane-item group hover:!z-[200] focus-within:!z-[200] absolute will-change-transform [height:var(--friend-tile-size)] [width:var(--friend-tile-size)]"
+        className="friend-plane-item group hover:!z-[200] focus-within:!z-[200] absolute [height:var(--friend-tile-size)] [width:var(--friend-tile-size)]"
         style={getItemStyle(item)}
+        onAnimationStart={handleAnimationStart}
+        onAnimationEnd={handleAnimationEnd}
       >
         <button
           type="button"
@@ -81,8 +91,10 @@ export function FriendAvatarItem({ item, onClick, setItemRef }: FriendAvatarItem
   return (
     <div
       ref={element => setItemRef(itemKey, element, item)}
-      className="friend-plane-item group hover:!z-[200] focus-within:!z-[200] absolute will-change-transform [height:var(--friend-tile-size)] [width:var(--friend-tile-size)]"
+      className="friend-plane-item group hover:!z-[200] focus-within:!z-[200] absolute [height:var(--friend-tile-size)] [width:var(--friend-tile-size)]"
       style={getItemStyle(item)}
+      onAnimationStart={handleAnimationStart}
+      onAnimationEnd={handleAnimationEnd}
     >
       <Link
         href={item.siteUrl}
@@ -90,7 +102,7 @@ export function FriendAvatarItem({ item, onClick, setItemRef }: FriendAvatarItem
         rel="noreferrer"
         aria-label={`${item.name}: ${item.description}`}
         onClick={onClick}
-        className="flex h-full w-full max-w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] cursor-pointer items-center overflow-hidden rounded-full border border-[color:var(--friend-plane-border)] bg-[var(--friend-plane-card)] p-1.5 text-left shadow-[var(--friend-plane-shadow)] backdrop-blur-xl transition-[width,background-color,filter,border-color] duration-[260ms] ease-out hover:w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] hover:border-[color:var(--friend-plane-hover-border)] hover:bg-[var(--friend-plane-card-highlight)] hover:brightness-[1.02] focus-visible:w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] focus-visible:outline-2 focus-visible:outline-theme-ring group-focus-within:w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] group-hover:w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] dark:hover:brightness-[1.03]"
+        className="flex h-full w-[min(calc(var(--friend-tile-size)_+_14rem),78vw)] cursor-pointer items-center overflow-hidden rounded-full border border-[color:var(--friend-plane-border)] bg-[var(--friend-plane-card)] p-1.5 text-left shadow-[var(--friend-plane-shadow)] backdrop-blur-xl transition-[clip-path,background-color,filter,border-color] duration-[260ms] ease-out [clip-path:inset(0_calc(100%_-_var(--friend-tile-size))_0_0_round_9999px)] hover:border-[color:var(--friend-plane-hover-border)] hover:bg-[var(--friend-plane-card-highlight)] hover:brightness-[1.02] focus-visible:outline-2 focus-visible:outline-theme-ring dark:hover:brightness-[1.03] group-focus-within:[clip-path:inset(0_0_0_0_round_9999px)] group-hover:[clip-path:inset(0_0_0_0_round_9999px)]"
       >
         <FriendAvatarImage key={item.avatarUrl} avatarUrl={item.avatarUrl} name={item.name} />
         <span className="w-[min(14rem,calc(78vw_-_var(--friend-tile-size)))] shrink-0 overflow-hidden pr-5 pl-3 opacity-0 transition-[clip-path,opacity] duration-200 ease-out [clip-path:inset(0_100%_0_0)] group-focus-within:opacity-100 group-hover:opacity-100 group-focus-within:[clip-path:inset(0_0_0_0)] group-hover:[clip-path:inset(0_0_0_0)]">

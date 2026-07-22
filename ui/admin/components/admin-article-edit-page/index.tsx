@@ -1,13 +1,13 @@
 'use client'
 
 import type { Blog, Note } from '@prisma/client'
-import type { FC } from 'react'
 import type { ArticleDTO } from './type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TagType } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { File, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useBlogTagsQuery } from '@/hooks/api/tag/use-blog-tags-query'
@@ -24,6 +24,7 @@ import { Input } from '@/ui/shadcn/input'
 import { Switch } from '@/ui/shadcn/switch'
 import MarkdownEditor from './markdown-editor'
 import { ArticleSchema } from './type'
+import { useMarkdownAutoSave } from './use-markdown-auto-save'
 
 // * 策略模式~
 const strategies = {
@@ -129,6 +130,34 @@ export const AdminArticleEditPage: FC<{
     mode: 'onBlur',
   })
   const previewTitle = form.watch('title')
+  const content = form.watch('content')
+  const restoredContent = useMarkdownAutoSave(content)
+
+  const updateTitleFromMarkdown = useCallback(
+    (nextContent: string) => {
+      const markdownTitle = extractMarkdownH1Title(nextContent)
+      if (markdownTitle == null) return
+
+      const currentTitle = form.getValues('title')
+      if (markdownTitle !== currentTitle) {
+        form.setValue('title', markdownTitle, {
+          shouldValidate: true,
+        })
+      }
+    },
+    [form],
+  )
+
+  useEffect(() => {
+    if (restoredContent == null || restoredContent === form.getValues('content')) return
+
+    form.setValue('content', restoredContent, {
+      shouldDirty: true,
+      shouldValidate: true,
+    })
+    updateTitleFromMarkdown(restoredContent)
+    sileo.info({ title: '已恢复未保存内容' })
+  }, [form, restoredContent, updateTitleFromMarkdown])
 
   return (
     <Form {...form}>
@@ -251,16 +280,7 @@ export const AdminArticleEditPage: FC<{
                   value={field.value}
                   onChange={nextContent => {
                     field.onChange(nextContent)
-
-                    const markdownTitle = extractMarkdownH1Title(nextContent)
-                    if (markdownTitle == null) return
-
-                    const currentTitle = form.getValues('title')
-                    if (markdownTitle !== currentTitle) {
-                      form.setValue('title', markdownTitle, {
-                        shouldValidate: true,
-                      })
-                    }
+                    updateTitleFromMarkdown(nextContent)
                   }}
                   previewTitle={previewTitle}
                 />

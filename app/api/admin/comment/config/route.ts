@@ -1,5 +1,5 @@
 import { BadRequestError } from '@/lib/common/errors/request'
-import { noPermission } from '@/lib/core/auth/guard'
+import { isTrustedRequestOrigin, noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
@@ -17,8 +17,8 @@ const isMissingTableError = (error: unknown) =>
   'code' in error &&
   (error as { code?: unknown }).code === 'P2021'
 
-export const GET = withResponse(async () => {
-  if (await noPermission()) {
+export const POST = withResponse(async request => {
+  if (!isTrustedRequestOrigin(request) || (await noPermission())) {
     throw new BadRequestError('Insufficient permissions.')
   }
 

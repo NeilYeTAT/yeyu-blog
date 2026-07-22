@@ -55,13 +55,10 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
 
     const form = event.currentTarget
     const formData = new FormData(form)
-    const payload = friendLinkApplyFields.reduce(
-      (result, field) => ({
-        ...result,
-        [field.name]: String(formData.get(field.name) ?? ''),
-      }),
-      {} as CreateFriendLinkParams,
-    )
+    const payload = friendLinkApplyFields.reduce((result, field) => {
+      result[field.name] = String(formData.get(field.name) ?? '')
+      return result
+    }, {} as CreateFriendLinkParams)
 
     createFriendLink(payload, {
       onSuccess: () => {

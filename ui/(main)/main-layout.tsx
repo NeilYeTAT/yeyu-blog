@@ -10,7 +10,7 @@ import StartUpMotion from './layout/start-up-motion'
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <MainProvider>
-      <main className="flex min-h-screen max-w-screen flex-col justify-between gap-2 md:text-lg dark:text-white">
+      <div className="flex min-h-dvh max-w-screen flex-col justify-between gap-2 md:text-lg dark:text-white">
         <Header />
 
         <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">
@@ -23,7 +23,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <Background />
         <DraggableFloatingMenu />
         <StartUpMotion />
-      </main>
+      </div>
     </MainProvider>
   )
 }

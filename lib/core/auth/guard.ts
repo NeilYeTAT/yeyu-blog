@@ -1,6 +1,7 @@
+import type { NextRequest } from 'next/server'
 import { headers } from 'next/headers'
 import { isAddress } from 'viem'
-import { auth } from '@/auth'
+import { auth, trustedOrigins } from '@/auth'
 import { clientEnv } from '@/config/env/client-env'
 import { BadRequestError } from '@/lib/common/errors/request'
 
@@ -13,6 +14,11 @@ const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',').reduce<string[
 }, [])
 
 const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
+
+export const isTrustedRequestOrigin = (request: NextRequest) => {
+  const origin = request.headers.get('origin')
+  return origin != null && trustedOrigins.includes(origin)
+}
 
 const isAdminWalletAddress = (walletAddress?: string | null) =>
   walletAddress !== null &&

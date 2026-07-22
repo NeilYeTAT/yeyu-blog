@@ -20,7 +20,7 @@ const normalizeOrigin = (value?: string) => {
   }
 }
 
-const trustedOrigins = (() => {
+export const trustedOrigins = (() => {
   const origins = new Set<string>()
 
   const add = (value?: string) => {

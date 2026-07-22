@@ -6,7 +6,7 @@ import { startupPanelDuration } from '../layout/start-up-motion/constant'
 
 const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)'
 const enterDuration = startupPanelDuration * 1000
-const enterStagger = 280
+const enterStagger = 120
 
 export function HomeMotionMain({ children }: { children: ReactNode }) {
   const isPanelOpening = useStartupStore(s => s.isPanelOpening)
@@ -40,7 +40,7 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
           { opacity: 1, transform: 'translateY(0)' },
         ],
         {
-          duration: enterDuration - delay,
+          duration: enterDuration,
           delay,
           easing: enterEase,
           fill: 'both',

@@ -139,9 +139,8 @@ export const useHeaderSubmenu = () => {
   const getRouteItemProps = useCallback(
     (path: string) => ({
       onPointerEnter: (event: PointerEvent<HTMLElement>) => handlePointerEnter(event, path),
-      onPointerLeave: handlePointerLeave,
     }),
-    [handlePointerEnter, handlePointerLeave],
+    [handlePointerEnter],
   )
 
   const getGroupTriggerProps = useCallback(
@@ -154,7 +153,7 @@ export const useHeaderSubmenu = () => {
     [getRouteItemProps, handleGroupClickCapture, handleGroupPointerDown],
   )
 
-  const panelProps = useMemo(
+  const hoverAreaProps = useMemo(
     () => ({
       onPointerEnter: (event: PointerEvent<HTMLElement>) => {
         if (event.pointerType !== 'mouse') return
@@ -171,9 +170,9 @@ export const useHeaderSubmenu = () => {
       close,
       getGroupTriggerProps,
       getRouteItemProps,
-      panelProps,
+      hoverAreaProps,
       state,
     }),
-    [close, getGroupTriggerProps, getRouteItemProps, panelProps, state],
+    [close, getGroupTriggerProps, getRouteItemProps, hoverAreaProps, state],
   )
 }

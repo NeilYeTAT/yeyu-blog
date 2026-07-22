@@ -156,8 +156,6 @@ export const getInjectedWallets = () => {
 
 const getInjectedWalletProvider = () => getInjectedWallets()[0]?.provider
 
-export const hasInjectedWallet = () => getInjectedWallets().length > 0
-
 const getRequiredInjectedWalletProvider = (provider?: InjectedWalletProvider) => {
   const walletProvider = provider ?? getInjectedWalletProvider()
 

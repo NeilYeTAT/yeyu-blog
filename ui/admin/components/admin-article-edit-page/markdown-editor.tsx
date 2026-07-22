@@ -7,7 +7,6 @@ import { simpleProcessor } from '@/lib/core/markdown/simple-processor'
 import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-block-enhancer'
 import { compressImageFiles } from './compress-image-files'
 import { useUploadThing } from './uploadthing'
-import { useMarkdownAutoSave } from './use-markdown-auto-save'
 
 export default function MarkdownEditor({
   value,
@@ -22,7 +21,6 @@ export default function MarkdownEditor({
   const [isCompressing, setIsCompressing] = useState(false)
   const previewId = useId()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  useMarkdownAutoSave({ value, onChange })
 
   const { startUpload, isUploading } = useUploadThing('imageUploader', {
     onClientUploadComplete: res => {

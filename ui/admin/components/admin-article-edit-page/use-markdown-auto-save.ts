@@ -1,6 +1,5 @@
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useRef } from 'react'
-import { sileo } from 'sileo'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 const autoSavePrefix = 'admin-article-markdown-draft-v1'
 const autoSaveDelayMs = 800
@@ -11,16 +10,14 @@ type DraftPayload = {
   updatedAt: number
 }
 
-export function useMarkdownAutoSave({
-  value,
-  onChange,
-}: {
-  value: string
-  onChange: (value: string) => void
-}) {
+export function useMarkdownAutoSave(value: string) {
   const pathname = usePathname()
   const latestValueRef = useRef(value)
   const restoredDraftKeyRef = useRef<string | null>(null)
+  const [restoredDraft, setRestoredDraft] = useState<{
+    content: string
+    storageKey: string
+  } | null>(null)
   const storageKey = `${autoSavePrefix}:${pathname}`
 
   const saveDraft = useCallback(
@@ -62,13 +59,12 @@ export function useMarkdownAutoSave({
       }
 
       if (payload.content !== latestValueRef.current) {
-        onChange(payload.content)
-        sileo.info({ title: '已恢复未保存内容' })
+        setRestoredDraft({ content: payload.content, storageKey })
       }
     } catch {
       localStorage.removeItem(storageKey)
     }
-  }, [onChange, storageKey])
+  }, [storageKey])
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -99,4 +95,6 @@ export function useMarkdownAutoSave({
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [saveDraft])
+
+  return restoredDraft?.storageKey === storageKey ? restoredDraft.content : null
 }

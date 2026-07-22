@@ -40,7 +40,6 @@ export function HeaderSubmenu({
             'border border-[#00000011] dark:border-white/10',
             'shadow-[0px_4px_10px_0px_#0000001A]',
           )}
-          {...submenu.panelProps}
         >
           <AnimatePresence mode="popLayout" custom={motionDirection}>
             <motion.div

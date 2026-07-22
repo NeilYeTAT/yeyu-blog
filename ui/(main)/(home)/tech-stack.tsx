@@ -83,8 +83,14 @@ const innerRingTechStackData = [
   },
 ] satisfies { key: string; component: ReactNode }[]
 
-const outerTechStackData = [...outerRingTechStackData, ...outerRingTechStackData]
-const innerTechStackData = [...innerRingTechStackData, ...innerRingTechStackData]
+const outerTechStackData = [
+  ...outerRingTechStackData.map(item => ({ ...item, key: `${item.key}-first` })),
+  ...outerRingTechStackData.map(item => ({ ...item, key: `${item.key}-second` })),
+]
+const innerTechStackData = [
+  ...innerRingTechStackData.map(item => ({ ...item, key: `${item.key}-first` })),
+  ...innerRingTechStackData.map(item => ({ ...item, key: `${item.key}-second` })),
+]
 const ringBaseCount = Math.max(outerRingTechStackData.length, innerRingTechStackData.length)
 
 function TechStack() {

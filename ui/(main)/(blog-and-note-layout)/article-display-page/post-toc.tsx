@@ -3,7 +3,7 @@
 import type { Heading } from './utils/extract-headings'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
-import { type FC, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { type FC, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useStartupStore } from '@/store/use-startup-store'
@@ -113,7 +113,10 @@ export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
-  const [activeId, setActiveId] = useState<string>('')
+  const [{ activeId, direction }, setActiveHeading] = useState({
+    activeId: '',
+    direction: 1,
+  })
   const [isExpanded, setIsExpanded] = useState(false)
   const portalState = useSyncExternalStore(
     subscribePortalState,
@@ -122,17 +125,27 @@ export const PostToc: FC<{
   )
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const prevActiveIdRef = useRef(activeId)
-  const directionRef = useRef(1)
+  const updateActiveHeading = useCallback(
+    (nextActiveId: string) => {
+      setActiveHeading(current => {
+        if (current.activeId === nextActiveId) return current
 
-  if (activeId !== prevActiveIdRef.current) {
-    const currentIndex = headings.findIndex(h => h.id === activeId)
-    const prevIndex = headings.findIndex(h => h.id === prevActiveIdRef.current)
-    if (prevIndex !== -1 && currentIndex !== -1) {
-      directionRef.current = currentIndex > prevIndex ? 1 : -1
-    }
-    prevActiveIdRef.current = activeId
-  }
+        const nextIndex = headings.findIndex(heading => heading.id === nextActiveId)
+        const currentIndex = headings.findIndex(heading => heading.id === current.activeId)
+        let nextDirection = current.direction
+
+        if (currentIndex !== -1 && nextIndex !== -1) {
+          nextDirection = nextIndex > currentIndex ? 1 : -1
+        }
+
+        return {
+          activeId: nextActiveId,
+          direction: nextDirection,
+        }
+      })
+    },
+    [headings],
+  )
 
   useEffect(() => {
     if (headings.length === 0) return
@@ -141,7 +154,7 @@ export const PostToc: FC<{
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
+            updateActiveHeading(entry.target.id)
           }
         })
       },
@@ -154,7 +167,7 @@ export const PostToc: FC<{
     })
 
     return () => observer.disconnect()
-  }, [headings])
+  }, [headings, updateActiveHeading])
 
   if (headings.length === 0) return null
   if (portalState.container == null) return null
@@ -200,7 +213,7 @@ export const PostToc: FC<{
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.scrollY - headerOffset
 
-      setActiveId(id)
+      updateActiveHeading(id)
       setIsExpanded(false)
 
       requestAnimationFrame(() => {
@@ -299,10 +312,10 @@ export const PostToc: FC<{
                   )}
                 </svg>
               </figure>
-              <AnimatePresence mode="popLayout" initial={false} custom={directionRef.current}>
+              <AnimatePresence mode="popLayout" initial={false} custom={direction}>
                 <motion.span
                   key={activeHeading?.id}
-                  custom={directionRef.current}
+                  custom={direction}
                   variants={variants}
                   initial="enter"
                   animate="center"

@@ -16,12 +16,43 @@ import { useScrollVisibility } from './hooks/use-scroll-visibility'
 
 const navigationRevealDelay = startupPanelDuration / 5
 
+const HeaderBackdropPortal = ({
+  isOpen,
+  onClose,
+  shouldReduceMotion,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  shouldReduceMotion: boolean | null
+}) => {
+  const mounted = useIsMounted()
+
+  if (!mounted) return null
+
+  return createPortal(
+    <AnimatePresence>
+      {isOpen && (
+        <motion.button
+          type="button"
+          aria-label="关闭导航菜单"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.14 }}
+          className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 backdrop-blur-xs dark:bg-black/20"
+          onClick={onClose}
+        />
+      )}
+    </AnimatePresence>,
+    document.body,
+  )
+}
+
 export default function Header() {
   const isPanelOpening = useStartupStore(s => s.isPanelOpening)
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
-  const mounted = useIsMounted()
   const activeRoute = useHeaderActiveRoute()
   const submenu = useHeaderSubmenu()
 
@@ -31,7 +62,7 @@ export default function Header() {
   return (
     <motion.header
       className={cn(
-        'sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center will-change-transform md:h-12 md:w-1/2 lg:w-5/12',
+        'sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center md:h-12 md:w-1/2 lg:w-5/12',
         !canInteractWithHeader && 'pointer-events-none',
       )}
       initial={false}
@@ -47,29 +78,19 @@ export default function Header() {
             : { duration: 0.18, ease: [0.4, 0, 1, 1] }
       }
     >
-      {mounted &&
-        createPortal(
-          <AnimatePresence>
-            {submenu.state.isOpen && (
-              <motion.button
-                type="button"
-                aria-label="关闭导航菜单"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.14 }}
-                className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 backdrop-blur-xs dark:bg-black/20"
-                onClick={submenu.close}
-              />
-            )}
-          </AnimatePresence>,
-          document.body,
-        )}
+      <HeaderBackdropPortal
+        isOpen={submenu.state.isOpen}
+        onClose={submenu.close}
+        shouldReduceMotion={shouldReduceMotion}
+      />
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-1/2 h-full -translate-x-1/2 rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#0000001A] backdrop-blur-sm will-change-[width] dark:border-white/10 dark:bg-black/70"
+        layout="size"
+        className={cn(
+          'pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto h-full rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#0000001A] backdrop-blur-sm dark:border-white/10 dark:bg-black/70',
+          isPanelOpening ? 'w-full' : 'w-16',
+        )}
         initial={false}
-        animate={{ width: isPanelOpening ? '100%' : '4rem' }}
         transition={
           shouldReduceMotion
             ? { duration: 0 }
@@ -97,6 +118,7 @@ export default function Header() {
                   ease: [0.22, 1, 0.36, 1],
                 }
           }
+          {...submenu.hoverAreaProps}
         >
           <LayoutGroup id="header-navigation">
             {navigationConfig.map(route => (
