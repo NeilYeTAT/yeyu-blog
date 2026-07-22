@@ -3,15 +3,14 @@
 import { animate, motion, useMotionValue } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
+import { startupEase, startupPanelDelay, startupPanelDuration } from './constant'
 
 const initialWelcomeText = '业余'
-const smoothEase: [number, number, number, number] = [0.76, 0, 0.24, 1]
 const lineDuration = 1.56
-const panelDelay = 1.28
-const panelDuration = 0.68
 const welcomeTextChars = initialWelcomeText.split('')
 
 export default function StartUpMotion() {
+  const setPanelOpening = useStartupStore(s => s.setPanelOpening)
   const setAnimationComplete = useStartupStore(s => s.setAnimationComplete)
   const rootRef = useRef<HTMLDivElement>(null)
   const scaleY = useMotionValue(0)
@@ -23,31 +22,35 @@ export default function StartUpMotion() {
     const lineAnimation = animate(scaleY, [0, 1, 0.72, 0], {
       duration: lineDuration,
       times: [0, 0.46, 0.64, 1],
-      ease: smoothEase,
+      ease: startupEase,
     })
 
     const leftPanelAnimation = animate(toLeft, '-100%', {
-      duration: panelDuration,
-      ease: smoothEase,
-      delay: panelDelay,
+      duration: startupPanelDuration,
+      ease: startupEase,
+      delay: startupPanelDelay,
     })
 
     const rightPanelAnimation = animate(toRight, '100%', {
-      duration: panelDuration,
-      ease: smoothEase,
-      delay: panelDelay,
+      duration: startupPanelDuration,
+      ease: startupEase,
+      delay: startupPanelDelay,
       onComplete: () => {
         rootRef.current?.setAttribute('hidden', '')
         setAnimationComplete(true)
       },
     })
+    const panelOpeningTimer = window.setTimeout(() => {
+      setPanelOpening(true)
+    }, startupPanelDelay * 1000)
 
     return () => {
+      window.clearTimeout(panelOpeningTimer)
       lineAnimation.stop()
       leftPanelAnimation.stop()
       rightPanelAnimation.stop()
     }
-  }, [scaleY, setAnimationComplete, toLeft, toRight])
+  }, [scaleY, setAnimationComplete, setPanelOpening, toLeft, toRight])
 
   return (
     <div ref={rootRef}>
@@ -71,7 +74,7 @@ export default function StartUpMotion() {
         transition={{
           duration: 1.86,
           times: [0, 0.09, 0.66, 1],
-          ease: smoothEase,
+          ease: startupEase,
         }}
       >
         {welcomeTextChars.map((char, index) => (
@@ -83,7 +86,7 @@ export default function StartUpMotion() {
             transition={{
               duration: 1.68,
               times: [0, 0.09, 0.72, 1],
-              ease: smoothEase,
+              ease: startupEase,
               delay: index * 0.02,
             }}
           >
