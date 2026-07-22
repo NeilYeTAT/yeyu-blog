@@ -9,7 +9,6 @@ const smoothEase: [number, number, number, number] = [0.76, 0, 0.24, 1]
 const lineDuration = 1.56
 const panelDelay = 1.28
 const panelDuration = 0.68
-const contentRevealDelay = 1180
 const welcomeTextChars = initialWelcomeText.split('')
 
 export default function StartUpMotion() {
@@ -39,15 +38,11 @@ export default function StartUpMotion() {
       delay: panelDelay,
       onComplete: () => {
         rootRef.current?.setAttribute('hidden', '')
+        setAnimationComplete(true)
       },
     })
 
-    const contentRevealTimer = window.setTimeout(() => {
-      setAnimationComplete(true)
-    }, contentRevealDelay)
-
     return () => {
-      window.clearTimeout(contentRevealTimer)
       lineAnimation.stop()
       leftPanelAnimation.stop()
       rightPanelAnimation.stop()

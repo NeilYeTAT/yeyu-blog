@@ -1,81 +1,103 @@
 'use client'
 
-import type { ReactNode } from 'react'
-import { motion, type Variants } from 'motion/react'
+import { type ReactNode, useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
-    },
-  },
-}
-
-const avatarVariants: Variants = {
-  hidden: { opacity: 0, y: -50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 100, damping: 20 },
-  },
-}
-
-const bioVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 100, damping: 20 },
-  },
-}
-
-const fadeVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.8, ease: 'easeOut' },
-  },
-}
+const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)'
+const enterDelay = 0
+const enterStagger = 300
 
 export function HomeMotionMain({ children }: { children: ReactNode }) {
   const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const mainRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const main = mainRef.current
+    if (!isAnimationComplete || main === null) return
+
+    const items = Array.from(main.querySelectorAll<HTMLElement>('[data-home-enter]'))
+    main.style.opacity = '1'
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      items.forEach(item => {
+        item.style.opacity = '1'
+        item.style.transform = 'translateY(0)'
+      })
+      return
+    }
+
+    const animations = items.map((item, index) => {
+      const offset = item.dataset.homeEnter === 'avatar' ? '-50px' : '50px'
+      const shouldTranslate = item.dataset.homeEnter !== 'fade'
+      const animation = item.animate(
+        [
+          {
+            opacity: 0,
+            transform: shouldTranslate ? `translateY(${offset})` : 'translateY(0)',
+          },
+          { opacity: 1, transform: 'translateY(0)' },
+        ],
+        {
+          duration: shouldTranslate ? 700 : 800,
+          delay: enterDelay + index * enterStagger,
+          easing: enterEase,
+          fill: 'both',
+        },
+      )
+
+      animation.onfinish = () => {
+        item.style.opacity = '1'
+        item.style.transform = 'translateY(0)'
+        animation.cancel()
+      }
+
+      return animation
+    })
+
+    return () => {
+      animations.forEach(animation => animation.cancel())
+    }
+  }, [isAnimationComplete])
 
   return (
-    <motion.main
+    <main
+      ref={mainRef}
       className="flex w-full flex-col items-center justify-center gap-4 pt-16 pb-4"
-      initial="hidden"
-      animate={isAnimationComplete ? 'visible' : 'hidden'}
-      variants={containerVariants}
+      style={{ opacity: 0 }}
     >
       {children}
-    </motion.main>
+    </main>
   )
 }
 
 export function HomeAvatarMotion({ children }: { children: ReactNode }) {
   return (
-    <motion.div variants={avatarVariants} className="flex w-full justify-center">
+    <div
+      data-home-enter="avatar"
+      className="flex w-full justify-center"
+      style={{ opacity: 0, transform: 'translateY(-50px)' }}
+    >
       {children}
-    </motion.div>
+    </div>
   )
 }
 
 export function HomeBioMotion({ children }: { children: ReactNode }) {
   return (
-    <motion.div variants={bioVariants} className="flex w-full justify-center">
+    <div
+      data-home-enter="bio"
+      className="flex w-full justify-center"
+      style={{ opacity: 0, transform: 'translateY(50px)' }}
+    >
       {children}
-    </motion.div>
+    </div>
   )
 }
 
 export function HomeFadeMotion({ children }: { children: ReactNode }) {
   return (
-    <motion.div variants={fadeVariants} className="flex w-full justify-center">
+    <div data-home-enter="fade" className="flex w-full justify-center" style={{ opacity: 0 }}>
       {children}
-    </motion.div>
+    </div>
   )
 }

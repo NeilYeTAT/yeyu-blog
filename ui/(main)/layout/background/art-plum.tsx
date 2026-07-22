@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useStartupStore } from '@/store/use-startup-store'
 
 const r180 = Math.PI
 const r90 = Math.PI / 2
@@ -11,6 +12,7 @@ const color = '#88888825'
 const { random } = Math
 
 export const ArtPlum = () => {
+  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stepsRef = useRef<Array<() => void>>([])
   const prevStepsRef = useRef<Array<() => void>>([])
@@ -18,33 +20,21 @@ export const ArtPlum = () => {
   const stopped = useRef(false)
 
   useEffect(() => {
+    if (!isAnimationComplete) return
+
     const canvas = canvasRef.current
     if (canvas == null) return
     let requestId: number | undefined
 
     const size = { width: window.innerWidth, height: window.innerHeight }
 
-    const initCanvas = (canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) => {
+    const initCanvas = (canvas: HTMLCanvasElement, width = 400, height = 400) => {
       const ctx = canvas.getContext('2d')!
-      const dpr = window.devicePixelRatio ?? 1
-
-      const bsr =
-        // @ts-expect-error don't worry
-        ctx?.webkitBackingStorePixelRatio ??
-        // @ts-expect-error don't worry
-        ctx?.mozBackingStorePixelRatio ??
-        // @ts-expect-error don't worry
-        ctx?.msBackingStorePixelRatio ??
-        // @ts-expect-error don't worry
-        ctx?.oBackingStorePixelRatio ??
-        // @ts-expect-error don't worry
-        ctx?.backingStorePixelRatio ??
-        1
-      const dpi = _dpi ?? dpr / bsr
+      const dpi = Math.min(window.devicePixelRatio, 1.5)
 
       canvas.style.cssText = `width: ${width}px; height: ${height}px;`
-      canvas.width = dpi * width
-      canvas.height = dpi * height
+      canvas.width = Math.round(dpi * width)
+      canvas.height = Math.round(dpi * height)
       ctx.scale(dpi, dpi)
 
       return { ctx }
@@ -87,7 +77,7 @@ export const ArtPlum = () => {
     }
 
     let lastTime = performance.now()
-    const interval = 1000 / 40 // 50fps
+    const interval = 1000 / 40
 
     const frame = () => {
       if (performance.now() - lastTime < interval) {
@@ -137,7 +127,7 @@ export const ArtPlum = () => {
     return () => {
       if (requestId !== undefined) cancelAnimationFrame(requestId)
     }
-  }, [])
+  }, [isAnimationComplete])
 
   const mask = 'radial-gradient(circle, transparent, black)'
 
