@@ -6,7 +6,7 @@ import type { CarouselApi } from '@/ui/shadcn/carousel'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
-import { NoteTagItemToggle } from '@/ui/admin/components/tag-item-toggle'
+import { NoteTagItemToggle } from '@/ui/admin/components/tag-item-toggle/note-tag-item-toggle'
 import { Carousel, CarouselContent, CarouselItem } from '@/ui/shadcn/carousel'
 
 export function NoteTagsContainer({

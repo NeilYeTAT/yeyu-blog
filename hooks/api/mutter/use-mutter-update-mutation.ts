@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateMutter } from '@/lib/api/mutter'
+import { updateMutter } from '@/lib/api/mutter/update-mutter'
 
 export type UpdateMutterMutationParams = {
   id: number

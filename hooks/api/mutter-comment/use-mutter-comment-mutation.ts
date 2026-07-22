@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { createMutterComment } from '@/lib/api/mutter-comment'
+import { createMutterComment } from '@/lib/api/mutter-comment/create-mutter-comment'
 
 export function useMutterCommentMutation() {
   const queryClient = useQueryClient()

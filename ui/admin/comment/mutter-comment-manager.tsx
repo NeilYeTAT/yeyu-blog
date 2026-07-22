@@ -1,16 +1,17 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import type { AdminMutterCommentRecord, MutterCommentState } from '@/lib/api/mutter-comment'
+import type {
+  AdminMutterCommentRecord,
+  MutterCommentState,
+} from '@/lib/api/mutter-comment/get-admin-mutter-comments'
 import { Check, RefreshCcw, Search, Trash2, X } from 'lucide-react'
 import { useMemo, useReducer } from 'react'
 import { sileo } from 'sileo'
-import {
-  useAdminMutterCommentDeleteMutation,
-  useAdminMutterCommentQuery,
-  useAdminMutterCommentRestoreMutation,
-  useAdminMutterCommentStateMutation,
-} from '@/hooks/api/mutter-comment'
+import { useAdminMutterCommentDeleteMutation } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-delete-mutation'
+import { useAdminMutterCommentQuery } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-query'
+import { useAdminMutterCommentRestoreMutation } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-restore-mutation'
+import { useAdminMutterCommentStateMutation } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-state-mutation'
 import { prettyDateTime } from '@/lib/utils/common/time'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 import Loading from '@/ui/components/shared/loading'

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { deleteTag } from '@/lib/api/tag'
+import { deleteTag } from '@/lib/api/tag/delete-tag'
 
 export function useTagDeleteMutation() {
   const queryClient = useQueryClient()

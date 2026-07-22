@@ -2,7 +2,7 @@
 
 import type { CSSProperties, ReactNode } from 'react'
 import { useRef } from 'react'
-import { useVisibilityAnimation } from '@/hooks/animation'
+import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
 import { useStartupStore } from '@/store/use-startup-store'
 
 const outerRotationKeyframes: Keyframe[] = [

@@ -3,11 +3,10 @@
 import type { ComponentProps, FC } from 'react'
 import { useEffect, useState } from 'react'
 import { sileo } from 'sileo'
-import { useCommentConfigMutation, useCommentConfigQuery } from '@/hooks/api/comment'
-import {
-  useMutterCommentConfigMutation,
-  useMutterCommentConfigQuery,
-} from '@/hooks/api/mutter-comment'
+import { useCommentConfigMutation } from '@/hooks/api/comment/use-comment-config-mutation'
+import { useCommentConfigQuery } from '@/hooks/api/comment/use-comment-config-query'
+import { useMutterCommentConfigMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-config-mutation'
+import { useMutterCommentConfigQuery } from '@/hooks/api/mutter-comment/use-mutter-comment-config-query'
 import Loading from '@/ui/components/shared/loading'
 import { Switch } from '@/ui/shadcn/switch'
 

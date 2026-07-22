@@ -1,5 +1,5 @@
 import { sileo } from 'sileo'
-import { useEchoDeleteMutation } from '@/hooks/api/echo'
+import { useEchoDeleteMutation } from '@/hooks/api/echo/use-echo-delete-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 

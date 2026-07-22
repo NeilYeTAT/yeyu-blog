@@ -1,9 +1,9 @@
 'use client'
 
 import type { ComponentProps, FC, SyntheticEvent } from 'react'
-import type { CreateFriendLinkParams } from '@/lib/api/friend-link'
+import type { CreateFriendLinkParams } from '@/lib/api/friend-link/create-friend-link'
 import { useEffect, useRef, useState } from 'react'
-import { useFriendLinkMutation } from '@/hooks/api/friend-link'
+import { useFriendLinkMutation } from '@/hooks/api/friend-link/use-friend-link-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { CheckIcon } from '@/ui/shadcn/check'

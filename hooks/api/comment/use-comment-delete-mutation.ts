@@ -1,8 +1,8 @@
-import type { CommentTargetType } from '@/lib/api/comment'
+import type { CommentTargetType } from '@/lib/api/comment/type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { adminPendingCountQueryKey } from '@/hooks/api/admin'
-import { deleteOwnComment } from '@/lib/api/comment'
+import { adminPendingCountQueryKey } from '@/hooks/api/admin/use-admin-pending-count-query'
+import { deleteOwnComment } from '@/lib/api/comment/delete-own-comment'
 
 export function useCommentDeleteMutation() {
   const queryClient = useQueryClient()

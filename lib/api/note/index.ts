@@ -1,5 +1,0 @@
-export * from './create-note'
-export * from './delete-note'
-export * from './get-notes'
-export * from './type'
-export * from './update-note'

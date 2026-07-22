@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getNoteTags } from '@/lib/api/tag'
+import { getNoteTags } from '@/lib/api/tag/get-note-tags'
 
 export type UseNoteTagsQueryParams = {
   enabled?: boolean

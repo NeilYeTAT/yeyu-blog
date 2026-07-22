@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import {
   type GetPublicMutterCommentsParams,
   getPublicMutterComments,
-} from '@/lib/api/mutter-comment'
+} from '@/lib/api/mutter-comment/get-public-mutter-comments'
 
 export type UsePublicMutterCommentQueryParams = GetPublicMutterCommentsParams & {
   enabled?: boolean

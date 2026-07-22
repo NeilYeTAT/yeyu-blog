@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { adminPendingCountQueryKey } from '@/hooks/api/admin'
-import { deleteFriendLink } from '@/lib/api/friend-link'
+import { adminPendingCountQueryKey } from '@/hooks/api/admin/use-admin-pending-count-query'
+import { deleteFriendLink } from '@/lib/api/friend-link/delete-friend-link'
 
 export function useAdminFriendLinkDeleteMutation() {
   const queryClient = useQueryClient()

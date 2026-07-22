@@ -1,4 +1,5 @@
-import type { AdminFriendLinkRecord, FriendLinkState } from '@/lib/api/friend-link'
+import type { AdminFriendLinkRecord } from '@/lib/api/friend-link/get-admin-friend-links'
+import type { FriendLinkState } from '@/lib/api/friend-link/type'
 
 export type FriendLinkStateFilter = 'all' | FriendLinkState
 

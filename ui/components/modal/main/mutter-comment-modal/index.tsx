@@ -1,14 +1,12 @@
 'use client'
 
-import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment'
+import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment/get-public-mutter-comments'
 import { MessageCircle } from 'lucide-react'
 import { type ComponentProps, type FC, startTransition, useMemo, useState } from 'react'
 import { type Address, isAddress } from 'viem'
-import {
-  useMutterCommentDeleteMutation,
-  useMutterCommentMutation,
-  usePublicMutterCommentQuery,
-} from '@/hooks/api/mutter-comment'
+import { useMutterCommentDeleteMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-delete-mutation'
+import { useMutterCommentMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-mutation'
+import { usePublicMutterCommentQuery } from '@/hooks/api/mutter-comment/use-public-mutter-comment-query'
 import { useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalStore } from '@/store/use-modal-store'

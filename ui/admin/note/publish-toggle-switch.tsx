@@ -1,5 +1,5 @@
 import { sileo } from 'sileo'
-import { useNotePublishMutation } from '@/hooks/api/note'
+import { useNotePublishMutation } from '@/hooks/api/note/use-note-publish-mutation'
 import { Switch } from '@/ui/shadcn/switch'
 
 export default function PublishToggleSwitch({

@@ -1,7 +1,7 @@
 import { TagType } from '@prisma/client'
 import { sileo } from 'sileo'
-import { useBlogDeleteMutation } from '@/hooks/api/blog'
-import { useNoteDeleteMutation } from '@/hooks/api/note'
+import { useBlogDeleteMutation } from '@/hooks/api/blog/use-blog-delete-mutation'
+import { useNoteDeleteMutation } from '@/hooks/api/note/use-note-delete-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 

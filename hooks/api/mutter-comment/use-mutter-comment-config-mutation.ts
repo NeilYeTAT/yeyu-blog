@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateMutterCommentConfig } from '@/lib/api/mutter-comment'
+import { updateMutterCommentConfig } from '@/lib/api/mutter-comment/update-mutter-comment-config'
 
 export function useMutterCommentConfigMutation() {
   const queryClient = useQueryClient()

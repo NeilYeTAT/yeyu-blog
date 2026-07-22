@@ -6,7 +6,7 @@ import {
   parseInjectedWalletChainId,
   requestInjectedWalletAccounts,
   signInjectedWalletMessage,
-} from '@/lib/core/web3'
+} from '@/lib/core/web3/injected-wallet'
 import { useInjectedWalletDiscovery } from './use-injected-wallet-discovery'
 
 export const useInjectedWallet = () => {

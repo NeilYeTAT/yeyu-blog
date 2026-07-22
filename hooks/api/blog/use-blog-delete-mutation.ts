@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteBlog } from '@/lib/api/blog'
+import { deleteBlog } from '@/lib/api/blog/delete-blog'
 
 export function useBlogDeleteMutation() {
   const queryClient = useQueryClient()

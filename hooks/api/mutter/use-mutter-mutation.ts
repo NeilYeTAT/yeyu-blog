@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createMutter } from '@/lib/api/mutter'
+import { createMutter } from '@/lib/api/mutter/create-mutter'
 
 export function useMutterMutation() {
   const queryClient = useQueryClient()

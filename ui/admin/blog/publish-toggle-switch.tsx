@@ -1,5 +1,5 @@
 import { sileo } from 'sileo'
-import { useBlogPublishMutation } from '@/hooks/api/blog'
+import { useBlogPublishMutation } from '@/hooks/api/blog/use-blog-publish-mutation'
 import { Switch } from '@/ui/shadcn/switch'
 
 export default function PublishToggleSwitch({

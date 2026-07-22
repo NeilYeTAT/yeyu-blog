@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { deleteMutter } from '@/lib/api/mutter'
+import { deleteMutter } from '@/lib/api/mutter/delete-mutter'
 
 export type DeleteMutterMutationParams = {
   id: number

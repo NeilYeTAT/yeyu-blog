@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { type GetPublicCommentsParams, getPublicComments } from '@/lib/api/comment'
+import {
+  type GetPublicCommentsParams,
+  getPublicComments,
+} from '@/lib/api/comment/get-public-comments'
 
 export type UsePublicCommentQueryParams = GetPublicCommentsParams & {
   enabled?: boolean

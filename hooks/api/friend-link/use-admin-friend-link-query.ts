@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { type GetAdminFriendLinksParams, getAdminFriendLinks } from '@/lib/api/friend-link'
+import {
+  type GetAdminFriendLinksParams,
+  getAdminFriendLinks,
+} from '@/lib/api/friend-link/get-admin-friend-links'
 
 export function useAdminFriendLinkQuery(params: GetAdminFriendLinksParams) {
   const { q, state, take = 20, skip = 0 } = params

@@ -2,7 +2,7 @@
 
 import type { ComponentProps, FC, SetStateAction } from 'react'
 import { useState } from 'react'
-import { useEchoQuery } from '@/hooks/api/echo'
+import { useEchoQuery } from '@/hooks/api/echo/use-echo-query'
 import Loading from '@/ui/components/shared/loading'
 import { DataTable } from '../components/table/data-table'
 import EchoSearch from './echo-search'

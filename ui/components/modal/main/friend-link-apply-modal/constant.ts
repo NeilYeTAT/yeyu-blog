@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import type { CreateFriendLinkParams } from '@/lib/api/friend-link'
+import type { CreateFriendLinkParams } from '@/lib/api/friend-link/create-friend-link'
 
 export const friendLinkApplyFields = [
   {

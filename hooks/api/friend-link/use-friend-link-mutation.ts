@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { createFriendLink } from '@/lib/api/friend-link'
+import { createFriendLink } from '@/lib/api/friend-link/create-friend-link'
 
 export function useFriendLinkMutation() {
   const queryClient = useQueryClient()

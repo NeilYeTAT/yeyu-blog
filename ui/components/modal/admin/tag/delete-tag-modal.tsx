@@ -1,6 +1,6 @@
-import type { DeleteTagDTO } from '@/lib/api/tag'
+import type { DeleteTagDTO } from '@/lib/api/tag/type'
 import { sileo } from 'sileo'
-import { useTagDeleteMutation } from '@/hooks/api/tag'
+import { useTagDeleteMutation } from '@/hooks/api/tag/use-tag-delete-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 

@@ -1,11 +1,11 @@
 'use client'
 
-import type { UpdateEchoDTO } from '@/lib/api/echo'
+import type { UpdateEchoDTO } from '@/lib/api/echo/type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
-import { useEchoUpdateMutation } from '@/hooks/api/echo'
+import { useEchoUpdateMutation } from '@/hooks/api/echo/use-echo-update-mutation'
 import { updateEchoSchema } from '@/lib/api/echo/schema'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'

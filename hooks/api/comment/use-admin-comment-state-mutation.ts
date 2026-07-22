@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { adminPendingCountQueryKey } from '@/hooks/api/admin'
-import { updateComment } from '@/lib/api/comment'
+import { adminPendingCountQueryKey } from '@/hooks/api/admin/use-admin-pending-count-query'
+import { updateComment } from '@/lib/api/comment/update-comment'
 
 export function useAdminCommentStateMutation() {
   const queryClient = useQueryClient()

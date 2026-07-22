@@ -1,5 +1,6 @@
+import type { BlogListItem } from '@/lib/api/blog/type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { type BlogListItem, type GetBlogsParams, getBlogs } from '@/lib/api/blog'
+import { type GetBlogsParams, getBlogs } from '@/lib/api/blog/get-blogs'
 import { getCachedPaginatedQueryData } from '../get-cached-paginated-query-data'
 
 export type UseBlogQueryParams = GetBlogsParams

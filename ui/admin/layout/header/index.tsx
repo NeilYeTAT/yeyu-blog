@@ -3,7 +3,7 @@
 import type { ComponentProps, FC } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAdminPendingCountQuery } from '@/hooks/api/admin'
+import { useAdminPendingCountQuery } from '@/hooks/api/admin/use-admin-pending-count-query'
 import { formatPendingCount } from '@/lib/utils/common/format-pending-count'
 import { cn } from '@/lib/utils/common/shadcn'
 import { Button } from '@/ui/shadcn/button'

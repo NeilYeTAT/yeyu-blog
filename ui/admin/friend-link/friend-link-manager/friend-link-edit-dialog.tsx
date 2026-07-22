@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from 'react'
-import type { AdminFriendLinkRecord } from '@/lib/api/friend-link'
+import type { AdminFriendLinkRecord } from '@/lib/api/friend-link/get-admin-friend-links'
 import type { FriendLinkEditForm } from './types'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'

@@ -1,16 +1,15 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import type { AdminCommentRecord, CommentState } from '@/lib/api/comment'
+import type { AdminCommentRecord } from '@/lib/api/comment/get-admin-comments'
+import type { CommentState } from '@/lib/api/comment/type'
 import type { CommentStateFilter, CommentTargetTypeFilter } from './comment-manager/types'
 import { useMemo, useReducer } from 'react'
 import { sileo } from 'sileo'
-import {
-  useAdminCommentDeleteMutation,
-  useAdminCommentQuery,
-  useAdminCommentRestoreMutation,
-  useAdminCommentStateMutation,
-} from '@/hooks/api/comment'
+import { useAdminCommentDeleteMutation } from '@/hooks/api/comment/use-admin-comment-delete-mutation'
+import { useAdminCommentQuery } from '@/hooks/api/comment/use-admin-comment-query'
+import { useAdminCommentRestoreMutation } from '@/hooks/api/comment/use-admin-comment-restore-mutation'
+import { useAdminCommentStateMutation } from '@/hooks/api/comment/use-admin-comment-state-mutation'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 import Loading from '@/ui/components/shared/loading'
 import { CommentManagerFilters } from './comment-manager/comment-manager-filters'

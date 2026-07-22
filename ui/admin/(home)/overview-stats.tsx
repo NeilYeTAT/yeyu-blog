@@ -1,6 +1,6 @@
 'use client'
 
-import { useAdminOverviewStatsQuery } from '@/hooks/api/admin'
+import { useAdminOverviewStatsQuery } from '@/hooks/api/admin/use-admin-overview-stats-query'
 
 const overviewStatLabels = ['博客', '笔记', '草稿', '待处理']
 

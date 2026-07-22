@@ -1,6 +1,6 @@
 import 'server-only'
 
-import type { AdminOverviewStats } from '@/lib/api/admin'
+import type { AdminOverviewStats } from '@/lib/api/admin/get-admin-overview-stats'
 import { prisma } from '@/prisma/instance'
 import { getAdminPendingCount } from '../pending-count/get-admin-pending-count'
 

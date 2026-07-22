@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useIsMounted } from '@/hooks/common'
+import { useIsMounted } from '@/hooks/common/use-is-mounted'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useStartupStore } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'

@@ -1,5 +1,6 @@
+import type { WithCountTagDTO } from '@/lib/api/tag/type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { type GetTagsParams, getTags, type WithCountTagDTO } from '@/lib/api/tag'
+import { type GetTagsParams, getTags } from '@/lib/api/tag/get-tags'
 import { getCachedPaginatedQueryData } from '../get-cached-paginated-query-data'
 
 export type UseTagsQueryParams = GetTagsParams

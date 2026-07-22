@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateNote } from '@/lib/api/note'
+import { updateNote } from '@/lib/api/note/update-note'
 
 export type ToggleNotePublishParams = {
   id: number

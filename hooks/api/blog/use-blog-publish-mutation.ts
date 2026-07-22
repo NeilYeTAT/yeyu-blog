@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateBlog } from '@/lib/api/blog'
+import { updateBlog } from '@/lib/api/blog/update-blog'
 
 export type ToggleBlogPublishParams = {
   id: number

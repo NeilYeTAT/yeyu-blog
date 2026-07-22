@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getCommentConfig } from '@/lib/api/comment'
+import { getCommentConfig } from '@/lib/api/comment/get-comment-config'
 
 export function useCommentConfigQuery() {
   return useQuery({

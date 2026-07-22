@@ -2,8 +2,8 @@
 
 import type { ComponentProps, FC, SetStateAction } from 'react'
 import { useState } from 'react'
-import { useNoteQuery } from '@/hooks/api/note'
-import { useNoteTagsQuery } from '@/hooks/api/tag'
+import { useNoteQuery } from '@/hooks/api/note/use-note-query'
+import { useNoteTagsQuery } from '@/hooks/api/tag/use-note-tags-query'
 import Loading from '@/ui/components/shared/loading'
 import { DataTable } from '../components/table/data-table'
 import NoteSearch from './note-search'

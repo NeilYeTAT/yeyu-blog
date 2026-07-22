@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import type { CommentState, CommentTargetType } from '@/lib/api/comment'
+import type { CommentState, CommentTargetType } from '@/lib/api/comment/type'
 import type { Badge } from '@/ui/shadcn/badge'
 import type { CommentStateFilter, CommentTargetTypeFilter } from './types'
 

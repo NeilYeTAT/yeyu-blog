@@ -1,16 +1,15 @@
 'use client'
 
 import type { ComponentProps, FC, SyntheticEvent } from 'react'
-import type { AdminFriendLinkRecord, FriendLinkState } from '@/lib/api/friend-link'
+import type { AdminFriendLinkRecord } from '@/lib/api/friend-link/get-admin-friend-links'
+import type { FriendLinkState } from '@/lib/api/friend-link/type'
 import type { FriendLinkEditForm, FriendLinkStateFilter } from './friend-link-manager/types'
 import { useReducer } from 'react'
 import { sileo } from 'sileo'
-import {
-  useAdminFriendLinkDeleteMutation,
-  useAdminFriendLinkQuery,
-  useAdminFriendLinkStateMutation,
-  useAdminFriendLinkUpdateMutation,
-} from '@/hooks/api/friend-link'
+import { useAdminFriendLinkDeleteMutation } from '@/hooks/api/friend-link/use-admin-friend-link-delete-mutation'
+import { useAdminFriendLinkQuery } from '@/hooks/api/friend-link/use-admin-friend-link-query'
+import { useAdminFriendLinkStateMutation } from '@/hooks/api/friend-link/use-admin-friend-link-state-mutation'
+import { useAdminFriendLinkUpdateMutation } from '@/hooks/api/friend-link/use-admin-friend-link-update-mutation'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 import Loading from '@/ui/components/shared/loading'
 import { initialFriendLinkEditForm } from './friend-link-manager/constants'

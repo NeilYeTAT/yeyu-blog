@@ -1,5 +1,6 @@
 import type { Address } from 'viem'
-import type { CommentParent, PublicCommentRecord } from '@/lib/api/comment'
+import type { PublicCommentRecord } from '@/lib/api/comment/get-public-comments'
+import type { CommentParent } from '@/lib/api/comment/type'
 
 export type CommentTreeNode = PublicCommentRecord & {
   children: CommentTreeNode[]

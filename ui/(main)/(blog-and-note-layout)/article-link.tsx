@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import type { BlogListItem } from '@/lib/api/blog'
-import type { NoteListItem } from '@/lib/api/note'
+import type { BlogListItem } from '@/lib/api/blog/type'
+import type { NoteListItem } from '@/lib/api/note/type'
 import { TagType } from '@prisma/client'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'

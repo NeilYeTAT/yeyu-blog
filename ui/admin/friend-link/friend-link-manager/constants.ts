@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import type { FriendLinkState } from '@/lib/api/friend-link'
+import type { FriendLinkState } from '@/lib/api/friend-link/type'
 import type { Badge } from '@/ui/shadcn/badge'
 import type { FriendLinkEditForm, FriendLinkStateFilter } from './types'
 

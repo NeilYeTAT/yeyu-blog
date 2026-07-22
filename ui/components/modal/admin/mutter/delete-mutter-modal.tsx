@@ -1,7 +1,7 @@
 'use client'
 
 import { sileo } from 'sileo'
-import { useMutterDeleteMutation } from '@/hooks/api/mutter'
+import { useMutterDeleteMutation } from '@/hooks/api/mutter/use-mutter-delete-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 

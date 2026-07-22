@@ -1,7 +1,7 @@
 'use client'
 
 import type { ComponentProps } from 'react'
-import type { CommentTargetType } from '@/lib/api/comment'
+import type { CommentTargetType } from '@/lib/api/comment/type'
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'

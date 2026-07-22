@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getMutterCommentConfig } from '@/lib/api/mutter-comment'
+import { getMutterCommentConfig } from '@/lib/api/mutter-comment/get-mutter-comment-config'
 
 export function useMutterCommentConfigQuery() {
   return useQuery({

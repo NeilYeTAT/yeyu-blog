@@ -1,12 +1,10 @@
-import type { CommentTargetType } from '@/lib/api/comment'
+import type { CommentTargetType } from '@/lib/api/comment/type'
 import type { CommentTreeNode } from './type'
 import { startTransition, useMemo, useState } from 'react'
 import { type Address, isAddress } from 'viem'
-import {
-  useCommentDeleteMutation,
-  useCommentMutation,
-  usePublicCommentQuery,
-} from '@/hooks/api/comment'
+import { useCommentDeleteMutation } from '@/hooks/api/comment/use-comment-delete-mutation'
+import { useCommentMutation } from '@/hooks/api/comment/use-comment-mutation'
+import { usePublicCommentQuery } from '@/hooks/api/comment/use-public-comment-query'
 import { useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalStore } from '@/store/use-modal-store'

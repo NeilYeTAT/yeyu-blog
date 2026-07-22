@@ -5,7 +5,7 @@ import {
   type InjectedWallet,
   providerAnnouncementEventName,
   providerRequestEventName,
-} from '@/lib/core/web3'
+} from '@/lib/core/web3/injected-wallet'
 
 const getWalletTextKey = (value?: string) => value?.trim().toLowerCase()
 

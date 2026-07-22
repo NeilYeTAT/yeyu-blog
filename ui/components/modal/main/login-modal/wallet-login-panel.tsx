@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
-import type { useInjectedWallet } from '@/hooks/web3'
-import type { InjectedWallet, InjectedWalletProvider } from '@/lib/core/web3'
+import type { useInjectedWallet } from '@/hooks/web3/use-injected-wallet'
+import type { InjectedWallet, InjectedWalletProvider } from '@/lib/core/web3/injected-wallet'
 import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
 import { SiweMessage } from 'siwe'

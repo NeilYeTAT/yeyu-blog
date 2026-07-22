@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { likeMutter } from '@/lib/api/mutter'
+import { likeMutter } from '@/lib/api/mutter/like-mutter'
 
 export function useMutterLikeMutation() {
   const queryClient = useQueryClient()

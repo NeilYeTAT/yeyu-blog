@@ -1,8 +1,6 @@
-'use client'
-
-import type { SoundAsset, UseSoundOptions, UseSoundReturn } from '@/lib/core/sound'
+import type { SoundAsset, UseSoundOptions, UseSoundReturn } from '@/lib/core/sound/sound-types'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { decodeAudioData, getAudioContext } from '@/lib/core/sound'
+import { decodeAudioData, getAudioContext } from '@/lib/core/sound/sound-engine'
 
 export function useSound(sound: SoundAsset, options: UseSoundOptions = {}): UseSoundReturn {
   const {

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAdminPendingCount } from '@/lib/api/admin'
+import { getAdminPendingCount } from '@/lib/api/admin/get-admin-pending-count'
 
 export const adminPendingCountQueryKey = ['admin-pending-count'] as const
 

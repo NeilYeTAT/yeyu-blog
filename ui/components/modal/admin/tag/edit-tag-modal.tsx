@@ -1,11 +1,11 @@
 'use client'
 
-import type { UpdateTagNameDTO } from '@/lib/api/tag'
+import type { UpdateTagNameDTO } from '@/lib/api/tag/type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
-import { useTagUpdateMutation } from '@/hooks/api/tag'
+import { useTagUpdateMutation } from '@/hooks/api/tag/use-tag-update-mutation'
 import { updateTagNameSchema } from '@/lib/api/tag/schema'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'

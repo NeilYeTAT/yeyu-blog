@@ -1,5 +1,6 @@
+import type { EchoRecord } from '@/lib/api/echo/type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { type EchoRecord, type GetEchosParams, getEchos } from '@/lib/api/echo'
+import { type GetEchosParams, getEchos } from '@/lib/api/echo/get-echos'
 import { getCachedPaginatedQueryData } from '../get-cached-paginated-query-data'
 
 export type UseEchoQueryParams = GetEchosParams

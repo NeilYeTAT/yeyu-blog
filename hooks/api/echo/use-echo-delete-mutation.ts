@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { deleteEcho } from '@/lib/api/echo'
+import { deleteEcho } from '@/lib/api/echo/delete-echo'
 
 export function useEchoDeleteMutation() {
   const queryClient = useQueryClient()

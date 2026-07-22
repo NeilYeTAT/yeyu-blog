@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { useIndicatorPosition } from '@/hooks/animation'
+import { useIndicatorPosition } from '@/hooks/animation/use-indicator-position'
 
 export const useHeaderIndicator = (activeKey: string) => {
   const refs = useRef(new Map<string, HTMLElement>())

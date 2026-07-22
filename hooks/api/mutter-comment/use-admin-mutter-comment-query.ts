@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { type GetAdminMutterCommentsParams, getAdminMutterComments } from '@/lib/api/mutter-comment'
+import {
+  type GetAdminMutterCommentsParams,
+  getAdminMutterComments,
+} from '@/lib/api/mutter-comment/get-admin-mutter-comments'
 
 export type UseAdminMutterCommentQueryParams = GetAdminMutterCommentsParams
 

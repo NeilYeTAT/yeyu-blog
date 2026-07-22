@@ -1,4 +1,4 @@
-import type { CommentState, CommentTargetType } from '@/lib/api/comment'
+import type { CommentState, CommentTargetType } from '@/lib/api/comment/type'
 
 export type CommentStateFilter = 'all' | 'deleted' | CommentState
 

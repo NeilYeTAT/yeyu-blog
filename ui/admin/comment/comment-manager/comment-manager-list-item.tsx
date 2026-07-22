@@ -1,4 +1,5 @@
-import type { AdminCommentRecord, CommentState } from '@/lib/api/comment'
+import type { AdminCommentRecord } from '@/lib/api/comment/get-admin-comments'
+import type { CommentState } from '@/lib/api/comment/type'
 import { Check, RefreshCcw, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
 import { prettyDateTime } from '@/lib/utils/common/time'

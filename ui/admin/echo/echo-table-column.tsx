@@ -1,7 +1,7 @@
 'use client'
 
 import type { ColumnDef } from '@tanstack/react-table'
-import type { EchoRecord } from '@/lib/api/echo'
+import type { EchoRecord } from '@/lib/api/echo/type'
 import { CalendarDays, Eye, Quote, TypeIcon, Wrench } from 'lucide-react'
 import { prettyDateTime } from '@/lib/utils/common/time'
 import { Button } from '@/ui/shadcn/button'

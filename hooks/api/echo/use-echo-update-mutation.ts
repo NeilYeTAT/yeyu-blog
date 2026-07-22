@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateEcho } from '@/lib/api/echo'
+import { updateEcho } from '@/lib/api/echo/update-echo'
 
 export function useEchoUpdateMutation() {
   const queryClient = useQueryClient()

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAdminOverviewStats } from '@/lib/api/admin'
+import { getAdminOverviewStats } from '@/lib/api/admin/get-admin-overview-stats'
 
 const adminOverviewStatsQueryKey = ['admin-overview-stats'] as const
 

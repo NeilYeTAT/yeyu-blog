@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { type GetAdminCommentsParams, getAdminComments } from '@/lib/api/comment'
+import { type GetAdminCommentsParams, getAdminComments } from '@/lib/api/comment/get-admin-comments'
 
 export function useAdminCommentQuery(params: GetAdminCommentsParams) {
   const { q, targetType, targetId, state, isDeleted, take = 20, skip = 0 } = params

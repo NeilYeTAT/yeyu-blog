@@ -1,6 +1,6 @@
 import { type FC, type SyntheticEvent, useState } from 'react'
 import { sileo } from 'sileo'
-import { useMutterMutation } from '@/hooks/api/mutter'
+import { useMutterMutation } from '@/hooks/api/mutter/use-mutter-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import {
   InputGroup,

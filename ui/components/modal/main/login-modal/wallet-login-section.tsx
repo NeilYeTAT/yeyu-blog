@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { useInjectedWallet } from '@/hooks/web3'
+import { useInjectedWallet } from '@/hooks/web3/use-injected-wallet'
 import { LoginPendingPanel } from './login-pending-panel'
 import { WalletLoginPanel } from './wallet-login-panel'
 

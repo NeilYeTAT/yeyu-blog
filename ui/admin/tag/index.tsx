@@ -2,7 +2,7 @@
 
 import type { ComponentProps, FC, SetStateAction } from 'react'
 import { useState } from 'react'
-import { useTagsQuery } from '@/hooks/api/tag'
+import { useTagsQuery } from '@/hooks/api/tag/use-tags-query'
 import Loading from '@/ui/components/shared/loading'
 import { DataTable } from '../components/table/data-table'
 import TagSearch from './tag-search'

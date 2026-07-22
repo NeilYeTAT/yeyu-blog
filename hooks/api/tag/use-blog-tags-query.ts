@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getBlogTags } from '@/lib/api/tag'
+import { getBlogTags } from '@/lib/api/tag/get-blog-tags'
 
 export type UseBlogTagsQueryParams = {
   enabled?: boolean

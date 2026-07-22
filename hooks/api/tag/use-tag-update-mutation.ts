@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateTag } from '@/lib/api/tag'
+import { updateTag } from '@/lib/api/tag/update-tag'
 
 export function useTagUpdateMutation() {
   const queryClient = useQueryClient()

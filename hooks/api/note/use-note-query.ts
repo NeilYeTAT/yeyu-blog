@@ -1,5 +1,6 @@
+import type { NoteListItem } from '@/lib/api/note/type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { type GetNotesParams, getNotes, type NoteListItem } from '@/lib/api/note'
+import { type GetNotesParams, getNotes } from '@/lib/api/note/get-notes'
 import { getCachedPaginatedQueryData } from '../get-cached-paginated-query-data'
 
 export type UseNoteQueryParams = GetNotesParams

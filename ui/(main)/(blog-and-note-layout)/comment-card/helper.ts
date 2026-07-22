@@ -1,4 +1,4 @@
-import type { PublicCommentRecord } from '@/lib/api/comment'
+import type { PublicCommentRecord } from '@/lib/api/comment/get-public-comments'
 import type { CommentAuthorLike, CommentTreeNode } from './type'
 import { type Address, isAddress } from 'viem'
 

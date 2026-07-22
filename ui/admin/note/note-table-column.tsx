@@ -1,7 +1,7 @@
 'use client'
 
 import type { ColumnDef } from '@tanstack/react-table'
-import type { NoteListItem } from '@/lib/api/note'
+import type { NoteListItem } from '@/lib/api/note/type'
 import { ArrowDown, ArrowUp, CalendarDays, Eye, TagIcon, TypeIcon, Wrench } from 'lucide-react'
 import { prettyDateTime } from '@/lib/utils/common/time'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { adminPendingCountQueryKey } from '@/hooks/api/admin'
-import { deleteOwnMutterComment } from '@/lib/api/mutter-comment'
+import { adminPendingCountQueryKey } from '@/hooks/api/admin/use-admin-pending-count-query'
+import { deleteOwnMutterComment } from '@/lib/api/mutter-comment/delete-own-mutter-comment'
 
 export function useMutterCommentDeleteMutation() {
   const queryClient = useQueryClient()

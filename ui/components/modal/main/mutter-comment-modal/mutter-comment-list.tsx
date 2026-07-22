@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment'
+import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment/get-public-mutter-comments'
 import { Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { siGithub, siGoogle } from 'simple-icons'

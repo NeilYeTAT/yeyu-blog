@@ -1,5 +1,0 @@
-export * from './create-friend-link'
-export * from './delete-friend-link'
-export * from './get-admin-friend-links'
-export * from './type'
-export * from './update-friend-link'

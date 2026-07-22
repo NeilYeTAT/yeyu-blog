@@ -1,7 +1,7 @@
 'use client'
 
 import { sileo } from 'sileo'
-import { useEchoPublishMutation } from '@/hooks/api/echo'
+import { useEchoPublishMutation } from '@/hooks/api/echo/use-echo-publish-mutation'
 import { Switch } from '@/ui/shadcn/switch'
 
 export default function PublishToggleSwitch({

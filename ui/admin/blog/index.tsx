@@ -2,8 +2,8 @@
 
 import type { ComponentProps, FC, SetStateAction } from 'react'
 import { useState } from 'react'
-import { useBlogQuery } from '@/hooks/api/blog'
-import { useBlogTagsQuery } from '@/hooks/api/tag'
+import { useBlogQuery } from '@/hooks/api/blog/use-blog-query'
+import { useBlogTagsQuery } from '@/hooks/api/tag/use-blog-tags-query'
 import Loading from '@/ui/components/shared/loading'
 import { DataTable } from '../components/table/data-table'
 import BlogSearch from './blog-search'

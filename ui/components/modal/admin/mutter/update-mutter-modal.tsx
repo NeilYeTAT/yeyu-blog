@@ -1,7 +1,7 @@
 'use client'
 
 import { sileo } from 'sileo'
-import { useMutterUpdateMutation } from '@/hooks/api/mutter'
+import { useMutterUpdateMutation } from '@/hooks/api/mutter/use-mutter-update-mutation'
 import { useModalStore } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import {
