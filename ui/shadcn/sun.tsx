@@ -98,6 +98,7 @@ const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
               animate={controls}
               custom={index + 1}
               d={d}
+              initial="normal"
               key={d}
               variants={pathVariants}
             />
