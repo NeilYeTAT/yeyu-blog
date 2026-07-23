@@ -1,0 +1,13 @@
+.bg-light-base {
+  background-color: var(--bg-animate-c-0-end);
+  background-image:
+    radial-gradient(circle at 24% 16%, var(--bg-animate-c-0-end) 4%, transparent 67%),
+    radial-gradient(circle at 62% 100%, var(--bg-animate-c-1-end) 4%, transparent 67%),
+    radial-gradient(ellipse at bottom, var(--bg-animate-base-start), var(--bg-animate-base-end));
+}
+
+.bg-light-motion {
+  background-image:
+    radial-gradient(circle at 12% 78%, var(--bg-animate-c-0-start) 3%, transparent 72%),
+    radial-gradient(circle at 88% 28%, var(--bg-animate-c-1-start) 3%, transparent 72%);
+}

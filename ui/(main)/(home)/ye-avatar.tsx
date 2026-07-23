@@ -1,18 +1,47 @@
 'use client'
 
-import type { Point } from '../layout/draggable-floating-menu/constant'
-import { AnimatePresence, motion, useMotionValue, useMotionValueEvent } from 'motion/react'
+import { AnimatePresence, motion, useMotionValue } from 'motion/react'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
-import { typedEntries } from '@/lib/utils/common/typed'
 import { useBackgroundMusicStore } from '@/store/use-background-music-store'
 import { useModalStore } from '@/store/use-modal-store'
 import { type IconsId, icons } from '../layout/draggable-floating-menu/constant'
 import { FloatingMenuActionButton } from '../layout/draggable-floating-menu/floating-menu-action-button'
+
+const dragConstraints = { top: 0, right: 0, bottom: 0, left: 0 }
+const dragTransition = { bounceStiffness: 500, bounceDamping: 15 }
+const tapAnimation = { scale: 0.99, rotate: 1 }
+const proximityThreshold = 100
+const proximityTargets = icons.map(({ id, initial }) => ({
+  id,
+  x: -initial.x * (id === 'lm' ? 85 / 30 : 100 / 30),
+  y: -initial.y * 3,
+}))
+
+function getActiveIcon(currX: number, currY: number) {
+  let closest: IconsId | null = null
+  let minDistanceSquared = Infinity
+
+  for (const target of proximityTargets) {
+    const deltaX = currX - target.x
+    const deltaY = currY - target.y
+    const distanceSquared = deltaX * deltaX + deltaY * deltaY
+
+    if (distanceSquared < minDistanceSquared) {
+      minDistanceSquared = distanceSquared
+      closest = target.id
+    }
+  }
+
+  const currentThreshold = closest === 'lm' ? proximityThreshold + 30 : proximityThreshold
+  return closest !== null && minDistanceSquared < currentThreshold * currentThreshold
+    ? closest
+    : null
+}
 
 export default function YeAvatar() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
@@ -33,41 +62,13 @@ export default function YeAvatar() {
     playClickSoft()
   }
 
-  const checkProximity = (currX: number, currY: number) => {
-    const threshold = 100
+  const handleDrag = () => {
+    const nextActiveIcon = getActiveIcon(x.get(), y.get())
+    if (activeIconRef.current === nextActiveIcon) return
 
-    const points = icons.reduce<Record<(typeof icons)[number]['id'], Point>>(
-      (acc, { id, initial }) => {
-        const xRatio = id === 'lm' ? 85 / 30 : 100 / 30
-        acc[id] = {
-          x: -initial.x * xRatio,
-          y: -initial.y * (30 / 10),
-        }
-        return acc
-      },
-      {} as Record<(typeof icons)[number]['id'], Point>,
-    )
-
-    let closest: IconsId | null = null
-    let minDist = Infinity
-
-    for (const [key, pos] of typedEntries(points)) {
-      const dist = Math.hypot(currX - pos.x, currY - pos.y)
-
-      if (dist < minDist) {
-        minDist = dist
-        closest = key
-      }
-    }
-
-    const currentThreshold = closest === 'lm' ? threshold + 30 : threshold
-    const result = minDist < currentThreshold && closest !== null ? closest : null
-    setActiveIcon(result)
-    activeIconRef.current = result
+    activeIconRef.current = nextActiveIcon
+    setActiveIcon(nextActiveIcon)
   }
-
-  useMotionValueEvent(x, 'change', latest => checkProximity(latest, y.get()))
-  useMotionValueEvent(y, 'change', latest => checkProximity(x.get(), latest))
 
   return (
     <div className="relative">
@@ -112,14 +113,25 @@ export default function YeAvatar() {
       {/* 摸摸头~ */}
       <motion.figure
         // TODO: config color
-        className="relative cursor-grab drop-shadow-2xl active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
-        whileTap={{ scale: 0.99, rotate: 1 }}
+        className="relative cursor-grab drop-shadow-2xl active:cursor-grabbing active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
+        whileTap={tapAnimation}
         drag
-        dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        dragTransition={{ bounceStiffness: 500, bounceDamping: 15 }}
+        dragConstraints={dragConstraints}
+        dragTransition={dragTransition}
         dragElastic={0.25}
-        onPointerDown={() => setIsDragging(true)}
-        onPointerUp={() => setIsDragging(false)}
+        onDrag={handleDrag}
+        onPointerDown={event => {
+          event.currentTarget.style.willChange = 'transform'
+          setIsDragging(true)
+        }}
+        onPointerUp={event => {
+          event.currentTarget.style.willChange = ''
+          setIsDragging(false)
+        }}
+        onPointerCancel={event => {
+          event.currentTarget.style.willChange = ''
+          setIsDragging(false)
+        }}
         onDragEnd={() => {
           const selected = activeIconRef.current
 
@@ -153,6 +165,7 @@ export default function YeAvatar() {
           placeholder="blur"
           preload
           fetchPriority="high"
+          draggable={false}
         />
         <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-400 ring-offset-1 dark:ring-white dark:ring-offset-black" />
       </motion.figure>

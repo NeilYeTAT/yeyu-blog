@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'motion/react'
 import { type ReactNode, useEffect, useRef } from 'react'
 import { useStartupStore } from '@/store/use-startup-store'
 import { startupPanelDuration } from '../layout/start-up-motion/constant'
@@ -30,7 +31,7 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
     const animations = items.map((item, index) => {
       const offset = item.dataset.homeEnter === 'avatar' ? '-50px' : '50px'
       const shouldTranslate = item.dataset.homeEnter !== 'fade'
-      const delay = index * enterStagger
+      const delay = (index + 1) * enterStagger
       const animation = item.animate(
         [
           {
@@ -73,14 +74,17 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
 }
 
 export function HomeAvatarMotion({ children }: { children: ReactNode }) {
+  const isPanelOpening = useStartupStore(s => s.isPanelOpening)
+
   return (
-    <div
-      data-home-enter="avatar"
+    <motion.div
       className="flex w-full justify-center"
-      style={{ opacity: 0, transform: 'translateY(-50px)' }}
+      initial={{ opacity: 0, y: -50 }}
+      animate={isPanelOpening ? { opacity: 1, y: 0 } : { opacity: 0, y: -50 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
 

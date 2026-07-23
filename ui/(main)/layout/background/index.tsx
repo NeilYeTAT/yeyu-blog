@@ -2,12 +2,47 @@
 
 // * thanks https://hypercolor.dev/
 import type { FC } from 'react'
+import { useRef } from 'react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
+import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
 import { useIsMounted } from '@/hooks/common/use-is-mounted'
-import { cn } from '@/lib/utils/common/shadcn'
+import { useStartupStore } from '@/store/use-startup-store'
 // * thanks https://www.mshr.app/mesh/1727202711374
-import '@/lib/styles/background-animate.css'
+import '@/lib/styles/background.css'
 import { ArtPlum } from './art-plum'
+
+const lightBackgroundKeyframes: Keyframe[] = [
+  { transform: 'translate3d(-3%, 3%, 0) scale(1.03)', opacity: 0.72 },
+  { transform: 'translate3d(3%, -3%, 0) scale(1.08)', opacity: 1 },
+  { transform: 'translate3d(4%, 2%, 0) scale(1.05)', opacity: 0.84 },
+  { transform: 'translate3d(-3%, 3%, 0) scale(1.03)', opacity: 0.72 },
+]
+const lightBackgroundAnimationOptions: KeyframeAnimationOptions = {
+  duration: 24000,
+  iterations: Infinity,
+  easing: 'ease-in-out',
+}
+
+function LightBackground() {
+  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const motionLayerRef = useRef<HTMLDivElement>(null)
+  useVisibilityAnimation({
+    targetRef: motionLayerRef,
+    keyframes: lightBackgroundKeyframes,
+    options: lightBackgroundAnimationOptions,
+    enabled: isAnimationComplete,
+    willChange: 'transform',
+  })
+
+  return (
+    <div className="pointer-events-none fixed inset-0 -z-20 min-h-dvh w-screen overflow-hidden bg-light-base opacity-45">
+      <div
+        ref={motionLayerRef}
+        className="absolute -inset-[8%] bg-light-motion [backface-visibility:hidden]"
+      />
+    </div>
+  )
+}
 
 export const Background: FC = () => {
   const mounted = useIsMounted()
@@ -18,46 +53,8 @@ export const Background: FC = () => {
   }
 
   if (resolvedTheme === 'light') {
-    return (
-      <>
-        <div
-          className={cn(
-            'pointer-events-none fixed top-0 left-0 -z-20 min-h-dvh w-screen',
-            'bg-hero-radial-light opacity-45',
-            // * 得考虑一下要不要这个动画了，或者再修改一下？
-            'animate-background-light',
-          )}
-        />
-        <svg className="pointer-events-none fixed -z-10 size-0">
-          <filter id="grain">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.8"
-              numOctaves="4"
-              stitchTiles="stitch"
-            />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-        </svg>
-        <div
-          className={cn(
-            'pointer-events-none fixed top-0 left-0 -z-10 min-h-dvh w-screen',
-            'filter-[url(#grain)] opacity-25',
-          )}
-        />
-      </>
-    )
+    return <LightBackground />
   }
 
-  return (
-    <>
-      <ArtPlum />
-      <div
-        className={cn(
-          'pointer-events-none fixed top-0 left-0 -z-10 min-h-dvh w-screen',
-          'filter-[url(#grain)] opacity-25',
-        )}
-      />
-    </>
-  )
+  return <ArtPlum />
 }

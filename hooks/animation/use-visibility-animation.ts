@@ -5,11 +5,13 @@ export function useVisibilityAnimation({
   keyframes,
   options,
   enabled = true,
+  willChange,
 }: {
   targetRef: RefObject<HTMLElement | null>
   keyframes: Keyframe[]
   options: KeyframeAnimationOptions
   enabled?: boolean
+  willChange?: string
 }) {
   const animationRef = useRef<Animation | null>(null)
   const isIntersectingRef = useRef(false)
@@ -20,7 +22,8 @@ export function useVisibilityAnimation({
 
   const syncPlayback = useCallback(() => {
     const animation = animationRef.current
-    if (animation === null) return
+    const target = targetRef.current
+    if (animation === null || target === null) return
 
     const shouldPlay =
       enabled &&
@@ -29,9 +32,15 @@ export function useVisibilityAnimation({
       !shouldReduceMotionRef.current &&
       document.visibilityState === 'visible'
 
-    if (shouldPlay) animation.play()
-    else animation.pause()
-  }, [enabled])
+    if (shouldPlay) {
+      if (willChange !== undefined) target.style.willChange = willChange
+      animation.play()
+      return
+    }
+
+    animation.pause()
+    if (willChange !== undefined) target.style.willChange = ''
+  }, [enabled, targetRef, willChange])
 
   useEffect(() => {
     const target = targetRef.current
@@ -68,8 +77,9 @@ export function useVisibilityAnimation({
       }
       animation.cancel()
       animationRef.current = null
+      if (willChange !== undefined) target.style.willChange = ''
     }
-  }, [keyframes, options, syncPlayback, targetRef])
+  }, [keyframes, options, syncPlayback, targetRef, willChange])
 
   const animatePlaybackRate = useCallback(
     (nextPlaybackRate: number, duration: number, onComplete?: () => void) => {
