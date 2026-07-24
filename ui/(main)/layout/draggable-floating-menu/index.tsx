@@ -7,9 +7,9 @@ import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useBackgroundMusicStore } from '@/store/use-background-music-store'
-import { useModalStore } from '@/store/use-modal-store'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useBackgroundMusicActions, useIsPlaying } from '@/store/use-background-music-store'
+import { useModalActions } from '@/store/use-modal-store'
+import { useIsAnimationComplete } from '@/store/use-startup-store'
 import { type IconsId, icons } from './constant'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
 
@@ -43,14 +43,13 @@ const flowTimesSecondary = [
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const pathname = usePathname()
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isAnimationComplete = useIsAnimationComplete()
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
-  const isPlaying = useBackgroundMusicStore(s => s.isPlaying)
-  const play = useBackgroundMusicStore(s => s.play)
-  const pause = useBackgroundMusicStore(s => s.pause)
+  const isPlaying = useIsPlaying()
+  const { play, pause } = useBackgroundMusicActions()
 
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)

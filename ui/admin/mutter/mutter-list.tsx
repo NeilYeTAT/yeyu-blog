@@ -7,7 +7,7 @@ import { sileo } from 'sileo'
 import { useMutterPublishMutation } from '@/hooks/api/mutter/use-mutter-publish-mutation'
 import { useMutterQuery } from '@/hooks/api/mutter/use-mutter-query'
 import { prettyDateTime } from '@/lib/utils/common/time'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import Loading from '@/ui/components/shared/loading'
 import { Button } from '@/ui/shadcn/button'
 
@@ -127,7 +127,7 @@ export const MutterList: FC<
   }
 > = ({ query, onEditMutter }) => {
   const { data, isPending } = useMutterQuery({ q: query })
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const { mutate: toggleMutterPublish } = useMutterPublishMutation()
   const [togglingMutterIds, setTogglingMutterIds] = useState<number[]>([])
   const mutters = data?.list ?? []

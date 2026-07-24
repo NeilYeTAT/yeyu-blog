@@ -4,7 +4,7 @@ import type { ComponentProps, FC, SyntheticEvent } from 'react'
 import type { CreateFriendLinkParams } from '@/lib/api/friend-link/create-friend-link'
 import { useEffect, useRef, useState } from 'react'
 import { useFriendLinkMutation } from '@/hooks/api/friend-link/use-friend-link-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { CheckIcon } from '@/ui/shadcn/check'
 import { CopyIcon } from '@/ui/shadcn/copy'
@@ -23,8 +23,8 @@ import { SendIcon, type SendIconHandle } from '@/ui/shadcn/send'
 import { friendLinkApplyFields, friendLinkSiteInfo } from './constant'
 
 export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'friendLinkApplyModal'
   const sendIconRef = useRef<SendIconHandle>(null)
   const copyStatusIconRef = useRef<SendIconHandle>(null)

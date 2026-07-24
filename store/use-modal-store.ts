@@ -16,21 +16,29 @@ export type ModalType =
   | 'friendLinkApplyModal'
   | null
 
-export const useModalStore = create<{
+const useModalStore = create<{
   modalType: ModalType
   payload: unknown
-  setModalOpen: <T = unknown>(modalType: ModalType, payload?: T) => void
-  closeModal: () => void
+  actions: {
+    setModalOpen: <T = unknown>(modalType: ModalType, payload?: T) => void
+    closeModal: () => void
+  }
 }>(set => ({
   modalType: null,
   payload: null,
-  setModalOpen: <T = unknown>(modalType: ModalType, payload: T = {} as T) => {
-    set({
-      modalType,
-      payload,
-    })
-  },
-  closeModal: () => {
-    set({ modalType: null, payload: null })
+  actions: {
+    setModalOpen: <T = unknown>(modalType: ModalType, payload: T = {} as T) => {
+      set({
+        modalType,
+        payload,
+      })
+    },
+    closeModal: () => {
+      set({ modalType: null, payload: null })
+    },
   },
 }))
+
+export const useModalType = () => useModalStore(state => state.modalType)
+export const useModalPayload = () => useModalStore(state => state.payload)
+export const useModalActions = () => useModalStore(state => state.actions)

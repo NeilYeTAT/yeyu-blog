@@ -1,13 +1,13 @@
 import type { NavGroup } from '../types'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { flatNavRoutes, navRouteGroupMap, navRoutePathMap } from '../constant'
 
 export const useHeaderActiveRoute = () => {
   const pathname = usePathname()
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
   const [groupLastActivePaths, setGroupLastActivePaths] = useState<Record<string, string>>({})
 
   useEffect(() => {

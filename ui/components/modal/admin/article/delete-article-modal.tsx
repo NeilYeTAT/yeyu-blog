@@ -2,13 +2,13 @@ import { TagType } from '@prisma/client'
 import { sileo } from 'sileo'
 import { useBlogDeleteMutation } from '@/hooks/api/blog/use-blog-delete-mutation'
 import { useNoteDeleteMutation } from '@/hooks/api/note/use-note-delete-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 
 export default function DeleteArticleModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal } = useModalActions()
 
   const isModalOpen = modalType === 'deleteArticleModal'
   const { id, title, articleType } =

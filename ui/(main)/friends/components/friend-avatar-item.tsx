@@ -4,7 +4,7 @@ import type { AnimationEvent, CSSProperties, MouseEvent } from 'react'
 import type { PlaneItem } from '../types'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { planeHeight, planeWidth } from '../constants'
 import { FriendAvatarImage } from './friend-avatar-image'
 
@@ -61,7 +61,7 @@ const handleAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
 
 export function FriendAvatarItem({ item, onClick, setItemRef }: FriendAvatarItemProps) {
   const itemKey = item.id
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
 
   if (item.type === 'apply') {
     return (

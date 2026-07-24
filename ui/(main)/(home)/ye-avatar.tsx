@@ -7,8 +7,8 @@ import avatar from '@/config/img/avatar.webp'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
-import { useBackgroundMusicStore } from '@/store/use-background-music-store'
-import { useModalStore } from '@/store/use-modal-store'
+import { useBackgroundMusicActions, useIsPlaying } from '@/store/use-background-music-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { type IconsId, icons } from '../layout/draggable-floating-menu/constant'
 import { FloatingMenuActionButton } from '../layout/draggable-floating-menu/floating-menu-action-button'
 
@@ -46,11 +46,10 @@ function getActiveIcon(currX: number, currY: number) {
 export default function YeAvatar() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
-  const isPlaying = useBackgroundMusicStore(s => s.isPlaying)
-  const play = useBackgroundMusicStore(s => s.play)
-  const pause = useBackgroundMusicStore(s => s.pause)
+  const isPlaying = useIsPlaying()
+  const { play, pause } = useBackgroundMusicActions()
 
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isDragging, setIsDragging] = useState(false)
   const [activeIcon, setActiveIcon] = useState<IconsId | null>(null)

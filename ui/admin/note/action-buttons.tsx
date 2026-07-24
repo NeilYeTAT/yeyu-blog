@@ -2,7 +2,7 @@ import { TagType } from '@prisma/client'
 import { Edit2, Eye, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { Button, buttonVariants } from '@/ui/shadcn/button'
 
 export default function ActionButtons({
@@ -14,7 +14,7 @@ export default function ActionButtons({
   slug: string
   title: string
 }) {
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
 
   return (
     <section className="flex items-center gap-1">

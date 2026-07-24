@@ -1,7 +1,7 @@
 import { type FC, type SyntheticEvent, useState } from 'react'
 import { sileo } from 'sileo'
 import { useMutterMutation } from '@/hooks/api/mutter/use-mutter-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import {
   InputGroup,
   InputGroupAddon,
@@ -38,7 +38,7 @@ const MutterFormFields: FC<{
   initialDraft: string
   clearEditingMutter: () => void
 }> = ({ editingMutter, initialDraft, clearEditingMutter }) => {
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const [draft, setDraft] = useState(initialDraft)
   const { mutate: createMutter, isPending: isCreating } = useMutterMutation()
   const trimmedDraft = draft.trim()

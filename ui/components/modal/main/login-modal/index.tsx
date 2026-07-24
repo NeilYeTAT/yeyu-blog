@@ -1,7 +1,7 @@
 'use client'
 
 import { lazy, Suspense } from 'react'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import Loading from '@/ui/components/shared/loading'
 import { Dialog, DialogContent } from '@/ui/shadcn/dialog'
 
@@ -10,8 +10,8 @@ const LoginModalContent = lazy(() =>
 )
 
 export const LoginModal = () => {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
 
   const isModalOpen = modalType === 'loginModal'
 

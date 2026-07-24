@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react'
 import { type ReactNode, useEffect, useRef } from 'react'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useIsPanelOpening } from '@/store/use-startup-store'
 import { startupPanelDuration } from '../layout/start-up-motion/constant'
 
 const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)'
@@ -10,7 +10,7 @@ const enterDuration = startupPanelDuration * 1000
 const enterStagger = 120
 
 export function HomeMotionMain({ children }: { children: ReactNode }) {
-  const isPanelOpening = useStartupStore(s => s.isPanelOpening)
+  const isPanelOpening = useIsPanelOpening()
   const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function HomeMotionMain({ children }: { children: ReactNode }) {
 }
 
 export function HomeAvatarMotion({ children }: { children: ReactNode }) {
-  const isPanelOpening = useStartupStore(s => s.isPanelOpening)
+  const isPanelOpening = useIsPanelOpening()
 
   return (
     <motion.div

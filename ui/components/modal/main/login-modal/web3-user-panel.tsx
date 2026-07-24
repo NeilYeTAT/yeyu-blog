@@ -3,14 +3,14 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { signOut, useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn } from '@/lib/core/auth/utils'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import { Button } from '@/ui/shadcn/button'
 import { LayoutGridIcon, type LayoutGridIconHandle } from '@/ui/shadcn/layout-grid'
 import { LogoutIcon, type LogoutIconHandle } from '@/ui/shadcn/logout'
 
 export const Web3UserPanel = () => {
-  const closeModal = useModalStore(s => s.closeModal)
+  const { closeModal } = useModalActions()
   const adminIconRef = useRef<LayoutGridIconHandle>(null)
   const logoutIconRef = useRef<LogoutIconHandle>(null)
   const { data: session, refetch: refetchSession } = useSession()

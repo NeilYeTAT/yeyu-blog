@@ -2,7 +2,7 @@
 
 import { sileo } from 'sileo'
 import { useMutterDeleteMutation } from '@/hooks/api/mutter/use-mutter-delete-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 
 type DeleteMutterPayload = {
@@ -11,9 +11,9 @@ type DeleteMutterPayload = {
 }
 
 export default function DeleteMutterModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'deleteMutterModal'
   const values = payload != null ? (payload as DeleteMutterPayload) : null
   const { mutate: deleteMutterById, isPending } = useMutterDeleteMutation()

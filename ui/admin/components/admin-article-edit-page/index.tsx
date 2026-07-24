@@ -16,7 +16,7 @@ import { createBlog } from '@/lib/api/blog/create-blog'
 import { updateBlog } from '@/lib/api/blog/update-blog'
 import { createNote } from '@/lib/api/note/create-note'
 import { updateNote } from '@/lib/api/note/update-note'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Combobox } from '@/ui/shadcn/combobox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
@@ -82,7 +82,7 @@ export const AdminArticleEditPage: FC<{
   type: TagType
 }> = ({ article, relatedArticleTagNames, type }) => {
   const { push } = useRouter()
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const strategy = strategies[type]
   const { data: blogTags } = useBlogTagsQuery({
     enabled: type === TagType.BLOG,

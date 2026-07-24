@@ -3,7 +3,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { useRef } from 'react'
 import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useIsAnimationComplete } from '@/store/use-startup-store'
 
 const outerRotationKeyframes: Keyframe[] = [
   { transform: 'rotate(0deg)' },
@@ -28,7 +28,7 @@ export function TechStackRings({
   innerItems: { key: string; component: ReactNode }[]
   ringBaseCount: number
 }) {
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isAnimationComplete = useIsAnimationComplete()
   const outerRingRef = useRef<HTMLDivElement>(null)
   const innerRingRef = useRef<HTMLDivElement>(null)
   const outerAnimation = useVisibilityAnimation({

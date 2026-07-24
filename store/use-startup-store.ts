@@ -1,13 +1,21 @@
 import { create } from 'zustand'
 
-export const useStartupStore = create<{
+const useStartupStore = create<{
   isPanelOpening: boolean
   isAnimationComplete: boolean
-  setPanelOpening: (value: boolean) => void
-  setAnimationComplete: (value: boolean) => void
+  actions: {
+    setPanelOpening: (value: boolean) => void
+    setAnimationComplete: (value: boolean) => void
+  }
 }>(set => ({
   isPanelOpening: false,
   isAnimationComplete: false,
-  setPanelOpening: value => set({ isPanelOpening: value }),
-  setAnimationComplete: value => set({ isAnimationComplete: value }),
+  actions: {
+    setPanelOpening: value => set({ isPanelOpening: value }),
+    setAnimationComplete: value => set({ isAnimationComplete: value }),
+  },
 }))
+
+export const useIsPanelOpening = () => useStartupStore(state => state.isPanelOpening)
+export const useIsAnimationComplete = () => useStartupStore(state => state.isAnimationComplete)
+export const useStartupActions = () => useStartupStore(state => state.actions)

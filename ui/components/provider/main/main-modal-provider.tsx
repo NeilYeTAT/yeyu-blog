@@ -1,7 +1,7 @@
 'use client'
 
 import { lazy, Suspense } from 'react'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { LoginModal } from '@/ui/components/modal/main/login-modal'
 import Loading from '@/ui/components/shared/loading'
 import { Dialog, DialogContent, DialogTitle } from '@/ui/shadcn/dialog'
@@ -25,7 +25,7 @@ const FriendLinkApplyModal = lazy(() =>
 )
 
 const MainModalLoading = () => {
-  const closeModal = useModalStore(s => s.closeModal)
+  const { closeModal } = useModalActions()
 
   return (
     <Dialog open onOpenChange={closeModal}>
@@ -38,7 +38,7 @@ const MainModalLoading = () => {
 }
 
 export function MainModalProvider({ children }: { children: React.ReactNode }) {
-  const modalType = useModalStore(s => s.modalType)
+  const modalType = useModalType()
 
   return (
     <>

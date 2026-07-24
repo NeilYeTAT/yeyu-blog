@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useIsAnimationComplete } from '@/store/use-startup-store'
 
 const r180 = Math.PI
 const r90 = Math.PI / 2
@@ -12,7 +12,7 @@ const color = '#88888825'
 const { random } = Math
 
 export const ArtPlum = () => {
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isAnimationComplete = useIsAnimationComplete()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stepsRef = useRef<Array<() => void>>([])
   const prevStepsRef = useRef<Array<() => void>>([])

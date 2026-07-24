@@ -1,12 +1,12 @@
 import { sileo } from 'sileo'
 import { useEchoDeleteMutation } from '@/hooks/api/echo/use-echo-delete-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 
 export default function DeleteEchoModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'deleteEchoModal'
   const { id } = payload != null ? (payload as { id: number }) : {}
 

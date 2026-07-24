@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useTagUpdateMutation } from '@/hooks/api/tag/use-tag-update-mutation'
 import { updateTagNameSchema } from '@/lib/api/tag/schema'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
@@ -20,9 +20,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/ui/shadcn/input'
 
 export default function EditTagModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
-  const payload = useModalStore(s => s.payload)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
+  const payload = useModalPayload()
   const isModalOpen = modalType === 'editTagModal'
   const { id, tagName, tagType } = payload != null ? (payload as UpdateTagNameDTO) : {}
 

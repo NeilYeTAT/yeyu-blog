@@ -2,7 +2,7 @@
 
 import { animate, motion, useMotionValue } from 'motion/react'
 import { useEffect, useRef } from 'react'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useStartupActions } from '@/store/use-startup-store'
 import { startupEase, startupPanelDelay, startupPanelDuration } from './constant'
 
 const lineDuration = 0.96
@@ -12,8 +12,7 @@ const welcomeTextChars = [
 ]
 
 export default function StartUpMotion() {
-  const setPanelOpening = useStartupStore(s => s.setPanelOpening)
-  const setAnimationComplete = useStartupStore(s => s.setAnimationComplete)
+  const { setPanelOpening, setAnimationComplete } = useStartupActions()
   const rootRef = useRef<HTMLDivElement>(null)
   const scaleY = useMotionValue(0)
 

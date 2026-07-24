@@ -1,13 +1,13 @@
 import type { DeleteTagDTO } from '@/lib/api/tag/type'
 import { sileo } from 'sileo'
 import { useTagDeleteMutation } from '@/hooks/api/tag/use-tag-delete-mutation'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 
 export default function DeleteTagModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'deleteTagModal'
   const values = payload != null ? (payload as DeleteTagDTO) : null
 

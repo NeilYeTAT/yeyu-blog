@@ -7,7 +7,7 @@ import { useCommentMutation } from '@/hooks/api/comment/use-comment-mutation'
 import { usePublicCommentQuery } from '@/hooks/api/comment/use-public-comment-query'
 import { useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { maxCommentLength } from './constant'
 import { buildCommentTree } from './helper'
 
@@ -23,7 +23,7 @@ export function useCommentCard({
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
   const [activeReplyCommentId, setActiveReplyCommentId] = useState<number | null>(null)
   const [deletingComment, setDeletingComment] = useState<CommentTreeNode | null>(null)
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
 
   const { data: session } = useSession()
   const isWalletUser = isWalletLoggedIn({ data: session ?? null })

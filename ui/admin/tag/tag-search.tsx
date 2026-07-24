@@ -3,12 +3,12 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { Plus, RotateCw, Search } from 'lucide-react'
 import { memo, useRef } from 'react'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Input } from '@/ui/shadcn/input'
 
 function TagSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }) {
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (

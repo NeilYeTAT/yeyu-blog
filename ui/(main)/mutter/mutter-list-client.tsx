@@ -8,7 +8,7 @@ import avatar from '@/config/img/avatar.webp'
 import { useMutterLikeMutation } from '@/hooks/api/mutter/use-mutter-like-mutation'
 import { getPublicMutters } from '@/lib/api/mutter/get-public-mutters'
 import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import Loading from '@/ui/components/shared/loading'
 import { itemVariants, listVariants } from './constant'
 import { MutterCommentButton } from './mutter-comment-button'
@@ -58,9 +58,9 @@ export function MutterListClient({
     },
     staleTime: 1000 * 30,
   })
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { setModalOpen } = useModalActions()
   const activeCommentPayload =
     modalType === 'mutterCommentModal' && payload != null
       ? (payload as {

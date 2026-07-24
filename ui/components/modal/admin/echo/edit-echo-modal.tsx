@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useEchoUpdateMutation } from '@/hooks/api/echo/use-echo-update-mutation'
 import { updateEchoSchema } from '@/lib/api/echo/schema'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
@@ -16,9 +16,9 @@ import { Switch } from '@/ui/shadcn/switch'
 import { Textarea } from '@/ui/shadcn/textarea'
 
 export default function EditEchoModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'editEchoModal'
 
   const { id, content, isPublished, reference } = payload != null ? (payload as UpdateEchoDTO) : {}

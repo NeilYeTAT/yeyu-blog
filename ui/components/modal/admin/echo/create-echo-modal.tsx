@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useEchoCreateMutation } from '@/hooks/api/echo/use-echo-create-mutation'
 import { createEchoSchema } from '@/lib/api/echo/schema'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
@@ -23,8 +23,8 @@ import { Switch } from '@/ui/shadcn/switch'
 import { Textarea } from '@/ui/shadcn/textarea'
 
 export default function CreateEchoModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
 
   const isModalOpen = modalType === 'createEchoModal'
   const { mutate: createEcho, isPending } = useEchoCreateMutation()

@@ -1,5 +1,5 @@
 import { Edit2, Trash } from 'lucide-react'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 
 export default function ActionButtons({
@@ -13,7 +13,7 @@ export default function ActionButtons({
   isPublished: boolean
   reference: string
 }) {
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
 
   return (
     <section className="flex items-center gap-1">

@@ -2,7 +2,7 @@ import type { NavRoute } from './types'
 import Link from 'next/link'
 import { type ComponentProps, type FC, startTransition } from 'react'
 import { sileo } from 'sileo'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions } from '@/store/use-modal-store'
 
 export const NavItem: FC<
   {
@@ -11,7 +11,7 @@ export const NavItem: FC<
   } & Omit<ComponentProps<'a'>, 'href' | 'ref'>
 > = ({ item, className, children, elRef, ...props }) => {
   const isButton = item.type === 'button'
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const { setModalOpen } = useModalActions()
 
   if (isButton) {
     return (

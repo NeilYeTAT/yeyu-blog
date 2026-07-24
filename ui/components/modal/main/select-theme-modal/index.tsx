@@ -8,12 +8,12 @@ import {
   resolveBrandTheme,
   setBrandTheme,
 } from '@/lib/styles/themes/constant'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 
 export const SelectThemeModal: FC<ComponentProps<'div'>> = () => {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'selectThemeModal'
   const [activeTheme, setActiveTheme] = useState<BrandThemeId>(resolveBrandTheme)
 

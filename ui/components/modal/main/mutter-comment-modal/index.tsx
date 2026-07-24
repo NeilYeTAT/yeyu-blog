@@ -9,7 +9,7 @@ import { useMutterCommentMutation } from '@/hooks/api/mutter-comment/use-mutter-
 import { usePublicMutterCommentQuery } from '@/hooks/api/mutter-comment/use-public-mutter-comment-query'
 import { useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { MutterCommentComposer } from './mutter-comment-composer'
@@ -17,10 +17,9 @@ import { MutterCommentList } from './mutter-comment-list'
 import { MutterCommentSource } from './mutter-comment-source'
 
 export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
-  const modalType = useModalStore(s => s.modalType)
-  const payload = useModalStore(s => s.payload)
-  const closeModal = useModalStore(s => s.closeModal)
-  const setModalOpen = useModalStore(s => s.setModalOpen)
+  const modalType = useModalType()
+  const payload = useModalPayload()
+  const { closeModal, setModalOpen } = useModalActions()
   const isModalOpen = modalType === 'mutterCommentModal'
   const values =
     isModalOpen && payload != null

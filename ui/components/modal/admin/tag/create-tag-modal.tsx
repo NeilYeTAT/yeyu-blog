@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useTagCreateMutation } from '@/hooks/api/tag/use-tag-create-mutation'
 import { createTagSchema } from '@/lib/api/tag/schema'
-import { useModalStore } from '@/store/use-modal-store'
+import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
@@ -16,8 +16,8 @@ import { Input } from '@/ui/shadcn/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/shadcn/select'
 
 export default function CreateTagModal() {
-  const modalType = useModalStore(s => s.modalType)
-  const closeModal = useModalStore(s => s.closeModal)
+  const modalType = useModalType()
+  const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'createTagModal'
   const { mutate: createTag, isPending } = useTagCreateMutation()
 

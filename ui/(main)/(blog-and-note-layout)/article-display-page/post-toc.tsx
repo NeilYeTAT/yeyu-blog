@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
 import { type FC, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useIsAnimationComplete } from '@/store/use-startup-store'
 
 const variants = {
   enter: (direction: number) => ({
@@ -112,7 +112,7 @@ const TocProgressCircle = ({ container }: { container: HTMLElement }) => {
 export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isAnimationComplete = useIsAnimationComplete()
   const [{ activeId, direction }, setActiveHeading] = useState({
     activeId: '',
     direction: 1,

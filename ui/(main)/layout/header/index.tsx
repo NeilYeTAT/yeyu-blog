@@ -4,7 +4,7 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/r
 import { createPortal } from 'react-dom'
 import { useIsMounted } from '@/hooks/common/use-is-mounted'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useStartupStore } from '@/store/use-startup-store'
+import { useIsAnimationComplete, useIsPanelOpening } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
 import { startupEase, startupPanelDuration } from '../start-up-motion/constant'
 import { isNavGroupRoute, navigationConfig } from './constant'
@@ -49,8 +49,8 @@ const HeaderBackdropPortal = ({
 }
 
 export default function Header() {
-  const isPanelOpening = useStartupStore(s => s.isPanelOpening)
-  const isAnimationComplete = useStartupStore(s => s.isAnimationComplete)
+  const isPanelOpening = useIsPanelOpening()
+  const isAnimationComplete = useIsAnimationComplete()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
   const activeRoute = useHeaderActiveRoute()
