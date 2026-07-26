@@ -2,27 +2,32 @@
 
 import type { Heading } from './utils/extract-headings'
 import { ChevronDown, TextAlignJustify } from 'lucide-react'
-import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { type FC, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useIsAnimationComplete } from '@/store/use-startup-store'
 
 const variants = {
-  enter: (direction: number) => ({
-    y: direction * 20,
+  enter: ({ direction, reduceMotion }: { direction: number; reduceMotion: boolean }) => ({
+    y: reduceMotion ? 0 : direction * 8,
     opacity: 0,
+    filter: reduceMotion ? 'blur(0px)' : 'blur(4px)',
   }),
   center: {
     y: 0,
     opacity: 1,
+    filter: 'blur(0px)',
   },
-  exit: (direction: number) => ({
-    y: direction * -20,
+  exit: ({ direction, reduceMotion }: { direction: number; reduceMotion: boolean }) => ({
+    y: reduceMotion ? 0 : direction * -8,
     opacity: 0,
+    filter: reduceMotion ? 'blur(0px)' : 'blur(4px)',
   }),
 }
 
+const labelTransition = { duration: 0.2, ease: [0.22, 1, 0.36, 1] } as const
+const layerTransition = { duration: 0.24, ease: [0.65, 0, 0.35, 1] } as const
 const tocProgressRadius = 34
 const tocProgressStrokeWidth = 10
 const emptyPortalState: {
@@ -113,6 +118,7 @@ export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
   const isAnimationComplete = useIsAnimationComplete()
+  const reduceMotion = Boolean(useReducedMotion())
   const [{ activeId, direction }, setActiveHeading] = useState({
     activeId: '',
     direction: 1,
@@ -313,15 +319,19 @@ export const PostToc: FC<{
                   )}
                 </svg>
               </figure>
-              <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+              <AnimatePresence
+                mode="popLayout"
+                initial={false}
+                custom={{ direction, reduceMotion }}
+              >
                 <motion.span
                   key={activeHeading?.id}
-                  custom={direction}
+                  custom={{ direction, reduceMotion }}
                   variants={variants}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  transition={reduceMotion ? { duration: 0 } : labelTransition}
                   className="block truncate"
                 >
                   {activeHeading?.text ?? '目录'}
@@ -331,13 +341,34 @@ export const PostToc: FC<{
             <motion.div
               layout="position"
               animate={{ rotate: isExpanded ? 180 : 0 }}
-              className="ml-2 text-muted-foreground"
+              transition={reduceMotion ? { duration: 0 } : labelTransition}
+              className="ml-2 size-4 shrink-0 text-muted-foreground"
             >
-              {isExpanded ? (
-                <TextAlignJustify className="size-4" />
-              ) : (
-                <ChevronDown className="size-4" />
-              )}
+              <AnimatePresence initial={false} mode="popLayout">
+                {isExpanded ? (
+                  <motion.span
+                    key="expanded"
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: 'blur(3px)' }}
+                    animate={{ opacity: 1, filter: 'blur(0px)' }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: 'blur(3px)' }}
+                    transition={reduceMotion ? { duration: 0 } : labelTransition}
+                    className="block size-4"
+                  >
+                    <TextAlignJustify className="size-4" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="collapsed"
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: 'blur(3px)' }}
+                    animate={{ opacity: 1, filter: 'blur(0px)' }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: 'blur(3px)' }}
+                    transition={reduceMotion ? { duration: 0 } : labelTransition}
+                    className="block size-4"
+                  >
+                    <ChevronDown className="size-4" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.button>
 
@@ -345,10 +376,30 @@ export const PostToc: FC<{
           <AnimatePresence>
             {isExpanded && (
               <motion.div
-                initial={{ opacity: 0, gridTemplateRows: '0fr' }}
-                animate={{ opacity: 1, gridTemplateRows: '1fr' }}
-                exit={{ opacity: 0, gridTemplateRows: '0fr' }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                initial={{
+                  opacity: 0,
+                  gridTemplateRows: '0fr',
+                  filter: reduceMotion ? 'blur(0px)' : 'blur(3px)',
+                }}
+                animate={{ opacity: 1, gridTemplateRows: '1fr', filter: 'blur(0px)' }}
+                exit={{
+                  opacity: 0,
+                  gridTemplateRows: '0fr',
+                  filter: reduceMotion ? 'blur(0px)' : 'blur(3px)',
+                }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : {
+                        gridTemplateRows: {
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 30,
+                        },
+                        opacity: layerTransition,
+                        filter: layerTransition,
+                      }
+                }
                 className="relative grid before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-black/5 dark:before:bg-white/5"
               >
                 <div
