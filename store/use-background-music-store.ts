@@ -42,5 +42,4 @@ const useBackgroundMusicStore = create<{
 }))
 
 export const useIsPlaying = () => useBackgroundMusicStore(state => state.isPlaying)
-export const useAudio = () => useBackgroundMusicStore(state => state.audio)
 export const useBackgroundMusicActions = () => useBackgroundMusicStore(state => state.actions)
