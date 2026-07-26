@@ -36,12 +36,14 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
   const { setModalOpen } = useModalActions()
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isOpen, setIsOpen] = useState(false)
+  const [canSelectAction, setCanSelectAction] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const constraintsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current !== null && !containerRef.current.contains(event.target as Node)) {
+        setCanSelectAction(false)
         setIsOpen(false)
       }
     }
@@ -74,6 +76,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
       setModalOpen('selectThemeModal')
       playSoundEffect()
     }
+    setCanSelectAction(false)
     setIsOpen(false)
   }
 
@@ -115,8 +118,11 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           type="button"
           aria-expanded={isOpen}
           aria-label="打开快捷菜单"
-          className="relative flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
-          onClick={() => setIsOpen(!isOpen)}
+          className="relative z-10 flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
+          onClick={() => {
+            setCanSelectAction(false)
+            setIsOpen(value => !value)
+          }}
         >
           <FluidOrb size={48} color="var(--theme-indicator)" aria-hidden />
           <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-400 ring-offset-1 ring-offset-background dark:ring-theme-600 dark:ring-offset-black" />
@@ -147,10 +153,14 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
                       x,
                       y,
                     }}
-                    exit={{ opacity: 0, scale: 0.95, x: 0, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, x: 0, y: 0, pointerEvents: 'none' }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="absolute top-1 left-1 cursor-pointer"
+                    className="absolute top-1 left-1 cursor-pointer disabled:pointer-events-none"
+                    disabled={!canSelectAction}
                     isActive={isFunctionActive}
+                    onAnimationComplete={() => {
+                      if (isOpen) setCanSelectAction(true)
+                    }}
                     onClick={e => {
                       e.stopPropagation()
                       handleSelect(id)
