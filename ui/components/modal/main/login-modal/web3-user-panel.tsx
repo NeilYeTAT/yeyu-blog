@@ -5,7 +5,7 @@ import { signOut, useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn } from '@/lib/core/auth/utils'
 import { useModalActions } from '@/store/use-modal-store'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
-import { Button } from '@/ui/shadcn/button'
+import { Button, buttonVariants } from '@/ui/shadcn/button'
 import { LayoutGridIcon, type LayoutGridIconHandle } from '@/ui/shadcn/layout-grid'
 import { LogoutIcon, type LogoutIconHandle } from '@/ui/shadcn/logout'
 
@@ -35,9 +35,13 @@ export const Web3UserPanel = () => {
 
       <div className="flex w-full flex-col gap-2">
         {isSessionAdmin && (
-          <Button
-            render={<Link href="/admin" onClick={closeModal} />}
-            className="h-10 w-full cursor-pointer rounded-xl bg-theme-indicator px-4 text-theme-active-text hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35"
+          <Link
+            href="/admin"
+            onClick={closeModal}
+            className={buttonVariants({
+              className:
+                'h-10 w-full cursor-pointer rounded-xl bg-theme-indicator px-4 text-theme-active-text hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35',
+            })}
             onMouseEnter={() => {
               adminIconRef.current?.startAnimation()
             }}
@@ -47,7 +51,7 @@ export const Web3UserPanel = () => {
           >
             <LayoutGridIcon ref={adminIconRef} className="size-4" size={16} />
             进入后台
-          </Button>
+          </Link>
         )}
         <Button
           variant="outline"

@@ -14,7 +14,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/shadcn/dropdown-menu'
@@ -70,7 +69,7 @@ export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenu>> = props
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 rounded-lg">
-        <DropdownMenuLabel className="flex items-center gap-2 p-2">
+        <div className="flex items-center gap-2 p-2">
           {isPending ? (
             <span aria-hidden="true" className={cn(avatarPlaceholderClassName, 'animate-pulse')} />
           ) : isWallet ? (
@@ -119,7 +118,7 @@ export const AvatarDropdownMenu: FC<ComponentProps<typeof DropdownMenu>> = props
               ) : null}
             </section>
           )}
-        </DropdownMenuLabel>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer"

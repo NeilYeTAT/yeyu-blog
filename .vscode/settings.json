@@ -11,8 +11,7 @@
   "editor.quickSuggestions": { "strings": true },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "explorer.sortOrderLexicographicOptions": "upper",
-  "javascript.preferences.quoteStyle": "single",
-  "typescript.preferences.quoteStyle": "single",
+  "js/ts.preferences.quoteStyle": "single",
 
   // Extensions settings
   "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName", "classNames"],

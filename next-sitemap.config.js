@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: process.env.SITE_URL || 'https://useyeyu.cc',
+  siteUrl: process.env.SITE_URL || 'https://www.useyeyu.cc',
   generateRobotsTxt: true,
   exclude: ['/admin/*', '/auth/*', '/api/*', '/server-sitemap.xml'],
   robotsTxtOptions: {

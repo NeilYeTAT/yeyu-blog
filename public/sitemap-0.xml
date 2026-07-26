@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://useyeyu.cc</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/about</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/2025-transition</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/26-spring</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/a-new-journey</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/adjust-work-and-rest</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/finally-started-my-blog</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/blog/fuck-react-native</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/mutter</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://useyeyu.cc/note</loc><lastmod>2026-04-03T01:00:30.279Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000</loc><lastmod>2026-07-26T10:50:09.940Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/2025-transition</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/26-spring</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/26-summer</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/a-new-journey</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/adjust-work-and-rest</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/finally-started-my-blog</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/fuck-react-native</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/friends</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/mutter</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/note</loc><lastmod>2026-07-26T10:50:09.941Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

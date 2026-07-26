@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://useyeyu.cc'),
+  metadataBase: new URL('https://www.useyeyu.cc'),
 
   title: {
     default: '叶鱼 & 业余',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: '叶鱼',
-      url: 'https://useyeyu.cc',
+      url: 'https://www.useyeyu.cc',
     },
   ],
 

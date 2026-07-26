@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAdminPendingCountQuery } from '@/hooks/api/admin/use-admin-pending-count-query'
 import { formatPendingCount } from '@/lib/utils/common/format-pending-count'
 import { cn } from '@/lib/utils/common/shadcn'
-import { Button } from '@/ui/shadcn/button'
+import { buttonVariants } from '@/ui/shadcn/button'
 import { ModeToggle } from '@/ui/shadcn/mode-toggle'
 import { AdminLogo } from './admin-logo'
 import { AvatarDropdownMenu } from './avatar-dropdown-menu'
@@ -34,14 +34,17 @@ export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
 
           return (
             <div key={route.path} className="relative inline-flex overflow-visible">
-              <Button
-                render={<Link href={route.path} prefetch={false} />}
-                className={cn('rounded-lg text-base', shouldShowPendingBadge && 'pr-5')}
-                variant={isActive ? 'default' : 'ghost'}
-                size="sm"
+              <Link
+                href={route.path}
+                prefetch={false}
+                className={buttonVariants({
+                  variant: isActive ? 'default' : 'ghost',
+                  size: 'sm',
+                  className: cn('rounded-lg text-base', shouldShowPendingBadge && 'pr-5'),
+                })}
               >
                 {route.pathName}
-              </Button>
+              </Link>
               {shouldShowPendingBadge ? (
                 <span className="pointer-events-none absolute right-0 bottom-0 z-10 inline-flex min-w-5 translate-x-1/3 translate-y-1/3 items-center justify-center rounded-full bg-destructive px-1.5 py-0.5 font-medium text-[10px] text-white leading-none shadow-xs">
                   {formatPendingCount(pendingCount)}
