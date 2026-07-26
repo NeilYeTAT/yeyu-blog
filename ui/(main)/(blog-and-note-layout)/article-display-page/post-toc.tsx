@@ -278,7 +278,8 @@ export const PostToc: FC<{
             aria-label="切换文章目录"
             className={cn(
               'flex w-full cursor-pointer items-center justify-between border-0 bg-transparent text-left text-inherit transition-colors hover:bg-black/5 dark:hover:bg-white/5',
-              'px-2 py-1',
+              'py-1',
+              isExpanded ? 'px-2' : 'pr-3 pl-1',
             )}
             onClick={handleTocToggleClick}
           >
@@ -348,7 +349,7 @@ export const PostToc: FC<{
                 animate={{ opacity: 1, gridTemplateRows: '1fr' }}
                 exit={{ opacity: 0, gridTemplateRows: '0fr' }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="grid border-black/5 border-t dark:border-white/5"
+                className="relative grid before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-black/5 dark:before:bg-white/5"
               >
                 <div
                   ref={scrollContainerRef}
