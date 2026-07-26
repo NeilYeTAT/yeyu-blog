@@ -8,6 +8,22 @@ import { PostToc } from './post-toc'
 import { extractHeadings } from './utils/extract-headings'
 import { extractTitleAndBody } from './utils/extract-title-and-body'
 
+const articleVariants = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+  visible: {
+    opacity: 1,
+    y: [30, -2, 0],
+    transition: {
+      type: 'tween' as const,
+      ease: 'easeInOut' as const,
+      duration: 0.8,
+    },
+  },
+}
+
 export default function ArticleDisplayPage({
   createdAt,
   tags,
@@ -28,19 +44,7 @@ export default function ArticleDisplayPage({
     <div className="z-10 min-h-dvh backdrop-blur-[1px]">
       <motion.article
         className="flex max-w-3xl flex-1 flex-col gap-4 rounded-sm px-6 py-2"
-        initial={{
-          opacity: 0,
-          y: 40,
-        }}
-        animate={{
-          opacity: 1,
-          y: [30, -2, 0],
-        }}
-        transition={{
-          type: 'tween',
-          ease: 'easeInOut',
-          duration: 0.8,
-        }}
+        variants={articleVariants}
       >
         {sanitizedTitleHtml != null ? (
           <header className="flex flex-col items-center justify-center gap-3 text-center">

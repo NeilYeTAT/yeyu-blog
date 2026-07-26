@@ -1,7 +1,10 @@
+'use client'
+
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import * as motion from 'motion/react-client'
+import { motion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useIsPanelOpening } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '@/ui/components/shared/max-width-wrapper'
 
 const sectionVariants: Variants = {
@@ -27,6 +30,8 @@ const lineVariants: Variants = {
 }
 
 export function AboutSection({ children, className }: { children: ReactNode; className?: string }) {
+  const isPanelOpening = useIsPanelOpening()
+
   return (
     <section className="flex h-[calc(100dvh-100px)] w-full snap-center flex-col items-center justify-center p-4">
       <MaxWidthWrapper>
@@ -36,7 +41,7 @@ export function AboutSection({ children, className }: { children: ReactNode; cla
             className,
           )}
           initial="hidden"
-          whileInView="visible"
+          whileInView={isPanelOpening ? 'visible' : 'hidden'}
           viewport={{ amount: 0.45, once: true }}
           variants={sectionVariants}
         >

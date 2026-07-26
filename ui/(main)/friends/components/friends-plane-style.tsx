@@ -3,9 +3,13 @@ export function FriendsPlaneStyle() {
     <style>
       {`
         .friend-plane-item {
+          opacity: 0;
+          transform-origin: center;
+        }
+
+        .friends-plane-stage[data-startup-ready="true"] .friend-plane-item {
           animation: friend-plane-item-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
           animation-delay: var(--friend-intro-delay);
-          transform-origin: center;
         }
 
         @keyframes friend-plane-item-enter {

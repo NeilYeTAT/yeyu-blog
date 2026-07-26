@@ -63,12 +63,7 @@ export const ArticleList: FC<
     .sort((a, b) => b - a)
 
   return (
-    <motion.div
-      className="group/list flex flex-col gap-10"
-      initial="hidden"
-      animate="visible"
-      variants={listVariants}
-    >
+    <motion.div className="group/list flex flex-col gap-10" variants={listVariants}>
       {sortedYears.map(year => (
         <motion.div key={year} className="flex flex-col gap-1" variants={listVariants}>
           <motion.h3

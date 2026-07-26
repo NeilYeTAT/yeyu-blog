@@ -9,6 +9,7 @@ import { useMutterLikeMutation } from '@/hooks/api/mutter/use-mutter-like-mutati
 import { getPublicMutters } from '@/lib/api/mutter/get-public-mutters'
 import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
+import { useIsPanelOpening } from '@/store/use-startup-store'
 import Loading from '@/ui/components/shared/loading'
 import { itemVariants, listVariants } from './constant'
 import { MutterCommentButton } from './mutter-comment-button'
@@ -61,6 +62,7 @@ export function MutterListClient({
   const modalType = useModalType()
   const payload = useModalPayload()
   const { setModalOpen } = useModalActions()
+  const isPanelOpening = useIsPanelOpening()
   const activeCommentPayload =
     modalType === 'mutterCommentModal' && payload != null
       ? (payload as {
@@ -148,7 +150,7 @@ export function MutterListClient({
     <motion.section
       className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-4 pb-10"
       initial="hidden"
-      animate="visible"
+      animate={isPanelOpening ? 'visible' : 'hidden'}
       variants={listVariants}
     >
       <motion.ul className="flex flex-col gap-4" variants={listVariants}>

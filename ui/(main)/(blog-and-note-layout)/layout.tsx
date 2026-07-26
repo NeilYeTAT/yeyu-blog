@@ -1,5 +1,8 @@
-import type React from 'react'
-import * as motion from 'motion/react-client'
+'use client'
+
+import type { ReactNode } from 'react'
+import { motion } from 'motion/react'
+import { useIsPanelOpening } from '@/store/use-startup-store'
 
 const containerVariants = {
   hidden: {},
@@ -10,15 +13,15 @@ const containerVariants = {
   },
 }
 
-export default function BlogAndNoteLayout({ children }: { children: React.ReactNode }) {
+export default function BlogAndNoteLayout({ children }: { children: ReactNode }) {
+  const isPanelOpening = useIsPanelOpening()
+
   return (
     <motion.main
       className="flex flex-col px-4"
       initial="hidden"
-      animate="visible"
+      animate={isPanelOpening ? 'visible' : 'hidden'}
       variants={containerVariants}
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
     >
       {children}
     </motion.main>
