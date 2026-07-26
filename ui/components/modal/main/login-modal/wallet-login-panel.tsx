@@ -3,8 +3,8 @@ import type { useInjectedWallet } from '@/hooks/web3/use-injected-wallet'
 import type { InjectedWallet, InjectedWalletProvider } from '@/lib/core/web3/injected-wallet'
 import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
-import { SiweMessage } from 'siwe'
 import { getAddress } from 'viem'
+import { createSiweMessage } from 'viem/siwe'
 import { authClient, useSession } from '@/lib/core/auth/client'
 import { Button } from '@/ui/shadcn/button'
 
@@ -41,7 +41,7 @@ export const WalletLoginPanel = ({
       return
     }
 
-    const siweMessage = new SiweMessage({
+    const message = createSiweMessage({
       domain: window.location.host,
       address: checksumWalletAddress,
       statement: 'Sign in with Ethereum to the useyeyu.cc',
@@ -51,7 +51,6 @@ export const WalletLoginPanel = ({
       nonce: nonceData.nonce,
     })
 
-    const message = siweMessage.prepareMessage()
     const signature = await injectedWallet.signMessage({
       account: walletAddress,
       message,

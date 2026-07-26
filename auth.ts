@@ -1,8 +1,8 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { siwe } from 'better-auth/plugins'
-import { generateNonce } from 'siwe'
 import { getAddress, verifyMessage as verifyViemMessage } from 'viem'
+import { generateSiweNonce } from 'viem/siwe'
 import { serverEnv } from '@/config/env/server-env'
 import { prisma } from '@/prisma/instance'
 
@@ -69,7 +69,7 @@ export const auth = betterAuth({
     siwe({
       domain,
       getNonce: async () => {
-        return generateNonce()
+        return generateSiweNonce()
       },
       verifyMessage: async ({ message, signature, address }) => {
         const checksumAddress = getAddress(address)
