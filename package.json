@@ -74,7 +74,6 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "czg": "^1.13.1",
-    "dotenv-cli": "^11.0.0",
     "lefthook": "^2.1.10",
     "lint-staged": "^17.2.0",
     "next-sitemap": "^4.2.3",
