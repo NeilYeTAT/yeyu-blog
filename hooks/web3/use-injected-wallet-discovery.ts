@@ -85,7 +85,7 @@ const subscribeToWallets = (listener: (wallets: InjectedWallet[]) => void) => {
   }
 }
 
-export const useInjectedWalletDiscovery = () => {
+export const useInjectedWallets = () => {
   const [wallets, setWallets] = useState<InjectedWallet[]>([])
 
   useEffect(() => subscribeToWallets(setWallets), [])

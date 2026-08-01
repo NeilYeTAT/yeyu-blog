@@ -7,14 +7,14 @@ import {
   requestInjectedWalletAccounts,
   signInjectedWalletMessage,
 } from '@/lib/core/web3/injected-wallet'
-import { useInjectedWalletDiscovery } from './use-injected-wallet-discovery'
+import { useInjectedWallets } from './use-injected-wallet-discovery'
 
-export const useInjectedWallet = () => {
-  const wallets = useInjectedWalletDiscovery()
+export const useInjectedWalletConnection = () => {
+  const wallets = useInjectedWallets()
   const [provider, setProvider] = useState<InjectedWalletProvider>()
   const [account, setAccount] = useState<string>()
   const [chainId, setChainId] = useState<number>()
-  const [isPending, setIsPending] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
 
   useEffect(() => {
     if (provider === undefined) {
@@ -46,7 +46,7 @@ export const useInjectedWallet = () => {
   }, [provider])
 
   const connect = useCallback(async (wallet: InjectedWallet) => {
-    setIsPending(true)
+    setIsConnecting(true)
 
     return await (async () => {
       const walletProvider = wallet.provider
@@ -71,7 +71,7 @@ export const useInjectedWallet = () => {
         provider: walletProvider,
       }
     })().finally(() => {
-      setIsPending(false)
+      setIsConnecting(false)
     })
   }, [])
 
@@ -99,12 +99,12 @@ export const useInjectedWallet = () => {
       account,
       chainId,
       connect,
-      hasWallet: wallets.length > 0,
-      isConnected: account !== undefined,
-      isPending,
+      hasAccount: account !== undefined,
+      hasInjectedWallet: wallets.length > 0,
+      isConnecting,
       signMessage,
       wallets,
     }),
-    [account, chainId, connect, isPending, signMessage, wallets],
+    [account, chainId, connect, isConnecting, signMessage, wallets],
   )
 }

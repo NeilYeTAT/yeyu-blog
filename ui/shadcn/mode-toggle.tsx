@@ -2,12 +2,12 @@
 
 import { Moon, Sun } from 'lucide-react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
-import { useIsMounted } from '@/hooks/common/use-is-mounted'
+import { useIsHydrated } from '@/hooks/common/use-is-mounted'
 import { Button } from '@/ui/shadcn/button'
 
 export function ModeToggle() {
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
-  const mounted = useIsMounted()
+  const mounted = useIsHydrated()
   const currentTheme = mounted && resolvedTheme === 'dark' ? 'dark' : 'light'
 
   return (

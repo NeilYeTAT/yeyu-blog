@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import type { useInjectedWallet } from '@/hooks/web3/use-injected-wallet'
+import type { useInjectedWalletConnection } from '@/hooks/web3/use-injected-wallet'
 import type { InjectedWallet, InjectedWalletProvider } from '@/lib/core/web3/injected-wallet'
 import { Wallet2 } from 'lucide-react'
 import Image from 'next/image'
@@ -13,11 +13,11 @@ export const WalletLoginPanel = ({
   isLoginPending,
   setIsWalletSigningIn,
 }: {
-  injectedWallet: ReturnType<typeof useInjectedWallet>
+  injectedWallet: ReturnType<typeof useInjectedWalletConnection>
   isLoginPending: boolean
   setIsWalletSigningIn: Dispatch<SetStateAction<boolean>>
 }) => {
-  const isActionPending = injectedWallet.isPending || isLoginPending
+  const isActionPending = injectedWallet.isConnecting || isLoginPending
 
   const { refetch: refetchSession } = useSession()
 

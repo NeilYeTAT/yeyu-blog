@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { useInjectedWallet } from '@/hooks/web3/use-injected-wallet'
+import { useInjectedWalletConnection } from '@/hooks/web3/use-injected-wallet'
 import { LoginPendingPanel } from './login-pending-panel'
 import { WalletLoginPanel } from './wallet-login-panel'
 
@@ -10,7 +10,7 @@ export const WalletLoginSection = ({
   isLoginPending: boolean
   setIsWalletSigningIn: Dispatch<SetStateAction<boolean>>
 }) => {
-  const injectedWallet = useInjectedWallet()
+  const injectedWallet = useInjectedWalletConnection()
 
   if (isLoginPending) {
     return <LoginPendingPanel />

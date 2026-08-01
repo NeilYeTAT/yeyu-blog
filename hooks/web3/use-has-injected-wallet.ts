@@ -1,7 +1,7 @@
-import { useInjectedWalletDiscovery } from './use-injected-wallet-discovery'
+import { useInjectedWallets } from './use-injected-wallet-discovery'
 
 export const useHasInjectedWallet = () => {
-  const wallets = useInjectedWalletDiscovery()
+  const wallets = useInjectedWallets()
 
   return wallets.length > 0
 }

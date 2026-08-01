@@ -4,5 +4,5 @@ const subscribe = () => () => undefined
 const getClientSnapshot = () => true
 const getServerSnapshot = () => false
 
-export const useIsMounted = () =>
+export const useIsHydrated = () =>
   useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot)

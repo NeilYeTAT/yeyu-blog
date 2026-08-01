@@ -2,7 +2,7 @@
 
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/react'
 import { createPortal } from 'react-dom'
-import { useIsMounted } from '@/hooks/common/use-is-mounted'
+import { useIsHydrated } from '@/hooks/common/use-is-mounted'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useIsAnimationComplete, useIsPanelOpening } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
@@ -25,7 +25,7 @@ const HeaderBackdropPortal = ({
   onClose: () => void
   shouldReduceMotion: boolean | null
 }) => {
-  const mounted = useIsMounted()
+  const mounted = useIsHydrated()
 
   if (!mounted) return null
 
