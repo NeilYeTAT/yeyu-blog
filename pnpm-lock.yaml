@@ -11,12 +11,12 @@ importers:
       '@base-ui/react':
         specifier: ^1.6.0
         version: 1.6.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@cfx-kit/wallet-avatar':
-        specifier: ^0.0.5
-        version: 0.0.5
       '@hookform/resolvers':
         specifier: ^5.5.7
         version: 5.5.7(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.17.7)(react-hook-form@7.84.0(react@19.2.8))(valibot@1.4.2(typescript@6.0.3))(zod@4.4.3)
+      '@outpacelabs/avatars':
+        specifier: ^0.4.0
+        version: 0.4.0(react@19.2.8)
       '@prisma/adapter-pg':
         specifier: ^7.9.1
         version: 7.9.1
@@ -366,9 +366,6 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
-
-  '@cfx-kit/wallet-avatar@0.0.5':
-    resolution: {integrity: sha512-qQjAxtkAWAG2YCUEffFmySVRwFquYCk3fH62dEv0IKnuTHZeqbqmlTgsXPvNUqBo4wPRZt0J4IxxFhykTvFfbA==}
 
   '@commitlint/cli@21.2.1':
     resolution: {integrity: sha512-blsZGe29hJ72VGEFVl72IVYX+1vsfINpjA9yWQA6i7OKD/McGEOXg08sKIRKjFk4JvzhV/9n0l3i6NooPLTNfg==}
@@ -1002,6 +999,11 @@ packages:
     resolution: {integrity: sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==}
     engines: {node: '>=14'}
 
+  '@outpacelabs/avatars@0.4.0':
+    resolution: {integrity: sha512-l//lzqRJmkvm8mNg70m9dHyYxHAq1/yyAAdOPPRC5nOMxX7TaE+ILyBQN+rxJGBQMNqktbLqkG1k9VmNbkBb1Q==}
+    peerDependencies:
+      react: '>=18'
+
   '@prisma/adapter-pg@7.9.1':
     resolution: {integrity: sha512-Ho2RK1KanQxLNSC0sR5bpiiVep10sWPLXCcxK+KXfI/Q69TMRbiafSvLPv3V9snimX72rMCqGlyJ4sBO4lKTAw==}
 
@@ -1498,9 +1500,6 @@ packages:
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
-
-  '@types/mersenne-twister@1.1.7':
-    resolution: {integrity: sha512-WC4CfMTR59ov9HxLxLg5bjgbX/MljzC9yEp+x8LJze9Y58hTVz6fuNdojxzE8shzQDWoe4id6rhgi4Sfk1G4Wg==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -2439,9 +2438,6 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mersenne-twister@1.1.0:
-    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
-
   micromark-core-commonmark@2.0.3:
     resolution: {integrity: sha512-RDBrHEMSxVFLg6xvnXmb1Ayr2WzLAWjeSATAoxwKYJV94TeNavgoIdA0a9ytzDSVzBy2YKFK+emCPOEibLeCrg==}
 
@@ -3312,11 +3308,6 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.6':
     optional: true
 
-  '@cfx-kit/wallet-avatar@0.0.5':
-    dependencies:
-      '@types/mersenne-twister': 1.1.7
-      mersenne-twister: 1.1.0
-
   '@commitlint/cli@21.2.1(@types/node@26.1.2)(conventional-commits-parser@7.1.2)(typescript@6.0.3)':
     dependencies:
       '@commitlint/config-conventional': 21.2.0
@@ -3754,6 +3745,10 @@ snapshots:
       fastq: 1.20.1
 
   '@opentelemetry/semantic-conventions@1.43.0': {}
+
+  '@outpacelabs/avatars@0.4.0(react@19.2.8)':
+    dependencies:
+      react: 19.2.8
 
   '@prisma/adapter-pg@7.9.1':
     dependencies:
@@ -4225,8 +4220,6 @@ snapshots:
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
-
-  '@types/mersenne-twister@1.1.7': {}
 
   '@types/ms@2.1.0': {}
 
@@ -5132,8 +5125,6 @@ snapshots:
       '@types/mdast': 4.0.4
 
   merge2@1.4.1: {}
-
-  mersenne-twister@1.1.0: {}
 
   micromark-core-commonmark@2.0.3:
     dependencies:

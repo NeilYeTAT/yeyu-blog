@@ -2,9 +2,8 @@
 
 import type { ComponentProps, FC } from 'react'
 import type { Address } from 'viem'
-import { generateAvatarURL } from '@cfx-kit/wallet-avatar'
+import { GradientAvatar } from '@outpacelabs/avatars'
 import { User } from 'lucide-react'
-import Image from 'next/image'
 import { cn } from '@/lib/utils/common/shadcn'
 
 export const AccountIcon: FC<
@@ -21,12 +20,11 @@ export const AccountIcon: FC<
       {...props}
     >
       {account != null ? (
-        <Image
-          className="h-full w-full"
-          width="32"
-          height="32"
-          src={generateAvatarURL(account)}
-          alt=""
+        <GradientAvatar
+          seed={account}
+          size={32}
+          radius="inherit"
+          style={{ width: '100%', height: '100%' }}
         />
       ) : (
         <User className="size-[62%]" />

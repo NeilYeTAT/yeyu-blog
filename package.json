@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
-    "@cfx-kit/wallet-avatar": "^0.0.5",
     "@hookform/resolvers": "^5.5.7",
+    "@outpacelabs/avatars": "^0.4.0",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@tanstack/react-query": "^5.101.4",
