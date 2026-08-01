@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { CommentAuthorLike, SessionAvatarProps } from './type'
 import Image from 'next/image'
-import { siGithub, siGoogle } from 'simple-icons'
+import { siGithub, siGoogle } from 'simple-icons/icons'
 import avatar from '@/config/img/avatar.webp'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import {

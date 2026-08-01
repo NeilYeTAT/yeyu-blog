@@ -1,60 +1,106 @@
-import dayjs from 'dayjs'
-import timezone from 'dayjs/plugin/timezone'
-import utc from 'dayjs/plugin/utc'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
 const shanghai = 'Asia/Shanghai'
+const minuteMs = 60 * 1000
+const hourMs = 60 * minuteMs
+const dayMs = 24 * hourMs
+const weekMs = 7 * dayMs
+
+const shanghaiDatePartsFormatter = new Intl.DateTimeFormat('en-US-u-nu-latn', {
+  timeZone: shanghai,
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  hourCycle: 'h23',
+})
+
+const displayDateFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: shanghai,
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+})
+
+const getShanghaiDateParts = (
+  date: number | Date,
+): {
+  year: number
+  month: number
+  day: number
+  hour: number
+  minute: number
+  second: number
+} => {
+  const values: Record<string, number> = {}
+
+  for (const part of shanghaiDatePartsFormatter.formatToParts(new Date(date))) {
+    if (part.type !== 'literal') {
+      values[part.type] = Number(part.value)
+    }
+  }
+
+  return values as {
+    year: number
+    month: number
+    day: number
+    hour: number
+    minute: number
+    second: number
+  }
+}
+
+const getDayOfYear = (year: number, month: number, day: number) =>
+  Math.floor((Date.UTC(year, month - 1, day) - Date.UTC(year, 0, 1)) / dayMs) + 1
 
 export function prettyDateTime(date: number | Date) {
-  return dayjs(date).tz(shanghai).locale('zh-cn').format('YY年M月D日 H时 m分')
+  const { year, month, day, hour, minute } = getShanghaiDateParts(date)
+  const twoDigitYear = String(year % 100).padStart(2, '0')
+
+  return `${twoDigitYear}年${month}月${day}日 ${hour}时 ${minute}分`
 }
 
 export function toRelativeDate(date: number | Date) {
-  const now = dayjs().tz(shanghai)
-  const target = dayjs(date).tz(shanghai)
-  const diff = now.valueOf() - target.valueOf()
+  const target = new Date(date)
+  const diff = Date.now() - target.getTime()
 
   if (diff <= 0) return '刚刚'
 
-  const minute = 60 * 1000
-  const hour = 60 * minute
-  const day = 24 * hour
-  const week = 7 * day
-
-  if (diff < hour) {
-    return `${Math.max(1, Math.floor(diff / minute))} 分钟前`
+  if (diff < hourMs) {
+    return `${Math.max(1, Math.floor(diff / minuteMs))} 分钟前`
   }
 
-  if (diff < day) {
-    return `${Math.floor(diff / hour)} 小时前`
+  if (diff < dayMs) {
+    return `${Math.floor(diff / hourMs)} 小时前`
   }
 
-  if (diff <= week) {
-    return `${Math.floor(diff / day)} 天前`
+  if (diff <= weekMs) {
+    return `${Math.floor(diff / dayMs)} 天前`
   }
 
-  return target.locale('zh-cn').format('YYYY年M月D日')
+  const { year, month, day } = getShanghaiDateParts(target)
+  return `${year}年${month}月${day}日`
 }
 
 export function toDisplayDate(date: number | Date) {
-  return dayjs(date).tz(shanghai).locale('en').format('MMM DD, YYYY')
+  return displayDateFormatter.format(new Date(date))
 }
 
 export function getRemainingDaysOfYear(): number {
-  const endOfYear = dayjs().tz(shanghai).endOf('year')
-  const now = dayjs().tz(shanghai)
-  return endOfYear.diff(now, 'day')
+  const { year, month, day } = getShanghaiDateParts(Date.now())
+  const daysInYear = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / dayMs
+
+  return daysInYear - getDayOfYear(year, month, day)
 }
 
 export function getYearProgress(): { passed: number; remaining: number } {
-  const now = dayjs().tz(shanghai)
-  const startOfYear = now.startOf('year')
-  const endOfYear = now.endOf('year')
-
-  const totalMs = endOfYear.diff(startOfYear)
-  const passedMs = now.diff(startOfYear)
+  const now = new Date()
+  const { year, month, day, hour, minute, second } = getShanghaiDateParts(now)
+  const startOfYear = Date.UTC(year, 0, 1)
+  const endOfYear = Date.UTC(year + 1, 0, 1) - 1
+  const currentTime = Date.UTC(year, month - 1, day, hour, minute, second) + now.getMilliseconds()
+  const totalMs = endOfYear - startOfYear
+  const passedMs = currentTime - startOfYear
 
   const passedPercentage = (passedMs / totalMs) * 100
   const remainingPercentage = 100 - passedPercentage
@@ -66,12 +112,10 @@ export function getYearProgress(): { passed: number; remaining: number } {
 }
 
 export function getTodayDayInfo(): { year: number; dayOfYear: number } {
-  const now = dayjs().tz(shanghai)
-  const startOfYear = now.startOf('year')
-  const dayOfYear = now.diff(startOfYear, 'day') + 1
+  const { year, month, day } = getShanghaiDateParts(Date.now())
 
   return {
-    year: now.year(),
-    dayOfYear,
+    year,
+    dayOfYear: getDayOfYear(year, month, day),
   }
 }

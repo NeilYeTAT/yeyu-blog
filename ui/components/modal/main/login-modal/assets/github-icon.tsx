@@ -1,5 +1,5 @@
 import type { ComponentProps, FC } from 'react'
-import { siGithub } from 'simple-icons'
+import { siGithub } from 'simple-icons/icons'
 
 export const GitHubIcon: FC<ComponentProps<'svg'>> = props => {
   return (

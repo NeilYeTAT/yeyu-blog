@@ -1,5 +1,5 @@
 import type { ComponentProps, FC } from 'react'
-import { siGoogle } from 'simple-icons'
+import { siGoogle } from 'simple-icons/icons'
 
 export const GoogleIcon: FC<ComponentProps<'svg'>> = props => {
   return (
