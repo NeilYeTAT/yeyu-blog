@@ -1,8 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { motion } from 'motion/react'
-import { useIsPanelOpening } from '@/store/use-startup-store'
+import { motion, useReducedMotion } from 'motion/react'
+import { usePathname } from 'next/navigation'
 
 const containerVariants = {
   hidden: {},
@@ -14,13 +14,15 @@ const containerVariants = {
 }
 
 export default function BlogAndNoteLayout({ children }: { children: ReactNode }) {
-  const isPanelOpening = useIsPanelOpening()
+  const pathname = usePathname()
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.main
+      key={pathname}
       className="flex flex-col px-4"
-      initial="hidden"
-      animate={isPanelOpening ? 'visible' : 'hidden'}
+      initial={shouldReduceMotion ? false : 'hidden'}
+      animate="visible"
       variants={containerVariants}
     >
       {children}

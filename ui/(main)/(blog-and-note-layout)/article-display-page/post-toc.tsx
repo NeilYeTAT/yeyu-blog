@@ -12,7 +12,6 @@ import {
   useSyncExternalStore,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { useIsAnimationComplete } from '@/store/use-startup-store'
 import { TocFloatingPanel } from './post-toc-floating-panel'
 
 const emptyPortalState: {
@@ -51,21 +50,13 @@ const getPortalStateSnapshot = () => {
 
 const getServerPortalStateSnapshot = () => emptyPortalState
 
-const ArticleBottomShadow = ({
-  container,
-  visible,
-}: {
-  container: HTMLElement
-  visible: boolean
-}) => {
+const ArticleBottomShadow = ({ container }: { container: HTMLElement }) => {
   const ref = useRef(container)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end end'],
   })
   const shadowOpacity = useTransform(scrollYProgress, [0, 0.84, 0.96, 1], [0.46, 0.46, 0.16, 0])
-
-  if (!visible) return null
 
   return (
     <motion.div
@@ -130,7 +121,6 @@ const useActiveHeading = (headings: Heading[]) => {
 export const PostToc: FC<{
   headings: Heading[]
 }> = ({ headings }) => {
-  const isAnimationComplete = useIsAnimationComplete()
   const reduceMotion = Boolean(useReducedMotion())
   const { activeId, direction, updateActiveHeading } = useActiveHeading(headings)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -199,16 +189,13 @@ export const PostToc: FC<{
 
   return createPortal(
     <>
-      {articleContent != null ? (
-        <ArticleBottomShadow container={articleContent} visible={isAnimationComplete} />
-      ) : null}
+      {articleContent != null ? <ArticleBottomShadow container={articleContent} /> : null}
       <TocFloatingPanel
         activeHeading={activeHeading}
         activeId={activeId}
         articleContent={articleContent}
         direction={direction}
         headings={headings}
-        isAnimationComplete={isAnimationComplete}
         isExpanded={isExpanded}
         reduceMotion={reduceMotion}
         scrollContainerRef={scrollContainerRef}

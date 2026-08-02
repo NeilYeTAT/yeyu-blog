@@ -2,9 +2,8 @@
 
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useIsPanelOpening } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '@/ui/components/shared/max-width-wrapper'
 
 const sectionVariants: Variants = {
@@ -30,7 +29,7 @@ const lineVariants: Variants = {
 }
 
 export function AboutSection({ children, className }: { children: ReactNode; className?: string }) {
-  const isPanelOpening = useIsPanelOpening()
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <section className="flex h-[calc(100dvh-100px)] w-full snap-center flex-col items-center justify-center p-4">
@@ -40,8 +39,8 @@ export function AboutSection({ children, className }: { children: ReactNode; cla
             'flex flex-col items-center justify-center gap-4 text-center md:text-lg',
             className,
           )}
-          initial="hidden"
-          whileInView={isPanelOpening ? 'visible' : 'hidden'}
+          initial={shouldReduceMotion ? false : 'hidden'}
+          whileInView="visible"
           viewport={{ amount: 0.45, once: true }}
           variants={sectionVariants}
         >

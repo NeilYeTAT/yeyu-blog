@@ -5,7 +5,6 @@ import { Background } from './layout/background'
 import { ContactMe } from './layout/contact-me'
 import { DraggableFloatingMenu } from './layout/draggable-floating-menu'
 import Header from './layout/header'
-import StartUpMotion from './layout/start-up-motion'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +21,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         <Background />
         <DraggableFloatingMenu />
-        <StartUpMotion />
       </div>
     </MainProvider>
   )

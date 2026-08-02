@@ -6,7 +6,6 @@ import { useRef } from 'react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
 import { useIsHydrated } from '@/hooks/common/use-is-mounted'
-import { useIsAnimationComplete } from '@/store/use-startup-store'
 // * thanks https://www.mshr.app/mesh/1727202711374
 import '@/lib/styles/background.css'
 import { ArtPlum } from './art-plum'
@@ -24,13 +23,11 @@ const lightBackgroundAnimationOptions: KeyframeAnimationOptions = {
 }
 
 function LightBackground() {
-  const isAnimationComplete = useIsAnimationComplete()
   const motionLayerRef = useRef<HTMLDivElement>(null)
   useVisibilityAnimation({
     targetRef: motionLayerRef,
     keyframes: lightBackgroundKeyframes,
     options: lightBackgroundAnimationOptions,
-    enabled: isAnimationComplete,
     willChange: 'transform',
   })
 

@@ -1,88 +1,62 @@
 'use client'
 
-import { motion } from 'motion/react'
-import { type ReactNode, useEffect, useRef } from 'react'
-import { useIsPanelOpening } from '@/store/use-startup-store'
-import { startupPanelDuration } from '../layout/start-up-motion/constant'
+import type { Variants } from 'motion/react'
+import type { ReactNode } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 
-const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)'
-const enterDuration = startupPanelDuration * 1000
-const enterStagger = 120
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
+
+const avatarVariants: Variants = {
+  hidden: { opacity: 0, y: -50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 100, damping: 20 },
+  },
+}
+
+const bioVariants: Variants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] },
+  },
+}
+
+const fadeVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] },
+  },
+}
 
 export function HomeMotionMain({ children }: { children: ReactNode }) {
-  const isPanelOpening = useIsPanelOpening()
-  const mainRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const main = mainRef.current
-    if (!isPanelOpening || main === null) return
-
-    const items = Array.from(main.querySelectorAll<HTMLElement>('[data-home-enter]'))
-    main.style.opacity = '1'
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      items.forEach(item => {
-        item.style.opacity = '1'
-        item.style.transform = 'translateY(0)'
-      })
-      return
-    }
-
-    const animations = items.map((item, index) => {
-      const offset = item.dataset.homeEnter === 'avatar' ? '-50px' : '50px'
-      const shouldTranslate = item.dataset.homeEnter !== 'fade'
-      const delay = (index + 1) * enterStagger
-      const animation = item.animate(
-        [
-          {
-            opacity: 0,
-            transform: shouldTranslate ? `translateY(${offset})` : 'translateY(0)',
-          },
-          { opacity: 1, transform: 'translateY(0)' },
-        ],
-        {
-          duration: enterDuration,
-          delay,
-          easing: enterEase,
-          fill: 'both',
-        },
-      )
-
-      animation.onfinish = () => {
-        item.style.opacity = '1'
-        item.style.transform = 'translateY(0)'
-        animation.cancel()
-      }
-
-      return animation
-    })
-
-    return () => {
-      animations.forEach(animation => animation.cancel())
-    }
-  }, [isPanelOpening])
+  const shouldReduceMotion = useReducedMotion()
 
   return (
-    <main
-      ref={mainRef}
+    <motion.main
       className="flex w-full flex-col items-center justify-center gap-4 pt-16 pb-4"
-      style={{ opacity: 0 }}
+      initial={shouldReduceMotion ? false : 'hidden'}
+      animate="visible"
+      variants={containerVariants}
     >
       {children}
-    </main>
+    </motion.main>
   )
 }
 
 export function HomeAvatarMotion({ children }: { children: ReactNode }) {
-  const isPanelOpening = useIsPanelOpening()
-
   return (
-    <motion.div
-      className="flex w-full justify-center"
-      initial={{ opacity: 0, y: -50 }}
-      animate={isPanelOpening ? { opacity: 1, y: 0 } : { opacity: 0, y: -50 }}
-      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-    >
+    <motion.div className="flex w-full justify-center" variants={avatarVariants}>
       {children}
     </motion.div>
   )
@@ -90,20 +64,16 @@ export function HomeAvatarMotion({ children }: { children: ReactNode }) {
 
 export function HomeBioMotion({ children }: { children: ReactNode }) {
   return (
-    <div
-      data-home-enter="bio"
-      className="flex w-full justify-center"
-      style={{ opacity: 0, transform: 'translateY(50px)' }}
-    >
+    <motion.div className="flex w-full justify-center" variants={bioVariants}>
       {children}
-    </div>
+    </motion.div>
   )
 }
 
 export function HomeFadeMotion({ children }: { children: ReactNode }) {
   return (
-    <div data-home-enter="fade" className="flex w-full justify-center" style={{ opacity: 0 }}>
+    <motion.div className="flex w-full justify-center" variants={fadeVariants}>
       {children}
-    </div>
+    </motion.div>
   )
 }

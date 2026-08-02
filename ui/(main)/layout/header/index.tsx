@@ -4,9 +4,7 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/r
 import { createPortal } from 'react-dom'
 import { useIsHydrated } from '@/hooks/common/use-is-mounted'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useIsAnimationComplete, useIsPanelOpening } from '@/store/use-startup-store'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
-import { startupEase, startupPanelDuration } from '../start-up-motion/constant'
 import { isNavGroupRoute, navigationConfig } from './constant'
 import { HeaderRouteItem } from './header-route-item'
 import { HeaderSubmenu } from './header-submenu'
@@ -14,7 +12,9 @@ import { useHeaderActiveRoute } from './hooks/use-header-active-route'
 import { useHeaderSubmenu } from './hooks/use-header-submenu'
 import { useScrollVisibility } from './hooks/use-scroll-visibility'
 
-const navigationRevealDelay = startupPanelDuration / 5
+const headerEase: [number, number, number, number] = [0.76, 0, 0.24, 1]
+const headerExpandDuration = 0.48
+const navigationRevealDelay = headerExpandDuration / 5
 
 const HeaderBackdropPortal = ({
   isOpen,
@@ -49,15 +49,14 @@ const HeaderBackdropPortal = ({
 }
 
 export default function Header() {
-  const isPanelOpening = useIsPanelOpening()
-  const isAnimationComplete = useIsAnimationComplete()
+  const isHeaderReady = useIsHydrated()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
   const activeRoute = useHeaderActiveRoute()
   const submenu = useHeaderSubmenu()
 
   const shouldShowHeader = isHeaderVisible || submenu.state.isOpen
-  const canInteractWithHeader = isAnimationComplete && shouldShowHeader
+  const canInteractWithHeader = shouldShowHeader
 
   return (
     <motion.header
@@ -88,13 +87,13 @@ export default function Header() {
         layout="size"
         className={cn(
           'pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto h-full rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#0000001A] backdrop-blur-sm dark:border-white/10 dark:bg-black/70',
-          isPanelOpening ? 'w-full' : 'w-16',
+          isHeaderReady ? 'w-full' : 'w-16',
         )}
         initial={false}
         transition={
           shouldReduceMotion
             ? { duration: 0 }
-            : { duration: startupPanelDuration, ease: startupEase }
+            : { duration: headerExpandDuration, ease: headerEase }
         }
       />
       <MaxWidthWrapper
@@ -106,15 +105,15 @@ export default function Header() {
           className="flex h-full items-center justify-between text-nowrap text-sm md:text-xl dark:text-neutral-400"
           initial={false}
           animate={{
-            opacity: isPanelOpening ? 1 : 0,
-            y: isPanelOpening || shouldReduceMotion ? 0 : 4,
+            opacity: isHeaderReady ? 1 : 0,
+            y: isHeaderReady || shouldReduceMotion ? 0 : 4,
           }}
           transition={
             shouldReduceMotion
               ? { duration: 0 }
               : {
                   duration: 0.22,
-                  delay: isPanelOpening ? navigationRevealDelay : 0,
+                  delay: isHeaderReady ? navigationRevealDelay : 0,
                   ease: [0.22, 1, 0.36, 1],
                 }
           }

@@ -2,7 +2,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useIsAnimationComplete } from '@/store/use-startup-store'
 
 const r180 = Math.PI
 const r90 = Math.PI / 2
@@ -12,7 +11,6 @@ const color = '#88888825'
 const { random } = Math
 
 export const ArtPlum = () => {
-  const isAnimationComplete = useIsAnimationComplete()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stepsRef = useRef<Array<() => void>>([])
   const prevStepsRef = useRef<Array<() => void>>([])
@@ -20,8 +18,6 @@ export const ArtPlum = () => {
   const stopped = useRef(false)
 
   useEffect(() => {
-    if (!isAnimationComplete) return
-
     const canvas = canvasRef.current
     if (canvas == null) return
     let requestId: number | undefined
@@ -127,7 +123,7 @@ export const ArtPlum = () => {
     return () => {
       if (requestId !== undefined) cancelAnimationFrame(requestId)
     }
-  }, [isAnimationComplete])
+  }, [])
 
   const mask = 'radial-gradient(circle, transparent, black)'
 

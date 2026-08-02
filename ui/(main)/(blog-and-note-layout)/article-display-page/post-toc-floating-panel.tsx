@@ -11,7 +11,6 @@ export const TocFloatingPanel = ({
   articleContent,
   direction,
   headings,
-  isAnimationComplete,
   isExpanded,
   reduceMotion,
   scrollContainerRef,
@@ -24,7 +23,6 @@ export const TocFloatingPanel = ({
   articleContent: HTMLElement | null
   direction: number
   headings: Heading[]
-  isAnimationComplete: boolean
   isExpanded: boolean
   reduceMotion: boolean
   scrollContainerRef: RefObject<HTMLDivElement | null>
@@ -59,11 +57,7 @@ export const TocFloatingPanel = ({
         isExpanded ? 'rounded-2xl' : 'rounded-full',
       )}
       initial={{ y: 100, opacity: 0 }}
-      animate={
-        isAnimationComplete
-          ? { y: 0, opacity: 1 }
-          : { y: 100, opacity: 0, transition: { duration: 0 } }
-      }
+      animate={{ y: 0, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       <motion.div layout="position" className="flex flex-col">

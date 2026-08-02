@@ -3,7 +3,6 @@
 import type { CSSProperties } from 'react'
 import type { Friend } from '../types'
 import { cn } from '@/lib/utils/common/shadcn'
-import { useIsPanelOpening } from '@/store/use-startup-store'
 import { planeHeight, planeWidth } from '../constants'
 import { useFriendsPlaneController } from '../hooks/use-friends-plane-controller'
 import { getPlaneTransform } from '../utils'
@@ -15,7 +14,6 @@ type FriendsPlaneProps = {
 }
 
 export function FriendsPlane({ friends }: FriendsPlaneProps) {
-  const isPanelOpening = useIsPanelOpening()
   const {
     handleFriendClick,
     handlePointerDown,
@@ -49,7 +47,6 @@ export function FriendsPlane({ friends }: FriendsPlaneProps) {
         )}
         data-dragging="false"
         data-moving="false"
-        data-startup-ready={isPanelOpening}
         onPointerCancel={handlePointerUp}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

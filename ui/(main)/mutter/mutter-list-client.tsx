@@ -1,7 +1,7 @@
 'use client'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
@@ -9,7 +9,6 @@ import { useMutterLikeMutation } from '@/hooks/api/mutter/use-mutter-like-mutati
 import { getPublicMutters } from '@/lib/api/mutter/get-public-mutters'
 import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
-import { useIsPanelOpening } from '@/store/use-startup-store'
 import Loading from '@/ui/components/shared/loading'
 import { itemVariants, listVariants } from './constant'
 import { MutterCommentButton } from './mutter-comment-button'
@@ -62,7 +61,7 @@ export function MutterListClient({
   const modalType = useModalType()
   const payload = useModalPayload()
   const { setModalOpen } = useModalActions()
-  const isPanelOpening = useIsPanelOpening()
+  const shouldReduceMotion = useReducedMotion()
   const activeCommentPayload =
     modalType === 'mutterCommentModal' && payload != null
       ? (payload as {
@@ -149,8 +148,8 @@ export function MutterListClient({
   return (
     <motion.section
       className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-4 pb-10"
-      initial="hidden"
-      animate={isPanelOpening ? 'visible' : 'hidden'}
+      initial={shouldReduceMotion ? false : 'hidden'}
+      animate="visible"
       variants={listVariants}
     >
       <motion.ul className="flex flex-col gap-4" variants={listVariants}>

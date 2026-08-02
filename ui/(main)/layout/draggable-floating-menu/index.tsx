@@ -9,7 +9,6 @@ import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useBackgroundMusicActions, useIsPlaying } from '@/store/use-background-music-store'
 import { useModalActions } from '@/store/use-modal-store'
-import { useIsAnimationComplete } from '@/store/use-startup-store'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
 import { type IconsId, icons } from './constant'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
@@ -27,7 +26,6 @@ const menuAngles: Record<IconsId, number> = {
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const pathname = usePathname()
-  const isAnimationComplete = useIsAnimationComplete()
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
   const isPlaying = useIsPlaying()
@@ -98,16 +96,8 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
         whileTap={{ scale: 0.95 }}
         initial={{ scale: 0.2, y: 100, opacity: 0 }}
-        animate={
-          isAnimationComplete
-            ? {
-                scale: 1,
-                y: 0,
-                opacity: 1,
-                transition: { type: 'spring', stiffness: 260, damping: 20 },
-              }
-            : { scale: 0.2, y: 100, opacity: 0, transition: { duration: 0 } }
-        }
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         className={cn(
           'fixed bottom-20 left-1/2 z-100 -ml-6 cursor-grab active:cursor-grabbing',
           className,

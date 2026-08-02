@@ -7,7 +7,7 @@ export function FriendsPlaneStyle() {
           transform-origin: center;
         }
 
-        .friends-plane-stage[data-startup-ready="true"] .friend-plane-item {
+        .friends-plane-stage .friend-plane-item {
           animation: friend-plane-item-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
           animation-delay: var(--friend-intro-delay);
         }
