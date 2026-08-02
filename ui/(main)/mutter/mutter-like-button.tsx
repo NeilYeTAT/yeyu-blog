@@ -32,7 +32,7 @@ export function MutterLikeButton({ isLiked, likeCount, onClick }: MutterLikeButt
       aria-label="like mutter"
       aria-pressed={isLiked}
       className={cn(
-        'inline-flex h-8 cursor-pointer items-center justify-center gap-0.5 rounded-md px-1.5 text-zinc-400 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-zinc-500 dark:hover:text-zinc-200',
+        'inline-flex h-7 min-w-7 cursor-pointer items-center justify-center gap-0.5 rounded-md px-1 text-zinc-400 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:h-8 md:min-w-0 md:px-1.5 dark:text-zinc-500 dark:hover:text-zinc-200',
         isLiked && 'text-rose-500 hover:text-rose-500 dark:text-rose-500',
       )}
       disabled={isLiked}
@@ -49,15 +49,11 @@ export function MutterLikeButton({ isLiked, likeCount, onClick }: MutterLikeButt
         )}
         size={16}
       />
-      <span
-        aria-hidden={!showLikeCount}
-        className={cn(
-          'flex h-4 min-w-[1.5ch] items-center justify-center font-medium text-[11px] tabular-nums leading-none',
-          !showLikeCount && 'invisible',
-        )}
-      >
-        {showLikeCount ? likeCount : null}
-      </span>
+      {showLikeCount ? (
+        <span className="flex h-3.5 min-w-[1.5ch] items-center justify-center font-medium text-[10px] tabular-nums leading-none md:h-4 md:text-[11px]">
+          {likeCount}
+        </span>
+      ) : null}
     </button>
   )
 }

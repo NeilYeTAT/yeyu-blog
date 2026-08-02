@@ -7,7 +7,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useMutterLikeMutation } from '@/hooks/api/mutter/use-mutter-like-mutation'
 import { getPublicMutters } from '@/lib/api/mutter/get-public-mutters'
-import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
+import { cn } from '@/lib/utils/common/shadcn'
+import { prettyDateTime } from '@/lib/utils/common/time'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import Loading from '@/ui/components/shared/loading'
 import { itemVariants, listVariants } from './constant'
@@ -147,40 +148,53 @@ export function MutterListClient({
 
   return (
     <motion.section
-      className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-4 pb-10"
+      className="mx-auto mt-6 flex w-[92%] max-w-3xl flex-col gap-3 pb-8 md:mt-8 md:w-full md:gap-4 md:pb-10"
       initial={shouldReduceMotion ? false : 'hidden'}
       animate="visible"
       variants={listVariants}
     >
-      <motion.ul className="flex flex-col gap-4" variants={listVariants}>
+      <motion.ul className="flex flex-col gap-3 md:gap-4" variants={listVariants}>
         {mutters.map((item, index) => {
           const createdAt = Date.parse(item.createdAt)
-          const relativeDate = toRelativeDate(createdAt)
+          const displayDateTime = prettyDateTime(createdAt)
           const isLiked = likedMutterIdSet.has(item.id)
           const likeCount = likeCounts[item.id] ?? item.likeCount
           const isCommentActive = activeCommentPayload?.mutterId === item.id
+          const isRightAligned = index % 2 === 1
 
           return (
-            <motion.li key={item.id} className="flex items-start gap-3.5" variants={itemVariants}>
+            <motion.li
+              key={item.id}
+              className={cn(
+                'flex w-[calc(100%_-_2.625rem)] items-start gap-2.5 md:w-[72%] md:gap-3.5',
+                isRightAligned && 'flex-row-reverse self-end',
+              )}
+              variants={itemVariants}
+            >
               <Image
                 src={avatar}
                 alt="avatar"
-                className="size-10 rounded-full border border-zinc-200 object-cover grayscale dark:border-zinc-700"
+                className="size-8 rounded-full border border-zinc-200 object-cover grayscale md:size-10 dark:border-zinc-700"
                 priority={index === 0}
               />
 
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div
+                className={cn(
+                  'flex min-w-0 flex-1 flex-col gap-1.5 md:gap-2',
+                  isRightAligned && 'items-end',
+                )}
+              >
                 <time
                   dateTime={item.createdAt}
-                  title={prettyDateTime(createdAt)}
+                  title={displayDateTime}
                   suppressHydrationWarning
-                  className="font-mono text-[11px] text-zinc-500 uppercase tracking-[0.12em] dark:text-zinc-400"
+                  className="font-mono text-[10px] text-zinc-500 uppercase tracking-[0.12em] md:text-[11px] dark:text-zinc-400"
                 >
-                  {relativeDate}
+                  {displayDateTime}
                 </time>
-                <article className="rounded-xl border border-[#00000011] bg-theme-background/80 px-4 py-3 text-[15px] text-zinc-900 leading-7 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+                <article className="w-full rounded-xl border border-[#00000011] bg-theme-background/80 px-2.5 pt-1.5 pb-0.5 text-left text-sm text-zinc-900 leading-6 md:px-4 md:pt-3 md:pb-1 md:text-[15px] md:leading-7 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
                   <MutterContent content={item.content} />
-                  <footer className="mt-3 flex items-center justify-end gap-0.5">
+                  <footer className="mt-1 flex items-center justify-end gap-0.5 md:mt-3">
                     <MutterCommentButton
                       isActive={isCommentActive}
                       commentCount={item.commentCount}
