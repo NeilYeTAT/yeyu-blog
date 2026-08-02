@@ -1,22 +1,4 @@
-'use client'
-
 import type { CSSProperties, ReactNode } from 'react'
-import { useRef } from 'react'
-import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
-
-const outerRotationKeyframes: Keyframe[] = [
-  { transform: 'rotate(0deg)' },
-  { transform: 'rotate(360deg)' },
-]
-const innerRotationKeyframes: Keyframe[] = [
-  { transform: 'rotate(0deg)' },
-  { transform: 'rotate(-360deg)' },
-]
-const ringAnimationOptions: KeyframeAnimationOptions = {
-  duration: 24000,
-  iterations: Infinity,
-  easing: 'linear',
-}
 
 export function TechStackRings({
   outerItems,
@@ -27,29 +9,6 @@ export function TechStackRings({
   innerItems: { key: string; component: ReactNode }[]
   ringBaseCount: number
 }) {
-  const outerRingRef = useRef<HTMLDivElement>(null)
-  const innerRingRef = useRef<HTMLDivElement>(null)
-  const outerAnimation = useVisibilityAnimation({
-    targetRef: outerRingRef,
-    keyframes: outerRotationKeyframes,
-    options: ringAnimationOptions,
-  })
-  const innerAnimation = useVisibilityAnimation({
-    targetRef: innerRingRef,
-    keyframes: innerRotationKeyframes,
-    options: ringAnimationOptions,
-  })
-
-  const stopRotation = () => {
-    outerAnimation.pause(800)
-    innerAnimation.pause(800)
-  }
-
-  const startRotation = () => {
-    outerAnimation.play(600)
-    innerAnimation.play(600)
-  }
-
   return (
     <section
       style={
@@ -63,13 +22,11 @@ export function TechStackRings({
       }
       className="relative rounded-full [--min-r:176px] [--s:64px] [--view-w:100vw] md:[--min-r:344px] md:[--s:128px] md:[--view-w:64rem]"
     >
-      <div ref={outerRingRef} className="absolute inset-0">
+      <div className="absolute inset-0 animate-ye-spin-slowly motion-reduce:animate-none">
         {outerItems.map((item, i) => (
           <div
             key={`outer-${item.key}`}
-            onMouseEnter={stopRotation}
-            onMouseLeave={startRotation}
-            className="absolute left-1/2 z-10 size-12 -translate-x-1/2 transition md:size-24"
+            className="absolute left-1/2 z-10 size-12 -translate-x-1/2 md:size-24"
             style={{
               rotate: `${i * (360 / outerItems.length)}deg`,
               transformOrigin: 'center var(--outer-r)',
@@ -86,13 +43,11 @@ export function TechStackRings({
         }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       >
-        <div ref={innerRingRef} className="absolute inset-0">
+        <div className="absolute inset-0 animate-ye-spin-slowly [animation-direction:reverse] motion-reduce:animate-none">
           {innerItems.map((item, i) => (
             <div
               key={`inner-${item.key}`}
-              onMouseEnter={stopRotation}
-              onMouseLeave={startRotation}
-              className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 transition md:size-[5rem]"
+              className="absolute left-1/2 z-20 size-[2.5rem] -translate-x-1/2 md:size-[5rem]"
               style={{
                 rotate: `${i * (360 / innerItems.length)}deg`,
                 transformOrigin: 'center var(--inner-r)',

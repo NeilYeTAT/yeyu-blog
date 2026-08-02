@@ -17,69 +17,72 @@ import { TypeScriptIcon } from './assets/svg/outer-ring/typescript-icon'
 import { WagmiIcon } from './assets/svg/outer-ring/wagmi-icon'
 import { TechStackRings } from './tech-stack-rings'
 
+const techStackIconClassName =
+  'size-full transition-none hover:text-zinc-400 dark:hover:text-zinc-400'
+
 const outerRingTechStackData = [
   {
     key: 'ts',
-    component: <TypeScriptIcon className="size-full" />,
+    component: <TypeScriptIcon className={techStackIconClassName} />,
   },
   {
     key: 'react',
-    component: <ReactIcon className="size-full" />,
+    component: <ReactIcon className={techStackIconClassName} />,
   },
   {
     key: 'tailwindcss',
-    component: <TailwindcssIcon className="size-full" />,
+    component: <TailwindcssIcon className={techStackIconClassName} />,
   },
   {
     key: 'next',
-    component: <NextjsIcon className="size-full" />,
+    component: <NextjsIcon className={techStackIconClassName} />,
   },
   {
     key: 'nest',
-    component: <NestjsIcon className="size-full" />,
+    component: <NestjsIcon className={techStackIconClassName} />,
   },
   {
     key: 'node',
-    component: <NodejsIcon className="size-full" />,
+    component: <NodejsIcon className={techStackIconClassName} />,
   },
   {
     key: 'react-query',
-    component: <ReactQueryIcon className="size-full" />,
+    component: <ReactQueryIcon className={techStackIconClassName} />,
   },
   {
     key: 'wagmi',
-    component: <WagmiIcon className="size-full" />,
+    component: <WagmiIcon className={techStackIconClassName} />,
   },
 ] satisfies { key: string; component: ReactNode }[]
 
 const innerRingTechStackData = [
   {
     key: 'github actions',
-    component: <GitHubActionsIcon className="size-full" />,
+    component: <GitHubActionsIcon className={techStackIconClassName} />,
   },
   {
     key: 'git',
-    component: <GitIcon className="size-full" />,
+    component: <GitIcon className={techStackIconClassName} />,
   },
   {
     key: 'neovim',
-    component: <NeovimIcon className="size-full" />,
+    component: <NeovimIcon className={techStackIconClassName} />,
   },
   {
     key: 'obsidian',
-    component: <ObsidianIcon className="size-full" />,
+    component: <ObsidianIcon className={techStackIconClassName} />,
   },
   {
     key: 'prisma',
-    component: <PrismaIcon className="size-full" />,
+    component: <PrismaIcon className={techStackIconClassName} />,
   },
   {
     key: 'shadcnui',
-    component: <ShadcnuiIcon className="size-full" />,
+    component: <ShadcnuiIcon className={techStackIconClassName} />,
   },
   {
     key: 'vim',
-    component: <VimIcon className="size-full" />,
+    component: <VimIcon className={techStackIconClassName} />,
   },
 ] satisfies { key: string; component: ReactNode }[]
 
