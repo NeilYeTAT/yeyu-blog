@@ -2,7 +2,13 @@ import type { useHeaderActiveRoute } from './hooks/use-header-active-route'
 import type { useHeaderSubmenu } from './hooks/use-header-submenu'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
-import { activeTextShadowClass, inactiveTextShadowClass, slideVariants } from './constant'
+import {
+  activeTextShadowClass,
+  headerWaveTriggerClassName,
+  headerWaveUnderlineClassName,
+  inactiveTextShadowClass,
+  slideVariants,
+} from './constant'
 import { NavItem } from './nav-item'
 
 export function HeaderSubmenu({
@@ -64,13 +70,13 @@ export function HeaderSubmenu({
                   }}
                   className={cn(
                     'rounded-lg px-4 py-2 transition-[color,text-shadow] duration-200 ease-out',
-                    'hover:underline',
+                    headerWaveTriggerClassName,
                     item.path === activeRoute.effectiveActiveUrl
                       ? cn('text-primary', activeTextShadowClass)
                       : cn('text-neutral-600 dark:text-neutral-400', inactiveTextShadowClass),
                   )}
                 >
-                  {item.pathName}
+                  <span className={headerWaveUnderlineClassName}>{item.pathName}</span>
                 </NavItem>
               ))}
             </motion.div>

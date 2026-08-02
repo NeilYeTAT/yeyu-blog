@@ -39,7 +39,7 @@ const HeaderBackdropPortal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: shouldReduceMotion ? 0 : 0.14 }}
-          className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 backdrop-blur-xs dark:bg-black/20"
+          className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 dark:bg-black/20"
           onClick={onClose}
         />
       )}

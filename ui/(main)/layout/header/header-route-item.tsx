@@ -3,8 +3,13 @@ import type { useHeaderSubmenu } from './hooks/use-header-submenu'
 import type { RouteItem } from './types'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
-import { activeTextShadowClass, inactiveTextShadowClass, isNavGroupRoute } from './constant'
-import { HoverBackground } from './hover-background'
+import {
+  activeTextShadowClass,
+  headerWaveTriggerClassName,
+  headerWaveUnderlineClassName,
+  inactiveTextShadowClass,
+  isNavGroupRoute,
+} from './constant'
 import { NavItem } from './nav-item'
 
 export function HeaderRouteItem({
@@ -22,7 +27,6 @@ export function HeaderRouteItem({
     const { group } = route
     const currentItem = activeRoute.getGroupCurrentItem(group)
     const isGroupActive = group.key === activeRoute.activeKey
-    const isGroupHovered = submenu.state.hoveredPath === group.key
 
     return (
       <div className="z-10" {...submenu.getGroupTriggerProps(group.key)}>
@@ -30,9 +34,10 @@ export function HeaderRouteItem({
           item={currentItem}
           className={cn(
             'relative z-10 block cursor-pointer transition-[color,text-shadow] duration-200 ease-out',
+            headerWaveTriggerClassName,
             isGroupActive
               ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
-              : cn('dark:hover:text-neutral-200', inactiveTextShadowClass),
+              : inactiveTextShadowClass,
           )}
         >
           <div className="relative px-2 md:px-4">
@@ -52,6 +57,7 @@ export function HeaderRouteItem({
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.h2
                 key={currentItem.pathName}
+                className={headerWaveUnderlineClassName}
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -4 }}
@@ -60,7 +66,6 @@ export function HeaderRouteItem({
                 {currentItem.pathName}
               </motion.h2>
             </AnimatePresence>
-            <HoverBackground isVisible={!isGroupActive && isGroupHovered} />
           </div>
         </NavItem>
       </div>
@@ -72,9 +77,10 @@ export function HeaderRouteItem({
       item={route}
       className={cn(
         'relative z-10 block transition-[color,text-shadow] duration-200 ease-out',
+        headerWaveTriggerClassName,
         route.path === activeRoute.activeKey
           ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
-          : cn('dark:hover:text-neutral-200', inactiveTextShadowClass),
+          : inactiveTextShadowClass,
       )}
       {...submenu.getRouteItemProps(route.path)}
     >
@@ -92,13 +98,7 @@ export function HeaderRouteItem({
             }
           />
         )}
-        <h2>{route.pathName}</h2>
-        <HoverBackground
-          isVisible={
-            submenu.state.hoveredPath !== activeRoute.activeKey &&
-            submenu.state.hoveredPath === route.path
-          }
-        />
+        <h2 className={headerWaveUnderlineClassName}>{route.pathName}</h2>
       </div>
     </NavItem>
   )
