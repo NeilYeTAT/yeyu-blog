@@ -1,5 +1,6 @@
 import { prisma } from '@/prisma/instance'
-import { FriendsPlane } from './components/friends-plane'
+import { FriendApplyButton } from './friend-apply-button'
+import { FriendsList } from './friends-list'
 
 export async function FriendsPage() {
   const friends = await prisma.friendLink.findMany({
@@ -24,10 +25,18 @@ export async function FriendsPage() {
   })
 
   return (
-    <section className="relative h-[calc(100dvh-194px)] min-h-[520px] overflow-hidden py-4">
-      <div className="relative h-full w-full overflow-hidden">
-        <FriendsPlane friends={friends} />
+    <section className="mx-auto flex w-full max-w-2xl flex-col px-1 py-4 sm:px-4">
+      <div className="mb-6 flex justify-center">
+        <FriendApplyButton />
       </div>
+
+      {friends.length > 0 ? (
+        <FriendsList friends={friends} />
+      ) : (
+        <p className="m-auto py-24 text-theme-muted-foreground dark:text-theme-dark-muted-foreground">
+          虚无。
+        </p>
+      )}
     </section>
   )
 }
