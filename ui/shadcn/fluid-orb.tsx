@@ -105,12 +105,16 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 const FluidOrb = ({
   size = 240,
   color = '#1A73F2',
+  maxDpr = 2,
+  frameRate = 60,
   className,
   style,
   ...props
 }: React.ComponentProps<'div'> & {
   size?: number
   color?: string
+  maxDpr?: number
+  frameRate?: number
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -120,7 +124,7 @@ const FluidOrb = ({
     const canvas = canvasRef.current
     if (!container || !canvas) return
 
-    const gl = canvas.getContext('webgl', { antialias: true, alpha: true })
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: true })
     if (!gl) return
 
     const program = gl.createProgram()
@@ -162,7 +166,7 @@ const FluidOrb = ({
       attributeFilter: ['class', 'data-brand-theme', 'style'],
     })
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    const dpr = Math.min(window.devicePixelRatio, maxDpr)
     const px = Math.round(size * dpr)
     canvas.width = px
     canvas.height = px
@@ -171,11 +175,18 @@ const FluidOrb = ({
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const start = performance.now()
+    const frameInterval = 1000 / frameRate
+    let previousRenderTime = start - frameInterval
     let raf = 0
 
     const render = (now: number) => {
-      gl.uniform1f(uTime, reduce ? 0 : (now - start) / 1000)
-      gl.drawArrays(gl.TRIANGLES, 0, 6)
+      const elapsedTime = now - previousRenderTime
+
+      if (elapsedTime >= frameInterval) {
+        previousRenderTime = now - (elapsedTime % frameInterval)
+        gl.uniform1f(uTime, reduce ? 0 : (now - start) / 1000)
+        gl.drawArrays(gl.TRIANGLES, 0, 6)
+      }
       if (!reduce) raf = requestAnimationFrame(render)
     }
     render(start)
@@ -188,7 +199,7 @@ const FluidOrb = ({
       gl.deleteShader(frag)
       gl.deleteBuffer(buffer)
     }
-  }, [size, color])
+  }, [color, frameRate, maxDpr, size])
 
   return (
     <div
