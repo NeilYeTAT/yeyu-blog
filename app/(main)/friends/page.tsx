@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: '友链',
 }
 
+export const revalidate = 3600
+
 export default function Page() {
   return <FriendsPage />
 }

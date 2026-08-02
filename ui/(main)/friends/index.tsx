@@ -14,15 +14,15 @@ export async function FriendsPage() {
       avatarUrl: true,
       siteUrl: true,
     },
-    orderBy: [
-      {
-        updatedAt: 'desc',
-      },
-      {
-        id: 'desc',
-      },
-    ],
   })
+
+  for (let index = friends.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const currentFriend = friends[index]
+
+    friends[index] = friends[randomIndex]
+    friends[randomIndex] = currentFriend
+  }
 
   return (
     <section className="mx-auto flex w-full max-w-2xl flex-col px-1 py-4 sm:px-4">
