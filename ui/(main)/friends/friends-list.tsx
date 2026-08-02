@@ -8,9 +8,16 @@ const revealInterval = 100
 
 export function FriendsList({ friends }: { friends: Friend[] }) {
   const [visibleFriendIds, setVisibleFriendIds] = useState<number[]>([])
-  const queuedFriendIdsRef = useRef(new Set<number>())
+  const queuedFriendIdsRef = useRef<Set<number> | null>(null)
   const pendingFriendsRef = useRef<{ id: number; index: number }[]>([])
   const revealTimerRef = useRef<number | null>(null)
+
+  if (queuedFriendIdsRef.current === null) {
+    queuedFriendIdsRef.current = new Set()
+  }
+
+  const queuedFriendIds = queuedFriendIdsRef.current
+  const visibleFriendIdSet = new Set(visibleFriendIds)
 
   const revealNextFriend = useCallback(() => {
     pendingFriendsRef.current.sort((a, b) => a.index - b.index)
@@ -27,18 +34,18 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
 
   const queueFriendReveal = useCallback(
     (friend: Friend, index: number) => {
-      if (queuedFriendIdsRef.current.has(friend.id)) {
+      if (queuedFriendIds.has(friend.id)) {
         return
       }
 
-      queuedFriendIdsRef.current.add(friend.id)
+      queuedFriendIds.add(friend.id)
       pendingFriendsRef.current.push({ id: friend.id, index })
 
       if (revealTimerRef.current == null) {
         revealTimerRef.current = window.setTimeout(revealNextFriend, 0)
       }
     },
-    [revealNextFriend],
+    [queuedFriendIds, revealNextFriend],
   )
 
   useEffect(
@@ -57,7 +64,7 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
           key={friend.id}
           friend={friend}
           index={index}
-          isVisible={visibleFriendIds.includes(friend.id)}
+          isVisible={visibleFriendIdSet.has(friend.id)}
           onViewportEnter={() => {
             queueFriendReveal(friend, index)
           }}
