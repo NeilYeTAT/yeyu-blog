@@ -40,7 +40,7 @@ export const Web3UserPanel = () => {
             onClick={closeModal}
             className={buttonVariants({
               className:
-                'h-10 w-full cursor-pointer rounded-xl bg-theme-indicator px-4 text-theme-active-text hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35',
+                'h-10 w-full cursor-pointer rounded-xl bg-theme-accent px-4 text-theme-accent-foreground hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35',
             })}
             onMouseEnter={() => {
               adminIconRef.current?.startAnimation()

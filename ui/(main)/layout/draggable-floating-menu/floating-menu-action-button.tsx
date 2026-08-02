@@ -28,7 +28,7 @@ export function FloatingMenuActionButton({
       {...props}
     >
       {showPing && (
-        <span className="absolute inset-0 animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-indicator/70 ring-offset-2 ring-offset-theme-100 dark:ring-white dark:ring-offset-black" />
+        <span className="absolute inset-0 animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-accent/70 ring-offset-2 ring-offset-theme-background dark:ring-white dark:ring-offset-black" />
       )}
       {children}
     </motion.button>

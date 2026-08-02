@@ -1,35 +1,31 @@
 :root[data-brand-theme="mist"] {
-  /* Theme scale (shadcn/tailwind style) */
-  --theme-50: hsl(0 0% 100%);
-  --theme-100: hsl(160 8% 93%);
-  --theme-200: hsl(178 37% 86%);
-  --theme-300: hsl(179 31% 77%);
-  --theme-400: hsl(180 31% 66%);
-  --theme-500: hsl(180 34% 53%);
-  --theme-600: hsl(181 39% 43%);
-  --theme-700: hsl(182 43% 33%);
-  --theme-800: hsl(183 40% 27%);
-  --theme-900: hsl(184 36% 21%);
-  --theme-950: hsl(186 31% 13%);
+  /* Interface colors */
+  --theme-primary: hsl(182 43% 33%);
+  --theme-background: hsl(160 8% 94%);
+  --theme-surface: hsl(0 0% 100%);
+  --theme-accent: hsl(180 34% 53%);
+  --theme-accent-strong: hsl(180 34% 53%);
+  --theme-accent-foreground: hsl(0 0% 100%);
+  --theme-hover-background: hsl(178 37% 86%);
+  --theme-border: hsl(179 31% 77%);
+  --theme-muted: hsl(178 37% 86%);
+  --theme-muted-foreground: hsl(183 40% 27%);
+  --theme-ring: hsl(180 31% 66%);
 
-  /* Semantic brand tokens */
-  --theme-primary: var(--theme-700);
-  --theme-primary-foreground: hsl(0 0% 100%);
-  --theme-background: var(--theme-100);
-  --theme-surface: var(--theme-50);
-  --theme-active-text: hsl(0 0% 100%);
-  --theme-indicator: var(--theme-500);
-  --theme-hover-background: var(--theme-200);
-  --theme-border: var(--theme-300);
-  --theme-muted: var(--theme-200);
-  --theme-muted-foreground: var(--theme-800);
-  --theme-ring: var(--theme-400);
+  /* Dark mode colors */
+  --theme-dark-surface: hsl(186 31% 13%);
+  --theme-dark-foreground: hsl(160 8% 93%);
+  --theme-dark-muted-foreground: hsl(178 37% 86%);
+  --theme-dark-border: hsl(180 31% 66%);
+  --theme-dark-hover-background: hsl(184 36% 21%);
+  --theme-dark-hover-foreground: hsl(0 0% 100%);
+  --theme-dark-ring: hsl(181 39% 43%);
 
-  /* Background animation tokens (light mode) */
-  --bg-animate-base-start: hsl(179 34% 78%);
-  --bg-animate-base-end: hsl(0 0% 100%);
-  --bg-animate-c-0-start: hsl(178 37% 86%);
-  --bg-animate-c-1-start: hsl(180 32% 72%);
-  --bg-animate-c-0-end: hsl(160 8% 95%);
-  --bg-animate-c-1-end: hsl(178 28% 82%);
+  /* Animated background colors */
+  --theme-background-base: hsl(160 8% 95%);
+  --theme-background-bottom-glow: hsl(178 28% 82%);
+  --theme-background-gradient-center: hsl(179 34% 78%);
+  --theme-background-gradient-edge: hsl(0 0% 100%);
+  --theme-background-motion-bottom-left: hsl(178 37% 86%);
+  --theme-background-motion-top-right: hsl(180 32% 72%);
 }

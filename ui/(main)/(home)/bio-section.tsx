@@ -9,7 +9,7 @@ export default function BioSection() {
       <p>我把此处当作我的前端试验田，看到有意思的东西都会往里面塞</p>
       <small className="text-xs md:text-sm">
         话说上面的头像可以拖动来着
-        <span className="text-theme-indicator"> ⸜( *ˊᵕˋ* )⸝ </span>
+        <span className="text-theme-accent"> ⸜( *ˊᵕˋ* )⸝ </span>
       </small>
     </section>
   )

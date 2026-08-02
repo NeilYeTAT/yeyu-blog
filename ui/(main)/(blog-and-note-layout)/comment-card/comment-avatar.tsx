@@ -98,7 +98,7 @@ function CommentAvatarFrame({
         href={`/api/github-user/${encodeURIComponent(githubAccountId)}`}
         target="_blank"
         rel="noreferrer"
-        className="relative inline-flex size-10 shrink-0 rounded-full outline-none transition-transform hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-theme-indicator/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="relative inline-flex size-10 shrink-0 rounded-full outline-none transition-transform hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-theme-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         aria-label={`打开 ${displayName} 的 GitHub 主页`}
       >
         {avatarContent}

@@ -1,11 +1,7 @@
 /*
  * Brand theme tokens.
- * Mint is default; other themes override via data-brand-theme.
+ * Mist is default; other themes override via data-brand-theme.
  */
-@import "./mint.css";
 @import "./mist.css";
 @import "./camellia.css";
-@import "./indigo.css";
-@import "./sky.css";
 @import "./leaf.css";
-@import "./lemon.css";

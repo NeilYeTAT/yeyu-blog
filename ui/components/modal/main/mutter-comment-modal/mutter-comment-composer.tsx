@@ -75,7 +75,7 @@ export function MutterCommentComposer({
             <Button
               type="button"
               size="sm"
-              className="h-9 w-full cursor-pointer rounded-xl bg-theme-indicator text-theme-active-text shadow-none hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35 disabled:cursor-not-allowed disabled:bg-theme-indicator disabled:text-theme-active-text disabled:opacity-45"
+              className="h-9 w-full cursor-pointer rounded-xl bg-theme-accent text-theme-accent-foreground shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35 disabled:cursor-not-allowed disabled:bg-theme-accent disabled:text-theme-accent-foreground disabled:opacity-45"
               disabled={trimmedComment.length === 0 || status.isCreatingComment}
               onClick={onSubmitComment}
             >
@@ -87,7 +87,7 @@ export function MutterCommentComposer({
         <div className="flex items-center justify-end">
           <Button
             type="button"
-            className="h-10 w-full cursor-pointer rounded-xl bg-theme-indicator text-theme-active-text shadow-none hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35"
+            className="h-10 w-full cursor-pointer rounded-xl bg-theme-accent text-theme-accent-foreground shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35"
             onClick={onLoginClick}
           >
             <LogIn className="size-4" />

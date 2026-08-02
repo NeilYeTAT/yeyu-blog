@@ -108,14 +108,14 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           type="button"
           aria-expanded={isOpen}
           aria-label="打开快捷菜单"
-          className="relative z-10 flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-indicator)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
+          className="relative z-10 flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
           onClick={() => {
             setCanSelectAction(false)
             setIsOpen(value => !value)
           }}
         >
-          <FluidOrb size={48} color="var(--theme-indicator)" aria-hidden />
-          <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-400 ring-offset-1 ring-offset-background dark:ring-theme-600 dark:ring-offset-black" />
+          <FluidOrb size={48} color="var(--theme-accent)" aria-hidden />
+          <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-ring ring-offset-1 ring-offset-background dark:ring-theme-dark-ring dark:ring-offset-black" />
         </button>
 
         <AnimatePresence>

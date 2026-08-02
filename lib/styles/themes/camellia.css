@@ -1,35 +1,31 @@
 :root[data-brand-theme="camellia"] {
-  /* Theme scale (shadcn/tailwind style) */
-  --theme-50: hsl(24 30% 98%);
-  --theme-100: hsl(18 24% 94%);
-  --theme-200: hsl(4 26% 89%);
-  --theme-300: hsl(357 31% 80%);
-  --theme-400: hsl(352 54% 66%);
-  --theme-500: hsl(351 70% 53%);
-  --theme-600: hsl(351 70% 45%);
-  --theme-700: hsl(351 68% 38%);
-  --theme-800: hsl(351 60% 31%);
-  --theme-900: hsl(352 53% 24%);
-  --theme-950: hsl(353 48% 16%);
+  /* Interface colors */
+  --theme-primary: hsl(351 68% 38%);
+  --theme-background: hsl(18 24% 94%);
+  --theme-surface: hsl(24 30% 98%);
+  --theme-accent: hsl(351 70% 53%);
+  --theme-accent-strong: hsl(351 70% 53%);
+  --theme-accent-foreground: hsl(0 0% 100%);
+  --theme-hover-background: hsl(4 26% 89%);
+  --theme-border: hsl(357 31% 80%);
+  --theme-muted: hsl(4 26% 89%);
+  --theme-muted-foreground: hsl(351 60% 31%);
+  --theme-ring: hsl(352 54% 66%);
 
-  /* Semantic brand tokens */
-  --theme-primary: var(--theme-700);
-  --theme-primary-foreground: hsl(0 0% 100%);
-  --theme-background: var(--theme-100);
-  --theme-surface: var(--theme-50);
-  --theme-active-text: hsl(0 0% 100%);
-  --theme-indicator: var(--theme-500);
-  --theme-hover-background: var(--theme-200);
-  --theme-border: var(--theme-300);
-  --theme-muted: var(--theme-200);
-  --theme-muted-foreground: var(--theme-800);
-  --theme-ring: var(--theme-400);
+  /* Dark mode colors */
+  --theme-dark-surface: hsl(353 48% 16%);
+  --theme-dark-foreground: hsl(18 24% 94%);
+  --theme-dark-muted-foreground: hsl(4 26% 89%);
+  --theme-dark-border: hsl(352 54% 66%);
+  --theme-dark-hover-background: hsl(352 53% 24%);
+  --theme-dark-hover-foreground: hsl(24 30% 98%);
+  --theme-dark-ring: hsl(351 70% 45%);
 
-  /* Background animation tokens (light mode) */
-  --bg-animate-base-start: hsl(352 42% 82%);
-  --bg-animate-base-end: hsl(24 30% 98%);
-  --bg-animate-c-0-start: hsl(4 28% 89%);
-  --bg-animate-c-1-start: hsl(352 44% 78%);
-  --bg-animate-c-0-end: hsl(24 26% 98%);
-  --bg-animate-c-1-end: hsl(357 28% 86%);
+  /* Animated background colors */
+  --theme-background-base: hsl(24 26% 98%);
+  --theme-background-bottom-glow: hsl(357 28% 86%);
+  --theme-background-gradient-center: hsl(352 42% 82%);
+  --theme-background-gradient-edge: hsl(24 30% 98%);
+  --theme-background-motion-bottom-left: hsl(4 28% 89%);
+  --theme-background-motion-top-right: hsl(352 44% 78%);
 }

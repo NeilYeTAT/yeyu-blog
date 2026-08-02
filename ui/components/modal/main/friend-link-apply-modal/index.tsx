@@ -113,7 +113,7 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
                 type="button"
                 variant="outline"
                 data-copied={isCopied ? 'true' : undefined}
-                className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/25 px-4 text-zinc-600 shadow-none hover:bg-black/5 hover:text-zinc-900 data-[copied=true]:text-theme-indicator dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
+                className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/25 px-4 text-zinc-600 shadow-none hover:bg-black/5 hover:text-zinc-900 data-[copied=true]:text-theme-accent dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
                 onClick={() => {
                   void handleCopySiteInfo()
                 }}
@@ -144,7 +144,7 @@ export const FriendLinkApplyModal: FC<ComponentProps<'div'>> = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-10 cursor-pointer rounded-xl bg-theme-indicator px-4 text-theme-active-text shadow-none hover:bg-[color-mix(in_srgb,var(--theme-indicator)_92%,black)] hover:text-theme-active-text focus-visible:ring-theme-ring/35"
+                  className="h-10 cursor-pointer rounded-xl bg-theme-accent px-4 text-theme-accent-foreground shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35"
                   onMouseEnter={() => {
                     sendIconRef.current?.startAnimation()
                   }}

@@ -74,7 +74,7 @@ export default function CommentCard({
             <div className="mb-4 flex justify-end">
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-theme-indicator dark:text-zinc-400 dark:hover:text-theme-indicator"
+                className="inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-theme-accent dark:text-zinc-400 dark:hover:text-theme-accent"
                 aria-label={`切换为${nextSortOrder === 'asc' ? '正序' : '倒序'}`}
                 onClick={() => {
                   setSortOrder(nextSortOrder)
@@ -118,11 +118,11 @@ export default function CommentCard({
         isPending={isDeletingComment}
       >
         {deletingComment != null ? (
-          <div className="rounded-xl border border-theme-border/70 bg-theme-surface/55 p-3 text-sm dark:border-theme-400/20 dark:bg-theme-950/35">
+          <div className="rounded-xl border border-theme-border/70 bg-theme-surface/55 p-3 text-sm dark:border-theme-dark-border/20 dark:bg-theme-dark-surface/35">
             <p className="font-medium">
               {deletingComment.user?.name ?? deletingComment.authorName}
             </p>
-            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-theme-muted-foreground text-xs dark:text-theme-200/75">
+            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-theme-muted-foreground text-xs dark:text-theme-dark-muted-foreground/75">
               {deletingComment.content}
             </p>
           </div>

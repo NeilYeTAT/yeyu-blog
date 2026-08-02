@@ -40,9 +40,7 @@ export const SelectThemeModal: FC<ComponentProps<'div'>> = () => {
                 closeModal()
               }}
             >
-              <span className={activeTheme === id ? 'text-theme-indicator' : undefined}>
-                {label}
-              </span>
+              <span className={activeTheme === id ? 'text-theme-accent' : undefined}>{label}</span>
             </button>
           ))}
         </div>

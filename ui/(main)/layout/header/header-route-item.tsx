@@ -31,7 +31,7 @@ export function HeaderRouteItem({
           className={cn(
             'relative z-10 block cursor-pointer transition-[color,text-shadow] duration-200 ease-out',
             isGroupActive
-              ? cn('text-theme-active-text dark:text-black', activeTextShadowClass)
+              ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
               : cn('dark:hover:text-neutral-200', inactiveTextShadowClass),
           )}
         >
@@ -40,7 +40,7 @@ export function HeaderRouteItem({
               <motion.span
                 layoutId="header-active-indicator"
                 aria-hidden="true"
-                className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-theme-indicator shadow-md dark:bg-white"
+                className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-theme-accent shadow-md dark:bg-white"
                 initial={false}
                 transition={
                   shouldReduceMotion
@@ -73,7 +73,7 @@ export function HeaderRouteItem({
       className={cn(
         'relative z-10 block transition-[color,text-shadow] duration-200 ease-out',
         route.path === activeRoute.activeKey
-          ? cn('text-theme-active-text dark:text-black', activeTextShadowClass)
+          ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
           : cn('dark:hover:text-neutral-200', inactiveTextShadowClass),
       )}
       {...submenu.getRouteItemProps(route.path)}
@@ -83,7 +83,7 @@ export function HeaderRouteItem({
           <motion.span
             layoutId="header-active-indicator"
             aria-hidden="true"
-            className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-theme-indicator shadow-md dark:bg-white"
+            className="absolute -inset-x-1 -inset-y-0.5 -z-10 rounded-full bg-theme-accent shadow-md dark:bg-white"
             initial={false}
             transition={
               shouldReduceMotion

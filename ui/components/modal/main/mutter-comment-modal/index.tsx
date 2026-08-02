@@ -144,11 +144,11 @@ export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
         isPending={isDeletingComment}
       >
         {deletingComment != null ? (
-          <div className="rounded-xl border border-theme-border/70 bg-theme-surface/55 p-3 text-sm dark:border-theme-400/20 dark:bg-theme-950/35">
+          <div className="rounded-xl border border-theme-border/70 bg-theme-surface/55 p-3 text-sm dark:border-theme-dark-border/20 dark:bg-theme-dark-surface/35">
             <p className="font-medium">
               {deletingComment.user?.name ?? deletingComment.authorName}
             </p>
-            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-theme-muted-foreground text-xs dark:text-theme-200/75">
+            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-theme-muted-foreground text-xs dark:text-theme-dark-muted-foreground/75">
               {deletingComment.content}
             </p>
           </div>

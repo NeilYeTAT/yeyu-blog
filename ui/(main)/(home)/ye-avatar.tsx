@@ -112,7 +112,7 @@ export default function YeAvatar() {
       {/* 摸摸头~ */}
       <motion.figure
         // TODO: config color
-        className="relative cursor-grab drop-shadow-2xl active:cursor-grabbing active:drop-shadow-[0_0_16px_var(--theme-indicator)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
+        className="relative cursor-grab drop-shadow-2xl active:cursor-grabbing active:drop-shadow-[0_0_16px_var(--theme-accent)] dark:active:drop-shadow-[0_0_16px_rgba(192,192,192,0.7)]"
         whileTap={tapAnimation}
         drag
         dragConstraints={dragConstraints}
@@ -166,7 +166,7 @@ export default function YeAvatar() {
           fetchPriority="high"
           draggable={false}
         />
-        <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-400 ring-offset-1 dark:ring-white dark:ring-offset-black" />
+        <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-4 ring-theme-ring ring-offset-1 dark:ring-white dark:ring-offset-black" />
       </motion.figure>
     </div>
   )

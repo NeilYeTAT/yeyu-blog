@@ -8,7 +8,7 @@ export function IntroSection() {
       </AboutLine>
       <AboutLine>
         <h2>
-          你可以叫我, <span className="font-bold text-theme-indicator">叶鱼</span> (●´ω｀●)ゞ
+          你可以叫我, <span className="font-bold text-theme-accent">叶鱼</span> (●´ω｀●)ゞ
         </h2>
       </AboutLine>
       <AboutLine>

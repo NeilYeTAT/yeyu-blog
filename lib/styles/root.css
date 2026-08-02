@@ -8,5 +8,5 @@
 }
 
 ::selection {
-  background-color: color-mix(in srgb, var(--theme-indicator) 32%, transparent);
+  background-color: color-mix(in srgb, var(--theme-accent) 32%, transparent);
 }

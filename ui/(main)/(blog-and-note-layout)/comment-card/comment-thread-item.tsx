@@ -71,19 +71,19 @@ export function CommentThreadItem({
                   <span
                     className={
                       comment.isAdmin
-                        ? 'max-w-40 truncate font-medium text-theme-indicator'
+                        ? 'max-w-40 truncate font-medium text-theme-accent'
                         : 'max-w-40 truncate font-medium text-zinc-800 dark:text-zinc-100'
                     }
                   >
                     {formattedDisplayName}
                   </span>
                   {comment.isAdmin ? (
-                    <span className="rounded-full bg-theme-indicator/12 px-2 py-0.5 font-medium text-theme-indicator">
+                    <span className="rounded-full bg-theme-accent/12 px-2 py-0.5 font-medium text-theme-accent">
                       Admin
                     </span>
                   ) : null}
                   {isCurrentUserComment ? (
-                    <span className="rounded-full bg-theme-indicator/8 px-2 py-0.5 font-medium text-theme-indicator/70">
+                    <span className="rounded-full bg-theme-accent/8 px-2 py-0.5 font-medium text-theme-accent/70">
                       You
                     </span>
                   ) : null}

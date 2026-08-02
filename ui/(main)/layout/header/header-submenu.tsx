@@ -38,7 +38,7 @@ export function HeaderSubmenu({
             'absolute top-[116%] left-0 w-full origin-top overflow-hidden rounded-3xl py-1 backdrop-blur-sm md:py-2',
             'bg-theme-background/80 dark:bg-black/70',
             'border border-[#00000011] dark:border-white/10',
-            'shadow-[0px_4px_10px_0px_#0000001A]',
+            'shadow-[0px_4px_10px_0px_#00000010]',
           )}
         >
           <AnimatePresence mode="popLayout" custom={motionDirection}>

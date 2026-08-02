@@ -2,11 +2,6 @@ const brandThemeAttribute = 'data-brand-theme'
 
 export const brandThemeOptions = [
   {
-    id: 'mint',
-    label: '薄荷绿',
-    cssFile: 'mint.css',
-  },
-  {
     id: 'mist',
     label: '雾薄荷',
     cssFile: 'mist.css',
@@ -17,30 +12,15 @@ export const brandThemeOptions = [
     cssFile: 'camellia.css',
   },
   {
-    id: 'indigo',
-    label: '星夜紫',
-    cssFile: 'indigo.css',
-  },
-  {
-    id: 'sky',
-    label: '晴空蓝',
-    cssFile: 'sky.css',
-  },
-  {
     id: 'leaf',
     label: '新叶绿',
     cssFile: 'leaf.css',
-  },
-  {
-    id: 'lemon',
-    label: '麦穗黄',
-    cssFile: 'lemon.css',
   },
 ] as const
 
 export type BrandThemeId = (typeof brandThemeOptions)[number]['id']
 
-export const defaultBrandTheme: BrandThemeId = 'mint'
+export const defaultBrandTheme: BrandThemeId = 'mist'
 
 const brandThemeIds = brandThemeOptions.map(option => option.id)
 

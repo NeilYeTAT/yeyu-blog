@@ -86,7 +86,7 @@ export default function Header() {
         aria-hidden="true"
         layout="size"
         className={cn(
-          'pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto h-full rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#0000001A] backdrop-blur-sm dark:border-white/10 dark:bg-black/70',
+          'pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto h-full rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#00000010] backdrop-blur-sm dark:border-white/10 dark:bg-black/70',
           isHeaderReady ? 'w-full' : 'w-16',
         )}
         initial={false}
