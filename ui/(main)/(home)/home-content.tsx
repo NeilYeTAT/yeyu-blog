@@ -1,5 +1,4 @@
 import BioSection from './bio-section'
-import EchoCard from './echo-card'
 import {
   HomeAvatarMotion,
   HomeBioMotion,
@@ -19,10 +18,6 @@ export default function HomeContent() {
       <HomeBioMotion>
         <BioSection />
       </HomeBioMotion>
-
-      <HomeFadeMotion>
-        <EchoCard />
-      </HomeFadeMotion>
 
       <HomeFadeMotion>
         <TechStack />

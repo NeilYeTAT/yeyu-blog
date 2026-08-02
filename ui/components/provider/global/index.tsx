@@ -24,7 +24,7 @@ export default function GlobalProvider({ children }: { children: React.ReactNode
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <ReactQueryProvider>
           {children}
-          <Toaster position="top-center" theme="system" />
+          <Toaster position="top-left" theme="system" />
         </ReactQueryProvider>
       </ThemeProvider>
       <Analytics mode="production" />

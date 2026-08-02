@@ -96,7 +96,7 @@ const ringBaseCount = Math.max(outerRingTechStackData.length, innerRingTechStack
 function TechStack() {
   return (
     <div className="relative mx-auto w-full max-w-5xl">
-      <div className="mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] flex h-44 justify-center overflow-hidden md:mt-20 md:h-88">
+      <div className="mask-[linear-gradient(to_bottom,black_70%,transparent_100%)] flex h-44 justify-center overflow-hidden md:h-88">
         <div className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] flex w-full justify-center pt-12">
           <TechStackRings
             outerItems={outerTechStackData}

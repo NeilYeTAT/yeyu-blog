@@ -16,12 +16,6 @@ export type EchoRecord = {
   createdAt: string
 }
 
-export type PublicEchoCardData = {
-  id: number
-  content: string
-  reference: string
-} | null
-
 export type UpdateEchoParams = {
   id: number
   content?: string
