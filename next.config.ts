@@ -15,8 +15,10 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: false,
+  reactCompiler: true,
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    turbopackRustReactCompiler: true,
   },
 }
 
