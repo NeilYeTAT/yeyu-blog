@@ -24,6 +24,15 @@
     transform 500ms ease;
 }
 
+.markdown-content .md-image-frame > img[data-article-image-lightbox="true"] {
+  cursor: zoom-in;
+  outline: none;
+}
+
+.markdown-content .md-image-frame > img[data-article-image-lightbox="true"]:focus-visible {
+  box-shadow: 0 0 0 2px #93b0ff;
+}
+
 .markdown-content .md-image-frame > img[data-article-image-loading="true"] {
   opacity: 0.72;
   filter: blur(12px);
