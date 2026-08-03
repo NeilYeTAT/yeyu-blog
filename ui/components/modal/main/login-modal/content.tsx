@@ -5,7 +5,6 @@ import { useHasInjectedWallet } from '@/hooks/web3/use-has-injected-wallet'
 import { useSession } from '@/lib/core/auth/client'
 import { isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { cn } from '@/lib/utils/common/shadcn'
-import { DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { LoginPanel } from './login-panel'
 import { WalletLoginSection } from './wallet-login-section'
 import { Web2UserPanel } from './web2-user-panel'
@@ -22,37 +21,29 @@ export const LoginModalContent = () => {
   const hasWalletLogin = hasInjectedWallet && !isEmailUser && !isWalletUser
 
   return (
-    <>
-      <DialogHeader className="">
-        <DialogTitle className="text-center font-bold text-xl">
-          {isEmailUser || isWalletUser ? '用户信息' : '登录 (ゝ∀･)'}
-        </DialogTitle>
-      </DialogHeader>
-
-      <main
-        className={cn(
-          'grid gap-3 font-mono',
-          !isLoginPending && hasWalletLogin ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1',
-        )}
-      >
-        {isEmailUser ? (
-          <Web2UserPanel />
-        ) : isWalletUser ? (
-          <Web3UserPanel />
-        ) : (
-          <>
-            {!isLoginPending ? (
-              <LoginPanel hasWalletLogin={hasWalletLogin} isActionPending={isLoginPending} />
-            ) : null}
-            {hasWalletLogin ? (
-              <WalletLoginSection
-                isLoginPending={isLoginPending}
-                setIsWalletSigningIn={setIsWalletSigningIn}
-              />
-            ) : null}
-          </>
-        )}
-      </main>
-    </>
+    <main
+      className={cn(
+        'grid gap-3 font-mono',
+        !isLoginPending && hasWalletLogin ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1',
+      )}
+    >
+      {isEmailUser ? (
+        <Web2UserPanel />
+      ) : isWalletUser ? (
+        <Web3UserPanel />
+      ) : (
+        <>
+          {!isLoginPending ? (
+            <LoginPanel hasWalletLogin={hasWalletLogin} isActionPending={isLoginPending} />
+          ) : null}
+          {hasWalletLogin ? (
+            <WalletLoginSection
+              isLoginPending={isLoginPending}
+              setIsWalletSigningIn={setIsWalletSigningIn}
+            />
+          ) : null}
+        </>
+      )}
+    </main>
   )
 }

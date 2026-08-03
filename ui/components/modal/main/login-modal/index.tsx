@@ -1,9 +1,11 @@
 'use client'
 
 import { lazy, Suspense } from 'react'
+import { useSession } from '@/lib/core/auth/client'
+import { isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
+import { Modal } from '@/ui/components/interior/modal'
 import Loading from '@/ui/components/shared/loading'
-import { Dialog, DialogContent } from '@/ui/shadcn/dialog'
 
 const LoginModalContent = lazy(() =>
   import('./content').then(mod => ({ default: mod.LoginModalContent })),
@@ -12,16 +14,24 @@ const LoginModalContent = lazy(() =>
 export const LoginModal = () => {
   const modalType = useModalType()
   const { closeModal } = useModalActions()
+  const { data: session } = useSession()
 
   const isModalOpen = modalType === 'loginModal'
+  const isLoggedIn = isEmailLoggedIn({ data: session }) || isWalletLoggedIn({ data: session })
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={closeModal}>
-      <DialogContent className="rounded-xl bg-theme-background/80 backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
-        <Suspense fallback={<Loading />}>
-          <LoginModalContent />
-        </Suspense>
-      </DialogContent>
-    </Dialog>
+    <Modal
+      open={isModalOpen}
+      onClose={closeModal}
+      title={isLoggedIn ? '用户信息' : '登录 (ゝ∀･)'}
+      closeLabel="关闭登录弹窗"
+      maxWidth={440}
+      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-theme-dark-border/20 dark:bg-black/70"
+      titleClassName="font-bold text-xl text-foreground"
+    >
+      <Suspense fallback={<Loading />}>
+        <LoginModalContent />
+      </Suspense>
+    </Modal>
   )
 }

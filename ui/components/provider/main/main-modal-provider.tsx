@@ -1,10 +1,12 @@
 'use client'
 
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
+import { Modal } from '@/ui/components/interior/modal'
 import { LoginModal } from '@/ui/components/modal/main/login-modal'
 import Loading from '@/ui/components/shared/loading'
-import { Dialog, DialogContent, DialogTitle } from '@/ui/shadcn/dialog'
+
+const modalExitDuration = 180
 
 const SelectThemeModal = lazy(() =>
   import('@/ui/components/modal/main/select-theme-modal').then(mod => ({
@@ -25,29 +27,51 @@ const FriendLinkApplyModal = lazy(() =>
 )
 
 const MainModalLoading = () => {
+  const modalType = useModalType()
   const { closeModal } = useModalActions()
 
   return (
-    <Dialog open onOpenChange={closeModal}>
-      <DialogTitle />
-      <DialogContent className="rounded-xl bg-theme-background/80 backdrop-blur-xl sm:max-w-96 dark:bg-black/70">
-        <Loading />
-      </DialogContent>
-    </Dialog>
+    <Modal
+      open={modalType !== null}
+      onClose={closeModal}
+      title={<span className="sr-only">正在加载</span>}
+      closeLabel="关闭弹窗"
+      maxWidth={384}
+      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-theme-dark-border/20 dark:bg-black/70"
+    >
+      <Loading />
+    </Modal>
   )
 }
 
 export function MainModalProvider({ children }: { children: React.ReactNode }) {
   const modalType = useModalType()
+  const [renderedModalType, setRenderedModalType] = useState(modalType)
+  const activeModalType = modalType ?? renderedModalType
+
+  useEffect(() => {
+    if (modalType !== null) {
+      setRenderedModalType(modalType)
+      return
+    }
+
+    const closeTimerId = window.setTimeout(() => {
+      setRenderedModalType(null)
+    }, modalExitDuration)
+
+    return () => {
+      window.clearTimeout(closeTimerId)
+    }
+  }, [modalType])
 
   return (
     <>
       {children}
       <Suspense fallback={<MainModalLoading />}>
-        {modalType === 'loginModal' ? <LoginModal /> : null}
-        {modalType === 'selectThemeModal' ? <SelectThemeModal /> : null}
-        {modalType === 'mutterCommentModal' ? <MutterCommentModal /> : null}
-        {modalType === 'friendLinkApplyModal' ? <FriendLinkApplyModal /> : null}
+        {activeModalType === 'loginModal' ? <LoginModal /> : null}
+        {activeModalType === 'selectThemeModal' ? <SelectThemeModal /> : null}
+        {activeModalType === 'mutterCommentModal' ? <MutterCommentModal /> : null}
+        {activeModalType === 'friendLinkApplyModal' ? <FriendLinkApplyModal /> : null}
       </Suspense>
     </>
   )

@@ -2,7 +2,7 @@
 
 import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment/get-public-mutter-comments'
 import { MessageCircle } from 'lucide-react'
-import { type ComponentProps, type FC, startTransition, useMemo, useState } from 'react'
+import { startTransition, useMemo, useState } from 'react'
 import { type Address, isAddress } from 'viem'
 import { useMutterCommentDeleteMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-delete-mutation'
 import { useMutterCommentMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-mutation'
@@ -10,13 +10,13 @@ import { usePublicMutterCommentQuery } from '@/hooks/api/mutter-comment/use-publ
 import { useSession } from '@/lib/core/auth/client'
 import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
+import { Modal } from '@/ui/components/interior/modal'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { MutterCommentComposer } from './mutter-comment-composer'
 import { MutterCommentList } from './mutter-comment-list'
 import { MutterCommentSource } from './mutter-comment-source'
 
-export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
+export const MutterCommentModal = () => {
   const modalType = useModalType()
   const payload = useModalPayload()
   const { closeModal, setModalOpen } = useModalActions()
@@ -92,15 +92,22 @@ export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
 
   return (
     <>
-      <Dialog open={isModalOpen} onOpenChange={closeModal}>
-        <DialogContent className="max-h-[88vh] overflow-hidden rounded-2xl border-zinc-200 bg-theme-background/80 backdrop-blur-xl sm:max-w-[580px] dark:border-zinc-800 dark:bg-black/70">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-center gap-2 font-bold text-xl text-zinc-900 dark:text-zinc-100">
-              <MessageCircle className="size-5 text-zinc-600 dark:text-zinc-300" />
-              评论
-            </DialogTitle>
-          </DialogHeader>
-
+      <Modal
+        open={isModalOpen}
+        onClose={closeModal}
+        title={
+          <span className="flex items-center justify-center gap-2">
+            <MessageCircle className="size-5 text-zinc-600 dark:text-zinc-300" />
+            评论
+          </span>
+        }
+        closeLabel="关闭评论弹窗"
+        maxWidth={580}
+        maxHeight="88vh"
+        className="border-zinc-200 bg-theme-background/80 text-zinc-900 backdrop-blur-xl dark:border-zinc-800 dark:bg-black/70 dark:text-zinc-100"
+        titleClassName="text-center font-bold text-xl text-zinc-900 dark:text-zinc-100"
+      >
+        <div className="grid gap-4">
           <MutterCommentSource values={values} />
           <MutterCommentList
             comments={comments}
@@ -130,8 +137,8 @@ export const MutterCommentModal: FC<ComponentProps<'div'>> = () => {
             }}
             onSubmitComment={handleSubmitComment}
           />
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Modal>
 
       <MainConfirmModal
         open={deletingComment != null}
