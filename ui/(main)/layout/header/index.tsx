@@ -2,7 +2,7 @@
 
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/react'
 import { createPortal } from 'react-dom'
-import { useIsHydrated } from '@/hooks/common/use-is-mounted'
+import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
 import { isNavGroupRoute, navigationConfig } from './constant'

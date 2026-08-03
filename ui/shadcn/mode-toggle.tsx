@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from 'lucide-react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
-import { useIsHydrated } from '@/hooks/common/use-is-mounted'
+import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 import { Button } from '@/ui/shadcn/button'
 
 export function ModeToggle() {

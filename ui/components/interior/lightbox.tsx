@@ -4,6 +4,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import Image from 'next/image'
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 
 const MotionImage = motion.create(Image)
 
@@ -45,9 +46,6 @@ const WHEEL_RATE = 140
 const SLOP = 8
 const NEAR_HOME = 1.02
 const SNAP_HOME = 1.05
-
-const CHROME_BUTTON =
-  'grid size-8 place-items-center rounded-[9px] border border-stone-200 bg-white text-stone-500 outline-none transition-[border-color,color,box-shadow] duration-150 hover:border-stone-300 hover:text-stone-700 focus-visible:border-[#4568FF] focus-visible:shadow-[0_1px_2px_rgba(28,25,23,0.08),0_10px_20px_-14px_rgba(69,104,255,0.6)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-400 dark:hover:border-white/20 dark:hover:text-stone-200 dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[0_10px_20px_-14px_rgba(147,176,255,0.5)]'
 
 type Spring = {
   type: 'spring'
@@ -97,7 +95,10 @@ export function useLightbox<
 
   const reduced = useReducedMotion()
   const dismiss = useRef(onDismiss)
-  dismiss.current = onDismiss
+
+  useLayoutEffect(() => {
+    dismiss.current = onDismiss
+  }, [onDismiss])
 
   const toStep = useCallback(
     (s: number) => clamp(Math.round(((s - 1) / (top - 1)) * cells), 0, cells),
@@ -354,6 +355,103 @@ export type LightboxProps = {
 
 type Landing = { dx: number; dy: number; s: number; o: number; r: number }
 
+function LightboxToolbar({
+  titleId,
+  caption,
+  alt,
+  zoomed,
+  reduced,
+  onToggleZoom,
+  onClose,
+}: {
+  titleId: string
+  caption?: string
+  alt: string
+  zoomed: boolean
+  reduced: boolean | null
+  onToggleZoom: () => void
+  onClose: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: reduced ? { duration: 0 } : EXIT }}
+      transition={reduced ? { duration: 0 } : VEIL}
+      className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-3 sm:p-4"
+    >
+      <p
+        id={titleId}
+        className="pointer-events-auto max-w-[65%] truncate rounded-[9px] border border-stone-200 bg-white px-2.5 py-1.5 text-[12.5px] text-stone-700 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-200"
+      >
+        {caption ?? alt}
+      </p>
+      <div className="pointer-events-auto flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onToggleZoom}
+          aria-label={zoomed ? 'Zoom out' : 'Zoom in'}
+          className="grid size-8 place-items-center rounded-[9px] border border-stone-200 bg-white text-stone-500 outline-none transition-[border-color,color,box-shadow] duration-150 hover:border-stone-300 hover:text-stone-700 focus-visible:border-[#4568FF] focus-visible:shadow-[0_1px_2px_rgba(28,25,23,0.08),0_10px_20px_-14px_rgba(69,104,255,0.6)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-400 dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[0_10px_20px_-14px_rgba(147,176,255,0.5)] dark:hover:border-white/20 dark:hover:text-stone-200"
+        >
+          <svg
+            viewBox="0 0 256 256"
+            className="size-[15px]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={16}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <circle cx="116" cy="116" r="84" />
+            <path d="M175.4 175.4 224 224M84 116h64" />
+            <motion.path
+              d="M116 84v64"
+              initial={false}
+              animate={{ opacity: zoomed ? 0 : 1 }}
+              transition={reduced ? { duration: 0 } : GLYPH}
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="grid size-8 place-items-center rounded-[9px] border border-stone-200 bg-white text-stone-500 outline-none transition-[border-color,color,box-shadow] duration-150 hover:border-stone-300 hover:text-stone-700 focus-visible:border-[#4568FF] focus-visible:shadow-[0_1px_2px_rgba(28,25,23,0.08),0_10px_20px_-14px_rgba(69,104,255,0.6)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-400 dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[0_10px_20px_-14px_rgba(147,176,255,0.5)] dark:hover:border-white/20 dark:hover:text-stone-200"
+        >
+          <svg
+            viewBox="0 0 256 256"
+            className="size-[15px]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={16}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M200 56 56 200M200 200 56 56" />
+          </svg>
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+function LightboxAnnouncements({ hintId, settledZoom }: { hintId: string; settledZoom: number }) {
+  return (
+    <>
+      <p id={hintId} className="sr-only">
+        Scroll to zoom toward the pointer, or press plus and minus. Drag or use the arrow keys to
+        pan, and double-click to switch between fit and close-up. Press zero to return to the
+        starting frame; Escape returns home first, then closes.
+      </p>
+      <p role="status" className="sr-only">
+        Zoom {settledZoom.toFixed(1)} times
+      </p>
+    </>
+  )
+}
+
 function Stage({
   onClose,
   src,
@@ -378,7 +476,15 @@ function Stage({
   const { frameRef, contentRef, bind, scale, x, y, zoomed, settledZoom, reset, zoomAt } =
     useLightbox({ maxScale, onDismiss: onClose })
 
-  const shellRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    dialog.showModal()
+    return () => dialog.close()
+  }, [])
 
   const toggleZoom = useCallback(() => {
     const frame = frameRef.current
@@ -497,44 +603,19 @@ function Stage({
     }
   }, [originRef])
 
-  useEffect(() => {
-    const shell = shellRef.current
-    if (!shell) return
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (zoomed) return
-        e.preventDefault()
-        onClose()
-        return
-      }
-      if (e.key !== 'Tab') return
-      const nodes = Array.from(shell.querySelectorAll<HTMLElement>('[data-lightbox-focus="1"]'))
-      if (nodes.length === 0) return
-      e.preventDefault()
-      const here =
-        document.activeElement instanceof HTMLElement ? nodes.indexOf(document.activeElement) : -1
-      const next = e.shiftKey
-        ? here <= 0
-          ? nodes.length - 1
-          : here - 1
-        : here === -1 || here === nodes.length - 1
-          ? 0
-          : here + 1
-      nodes[next]?.focus()
-    }
-
-    shell.addEventListener('keydown', onKeyDown)
-    return () => shell.removeEventListener('keydown', onKeyDown)
-  }, [onClose, zoomed])
-
   return (
-    <div
-      ref={shellRef}
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
       aria-labelledby={titleId}
-      className={`fixed inset-0 z-50 ${className}`}
+      onCancel={event => {
+        event.preventDefault()
+        if (zoomed) {
+          reset()
+          return
+        }
+        onClose()
+      }}
+      className={`fixed inset-0 z-50 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-transparent ${className}`}
     >
       <motion.div
         aria-hidden
@@ -549,7 +630,6 @@ function Stage({
       />
       <div
         ref={frameRef}
-        data-lightbox-focus="1"
         tabIndex={-1}
         role="group"
         aria-labelledby={titleId}
@@ -584,87 +664,22 @@ function Stage({
           />
         </motion.div>
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: reduced ? { duration: 0 } : EXIT }}
-        transition={reduced ? { duration: 0 } : VEIL}
-        className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-3 sm:p-4"
-      >
-        <p
-          id={titleId}
-          className="pointer-events-auto max-w-[65%] truncate rounded-[9px] border border-stone-200 bg-white px-2.5 py-1.5 text-[12.5px] text-stone-700 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-200"
-        >
-          {caption ?? alt}
-        </p>
-        <div className="pointer-events-auto flex items-center gap-2">
-          <button
-            data-lightbox-focus="1"
-            type="button"
-            onClick={toggleZoom}
-            aria-label={zoomed ? 'Zoom out' : 'Zoom in'}
-            className={CHROME_BUTTON}
-          >
-            <svg
-              viewBox="0 0 256 256"
-              className="size-[15px]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={16}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-            >
-              <circle cx="116" cy="116" r="84" />
-              <path d="M175.4 175.4 224 224M84 116h64" />
-              <motion.path
-                d="M116 84v64"
-                initial={false}
-                animate={{ opacity: zoomed ? 0 : 1 }}
-                transition={reduced ? { duration: 0 } : GLYPH}
-              />
-            </svg>
-          </button>
-          <button
-            data-lightbox-focus="1"
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className={CHROME_BUTTON}
-          >
-            <svg
-              viewBox="0 0 256 256"
-              className="size-[15px]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={16}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-            >
-              <path d="M200 56 56 200M200 200 56 56" />
-            </svg>
-          </button>
-        </div>
-      </motion.div>
-      <p id={hintId} className="sr-only">
-        Scroll to zoom toward the pointer, or press plus and minus. Drag or use the arrow keys to
-        pan, and double-click to switch between fit and close-up. Press zero to return to the
-        starting frame; Escape returns home first, then closes.
-      </p>
-      <p role="status" className="sr-only">
-        Zoom {settledZoom.toFixed(1)} times
-      </p>
-    </div>
+      <LightboxToolbar
+        titleId={titleId}
+        caption={caption}
+        alt={alt}
+        zoomed={zoomed}
+        reduced={reduced}
+        onToggleZoom={toggleZoom}
+        onClose={onClose}
+      />
+      <LightboxAnnouncements hintId={hintId} settledZoom={settledZoom} />
+    </dialog>
   )
 }
 
 export function Lightbox(props: LightboxProps) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useIsHydrated()
 
   if (!mounted) return null
 

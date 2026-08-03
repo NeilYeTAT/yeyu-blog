@@ -125,7 +125,10 @@ export function useModal({
   const descriptionId = `${baseId}-description`
 
   const latest = useRef({ onClose, closeOnEscape, closeOnBackdrop, initialFocusRef })
-  latest.current = { onClose, closeOnEscape, closeOnBackdrop, initialFocusRef }
+
+  useIsomorphicLayoutEffect(() => {
+    latest.current = { onClose, closeOnEscape, closeOnBackdrop, initialFocusRef }
+  }, [closeOnBackdrop, closeOnEscape, initialFocusRef, onClose])
 
   const close = useCallback(() => latest.current.onClose(), [])
 

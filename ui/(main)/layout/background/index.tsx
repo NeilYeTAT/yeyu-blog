@@ -5,7 +5,7 @@ import type { FC } from 'react'
 import { useRef } from 'react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
-import { useIsHydrated } from '@/hooks/common/use-is-mounted'
+import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 // * thanks https://www.mshr.app/mesh/1727202711374
 import '@/lib/styles/background.css'
 import { ArtPlum } from './art-plum'
