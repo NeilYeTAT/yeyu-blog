@@ -1,11 +1,14 @@
 import Link from 'next/link'
+import { Emoticon } from '@/ui/components/shared/emoticon'
 import { AboutLine, AboutSection } from './about-section'
 
 export function BioSection() {
   return (
     <AboutSection>
       <AboutLine>
-        <p>是个二次元死宅 _:(´□`」 ∠):_</p>
+        <p>
+          是个二次元死宅 <Emoticon>_:(´□`」 ∠):_</Emoticon>
+        </p>
       </AboutLine>
 
       <AboutLine>

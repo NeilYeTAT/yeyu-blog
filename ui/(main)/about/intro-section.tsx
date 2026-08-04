@@ -1,3 +1,4 @@
+import { Emoticon } from '@/ui/components/shared/emoticon'
 import { AboutLine, AboutSection } from './about-section'
 
 export function IntroSection() {
@@ -8,7 +9,8 @@ export function IntroSection() {
       </AboutLine>
       <AboutLine>
         <h2>
-          你可以叫我, <span className="font-bold text-theme-accent">叶鱼</span> (●´ω｀●)ゞ
+          你可以叫我, <span className="font-bold text-theme-accent">叶鱼</span>{' '}
+          <Emoticon>(●´ω｀●)ゞ</Emoticon>
         </h2>
       </AboutLine>
       <AboutLine>
@@ -16,7 +18,10 @@ export function IntroSection() {
         <p>指以言语或行为戏弄、嘲讽他人, 带有调笑或轻度侮辱的意味</p>
       </AboutLine>
       <AboutLine>
-        <p>就想着取一个同音假名，用来「愚弄」人的(￣∇￣)</p>
+        <p>
+          就想着取一个同音假名，用来「愚弄」人的
+          <Emoticon>(￣∇￣)</Emoticon>
+        </p>
         <small>唉哟我操这人怎么这么坏啊😅</small>
       </AboutLine>
       <AboutLine>

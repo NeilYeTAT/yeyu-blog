@@ -1,3 +1,4 @@
+import { Emoticon } from '@/ui/components/shared/emoticon'
 import { AboutLine, AboutSection } from './about-section'
 
 export function ClosingSection() {
@@ -8,7 +9,9 @@ export function ClosingSection() {
       </AboutLine>
 
       <AboutLine>
-        <h2>祝你每天过得开心，永远不死 (◕ω＜)</h2>
+        <h2>
+          祝你每天过得开心，永远不死 <Emoticon>(◕ω＜)</Emoticon>
+        </h2>
       </AboutLine>
     </AboutSection>
   )
