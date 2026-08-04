@@ -1,12 +1,9 @@
 'use client'
 
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'motion/react'
-import Image from 'next/image'
 import { useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
-
-const MotionImage = motion.create(Image)
 
 const CELL = {
   type: 'spring',
@@ -622,13 +619,13 @@ function Stage({
           transition={reduced ? { duration: 0 } : { filter: { duration: 0.35, ease: EASE } }}
           className="absolute inset-0 flex items-center justify-center p-4 sm:p-14"
         >
-          <MotionImage
+          {/* biome-ignore lint/performance/noImgElement: Lightbox motion relies on the native image element's intrinsic dimensions. */}
+          <motion.img
             ref={contentRef}
             src={src}
             alt={alt}
             width={width}
             height={height}
-            unoptimized
             draggable={false}
             style={{ x, y, scale, borderRadius: fr }}
             variants={{ away: unwind }}

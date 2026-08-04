@@ -107,6 +107,9 @@ importers:
       remark-rehype:
         specifier: ^11.1.2
         version: 11.1.2
+      sharp:
+        specifier: ^0.35.3
+        version: 0.35.3(@types/node@26.1.2)
       sileo:
         specifier: ^0.1.5
         version: 0.1.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -3692,8 +3695,7 @@ snapshots:
       valibot: 1.4.2(typescript@7.0.2)
       zod: 4.4.3
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.3':
     optionalDependencies:
@@ -5944,7 +5946,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.3
       '@img/sharp-win32-x64': 0.35.3
       '@types/node': 26.1.2
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:

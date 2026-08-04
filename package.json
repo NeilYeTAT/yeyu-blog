@@ -51,6 +51,7 @@
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "sharp": "^0.35.3",
     "sileo": "^0.1.5",
     "simple-icons": "^16.28.0",
     "tailwindcss-animate": "^1.0.7",
