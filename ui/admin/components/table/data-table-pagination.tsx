@@ -1,24 +1,35 @@
-import type { Table } from '@tanstack/react-table'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import { Button } from '@/ui/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/shadcn/select'
 
-export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
-  const pageCount = Math.max(table.getPageCount(), 1)
+export function DataTablePagination({
+  pageCount,
+  pageIndex,
+  pageSize,
+  onPageIndexChange,
+  onPageSizeChange,
+}: {
+  pageCount: number
+  pageIndex: number
+  pageSize: number
+  onPageIndexChange: (pageIndex: number) => void
+  onPageSizeChange: (pageSize: number) => void
+}) {
+  const canPreviousPage = pageIndex > 0
+  const canNextPage = pageIndex < pageCount - 1
 
   return (
     <div className="flex shrink-0 items-center justify-end border-zinc-200 border-t py-2 dark:border-zinc-800">
       <div className="flex items-center gap-x-2 lg:gap-x-3">
         <div className="flex items-center gap-x-2">
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${pageSize}`}
             onValueChange={value => {
-              table.setPageSize(Number(value))
-              table.setPageIndex(0)
+              onPageSizeChange(Number(value))
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue placeholder={pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
               {[15, 30, 50].map(pageSize => (
@@ -30,14 +41,14 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center font-medium text-sm">
-          {table.getState().pagination.pageIndex + 1} /{pageCount}
+          {pageIndex + 1} /{pageCount}
         </div>
         <div className="flex items-center gap-x-2">
           <Button
             variant="outline"
             className="hidden size-8 cursor-pointer p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageIndexChange(0)}
+            disabled={!canPreviousPage}
           >
             <span className="sr-only">首页</span>
             <ChevronsLeft />
@@ -45,8 +56,8 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
           <Button
             variant="outline"
             className="size-8 cursor-pointer p-0"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageIndexChange(pageIndex - 1)}
+            disabled={!canPreviousPage}
           >
             <span className="sr-only">上一页</span>
             <ChevronLeft />
@@ -54,8 +65,8 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
           <Button
             variant="outline"
             className="size-8 cursor-pointer p-0"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageIndexChange(pageIndex + 1)}
+            disabled={!canNextPage}
           >
             <span className="sr-only">下一页</span>
             <ChevronRight />
@@ -63,8 +74,8 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
           <Button
             variant="outline"
             className="hidden size-8 cursor-pointer p-0 lg:flex"
-            onClick={() => table.setPageIndex(pageCount - 1)}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageIndexChange(pageCount - 1)}
+            disabled={!canNextPage}
           >
             <span className="sr-only">最后一页</span>
             <ChevronsRight />

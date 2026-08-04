@@ -1,5 +1,5 @@
 import type { SoundAsset, UseSoundOptions, UseSoundReturn } from '@/lib/core/sound/sound-types'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { decodeAudioData, getAudioContext } from '@/lib/core/sound/sound-engine'
 
 export function useSound(sound: SoundAsset, options: UseSoundOptions = {}): UseSoundReturn {
@@ -34,7 +34,7 @@ export function useSound(sound: SoundAsset, options: UseSoundOptions = {}): UseS
     }
   }, [sound.dataUri])
 
-  const stop = useCallback(() => {
+  const stop = () => {
     const source = sourceRef.current
 
     if (source !== null) {
@@ -45,56 +45,53 @@ export function useSound(sound: SoundAsset, options: UseSoundOptions = {}): UseS
 
     setIsPlaying(false)
     onStop?.()
-  }, [onStop])
+  }
 
-  const play = useCallback(
-    (overrides?: { volume?: number; playbackRate?: number }) => {
-      if (!soundEnabled || !bufferRef.current) return
+  const play = (overrides?: { volume?: number; playbackRate?: number }) => {
+    if (!soundEnabled || !bufferRef.current) return
 
-      const ctx = getAudioContext()
+    const ctx = getAudioContext()
 
-      if (ctx.state === 'suspended') {
-        ctx.resume()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
+
+    if (interrupt && sourceRef.current) {
+      stop()
+    }
+
+    const source = ctx.createBufferSource()
+    const gain = ctx.createGain()
+
+    source.buffer = bufferRef.current
+    source.playbackRate.value = overrides?.playbackRate ?? playbackRate
+    gain.gain.value = overrides?.volume ?? volume
+
+    source.connect(gain)
+    gain.connect(ctx.destination)
+
+    source.onended = () => {
+      if (isStoppingRef.current) {
+        isStoppingRef.current = false
+        return
       }
 
-      if (interrupt && sourceRef.current) {
-        stop()
-      }
+      sourceRef.current = null
+      setIsPlaying(false)
+      onEnd?.()
+    }
 
-      const source = ctx.createBufferSource()
-      const gain = ctx.createGain()
+    source.start(0)
+    sourceRef.current = source
+    gainRef.current = gain
+    setIsPlaying(true)
+    onPlay?.()
+  }
 
-      source.buffer = bufferRef.current
-      source.playbackRate.value = overrides?.playbackRate ?? playbackRate
-      gain.gain.value = overrides?.volume ?? volume
-
-      source.connect(gain)
-      gain.connect(ctx.destination)
-
-      source.onended = () => {
-        if (isStoppingRef.current) {
-          isStoppingRef.current = false
-          return
-        }
-
-        sourceRef.current = null
-        setIsPlaying(false)
-        onEnd?.()
-      }
-
-      source.start(0)
-      sourceRef.current = source
-      gainRef.current = gain
-      setIsPlaying(true)
-      onPlay?.()
-    },
-    [soundEnabled, playbackRate, volume, interrupt, stop, onPlay, onEnd],
-  )
-
-  const pause = useCallback(() => {
+  const pause = () => {
     stop()
     onPause?.()
-  }, [stop, onPause])
+  }
 
   useEffect(() => {
     if (gainRef.current) {

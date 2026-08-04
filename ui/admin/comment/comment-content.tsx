@@ -1,7 +1,6 @@
 'use client'
 
 import Image, { type ImageLoaderProps } from 'next/image'
-import { useMemo } from 'react'
 
 const urlPattern = /https?:\/\/[^\s<>"'`]+/g
 const trailingUrlTextPattern = /[),.;:!?，。！？；：、]+$/g
@@ -109,7 +108,7 @@ function getCommentLinkLabel(url: URL) {
 }
 
 export function CommentContent({ content }: { content: string }) {
-  const blocks = useMemo(() => getCommentContentBlocks(content), [content])
+  const blocks = getCommentContentBlocks(content)
 
   return (
     <div className="mt-2 flex flex-col gap-2 text-sm leading-6">

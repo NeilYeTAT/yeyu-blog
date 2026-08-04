@@ -1,7 +1,7 @@
 'use client'
 
 import type { Friend } from './types'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FriendCard } from './friend-card'
 
 const revealInterval = 100
@@ -19,7 +19,7 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
   const queuedFriendIds = queuedFriendIdsRef.current
   const visibleFriendIdSet = new Set(visibleFriendIds)
 
-  const revealNextFriend = useCallback(() => {
+  function revealNextFriend() {
     pendingFriendsRef.current.sort((a, b) => a.index - b.index)
     const nextFriend = pendingFriendsRef.current.shift()
 
@@ -30,23 +30,20 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
 
     setVisibleFriendIds(currentIds => [...currentIds, nextFriend.id])
     revealTimerRef.current = window.setTimeout(revealNextFriend, revealInterval)
-  }, [])
+  }
 
-  const queueFriendReveal = useCallback(
-    (friend: Friend, index: number) => {
-      if (queuedFriendIds.has(friend.id)) {
-        return
-      }
+  const queueFriendReveal = (friend: Friend, index: number) => {
+    if (queuedFriendIds.has(friend.id)) {
+      return
+    }
 
-      queuedFriendIds.add(friend.id)
-      pendingFriendsRef.current.push({ id: friend.id, index })
+    queuedFriendIds.add(friend.id)
+    pendingFriendsRef.current.push({ id: friend.id, index })
 
-      if (revealTimerRef.current == null) {
-        revealTimerRef.current = window.setTimeout(revealNextFriend, 0)
-      }
-    },
-    [queuedFriendIds, revealNextFriend],
-  )
+    if (revealTimerRef.current == null) {
+      revealTimerRef.current = window.setTimeout(revealNextFriend, 0)
+    }
+  }
 
   useEffect(
     () => () => {

@@ -1,4 +1,4 @@
-import { type RefObject, useCallback, useEffect, useRef } from 'react'
+import { type RefObject, useEffect, useEffectEvent, useRef } from 'react'
 
 export function useVisibilityAnimation({
   targetRef,
@@ -20,7 +20,7 @@ export function useVisibilityAnimation({
   const playbackRateRef = useRef(1)
   const playbackRateFrameRef = useRef<number | null>(null)
 
-  const syncPlayback = useCallback(() => {
+  const syncPlayback = () => {
     const animation = animationRef.current
     const target = targetRef.current
     if (animation === null || target === null) return
@@ -40,7 +40,8 @@ export function useVisibilityAnimation({
 
     animation.pause()
     if (willChange !== undefined) target.style.willChange = ''
-  }, [enabled, targetRef, willChange])
+  }
+  const syncPlaybackEvent = useEffectEvent(syncPlayback)
 
   useEffect(() => {
     const target = targetRef.current
@@ -55,21 +56,21 @@ export function useVisibilityAnimation({
 
     const observer = new IntersectionObserver(entries => {
       isIntersectingRef.current = entries[0]?.isIntersecting ?? false
-      syncPlayback()
+      syncPlaybackEvent()
     })
 
     const handleReducedMotionChange = (event: MediaQueryListEvent) => {
       shouldReduceMotionRef.current = event.matches
-      syncPlayback()
+      syncPlaybackEvent()
     }
 
     observer.observe(target)
-    document.addEventListener('visibilitychange', syncPlayback)
+    document.addEventListener('visibilitychange', syncPlaybackEvent)
     reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
 
     return () => {
       observer.disconnect()
-      document.removeEventListener('visibilitychange', syncPlayback)
+      document.removeEventListener('visibilitychange', syncPlaybackEvent)
       reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
       if (playbackRateFrameRef.current !== null) {
         cancelAnimationFrame(playbackRateFrameRef.current)
@@ -79,78 +80,73 @@ export function useVisibilityAnimation({
       animationRef.current = null
       if (willChange !== undefined) target.style.willChange = ''
     }
-  }, [keyframes, options, syncPlayback, targetRef, willChange])
+  }, [keyframes, options, targetRef, willChange])
 
-  const animatePlaybackRate = useCallback(
-    (nextPlaybackRate: number, duration: number, onComplete?: () => void) => {
-      if (playbackRateFrameRef.current !== null) {
-        cancelAnimationFrame(playbackRateFrameRef.current)
-      }
+  const animatePlaybackRate = (
+    nextPlaybackRate: number,
+    duration: number,
+    onComplete?: () => void,
+  ) => {
+    if (playbackRateFrameRef.current !== null) {
+      cancelAnimationFrame(playbackRateFrameRef.current)
+    }
 
-      const animation = animationRef.current
-      if (animation === null) return
+    const animation = animationRef.current
+    if (animation === null) return
 
-      const initialPlaybackRate = playbackRateRef.current
-      const startTime = performance.now()
+    const initialPlaybackRate = playbackRateRef.current
+    const startTime = performance.now()
 
-      const updatePlaybackRate = (time: number) => {
-        const progress = Math.min((time - startTime) / duration, 1)
-        const easedProgress = progress * progress * (3 - 2 * progress)
-        const playbackRate =
-          initialPlaybackRate + (nextPlaybackRate - initialPlaybackRate) * easedProgress
+    const updatePlaybackRate = (time: number) => {
+      const progress = Math.min((time - startTime) / duration, 1)
+      const easedProgress = progress * progress * (3 - 2 * progress)
+      const playbackRate =
+        initialPlaybackRate + (nextPlaybackRate - initialPlaybackRate) * easedProgress
 
-        playbackRateRef.current = playbackRate
-        animation.updatePlaybackRate(playbackRate)
+      playbackRateRef.current = playbackRate
+      animation.updatePlaybackRate(playbackRate)
 
-        if (progress < 1) {
-          playbackRateFrameRef.current = requestAnimationFrame(updatePlaybackRate)
-          return
-        }
-
-        playbackRateFrameRef.current = null
-        onComplete?.()
-      }
-
-      playbackRateFrameRef.current = requestAnimationFrame(updatePlaybackRate)
-    },
-    [],
-  )
-
-  const pause = useCallback(
-    (duration = 0) => {
-      if (duration === 0) {
-        isManuallyPausedRef.current = true
-        syncPlayback()
+      if (progress < 1) {
+        playbackRateFrameRef.current = requestAnimationFrame(updatePlaybackRate)
         return
       }
 
-      animatePlaybackRate(0, duration, () => {
-        isManuallyPausedRef.current = true
-        syncPlayback()
-      })
-    },
-    [animatePlaybackRate, syncPlayback],
-  )
+      playbackRateFrameRef.current = null
+      onComplete?.()
+    }
 
-  const play = useCallback(
-    (duration = 0) => {
-      isManuallyPausedRef.current = false
+    playbackRateFrameRef.current = requestAnimationFrame(updatePlaybackRate)
+  }
 
-      if (duration === 0) {
-        playbackRateRef.current = 1
-        animationRef.current?.updatePlaybackRate(1)
-        syncPlayback()
-        return
-      }
-
-      if (animationRef.current !== null && playbackRateRef.current === 0) {
-        animationRef.current.updatePlaybackRate(0.001)
-      }
+  const pause = (duration = 0) => {
+    if (duration === 0) {
+      isManuallyPausedRef.current = true
       syncPlayback()
-      animatePlaybackRate(1, duration)
-    },
-    [animatePlaybackRate, syncPlayback],
-  )
+      return
+    }
+
+    animatePlaybackRate(0, duration, () => {
+      isManuallyPausedRef.current = true
+      syncPlayback()
+    })
+  }
+
+  const play = (duration = 0) => {
+    isManuallyPausedRef.current = false
+
+    if (duration === 0) {
+      playbackRateRef.current = 1
+      animationRef.current?.updatePlaybackRate(1)
+      syncPlayback()
+      return
+    }
+
+    if (animationRef.current !== null && playbackRateRef.current === 0) {
+      animationRef.current.updatePlaybackRate(0.001)
+    }
+    syncPlayback()
+    animatePlaybackRate(1, duration)
+  }
 
   return { pause, play }
 }

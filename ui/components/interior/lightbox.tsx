@@ -2,7 +2,7 @@
 
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 
@@ -100,47 +100,35 @@ export function useLightbox<
     dismiss.current = onDismiss
   }, [onDismiss])
 
-  const toStep = useCallback(
-    (s: number) => clamp(Math.round(((s - 1) / (top - 1)) * cells), 0, cells),
-    [cells, top],
-  )
+  const toStep = (s: number) => clamp(Math.round(((s - 1) / (top - 1)) * cells), 0, cells)
 
-  const mark = useCallback(
-    (s: number) => {
-      const next = toStep(s)
-      if (stepRef.current === next) return
-      stepRef.current = next
-      setStep(next)
-    },
-    [toStep],
-  )
+  const mark = (s: number) => {
+    const next = toStep(s)
+    if (stepRef.current === next) return
+    stepRef.current = next
+    setStep(next)
+  }
 
-  const settle = useCallback(
-    (s: number) => {
-      if (timer.current) {
-        clearTimeout(timer.current)
-        timer.current = null
-      }
-      const next = toStep(s)
-      if (settledRef.current === next) return
-      settledRef.current = next
-      setSettled(next)
-    },
-    [toStep],
-  )
+  const settle = (s: number) => {
+    if (timer.current) {
+      clearTimeout(timer.current)
+      timer.current = null
+    }
+    const next = toStep(s)
+    if (settledRef.current === next) return
+    settledRef.current = next
+    setSettled(next)
+  }
 
-  const settleSoon = useCallback(
-    (s: number) => {
-      if (timer.current) clearTimeout(timer.current)
-      timer.current = setTimeout(() => {
-        timer.current = null
-        settle(s)
-      }, 220)
-    },
-    [settle],
-  )
+  const settleSoon = (s: number) => {
+    if (timer.current) clearTimeout(timer.current)
+    timer.current = setTimeout(() => {
+      timer.current = null
+      settle(s)
+    }, 220)
+  }
 
-  const limit = useCallback((s: number) => {
+  const limit = (s: number) => {
     const frame = frameRef.current
     const content = contentRef.current
     if (!frame || !content) return { mx: 0, my: 0 }
@@ -148,71 +136,63 @@ export function useLightbox<
       mx: Math.max(0, (content.offsetWidth * s - frame.clientWidth) / 2),
       my: Math.max(0, (content.offsetHeight * s - frame.clientHeight) / 2),
     }
-  }, [])
+  }
 
-  const place = useCallback(
-    (s: number, nx: number, ny: number) => {
-      const { mx, my } = limit(s)
+  const place = (s: number, nx: number, ny: number) => {
+    const { mx, my } = limit(s)
+    scale.set(s)
+    x.set(clamp(nx, -mx, mx))
+    y.set(clamp(ny, -my, my))
+    mark(s)
+  }
+
+  const glide = (s: number, nx: number, ny: number, spring: Spring = CELL) => {
+    const { mx, my } = limit(s)
+    const tx = clamp(nx, -mx, mx)
+    const ty = clamp(ny, -my, my)
+    if (reduced) {
       scale.set(s)
-      x.set(clamp(nx, -mx, mx))
-      y.set(clamp(ny, -my, my))
-      mark(s)
-    },
-    [limit, mark, scale, x, y],
-  )
+      x.set(tx)
+      y.set(ty)
+    } else {
+      animate(scale, s, spring)
+      animate(x, tx, spring)
+      animate(y, ty, spring)
+    }
+    mark(s)
+    settle(s)
+  }
 
-  const glide = useCallback(
-    (s: number, nx: number, ny: number, spring: Spring = CELL) => {
-      const { mx, my } = limit(s)
-      const tx = clamp(nx, -mx, mx)
-      const ty = clamp(ny, -my, my)
-      if (reduced) {
-        scale.set(s)
-        x.set(tx)
-        y.set(ty)
-      } else {
-        animate(scale, s, spring)
-        animate(x, tx, spring)
-        animate(y, ty, spring)
-      }
-      mark(s)
-      settle(s)
-    },
-    [limit, mark, reduced, scale, settle, x, y],
-  )
-
-  const reset = useCallback(() => {
+  const reset = () => {
     glide(1, 0, 0, HOME)
-  }, [glide])
+  }
 
-  const zoomAt = useCallback(
-    (next: number, cx: number, cy: number, animated: boolean) => {
-      const frame = frameRef.current
-      if (!frame) return
-      const r = frame.getBoundingClientRect()
-      const px = cx - (r.left + r.width / 2)
-      const py = cy - (r.top + r.height / 2)
-      const s0 = scale.get()
-      const ax = (px - x.get()) / s0
-      const ay = (py - y.get()) / s0
-      const s = clamp(next, 1, top)
-      const nx = px - ax * s
-      const ny = py - ay * s
-      if (animated) {
-        glide(s, nx, ny, s <= 1 ? HOME : CELL)
-        return
-      }
-      place(s, nx, ny)
-      settleSoon(s)
-    },
-    [glide, place, scale, settleSoon, top, x, y],
-  )
+  const zoomAt = (next: number, cx: number, cy: number, animated: boolean) => {
+    const frame = frameRef.current
+    if (!frame) return
+    const r = frame.getBoundingClientRect()
+    const px = cx - (r.left + r.width / 2)
+    const py = cy - (r.top + r.height / 2)
+    const s0 = scale.get()
+    const ax = (px - x.get()) / s0
+    const ay = (py - y.get()) / s0
+    const s = clamp(next, 1, top)
+    const nx = px - ax * s
+    const ny = py - ay * s
+    if (animated) {
+      glide(s, nx, ny, s <= 1 ? HOME : CELL)
+      return
+    }
+    place(s, nx, ny)
+    settleSoon(s)
+  }
+  const zoomAtEvent = useEffectEvent(zoomAt)
 
-  const finish = useCallback(() => {
+  const finish = () => {
     const s0 = scale.get()
     if (s0 < SNAP_HOME) reset()
     else settle(s0)
-  }, [reset, scale, settle])
+  }
 
   const release = (e: React.PointerEvent) => {
     const held = drag.current
@@ -306,11 +286,11 @@ export function useLightbox<
     const onWheel = (e: WheelEvent) => {
       if (disabled) return
       e.preventDefault()
-      zoomAt(scale.get() * Math.exp(-e.deltaY / WHEEL_RATE), e.clientX, e.clientY, false)
+      zoomAtEvent(scale.get() * Math.exp(-e.deltaY / WHEEL_RATE), e.clientX, e.clientY, false)
     }
     frame.addEventListener('wheel', onWheel, { passive: false })
     return () => frame.removeEventListener('wheel', onWheel)
-  }, [disabled, scale, zoomAt])
+  }, [disabled, scale])
 
   useEffect(() => {
     const bail = () => {
@@ -343,6 +323,7 @@ export function useLightbox<
 export type LightboxProps = {
   open: boolean
   onClose: () => void
+  onOriginVisibilityChange?: (hidden: boolean) => void
   src: string
   alt: string
   originRef?: React.RefObject<HTMLElement | null>
@@ -354,6 +335,29 @@ export type LightboxProps = {
 }
 
 type Landing = { dx: number; dy: number; s: number; o: number; r: number }
+
+function getLanding(
+  frame: HTMLElement | null,
+  content: HTMLElement | null,
+  origin: HTMLElement | null | undefined,
+): Landing {
+  if (frame && content && origin && content.offsetWidth > 0) {
+    const frameRect = frame.getBoundingClientRect()
+    const originRect = origin.getBoundingClientRect()
+    if (originRect.width > 0) {
+      const scale = originRect.width / content.offsetWidth
+      const radius = Number.parseFloat(getComputedStyle(origin).borderTopLeftRadius) || 9
+      return {
+        dx: originRect.left + originRect.width / 2 - (frameRect.left + frameRect.width / 2),
+        dy: originRect.top + originRect.height / 2 - (frameRect.top + frameRect.height / 2),
+        s: scale,
+        o: 1,
+        r: radius / scale,
+      }
+    }
+  }
+  return { dx: 0, dy: 10, s: 0.97, o: 0, r: 14 }
+}
 
 function LightboxToolbar({
   titleId,
@@ -454,6 +458,7 @@ function LightboxAnnouncements({ hintId, settledZoom }: { hintId: string; settle
 
 function Stage({
   onClose,
+  onOriginVisibilityChange,
   src,
   alt,
   originRef,
@@ -486,7 +491,7 @@ function Stage({
     return () => dialog.close()
   }, [])
 
-  const toggleZoom = useCallback(() => {
+  const toggleZoom = () => {
     const frame = frameRef.current
     if (!frame) return
     if (zoomed) {
@@ -500,29 +505,7 @@ function Stage({
       r.top + r.height / 2,
       true,
     )
-  }, [frameRef, maxScale, reset, zoomAt, zoomed])
-
-  const landing = useCallback((): Landing => {
-    const frame = frameRef.current
-    const content = contentRef.current
-    const origin = originRef?.current
-    if (frame && content && origin && content.offsetWidth > 0) {
-      const r = frame.getBoundingClientRect()
-      const o = origin.getBoundingClientRect()
-      if (o.width > 0) {
-        const s = o.width / content.offsetWidth
-        const rad = Number.parseFloat(getComputedStyle(origin).borderTopLeftRadius) || 9
-        return {
-          dx: o.left + o.width / 2 - (r.left + r.width / 2),
-          dy: o.top + o.height / 2 - (r.top + r.height / 2),
-          s,
-          o: 1,
-          r: rad / s,
-        }
-      }
-    }
-    return { dx: 0, dy: 10, s: 0.97, o: 0, r: 14 }
-  }, [contentRef, frameRef, originRef])
+  }
 
   useLayoutEffect(() => {
     if (reduced) {
@@ -533,7 +516,7 @@ function Stage({
       fr.set(14)
       return
     }
-    const d = landing()
+    const d = getLanding(frameRef.current, contentRef.current, originRef?.current)
     fx.set(d.dx)
     fy.set(d.dy)
     fs.set(d.s)
@@ -548,11 +531,11 @@ function Stage({
       animate(fr, 14, HOME),
     ]
     return () => runs.forEach(r => r.stop())
-  }, [fo, fr, fs, fx, fy, landing, reduced])
+  }, [contentRef, fo, fr, frameRef, fs, fx, fy, originRef, reduced])
 
-  const away = useCallback(() => {
+  const away = () => {
     if (reduced) return { opacity: 0, transition: { duration: 0.12 } }
-    const d = landing()
+    const d = getLanding(frameRef.current, contentRef.current, originRef?.current)
     animate(fr, d.r, HOME)
     return {
       x: d.dx,
@@ -561,17 +544,14 @@ function Stage({
       opacity: d.o,
       transition: { duration: 0.34, ease: EASE },
     }
-  }, [fr, landing, reduced])
+  }
 
-  const unwind = useCallback(
-    () => ({
-      x: 0,
-      y: 0,
-      scale: 1,
-      transition: reduced ? { duration: 0 } : { duration: 0.34, ease: EASE },
-    }),
-    [reduced],
-  )
+  const unwind = () => ({
+    x: 0,
+    y: 0,
+    scale: 1,
+    transition: reduced ? { duration: 0 } : { duration: 0.34, ease: EASE },
+  })
 
   useEffect(() => {
     const frame = frameRef.current
@@ -592,16 +572,9 @@ function Stage({
   }, [frameRef])
 
   useLayoutEffect(() => {
-    const origin = originRef?.current
-    if (!origin) return
-
-    const visibility = origin.style.visibility
-    origin.style.visibility = 'hidden'
-
-    return () => {
-      origin.style.visibility = visibility
-    }
-  }, [originRef])
+    onOriginVisibilityChange?.(true)
+    return () => onOriginVisibilityChange?.(false)
+  }, [onOriginVisibilityChange])
 
   return (
     <dialog

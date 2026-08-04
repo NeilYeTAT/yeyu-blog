@@ -1,5 +1,4 @@
 import { useTheme } from 'next-themes'
-import { useCallback } from 'react'
 
 type Direction = 'left' | 'right' | 'center' | 'top' | 'bottom'
 
@@ -42,35 +41,32 @@ function canUseViewTransition(): boolean {
 export function useTransitionTheme() {
   const { setTheme, theme, themes, forcedTheme, resolvedTheme, systemTheme } = useTheme()
 
-  const setTransitionTheme = useCallback(
-    (nextTheme: 'light' | 'dark', options?: TransitionOptions) => {
-      if (theme === nextTheme) return
+  const setTransitionTheme = (nextTheme: 'light' | 'dark', options?: TransitionOptions) => {
+    if (theme === nextTheme) return
 
-      const { direction, duration, easing } = { ...defaultOptions, ...options }
+    const { direction, duration, easing } = { ...defaultOptions, ...options }
 
-      if (!canUseViewTransition()) {
-        setTheme(nextTheme)
-        return
-      }
+    if (!canUseViewTransition()) {
+      setTheme(nextTheme)
+      return
+    }
 
-      const transition = document.startViewTransition(() => {
-        setTheme(nextTheme)
-      })
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme)
+    })
 
-      transition.ready.then(() => {
-        const clipPath = getClipPathDirection(direction)
-        document.documentElement.animate(
-          { clipPath },
-          {
-            duration,
-            easing,
-            pseudoElement: '::view-transition-new(root)',
-          },
-        )
-      })
-    },
-    [setTheme, theme],
-  )
+    transition.ready.then(() => {
+      const clipPath = getClipPathDirection(direction)
+      document.documentElement.animate(
+        { clipPath },
+        {
+          duration,
+          easing,
+          pseudoElement: '::view-transition-new(root)',
+        },
+      )
+    })
+  }
 
   return {
     setTransitionTheme,

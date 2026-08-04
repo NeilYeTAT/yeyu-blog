@@ -1,6 +1,6 @@
 import type { CommentTargetType } from '@/lib/api/comment/type'
 import type { CommentTreeNode } from './type'
-import { startTransition, useMemo, useState } from 'react'
+import { startTransition, useState } from 'react'
 import { type Address, isAddress } from 'viem'
 import { useCommentDeleteMutation } from '@/hooks/api/comment/use-comment-delete-mutation'
 import { useCommentMutation } from '@/hooks/api/comment/use-comment-mutation'
@@ -31,15 +31,16 @@ export function useCommentCard({
   const isAdminUser = isAdminLoggedIn({ data: session ?? null })
   const isLoggedIn = isEmailUser || isWalletUser
 
-  const { data, isPending: isCommentPending } = usePublicCommentQuery({
+  const {
+    data,
+    dataUpdatedAt: commentReferenceTime,
+    isPending: isCommentPending,
+  } = usePublicCommentQuery({
     targetType: articleType,
     targetId: articleId,
     take: 50,
   })
-  const commentTree = useMemo(
-    () => buildCommentTree(data?.list ?? [], sortOrder),
-    [data?.list, sortOrder],
-  )
+  const commentTree = buildCommentTree(data?.list ?? [], sortOrder)
 
   const { mutate: createComment, isPending: isCreatingComment } = useCommentMutation()
   const { mutate: deleteComment, isPending: isDeletingComment } = useCommentDeleteMutation()
@@ -48,15 +49,12 @@ export function useCommentCard({
     ? (session?.user?.name as Address)
     : undefined
   const sessionAvatar = session?.user?.image?.trim() || undefined
-  const sessionAvatarProps = useMemo(
-    () => ({
-      isAdminUser,
-      isWalletUser,
-      sessionAvatar,
-      sessionAddress,
-    }),
-    [isAdminUser, isWalletUser, sessionAvatar, sessionAddress],
-  )
+  const sessionAvatarProps = {
+    isAdminUser,
+    isWalletUser,
+    sessionAvatar,
+    sessionAddress,
+  }
 
   const openLoginModal = () => {
     startTransition(() => {
@@ -166,6 +164,7 @@ export function useCommentCard({
 
   return {
     total: data?.total,
+    commentReferenceTime,
     commentTree,
     sortOrder,
     setSortOrder,

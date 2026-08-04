@@ -5,6 +5,7 @@ import { Lightbox } from '@/ui/components/interior/lightbox'
 
 export function ArticleImageLoadEnhancer({ rootSelector }: { rootSelector: string }) {
   const originRef = useRef<HTMLImageElement>(null)
+  const originVisibilityRef = useRef('')
   const [lightbox, setLightbox] = useState<{
     open: boolean
     src: string
@@ -101,10 +102,24 @@ export function ArticleImageLoadEnhancer({ rootSelector }: { rootSelector: strin
     }
   }, [rootSelector])
 
+  const handleOriginVisibilityChange = (hidden: boolean) => {
+    const origin = originRef.current
+    if (origin == null) return
+
+    if (hidden) {
+      originVisibilityRef.current = origin.style.visibility
+      origin.style.visibility = 'hidden'
+      return
+    }
+
+    origin.style.visibility = originVisibilityRef.current
+  }
+
   return (
     <Lightbox
       open={lightbox.open}
       onClose={() => setLightbox(current => ({ ...current, open: false }))}
+      onOriginVisibilityChange={handleOriginVisibilityChange}
       src={lightbox.src}
       alt={lightbox.alt}
       width={lightbox.width}

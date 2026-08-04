@@ -2,7 +2,6 @@
 
 import type { UpdateEchoDTO } from '@/lib/api/echo/type'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useEchoUpdateMutation } from '@/hooks/api/echo/use-echo-update-mutation'
@@ -23,15 +22,12 @@ export default function EditEchoModal() {
 
   const { id, content, isPublished, reference } = payload != null ? (payload as UpdateEchoDTO) : {}
 
-  const initialValues = useMemo<UpdateEchoDTO>(
-    () => ({
-      content: content ?? '',
-      reference: reference ?? '',
-      isPublished: isPublished ?? true,
-      id: id!,
-    }),
-    [content, id, isPublished, reference],
-  )
+  const initialValues: UpdateEchoDTO = {
+    content: content ?? '',
+    reference: reference ?? '',
+    isPublished: isPublished ?? true,
+    id: id!,
+  }
 
   const form = useForm<UpdateEchoDTO>({
     resolver: zodResolver(updateEchoSchema),

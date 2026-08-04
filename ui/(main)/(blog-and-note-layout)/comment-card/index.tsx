@@ -21,6 +21,7 @@ export default function CommentCard({
 }) {
   const {
     total,
+    commentReferenceTime,
     commentTree,
     sortOrder,
     setSortOrder,
@@ -94,6 +95,7 @@ export default function CommentCard({
               isPending: isCommentPending,
             }}
             commentTree={commentTree}
+            commentReferenceTime={commentReferenceTime}
             sessionUserId={sessionUserId}
             activeReplyCommentId={activeReplyCommentId}
             replyContent={replyContent}

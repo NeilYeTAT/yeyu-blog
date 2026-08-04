@@ -2,8 +2,9 @@
 
 import { X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 import { cn } from '@/lib/utils/common/shadcn'
 
 const ease = [0.23, 1, 0.32, 1] as const
@@ -113,7 +114,8 @@ export function useModal({
   initialFocusRef,
   container,
 }: UseModalOptions): UseModalResult {
-  const [target, setTarget] = useState<HTMLElement | null>(null)
+  const hydrated = useIsHydrated()
+  const target = container === undefined ? (hydrated ? document.body : null) : container
 
   const overlayRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -130,11 +132,7 @@ export function useModal({
     latest.current = { onClose, closeOnEscape, closeOnBackdrop, initialFocusRef }
   }, [closeOnBackdrop, closeOnEscape, initialFocusRef, onClose])
 
-  const close = useCallback(() => latest.current.onClose(), [])
-
-  useEffect(() => {
-    setTarget(container === undefined ? document.body : container)
-  }, [container])
+  const close = () => latest.current.onClose()
 
   useIsomorphicLayoutEffect(() => {
     if (!open || !lockScroll) return
@@ -214,7 +212,7 @@ export function useModal({
     }
   }, [open, target])
 
-  const onKeyDown = useCallback((event: React.KeyboardEvent) => {
+  const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key !== 'Tab') return
     const panel = panelRef.current
     if (!panel) return
@@ -239,21 +237,21 @@ export function useModal({
       event.preventDefault()
       first.focus({ preventScroll: true })
     }
-  }, [])
+  }
 
-  const onPointerDown = useCallback((event: React.PointerEvent) => {
+  const onPointerDown = (event: React.PointerEvent) => {
     const panel = panelRef.current
     downedOutside.current = !panel?.contains(event.target as Node)
-  }, [])
+  }
 
-  const onClick = useCallback((event: React.MouseEvent) => {
+  const onClick = (event: React.MouseEvent) => {
     const panel = panelRef.current
     if (!latest.current.closeOnBackdrop) return
     if (panel?.contains(event.target as Node)) return
     if (!downedOutside.current) return
     downedOutside.current = false
     latest.current.onClose()
-  }, [])
+  }
 
   return {
     target,
@@ -331,7 +329,7 @@ export function Modal({
     container,
   })
 
-  const variants = useMemo(() => {
+  const variants = (() => {
     if (reduced) {
       return {
         backdrop: {
@@ -369,7 +367,7 @@ export function Modal({
         },
       },
     }
-  }, [reduced])
+  })()
 
   if (!target) return null
 

@@ -1,5 +1,4 @@
 import Image, { type ImageLoaderProps } from 'next/image'
-import { useMemo } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 
 const urlPattern = /https?:\/\/[^\s<>"'`]+/g
@@ -142,7 +141,7 @@ export function CommentMarkdownContent({
   content: string
   htmlContent: string
 }) {
-  const links = useMemo(() => getCommentLinkBlocks(content), [content])
+  const links = getCommentLinkBlocks(content)
 
   return (
     <div className="flex flex-col gap-2">

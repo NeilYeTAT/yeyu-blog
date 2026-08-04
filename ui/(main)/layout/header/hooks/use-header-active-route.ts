@@ -1,6 +1,6 @@
 import type { NavGroup } from '../types'
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { flatNavRoutes, navRouteGroupMap, navRoutePathMap } from '../constant'
 
@@ -8,78 +8,63 @@ export const useHeaderActiveRoute = () => {
   const pathname = usePathname()
   const modalType = useModalType()
   const { closeModal } = useModalActions()
-  const [groupLastActivePaths, setGroupLastActivePaths] = useState<Record<string, string>>({})
 
   useEffect(() => {
     closeModal()
   }, [closeModal])
 
-  const activeUrl = useMemo(() => {
-    return flatNavRoutes.find(route => route.pattern.test(pathname))?.path ?? pathname
-  }, [pathname])
+  const activeUrl = flatNavRoutes.find(route => route.pattern.test(pathname))?.path ?? pathname
+  const modalRoute =
+    modalType == null ? undefined : flatNavRoutes.find(route => route.modal === modalType)
+  const effectiveActiveUrl = modalRoute?.path ?? activeUrl
+  const activeRouteGroup = navRouteGroupMap.get(effectiveActiveUrl)
 
-  const effectiveActiveUrl = useMemo(() => {
-    if (modalType != null) {
-      const modalRoute = flatNavRoutes.find(route => route.modal === modalType)
+  const [routeHistory, setRouteHistory] = useState<{
+    activeUrl: string
+    groupLastActivePaths: Record<string, string>
+  }>(() => ({
+    activeUrl: effectiveActiveUrl,
+    groupLastActivePaths:
+      activeRouteGroup == null ? {} : { [activeRouteGroup.group.key]: effectiveActiveUrl },
+  }))
 
-      if (modalRoute != null) return modalRoute.path
-    }
-
-    return activeUrl
-  }, [activeUrl, modalType])
-
-  const activeRouteGroup = useMemo(() => {
-    return navRouteGroupMap.get(effectiveActiveUrl)
-  }, [effectiveActiveUrl])
-
-  useEffect(() => {
-    if (activeRouteGroup == null) return
-
-    const { key } = activeRouteGroup.group
-
-    setGroupLastActivePaths(prev => {
-      if (prev[key] === effectiveActiveUrl) return prev
-
-      return {
-        ...prev,
-        [key]: effectiveActiveUrl,
-      }
+  if (routeHistory.activeUrl !== effectiveActiveUrl) {
+    setRouteHistory({
+      activeUrl: effectiveActiveUrl,
+      groupLastActivePaths:
+        activeRouteGroup == null
+          ? routeHistory.groupLastActivePaths
+          : {
+              ...routeHistory.groupLastActivePaths,
+              [activeRouteGroup.group.key]: effectiveActiveUrl,
+            },
     })
-  }, [activeRouteGroup, effectiveActiveUrl])
+  }
 
-  const activeKey = useMemo(() => {
-    if (activeRouteGroup != null) return activeRouteGroup.group.key
+  const activeKey =
+    activeRouteGroup?.group.key ??
+    navRoutePathMap.get(effectiveActiveUrl)?.path ??
+    effectiveActiveUrl
 
-    const activeRoute = navRoutePathMap.get(effectiveActiveUrl)
+  const getGroupCurrentItem = (group: NavGroup) => {
+    const activeItem = group.items.find(item => item.path === effectiveActiveUrl)
 
-    return activeRoute?.path ?? effectiveActiveUrl
-  }, [activeRouteGroup, effectiveActiveUrl])
+    if (activeItem != null) return activeItem
 
-  const getGroupCurrentItem = useCallback(
-    (group: NavGroup) => {
-      const activeItem = group.items.find(item => item.path === effectiveActiveUrl)
+    const lastActivePath = routeHistory.groupLastActivePaths[group.key]
+    const lastActiveItem = group.items.find(item => item.path === lastActivePath)
 
-      if (activeItem != null) return activeItem
+    if (lastActiveItem != null) return lastActiveItem
 
-      const lastActivePath = groupLastActivePaths[group.key]
-      const lastActiveItem = group.items.find(item => item.path === lastActivePath)
+    const mainItem =
+      group.mainPath == null ? undefined : group.items.find(item => item.path === group.mainPath)
 
-      if (lastActiveItem != null) return lastActiveItem
+    return mainItem ?? group.items[0]
+  }
 
-      const mainItem =
-        group.mainPath == null ? undefined : group.items.find(item => item.path === group.mainPath)
-
-      return mainItem ?? group.items[0]
-    },
-    [effectiveActiveUrl, groupLastActivePaths],
-  )
-
-  return useMemo(
-    () => ({
-      activeKey,
-      effectiveActiveUrl,
-      getGroupCurrentItem,
-    }),
-    [activeKey, effectiveActiveUrl, getGroupCurrentItem],
-  )
+  return {
+    activeKey,
+    effectiveActiveUrl,
+    getGroupCurrentItem,
+  }
 }

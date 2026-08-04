@@ -5,6 +5,7 @@ import { CommentThreadItem } from './comment-thread-item'
 export function CommentList({
   status,
   commentTree,
+  commentReferenceTime,
   sessionUserId,
   activeReplyCommentId,
   replyContent,
@@ -22,6 +23,7 @@ export function CommentList({
     isPending: boolean
   }
   commentTree: CommentTreeNode[]
+  commentReferenceTime: number
   sessionUserId?: string
   activeReplyCommentId: number | null
   replyContent: string
@@ -54,6 +56,7 @@ export function CommentList({
         <CommentThreadItem
           key={comment.id}
           comment={comment}
+          commentReferenceTime={commentReferenceTime}
           depth={0}
           sessionUserId={sessionUserId}
           isLoggedIn={status.isLoggedIn}

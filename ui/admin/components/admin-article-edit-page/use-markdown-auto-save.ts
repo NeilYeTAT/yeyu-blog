@@ -1,84 +1,93 @@
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const autoSavePrefix = 'admin-article-markdown-draft-v1'
 const autoSaveDelayMs = 800
 const maxDraftAgeMs = 1000 * 60 * 60 * 24 * 7
 
-type DraftPayload = {
-  content: string
-  updatedAt: number
+function readLegacyDraft(rawDraft: string) {
+  const match = rawDraft.match(
+    /^\{"content":("(?:\\(?:["\\/bfnrt]|u[\da-fA-F]{4})|[^"\\])*"),"updatedAt":(\d+)\}$/,
+  )
+  if (match == null) return null
+
+  const serializedContent = match[1]
+  for (const character of serializedContent) {
+    if (character.charCodeAt(0) < 32) return null
+  }
+
+  return {
+    content: JSON.parse(serializedContent) as string,
+    updatedAt: Number(match[2]),
+  }
+}
+
+function readDraft(storageKey: string, currentValue: string) {
+  if (typeof window === 'undefined') return null
+
+  const storedContent = localStorage.getItem(storageKey)
+  const storedUpdatedAt = localStorage.getItem(`${storageKey}:updated-at`)
+  const legacyDraft =
+    storedContent == null || storedUpdatedAt != null ? null : readLegacyDraft(storedContent)
+  const content = legacyDraft == null ? storedContent : legacyDraft.content
+  const updatedAt = legacyDraft == null ? Number(storedUpdatedAt) : legacyDraft.updatedAt
+
+  if (
+    content == null ||
+    !Number.isFinite(updatedAt) ||
+    Date.now() - updatedAt > maxDraftAgeMs ||
+    content === currentValue
+  ) {
+    return null
+  }
+
+  return content
+}
+
+function saveDraft(storageKey: string, content: string) {
+  if (content.trim().length === 0) {
+    localStorage.removeItem(storageKey)
+    localStorage.removeItem(`${storageKey}:updated-at`)
+    return
+  }
+
+  localStorage.setItem(storageKey, content)
+  localStorage.setItem(`${storageKey}:updated-at`, String(Date.now()))
 }
 
 export function useMarkdownAutoSave(value: string) {
   const pathname = usePathname()
   const latestValueRef = useRef(value)
-  const restoredDraftKeyRef = useRef<string | null>(null)
-  const [restoredDraft, setRestoredDraft] = useState<{
-    content: string
-    storageKey: string
-  } | null>(null)
   const storageKey = `${autoSavePrefix}:${pathname}`
+  const [restoredDraft, setRestoredDraft] = useState(() => ({
+    content: readDraft(storageKey, value),
+    storageKey,
+  }))
 
-  const saveDraft = useCallback(
-    (content: string) => {
-      if (content.trim().length === 0) {
-        localStorage.removeItem(storageKey)
-        return
-      }
-
-      const payload: DraftPayload = {
-        content,
-        updatedAt: Date.now(),
-      }
-      localStorage.setItem(storageKey, JSON.stringify(payload))
-    },
-    [storageKey],
-  )
+  if (restoredDraft.storageKey !== storageKey) {
+    setRestoredDraft({
+      content: readDraft(storageKey, value),
+      storageKey,
+    })
+  }
 
   useEffect(() => {
     latestValueRef.current = value
   }, [value])
 
   useEffect(() => {
-    if (restoredDraftKeyRef.current === storageKey) return
-    restoredDraftKeyRef.current = storageKey
-
-    const rawDraft = localStorage.getItem(storageKey)
-    if (rawDraft == null) return
-
-    try {
-      const payload = JSON.parse(rawDraft) as DraftPayload
-      if (
-        typeof payload.content !== 'string' ||
-        typeof payload.updatedAt !== 'number' ||
-        Date.now() - payload.updatedAt > maxDraftAgeMs
-      ) {
-        localStorage.removeItem(storageKey)
-        return
-      }
-
-      if (payload.content !== latestValueRef.current) {
-        setRestoredDraft({ content: payload.content, storageKey })
-      }
-    } catch {
-      localStorage.removeItem(storageKey)
-    }
-  }, [storageKey])
-
-  useEffect(() => {
     const timer = window.setTimeout(() => {
-      saveDraft(value)
+      saveDraft(storageKey, value)
     }, autoSaveDelayMs)
 
     return () => {
       window.clearTimeout(timer)
     }
-  }, [saveDraft, value])
+  }, [storageKey, value])
 
   useEffect(() => {
     const persistDraftNow = () => {
-      saveDraft(latestValueRef.current)
+      saveDraft(storageKey, latestValueRef.current)
     }
 
     const handleVisibilityChange = () => {
@@ -94,7 +103,7 @@ export function useMarkdownAutoSave(value: string) {
       window.removeEventListener('pagehide', persistDraftNow)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [saveDraft])
+  }, [storageKey])
 
-  return restoredDraft?.storageKey === storageKey ? restoredDraft.content : null
+  return restoredDraft.storageKey === storageKey ? restoredDraft.content : null
 }

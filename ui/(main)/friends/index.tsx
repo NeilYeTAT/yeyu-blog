@@ -1,28 +1,15 @@
+import type { Friend } from './types'
 import { prisma } from '@/prisma/instance'
 import { FriendApplyButton } from './friend-apply-button'
 import { FriendsList } from './friends-list'
 
 export async function FriendsPage() {
-  const friends = await prisma.friendLink.findMany({
-    where: {
-      state: 'APPROVED',
-    },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      avatarUrl: true,
-      siteUrl: true,
-    },
-  })
-
-  for (let index = friends.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1))
-    const currentFriend = friends[index]
-
-    friends[index] = friends[randomIndex]
-    friends[randomIndex] = currentFriend
-  }
+  const friends = await prisma.$queryRaw<Friend[]>`
+    SELECT "id", "name", "description", "avatarUrl", "siteUrl"
+    FROM "FriendLink"
+    WHERE "state" = 'APPROVED'
+    ORDER BY RANDOM()
+  `
 
   return (
     <section className="mx-auto flex w-full max-w-2xl flex-col px-1 py-4 sm:px-4">

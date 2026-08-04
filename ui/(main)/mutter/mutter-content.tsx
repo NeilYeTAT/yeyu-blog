@@ -1,13 +1,12 @@
 'use client'
 
-import { useMemo } from 'react'
 import { GenericLinkCard } from './generic-link-card'
 import { getMutterContentBlocks } from './mutter-content-utils'
 import { NeteaseMusicCard } from './netease-music-card'
 import { TwitterTweetCard } from './twitter-tweet-card'
 
 export function MutterContent({ content }: { content: string }) {
-  const blocks = useMemo(() => getMutterContentBlocks(content), [content])
+  const blocks = getMutterContentBlocks(content)
 
   return (
     <div className="flex flex-col gap-3">

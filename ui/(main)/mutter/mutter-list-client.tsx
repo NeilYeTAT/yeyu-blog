@@ -3,7 +3,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { motion, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import avatar from '@/config/img/avatar.webp'
 import { useMutterLikeMutation } from '@/hooks/api/mutter/use-mutter-like-mutation'
 import { getPublicMutters } from '@/lib/api/mutter/get-public-mutters'
@@ -71,7 +71,7 @@ export function MutterListClient({
           createdAt: string
         })
       : null
-  const mutters = useMemo(() => {
+  const mutters = (() => {
     const existingIds = new Set<number>()
     const nextMutters: typeof initialMutters = []
 
@@ -87,8 +87,8 @@ export function MutterListClient({
     }
 
     return nextMutters
-  }, [data.pages])
-  const likedMutterIdSet = useMemo(() => new Set(likedMutterIds), [likedMutterIds])
+  })()
+  const likedMutterIdSet = new Set(likedMutterIds)
 
   useEffect(() => {
     const element = loadMoreRef.current

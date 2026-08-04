@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   type BrandThemeId,
   brandThemeOptions,
@@ -15,11 +15,6 @@ export const SelectThemeModal = () => {
   const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'selectThemeModal'
   const [activeTheme, setActiveTheme] = useState<BrandThemeId>(resolveBrandTheme)
-
-  useEffect(() => {
-    if (!isModalOpen) return
-    setActiveTheme(resolveBrandTheme())
-  }, [isModalOpen])
 
   return (
     <Modal

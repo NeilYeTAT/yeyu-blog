@@ -2,7 +2,7 @@
 
 import { Edit2, Eye, EyeOff, Trash } from 'lucide-react'
 import Image, { type ImageLoaderProps } from 'next/image'
-import { type ComponentProps, type FC, useMemo, useState } from 'react'
+import { type ComponentProps, type FC, useState } from 'react'
 import { sileo } from 'sileo'
 import { useMutterPublishMutation } from '@/hooks/api/mutter/use-mutter-publish-mutation'
 import { useMutterQuery } from '@/hooks/api/mutter/use-mutter-query'
@@ -131,7 +131,7 @@ export const MutterList: FC<
   const { mutate: toggleMutterPublish } = useMutterPublishMutation()
   const [togglingMutterIds, setTogglingMutterIds] = useState<number[]>([])
   const mutters = data?.list ?? []
-  const togglingMutterIdSet = useMemo(() => new Set(togglingMutterIds), [togglingMutterIds])
+  const togglingMutterIdSet = new Set(togglingMutterIds)
 
   const handleTogglePublish = (id: number, isPublished: boolean) => {
     setTogglingMutterIds(previousIds =>

@@ -10,6 +10,7 @@ import { formatCommentDisplayName, getCommentDisplayName } from './helper'
 
 export function CommentThreadItem({
   comment,
+  commentReferenceTime,
   depth,
   sessionUserId,
   isLoggedIn,
@@ -25,6 +26,7 @@ export function CommentThreadItem({
   onDeleteClick,
 }: {
   comment: CommentTreeNode
+  commentReferenceTime: number
   depth: number
   sessionUserId?: string
   isLoggedIn: boolean
@@ -43,7 +45,7 @@ export function CommentThreadItem({
   const commentCreatedAt = new Date(comment.createdAt)
   const absoluteTime = prettyDateTime(commentCreatedAt)
   const shouldShowRelativeTime =
-    Math.abs(Date.now() - commentCreatedAt.getTime()) <= 7 * 24 * 60 * 60 * 1000
+    Math.abs(commentReferenceTime - commentCreatedAt.getTime()) <= 7 * 24 * 60 * 60 * 1000
   const displayName = getCommentDisplayName(comment)
   const formattedDisplayName = formatCommentDisplayName(displayName)
   const isCurrentUserComment = sessionUserId != null && comment.userId === sessionUserId
@@ -192,6 +194,7 @@ export function CommentThreadItem({
                 <CommentThreadItem
                   key={childComment.id}
                   comment={childComment}
+                  commentReferenceTime={commentReferenceTime}
                   depth={depth + 1}
                   sessionUserId={sessionUserId}
                   isLoggedIn={isLoggedIn}

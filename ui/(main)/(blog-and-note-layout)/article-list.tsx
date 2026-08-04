@@ -51,7 +51,9 @@ export const ArticleList: FC<
   const groupedItems = sortedItems.reduce(
     (acc, item) => {
       const year = new Date(item.createdAt).getFullYear()
-      acc[year] ??= []
+      if (acc[year] === undefined) {
+        acc[year] = []
+      }
       acc[year].push(item)
       return acc
     },

@@ -3,7 +3,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { Plus, RotateCw, Search } from 'lucide-react'
 import Link from 'next/link'
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { Button, buttonVariants } from '@/ui/shadcn/button'
 import { Input } from '@/ui/shadcn/input'
@@ -70,4 +70,4 @@ function NoteSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
   )
 }
 
-export default memo(NoteSearch)
+export default NoteSearch

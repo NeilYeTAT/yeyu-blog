@@ -5,8 +5,8 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import {
   type FC,
   type MouseEvent,
-  useCallback,
   useEffect,
+  useEffectEvent,
   useRef,
   useState,
   useSyncExternalStore,
@@ -73,27 +73,25 @@ const useActiveHeading = (headings: Heading[]) => {
     direction: 1,
   })
 
-  const updateActiveHeading = useCallback(
-    (nextActiveId: string) => {
-      setActiveHeading(current => {
-        if (current.activeId === nextActiveId) return current
+  const updateActiveHeading = (nextActiveId: string) => {
+    setActiveHeading(current => {
+      if (current.activeId === nextActiveId) return current
 
-        const nextIndex = headings.findIndex(heading => heading.id === nextActiveId)
-        const currentIndex = headings.findIndex(heading => heading.id === current.activeId)
-        let nextDirection = current.direction
+      const nextIndex = headings.findIndex(heading => heading.id === nextActiveId)
+      const currentIndex = headings.findIndex(heading => heading.id === current.activeId)
+      let nextDirection = current.direction
 
-        if (currentIndex !== -1 && nextIndex !== -1) {
-          nextDirection = nextIndex > currentIndex ? 1 : -1
-        }
+      if (currentIndex !== -1 && nextIndex !== -1) {
+        nextDirection = nextIndex > currentIndex ? 1 : -1
+      }
 
-        return {
-          activeId: nextActiveId,
-          direction: nextDirection,
-        }
-      })
-    },
-    [headings],
-  )
+      return {
+        activeId: nextActiveId,
+        direction: nextDirection,
+      }
+    })
+  }
+  const updateActiveHeadingEvent = useEffectEvent(updateActiveHeading)
 
   useEffect(() => {
     if (headings.length === 0) return
@@ -101,7 +99,7 @@ const useActiveHeading = (headings: Heading[]) => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) updateActiveHeading(entry.target.id)
+          if (entry.isIntersecting) updateActiveHeadingEvent(entry.target.id)
         })
       },
       { rootMargin: '-10% 0px -80% 0px' },
@@ -113,7 +111,7 @@ const useActiveHeading = (headings: Heading[]) => {
     })
 
     return () => observer.disconnect()
-  }, [headings, updateActiveHeading])
+  }, [headings])
 
   return { activeId, direction, updateActiveHeading }
 }

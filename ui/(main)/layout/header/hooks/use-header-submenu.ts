@@ -1,6 +1,6 @@
 import type { MouseEvent, PointerEvent } from 'react'
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { navGroupIndexMap, navGroupRouteMap } from '../constant'
 
 const closeDelay = 150
@@ -20,159 +20,126 @@ export const useHeaderSubmenu = () => {
   const [hoveredPath, setHoveredPath] = useState<string | null>(null)
   const [direction, setDirection] = useState(0)
 
-  const activeGroupRoute = useMemo(() => {
-    if (hoveredPath == null) return undefined
+  const activeGroupRoute = hoveredPath == null ? undefined : navGroupRouteMap.get(hoveredPath)
 
-    return navGroupRouteMap.get(hoveredPath)
-  }, [hoveredPath])
-
-  const clearCloseTimer = useCallback(() => {
+  const clearCloseTimer = () => {
     if (timeoutRef.current == null) return
 
     clearTimeout(timeoutRef.current)
     timeoutRef.current = null
-  }, [])
+  }
 
-  const showNavPath = useCallback(
-    (path: string) => {
-      clearCloseTimer()
+  const showNavPath = (path: string) => {
+    clearCloseTimer()
 
-      const newIndex = getNavGroupIndex(path)
-      const oldIndex = getNavGroupIndex(hoveredPath)
+    const newIndex = getNavGroupIndex(path)
+    const oldIndex = getNavGroupIndex(hoveredPath)
 
-      if (newIndex !== -1 && oldIndex !== -1 && newIndex !== oldIndex) {
-        setDirection(newIndex > oldIndex ? 1 : -1)
-      } else if (newIndex === -1 || oldIndex === -1) {
-        setDirection(0)
-      }
+    if (newIndex !== -1 && oldIndex !== -1 && newIndex !== oldIndex) {
+      setDirection(newIndex > oldIndex ? 1 : -1)
+    } else if (newIndex === -1 || oldIndex === -1) {
+      setDirection(0)
+    }
 
-      setHoveredPath(path)
-    },
-    [clearCloseTimer, hoveredPath],
-  )
+    setHoveredPath(path)
+  }
 
-  const close = useCallback(() => {
+  const close = () => {
     clearCloseTimer()
     touchTargetPathRef.current = null
     touchStartedOpenPathRef.current = null
     setHoveredPath(null)
     setDirection(0)
-  }, [clearCloseTimer])
+  }
+  const closeEvent = useEffectEvent(close)
+  const clearCloseTimerEvent = useEffectEvent(clearCloseTimer)
 
   useEffect(() => {
     if (routePathnameRef.current === pathname) return
 
     routePathnameRef.current = pathname
-    close()
-  }, [pathname, close])
+    closeEvent()
+  }, [pathname])
 
   useEffect(() => {
     return () => {
-      clearCloseTimer()
+      clearCloseTimerEvent()
     }
-  }, [clearCloseTimer])
+  }, [])
 
-  const handlePointerEnter = useCallback(
-    (event: PointerEvent<HTMLElement>, path: string) => {
-      if (event.pointerType !== 'mouse') return
+  const handlePointerEnter = (event: PointerEvent<HTMLElement>, path: string) => {
+    if (event.pointerType !== 'mouse') return
 
-      showNavPath(path)
-    },
-    [showNavPath],
-  )
+    showNavPath(path)
+  }
 
-  const handlePointerLeave = useCallback(
-    (event: PointerEvent<HTMLElement>) => {
-      if (event.pointerType !== 'mouse') return
+  const handlePointerLeave = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== 'mouse') return
 
-      clearCloseTimer()
-      timeoutRef.current = setTimeout(() => {
-        close()
-      }, closeDelay)
-    },
-    [clearCloseTimer, close],
-  )
+    clearCloseTimer()
+    timeoutRef.current = setTimeout(() => {
+      close()
+    }, closeDelay)
+  }
 
-  const handleGroupPointerDown = useCallback(
-    (event: PointerEvent<HTMLElement>, path: string) => {
-      if (event.pointerType === 'mouse') {
-        touchTargetPathRef.current = null
-        touchStartedOpenPathRef.current = null
-        return
-      }
-
-      touchTargetPathRef.current = path
-      touchStartedOpenPathRef.current = hoveredPath === path ? path : null
-    },
-    [hoveredPath],
-  )
-
-  const handleGroupClickCapture = useCallback(
-    (event: MouseEvent<HTMLElement>, path: string) => {
-      if (touchTargetPathRef.current !== path) return
-
-      event.preventDefault()
-      event.stopPropagation()
-
-      if (touchStartedOpenPathRef.current === path) {
-        close()
-      } else {
-        showNavPath(path)
-      }
-
+  const handleGroupPointerDown = (event: PointerEvent<HTMLElement>, path: string) => {
+    if (event.pointerType === 'mouse') {
       touchTargetPathRef.current = null
       touchStartedOpenPathRef.current = null
+      return
+    }
+
+    touchTargetPathRef.current = path
+    touchStartedOpenPathRef.current = hoveredPath === path ? path : null
+  }
+
+  const handleGroupClickCapture = (event: MouseEvent<HTMLElement>, path: string) => {
+    if (touchTargetPathRef.current !== path) return
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (touchStartedOpenPathRef.current === path) {
+      close()
+    } else {
+      showNavPath(path)
+    }
+
+    touchTargetPathRef.current = null
+    touchStartedOpenPathRef.current = null
+  }
+
+  const state = {
+    activeGroupRoute,
+    direction,
+    hoveredPath,
+    isOpen: activeGroupRoute != null,
+  }
+
+  const getRouteItemProps = (path: string) => ({
+    onPointerEnter: (event: PointerEvent<HTMLElement>) => handlePointerEnter(event, path),
+  })
+
+  const getGroupTriggerProps = (path: string) => ({
+    onClickCapture: (event: MouseEvent<HTMLElement>) => handleGroupClickCapture(event, path),
+    onPointerDownCapture: (event: PointerEvent<HTMLElement>) => handleGroupPointerDown(event, path),
+    ...getRouteItemProps(path),
+  })
+
+  const hoverAreaProps = {
+    onPointerEnter: (event: PointerEvent<HTMLElement>) => {
+      if (event.pointerType !== 'mouse') return
+
+      clearCloseTimer()
     },
-    [close, showNavPath],
-  )
+    onPointerLeave: handlePointerLeave,
+  }
 
-  const state = useMemo(
-    () => ({
-      activeGroupRoute,
-      direction,
-      hoveredPath,
-      isOpen: activeGroupRoute != null,
-    }),
-    [activeGroupRoute, direction, hoveredPath],
-  )
-
-  const getRouteItemProps = useCallback(
-    (path: string) => ({
-      onPointerEnter: (event: PointerEvent<HTMLElement>) => handlePointerEnter(event, path),
-    }),
-    [handlePointerEnter],
-  )
-
-  const getGroupTriggerProps = useCallback(
-    (path: string) => ({
-      onClickCapture: (event: MouseEvent<HTMLElement>) => handleGroupClickCapture(event, path),
-      onPointerDownCapture: (event: PointerEvent<HTMLElement>) =>
-        handleGroupPointerDown(event, path),
-      ...getRouteItemProps(path),
-    }),
-    [getRouteItemProps, handleGroupClickCapture, handleGroupPointerDown],
-  )
-
-  const hoverAreaProps = useMemo(
-    () => ({
-      onPointerEnter: (event: PointerEvent<HTMLElement>) => {
-        if (event.pointerType !== 'mouse') return
-
-        clearCloseTimer()
-      },
-      onPointerLeave: handlePointerLeave,
-    }),
-    [clearCloseTimer, handlePointerLeave],
-  )
-
-  return useMemo(
-    () => ({
-      close,
-      getGroupTriggerProps,
-      getRouteItemProps,
-      hoverAreaProps,
-      state,
-    }),
-    [close, getGroupTriggerProps, getRouteItemProps, hoverAreaProps, state],
-  )
+  return {
+    close,
+    getGroupTriggerProps,
+    getRouteItemProps,
+    hoverAreaProps,
+    state,
+  }
 }

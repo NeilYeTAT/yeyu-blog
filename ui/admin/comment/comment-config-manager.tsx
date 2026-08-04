@@ -1,7 +1,7 @@
 'use client'
 
 import type { ComponentProps, FC } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { sileo } from 'sileo'
 import { useCommentConfigMutation } from '@/hooks/api/comment/use-comment-config-mutation'
 import { useCommentConfigQuery } from '@/hooks/api/comment/use-comment-config-query'
@@ -10,8 +10,81 @@ import { useMutterCommentConfigQuery } from '@/hooks/api/mutter-comment/use-mutt
 import Loading from '@/ui/components/shared/loading'
 import { Switch } from '@/ui/shadcn/switch'
 
-const configRowClassName =
-  'flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between'
+function CommentConfigSection({
+  title,
+  config,
+  emailDescription,
+  walletDescription,
+  isUpdating,
+  onUpdate,
+}: {
+  title: string
+  config: {
+    autoApproveEmailUsers: boolean
+    autoApproveWalletUsers: boolean
+  }
+  emailDescription: string
+  walletDescription: string
+  isUpdating: boolean
+  onUpdate: (nextConfig: {
+    autoApproveEmailUsers: boolean
+    autoApproveWalletUsers: boolean
+  }) => void
+}) {
+  const [emailUsersOverride, setEmailUsersOverride] = useState<boolean | null>(null)
+  const [walletUsersOverride, setWalletUsersOverride] = useState<boolean | null>(null)
+  const autoApproveEmailUsers =
+    emailUsersOverride === null ? config.autoApproveEmailUsers : emailUsersOverride
+  const autoApproveWalletUsers =
+    walletUsersOverride === null ? config.autoApproveWalletUsers : walletUsersOverride
+
+  return (
+    <section>
+      <header className="border-b bg-muted/30 px-4 py-2">
+        <h3 className="font-medium text-xs">{title}</h3>
+      </header>
+      <div className="divide-y">
+        <section className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h4 className="font-medium text-sm">GitHub 登录用户自动通过</h4>
+            <p className="mt-1 text-muted-foreground text-xs">{emailDescription}</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            checked={autoApproveEmailUsers}
+            disabled={isUpdating}
+            onCheckedChange={checked => {
+              setEmailUsersOverride(checked)
+              onUpdate({
+                autoApproveEmailUsers: checked,
+                autoApproveWalletUsers,
+              })
+            }}
+          />
+        </section>
+
+        <section className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h4 className="font-medium text-sm">钱包登录用户自动通过</h4>
+            <p className="mt-1 text-muted-foreground text-xs">{walletDescription}</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            checked={autoApproveWalletUsers}
+            disabled={isUpdating}
+            onCheckedChange={checked => {
+              setWalletUsersOverride(checked)
+              onUpdate({
+                autoApproveEmailUsers,
+                autoApproveWalletUsers: checked,
+              })
+            }}
+          />
+        </section>
+      </div>
+    </section>
+  )
+}
 
 export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
   const { data: articleData, isPending: isArticlePending } = useCommentConfigQuery()
@@ -19,31 +92,6 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
   const { mutate: updateArticleConfig, isPending: isUpdatingArticle } = useCommentConfigMutation()
   const { mutate: updateMutterConfig, isPending: isUpdatingMutter } =
     useMutterCommentConfigMutation()
-
-  const [articleAutoApproveEmailUsers, setArticleAutoApproveEmailUsers] = useState(true)
-  const [articleAutoApproveWalletUsers, setArticleAutoApproveWalletUsers] = useState(false)
-  const [mutterAutoApproveEmailUsers, setMutterAutoApproveEmailUsers] = useState(true)
-  const [mutterAutoApproveWalletUsers, setMutterAutoApproveWalletUsers] = useState(false)
-
-  useEffect(() => {
-    const config = articleData?.data
-    if (config == null) {
-      return
-    }
-
-    setArticleAutoApproveEmailUsers(config.autoApproveEmailUsers)
-    setArticleAutoApproveWalletUsers(config.autoApproveWalletUsers)
-  }, [articleData?.data])
-
-  useEffect(() => {
-    const config = mutterData?.data
-    if (config == null) {
-      return
-    }
-
-    setMutterAutoApproveEmailUsers(config.autoApproveEmailUsers)
-    setMutterAutoApproveWalletUsers(config.autoApproveWalletUsers)
-  }, [mutterData?.data])
 
   const handleUpdateArticleConfig = (nextConfig: {
     autoApproveEmailUsers: boolean
@@ -73,7 +121,10 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
     })
   }
 
-  if (isArticlePending || isMutterPending) {
+  const articleConfig = articleData?.data
+  const mutterConfig = mutterData?.data
+
+  if (isArticlePending || isMutterPending || articleConfig == null || mutterConfig == null) {
     return <Loading />
   }
 
@@ -89,103 +140,27 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <section>
-          <header className="border-b bg-muted/30 px-4 py-2">
-            <h3 className="font-medium text-xs">文章评论</h3>
-          </header>
-          <div className="divide-y">
-            <section className={configRowClassName}>
-              <div className="min-w-0">
-                <h4 className="font-medium text-sm">GitHub 登录用户自动通过</h4>
-                <p className="mt-1 text-muted-foreground text-xs">
-                  关闭后，GitHub 登录用户提交文章评论也会进入待审核状态。
-                </p>
-              </div>
-              <Switch
-                className="shrink-0"
-                checked={articleAutoApproveEmailUsers}
-                disabled={isUpdatingArticle}
-                onCheckedChange={checked => {
-                  setArticleAutoApproveEmailUsers(checked)
-                  handleUpdateArticleConfig({
-                    autoApproveEmailUsers: checked,
-                    autoApproveWalletUsers: articleAutoApproveWalletUsers,
-                  })
-                }}
-              />
-            </section>
+        <CommentConfigSection
+          key={`article-${articleConfig.autoApproveEmailUsers}-${articleConfig.autoApproveWalletUsers}`}
+          title="文章评论"
+          config={articleConfig}
+          emailDescription="关闭后，GitHub 登录用户提交文章评论也会进入待审核状态。"
+          walletDescription="关闭后，钱包登录用户提交文章评论会进入待审核状态。"
+          isUpdating={isUpdatingArticle}
+          onUpdate={handleUpdateArticleConfig}
+        />
 
-            <section className={configRowClassName}>
-              <div className="min-w-0">
-                <h4 className="font-medium text-sm">钱包登录用户自动通过</h4>
-                <p className="mt-1 text-muted-foreground text-xs">
-                  关闭后，钱包登录用户提交文章评论会进入待审核状态。
-                </p>
-              </div>
-              <Switch
-                className="shrink-0"
-                checked={articleAutoApproveWalletUsers}
-                disabled={isUpdatingArticle}
-                onCheckedChange={checked => {
-                  setArticleAutoApproveWalletUsers(checked)
-                  handleUpdateArticleConfig({
-                    autoApproveEmailUsers: articleAutoApproveEmailUsers,
-                    autoApproveWalletUsers: checked,
-                  })
-                }}
-              />
-            </section>
-          </div>
-        </section>
-
-        <section>
-          <header className="border-y bg-muted/30 px-4 py-2">
-            <h3 className="font-medium text-xs">低语评论</h3>
-          </header>
-          <div className="divide-y">
-            <section className={configRowClassName}>
-              <div className="min-w-0">
-                <h4 className="font-medium text-sm">GitHub 登录用户自动通过</h4>
-                <p className="mt-1 text-muted-foreground text-xs">
-                  关闭后，GitHub 登录用户提交低语评论也会进入待审核状态。
-                </p>
-              </div>
-              <Switch
-                className="shrink-0"
-                checked={mutterAutoApproveEmailUsers}
-                disabled={isUpdatingMutter}
-                onCheckedChange={checked => {
-                  setMutterAutoApproveEmailUsers(checked)
-                  handleUpdateMutterConfig({
-                    autoApproveEmailUsers: checked,
-                    autoApproveWalletUsers: mutterAutoApproveWalletUsers,
-                  })
-                }}
-              />
-            </section>
-
-            <section className={configRowClassName}>
-              <div className="min-w-0">
-                <h4 className="font-medium text-sm">钱包登录用户自动通过</h4>
-                <p className="mt-1 text-muted-foreground text-xs">
-                  关闭后，钱包登录用户提交低语评论会进入待审核状态。
-                </p>
-              </div>
-              <Switch
-                className="shrink-0"
-                checked={mutterAutoApproveWalletUsers}
-                disabled={isUpdatingMutter}
-                onCheckedChange={checked => {
-                  setMutterAutoApproveWalletUsers(checked)
-                  handleUpdateMutterConfig({
-                    autoApproveEmailUsers: mutterAutoApproveEmailUsers,
-                    autoApproveWalletUsers: checked,
-                  })
-                }}
-              />
-            </section>
-          </div>
-        </section>
+        <div className="border-t">
+          <CommentConfigSection
+            key={`mutter-${mutterConfig.autoApproveEmailUsers}-${mutterConfig.autoApproveWalletUsers}`}
+            title="低语评论"
+            config={mutterConfig}
+            emailDescription="关闭后，GitHub 登录用户提交低语评论也会进入待审核状态。"
+            walletDescription="关闭后，钱包登录用户提交低语评论会进入待审核状态。"
+            isUpdating={isUpdatingMutter}
+            onUpdate={handleUpdateMutterConfig}
+          />
+        </div>
       </div>
     </main>
   )

@@ -2,7 +2,7 @@
 
 import type { PublicMutterCommentRecord } from '@/lib/api/mutter-comment/get-public-mutter-comments'
 import { MessageCircle } from 'lucide-react'
-import { startTransition, useMemo, useState } from 'react'
+import { startTransition, useState } from 'react'
 import { type Address, isAddress } from 'viem'
 import { useMutterCommentDeleteMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-delete-mutation'
 import { useMutterCommentMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-mutation'
@@ -39,7 +39,7 @@ export const MutterCommentModal = () => {
   const isEmailUser = isEmailLoggedIn({ data: session ?? null })
   const isAdminUser = isAdminLoggedIn({ data: session ?? null })
 
-  const isLoggedIn = useMemo(() => isEmailUser || isWalletUser, [isEmailUser, isWalletUser])
+  const isLoggedIn = isEmailUser || isWalletUser
 
   const { data: commentListData, isLoading: isCommentListLoading } = usePublicMutterCommentQuery({
     mutterId,

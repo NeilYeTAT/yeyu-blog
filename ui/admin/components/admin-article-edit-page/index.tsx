@@ -1,14 +1,15 @@
 'use client'
 
 import type { Blog, Note } from '@prisma/client'
+import type { UseFormReturn } from 'react-hook-form'
 import type { ArticleDTO } from './type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TagType } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { File, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { type FC, useCallback, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { type FC, useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { useBlogTagsQuery } from '@/hooks/api/tag/use-blog-tags-query'
 import { useNoteTagsQuery } from '@/hooks/api/tag/use-note-tags-query'
@@ -76,6 +77,18 @@ function extractMarkdownH1Title(content: string): string | null {
   return match[1].trim()
 }
 
+function updateTitleFromMarkdown(form: UseFormReturn<ArticleDTO>, content: string) {
+  const markdownTitle = extractMarkdownH1Title(content)
+  if (markdownTitle == null) return
+
+  const currentTitle = form.getValues('title')
+  if (markdownTitle !== currentTitle) {
+    form.setValue('title', markdownTitle, {
+      shouldValidate: true,
+    })
+  }
+}
+
 export const AdminArticleEditPage: FC<{
   article: Blog | Note | null
   relatedArticleTagNames?: string[]
@@ -129,24 +142,9 @@ export const AdminArticleEditPage: FC<{
     },
     mode: 'onBlur',
   })
-  const previewTitle = form.watch('title')
-  const content = form.watch('content')
+  const previewTitle = useWatch({ control: form.control, name: 'title' })
+  const content = useWatch({ control: form.control, name: 'content' })
   const restoredContent = useMarkdownAutoSave(content)
-
-  const updateTitleFromMarkdown = useCallback(
-    (nextContent: string) => {
-      const markdownTitle = extractMarkdownH1Title(nextContent)
-      if (markdownTitle == null) return
-
-      const currentTitle = form.getValues('title')
-      if (markdownTitle !== currentTitle) {
-        form.setValue('title', markdownTitle, {
-          shouldValidate: true,
-        })
-      }
-    },
-    [form],
-  )
 
   useEffect(() => {
     if (restoredContent == null || restoredContent === form.getValues('content')) return
@@ -155,9 +153,9 @@ export const AdminArticleEditPage: FC<{
       shouldDirty: true,
       shouldValidate: true,
     })
-    updateTitleFromMarkdown(restoredContent)
+    updateTitleFromMarkdown(form, restoredContent)
     sileo.info({ title: '已恢复未保存内容' })
-  }, [form, restoredContent, updateTitleFromMarkdown])
+  }, [form, restoredContent])
 
   return (
     <Form {...form}>
@@ -280,7 +278,7 @@ export const AdminArticleEditPage: FC<{
                   value={field.value}
                   onChange={nextContent => {
                     field.onChange(nextContent)
-                    updateTitleFromMarkdown(nextContent)
+                    updateTitleFromMarkdown(form, nextContent)
                   }}
                   previewTitle={previewTitle}
                 />

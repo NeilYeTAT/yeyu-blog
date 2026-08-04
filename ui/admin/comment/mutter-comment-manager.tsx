@@ -6,7 +6,7 @@ import type {
   MutterCommentState,
 } from '@/lib/api/mutter-comment/get-admin-mutter-comments'
 import { Check, RefreshCcw, Search, Trash2, X } from 'lucide-react'
-import { useMemo, useReducer } from 'react'
+import { useReducer } from 'react'
 import { sileo } from 'sileo'
 import { useAdminMutterCommentDeleteMutation } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-delete-mutation'
 import { useAdminMutterCommentQuery } from '@/hooks/api/mutter-comment/use-admin-mutter-comment-query'
@@ -124,14 +124,14 @@ export const MutterCommentManager: FC<ComponentProps<'main'>> = () => {
   const { deletingComment, draftMutterId, draftQuery, draftState, mutterIdInput, query, state } =
     filterState
 
-  const parsedMutterId = useMemo(() => {
+  const parsedMutterId = (() => {
     if (mutterIdInput.trim().length === 0) {
       return undefined
     }
 
     const numberValue = Number.parseInt(mutterIdInput, 10)
     return Number.isNaN(numberValue) || numberValue <= 0 ? undefined : numberValue
-  }, [mutterIdInput])
+  })()
 
   const { data, isPending } = useAdminMutterCommentQuery({
     q: query,

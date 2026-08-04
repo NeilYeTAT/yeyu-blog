@@ -2,7 +2,7 @@
 
 import type { Dispatch, SetStateAction } from 'react'
 import { Plus, RotateCw, Search } from 'lucide-react'
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import { useModalActions } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 import { Input } from '@/ui/shadcn/input'
@@ -73,4 +73,4 @@ function EchoSearch({ setQuery }: { setQuery: Dispatch<SetStateAction<string>> }
   )
 }
 
-export default memo(EchoSearch)
+export default EchoSearch

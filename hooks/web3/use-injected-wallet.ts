@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   getInjectedWalletChainId,
   type InjectedWallet,
@@ -45,7 +45,7 @@ export const useInjectedWalletConnection = () => {
     }
   }, [provider])
 
-  const connect = useCallback(async (wallet: InjectedWallet) => {
+  const connect = async (wallet: InjectedWallet) => {
     setIsConnecting(true)
 
     return await (async () => {
@@ -73,38 +73,32 @@ export const useInjectedWalletConnection = () => {
     })().finally(() => {
       setIsConnecting(false)
     })
-  }, [])
+  }
 
-  const signMessage = useCallback(
-    async ({
+  const signMessage = async ({
+    account,
+    message,
+    provider: walletProvider,
+  }: {
+    account: string
+    message: string
+    provider?: InjectedWalletProvider
+  }) => {
+    return await signInjectedWalletMessage({
       account,
       message,
-      provider: walletProvider,
-    }: {
-      account: string
-      message: string
-      provider?: InjectedWalletProvider
-    }) => {
-      return await signInjectedWalletMessage({
-        account,
-        message,
-        provider: walletProvider ?? provider,
-      })
-    },
-    [provider],
-  )
+      provider: walletProvider ?? provider,
+    })
+  }
 
-  return useMemo(
-    () => ({
-      account,
-      chainId,
-      connect,
-      hasAccount: account !== undefined,
-      hasInjectedWallet: wallets.length > 0,
-      isConnecting,
-      signMessage,
-      wallets,
-    }),
-    [account, chainId, connect, isConnecting, signMessage, wallets],
-  )
+  return {
+    account,
+    chainId,
+    connect,
+    hasAccount: account !== undefined,
+    hasInjectedWallet: wallets.length > 0,
+    isConnecting,
+    signMessage,
+    wallets,
+  }
 }

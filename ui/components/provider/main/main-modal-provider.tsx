@@ -49,11 +49,12 @@ export function MainModalProvider({ children }: { children: React.ReactNode }) {
   const [renderedModalType, setRenderedModalType] = useState(modalType)
   const activeModalType = modalType ?? renderedModalType
 
+  if (modalType !== null && modalType !== renderedModalType) {
+    setRenderedModalType(modalType)
+  }
+
   useEffect(() => {
-    if (modalType !== null) {
-      setRenderedModalType(modalType)
-      return
-    }
+    if (modalType !== null) return
 
     const closeTimerId = window.setTimeout(() => {
       setRenderedModalType(null)

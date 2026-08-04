@@ -4,7 +4,7 @@ import type { ComponentProps, FC } from 'react'
 import type { AdminCommentRecord } from '@/lib/api/comment/get-admin-comments'
 import type { CommentState } from '@/lib/api/comment/type'
 import type { CommentStateFilter, CommentTargetTypeFilter } from './comment-manager/types'
-import { useMemo, useReducer } from 'react'
+import { useReducer } from 'react'
 import { sileo } from 'sileo'
 import { useAdminCommentDeleteMutation } from '@/hooks/api/comment/use-admin-comment-delete-mutation'
 import { useAdminCommentQuery } from '@/hooks/api/comment/use-admin-comment-query'
@@ -118,14 +118,14 @@ export const CommentManager: FC<ComponentProps<'main'>> = () => {
     targetType,
   } = filterState
 
-  const parsedTargetId = useMemo(() => {
+  const parsedTargetId = (() => {
     if (targetIdInput.trim().length === 0) {
       return undefined
     }
 
     const numberValue = Number.parseInt(targetIdInput, 10)
     return Number.isNaN(numberValue) || numberValue <= 0 ? undefined : numberValue
-  }, [targetIdInput])
+  })()
 
   const { data, isPending } = useAdminCommentQuery({
     q: query,
