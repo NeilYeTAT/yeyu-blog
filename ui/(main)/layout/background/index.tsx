@@ -7,7 +7,7 @@ import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useVisibilityAnimation } from '@/hooks/animation/use-visibility-animation'
 import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
 // * thanks https://www.mshr.app/mesh/1727202711374
-import '@/lib/styles/background.css'
+import './background.css'
 import { ArtPlum } from './art-plum'
 
 const lightBackgroundKeyframes: Keyframe[] = [
@@ -32,10 +32,10 @@ function LightBackground() {
   })
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-20 min-h-dvh w-screen overflow-hidden bg-light-base opacity-45">
+    <div className="light-background-base pointer-events-none fixed inset-0 -z-20 min-h-dvh w-screen overflow-hidden opacity-45">
       <div
         ref={motionLayerRef}
-        className="absolute -inset-[8%] bg-light-motion [backface-visibility:hidden]"
+        className="light-background-motion absolute -inset-[8%] [backface-visibility:hidden]"
       />
     </div>
   )

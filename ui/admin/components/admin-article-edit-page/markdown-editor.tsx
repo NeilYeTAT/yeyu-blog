@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { sileo } from 'sileo'
 import { customMarkdownTheme } from '@/lib/core/markdown/markdown-style'
+import '@/lib/core/markdown/styles/index.css'
 import { simpleProcessor } from '@/lib/core/markdown/simple-processor'
 import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-block-enhancer'
 import { compressImageFiles } from './compress-image-files'

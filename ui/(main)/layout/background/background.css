@@ -1,4 +1,4 @@
-.bg-light-base {
+.light-background-base {
   background-color: var(--theme-background-base);
   background-image:
     radial-gradient(circle at 24% 16%, var(--theme-background-base) 4%, transparent 67%),
@@ -10,7 +10,7 @@
     );
 }
 
-.bg-light-motion {
+.light-background-motion {
   background-image:
     radial-gradient(
       circle at 12% 78%,
