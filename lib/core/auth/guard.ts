@@ -1,56 +1,14 @@
 import type { NextRequest } from 'next/server'
 import { headers } from 'next/headers'
-import { isAddress } from 'viem'
 import { auth, trustedOrigins } from '@/auth'
-import { clientEnv } from '@/config/env/client-env'
 import { BadRequestError } from '@/lib/common/errors/request'
+import { isAdminUser, isWalletSessionUser } from './admin'
 
-const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',').reduce<string[]>((acc, email) => {
-  const normalizedEmail = email.trim().toLowerCase()
-  if (normalizedEmail.length > 0) {
-    acc.push(normalizedEmail)
-  }
-  return acc
-}, [])
-
-const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
+export { isAdminUser, isWalletSessionUser }
 
 export const isTrustedRequestOrigin = (request: NextRequest) => {
   const origin = request.headers.get('origin')
   return origin != null && trustedOrigins.includes(origin)
-}
-
-const isAdminWalletAddress = (walletAddress?: string | null) =>
-  walletAddress !== null &&
-  walletAddress !== undefined &&
-  adminWalletAddress !== undefined &&
-  walletAddress.toLowerCase() === adminWalletAddress
-
-const isWalletEmail = (email: string) => {
-  const at = email.indexOf('@')
-  if (at <= 0) return false
-  const local = email.slice(0, at)
-  return isAddress(local)
-}
-
-export const isWalletSessionUser = (
-  user?: { name?: string | null; email?: string | null } | null,
-) => user != null && user.email != null && isAddress(user.name ?? '') && isWalletEmail(user.email)
-
-export const isAdminUser = (user?: { name?: string | null; email?: string | null } | null) => {
-  if (user?.email == null) {
-    return false
-  }
-
-  if (isWalletSessionUser(user) && adminWalletAddress !== undefined) {
-    return isAdminWalletAddress(user.name)
-  }
-
-  if (adminEmails.length > 0) {
-    return adminEmails.includes(user.email.toLowerCase())
-  }
-
-  return false
 }
 
 export const noPermission = async () => {
@@ -62,7 +20,7 @@ export const noPermission = async () => {
     return true
   }
 
-  return !isAdminUser(session.user)
+  return !session.isAdmin
 }
 
 export const requireSignedInUser = async () => {

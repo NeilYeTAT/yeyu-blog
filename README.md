@@ -69,13 +69,11 @@ cp .env.example .env
 
 ```env
 SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=http://localhost:3000
 
-NEXT_PUBLIC_ADMIN_EMAILS="example@gmail.com"
-NEXT_PUBLIC_ADMIN_WALLET_ADDRESS=""
+ADMIN_EMAILS="admin@example.com editor@example.com"
+ADMIN_WALLET_ADDRESS=""
 
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
@@ -102,7 +100,7 @@ Gmail 应用专用密码可以不写空格，代码发送前也会自动移除�
 openssl rand -base64 32
 ```
 
-当前服务端环境变量校验要求 GitHub 和 Google 两组 OAuth 都填写。`NEXT_PUBLIC_ADMIN_WALLET_ADDRESS` 是可选项，不需要钱包登录后台时可以留空。`MAIL_TO` 是站长通知收件人，多个邮箱用英文逗号分隔。
+当前服务端环境变量校验要求 GitHub 和 Google 两组 OAuth 都填写。`ADMIN_EMAILS` 支持使用空格或英文逗号分隔多个邮箱；`ADMIN_WALLET_ADDRESS` 是可选项，不需要钱包登录后台时可以留空。SMTP 配置需要整组填写或全部留空；`MAIL_TO` 是站长通知收件人，多个邮箱用英文逗号分隔。
 
 ### 配置数据库
 
@@ -153,12 +151,12 @@ pnpm dev
 - Vercel 环境变量已按 `.env.example` 配置完整
 - 线上数据库已经执行过 Prisma migration
 - GitHub / Google OAuth callback URL 已改成线上域名
-- `SITE_URL`、`NEXT_PUBLIC_SITE_URL`、`BETTER_AUTH_URL` 都是线上站点地址
+- `SITE_URL` 是线上站点地址
 
 ## 修改网站信息
 
 - `config/seo/index.ts`：站点 metadata 和 SEO 信息
-- `config/env/server-env.ts`、`config/env/client-env.ts`：服务端和客户端环境变量校验
+- `config/env/parse-server-env.ts`、`config/env/server-env.ts`：服务端环境变量校验与读取
 - `config/img/avatar.webp`：首页头像图片
 - `ui/(main)/(home)/bio-section.tsx`：首页个人简介
 - `ui/(main)/about/index.tsx`：关于页内容

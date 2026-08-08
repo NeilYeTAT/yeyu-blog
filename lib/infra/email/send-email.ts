@@ -20,36 +20,21 @@ type SendEmailResult =
       reason: string
     }
 
-const getEnvValue = (value?: string | null) => {
-  const trimmedValue = value?.trim()
-  return trimmedValue === '' ? undefined : trimmedValue
-}
-
-const getSmtpPassword = () => getEnvValue(serverEnv.SMTP_PASS)?.replace(/\s/g, '')
-
-const splitEmailList = (value?: string | null) =>
-  (value ?? '').split(',').reduce<string[]>((acc, email) => {
-    const normalizedEmail = email.trim()
-    if (isDeliverableEmail(normalizedEmail)) {
-      acc.push(normalizedEmail)
-    }
-    return acc
-  }, [])
-
 const isDeliverableEmail = (email?: string | null) =>
   email != null && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
 
-const getNotificationRecipients = () => splitEmailList(serverEnv.MAIL_TO)
+const getNotificationRecipients = () => serverEnv.MAIL_TO ?? []
 
 const getMissingEmailConfigKeys = () =>
   (
     [
-      ['SMTP_HOST', getEnvValue(serverEnv.SMTP_HOST)],
-      ['SMTP_PORT', getEnvValue(serverEnv.SMTP_PORT)],
-      ['SMTP_USER', getEnvValue(serverEnv.SMTP_USER)],
-      ['SMTP_PASS', getSmtpPassword()],
-      ['MAIL_FROM', getEnvValue(serverEnv.MAIL_FROM)],
-    ] satisfies Array<[string, string | undefined]>
+      ['SMTP_HOST', serverEnv.SMTP_HOST],
+      ['SMTP_PORT', serverEnv.SMTP_PORT],
+      ['SMTP_SECURE', serverEnv.SMTP_SECURE],
+      ['SMTP_USER', serverEnv.SMTP_USER],
+      ['SMTP_PASS', serverEnv.SMTP_PASS],
+      ['MAIL_FROM', serverEnv.MAIL_FROM],
+    ] satisfies Array<[string, string | number | boolean | undefined]>
   ).reduce<string[]>((acc, [key, value]) => {
     if (value == null) {
       acc.push(key)
@@ -65,12 +50,12 @@ const getMailTransporter = () => {
   }
 
   mailTransporter ??= nodemailer.createTransport({
-    host: getEnvValue(serverEnv.SMTP_HOST),
-    port: Number(getEnvValue(serverEnv.SMTP_PORT)),
-    secure: serverEnv.SMTP_SECURE === 'true',
+    host: serverEnv.SMTP_HOST,
+    port: serverEnv.SMTP_PORT,
+    secure: serverEnv.SMTP_SECURE,
     auth: {
-      user: getEnvValue(serverEnv.SMTP_USER),
-      pass: getSmtpPassword(),
+      user: serverEnv.SMTP_USER,
+      pass: serverEnv.SMTP_PASS,
     },
     connectionTimeout: smtpConnectionTimeout,
     greetingTimeout: smtpGreetingTimeout,
@@ -124,7 +109,7 @@ export async function sendEmail({
   return new Promise<SendEmailResult>(resolve => {
     transporter.sendMail(
       {
-        from: getEnvValue(serverEnv.MAIL_FROM),
+        from: serverEnv.MAIL_FROM,
         to: normalizedRecipients,
         subject,
         text,

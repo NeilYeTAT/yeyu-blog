@@ -4,8 +4,6 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 import { serverEnv } from '@/config/env/server-env'
 
-const rawConnectionString = serverEnv.DATABASE_URL
-
 const normalizeConnectionString = (connectionString: string) => {
   const url = new URL(connectionString)
   const sslmode = url.searchParams.get('sslmode')?.toLowerCase()
@@ -18,9 +16,7 @@ const normalizeConnectionString = (connectionString: string) => {
   return connectionString
 }
 
-const connectionString = rawConnectionString
-  ? normalizeConnectionString(rawConnectionString)
-  : undefined
+const connectionString = normalizeConnectionString(serverEnv.DATABASE_URL)
 
 const adapter = new PrismaPg({ connectionString })
 

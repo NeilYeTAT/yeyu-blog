@@ -1,9 +1,7 @@
 import type { NextConfig } from 'next'
-import { validatePublicEnv } from './config/env/validate-public-env'
-import { validateServerEnv } from './config/env/validate-server-env'
+import { parseServerEnv } from './config/env/parse-server-env'
 
-validatePublicEnv()
-validateServerEnv()
+parseServerEnv()
 
 const nextConfig: NextConfig = {
   images: {

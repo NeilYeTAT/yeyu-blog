@@ -1,17 +1,6 @@
 import type { useSession } from './client'
-import { clientEnv } from '@/config/env/client-env'
 
 const ethereumAddressRegExp = /^0x[a-fA-F0-9]{40}$/
-
-const adminEmails = clientEnv.NEXT_PUBLIC_ADMIN_EMAILS.split(',').reduce<string[]>((acc, email) => {
-  const normalizedEmail = email.trim().toLowerCase()
-  if (normalizedEmail.length > 0) {
-    acc.push(normalizedEmail)
-  }
-  return acc
-}, [])
-
-const adminWalletAddress = clientEnv.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS?.trim().toLowerCase()
 
 const isEthereumAddress = (value?: string | null) =>
   value !== null && value !== undefined && ethereumAddressRegExp.test(value)
@@ -37,19 +26,5 @@ export const isEmailLoggedIn = ({ data: session }: Pick<ReturnType<typeof useSes
 }
 
 export const isAdminLoggedIn = ({ data: session }: Pick<ReturnType<typeof useSession>, 'data'>) => {
-  const user = session?.user
-
-  if (user == null || user.email === '') {
-    return false
-  }
-
-  if (isEthereumAddress(user.name) && adminWalletAddress !== undefined) {
-    return user.name.toLowerCase() === adminWalletAddress
-  }
-
-  if (adminEmails.length > 0) {
-    return adminEmails.includes(user.email.toLowerCase())
-  }
-
-  return false
+  return session?.isAdmin === true
 }

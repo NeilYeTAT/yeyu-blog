@@ -11,7 +11,7 @@ export const friendLinkApplyFields = [
   {
     name: 'email',
     label: '联系邮箱（可选，仅用于通知）',
-    placeholder: 'nearjilt@gmail.com',
+    placeholder: 'yeyuqwer@gmail.com',
     type: 'email',
     required: false,
   },
