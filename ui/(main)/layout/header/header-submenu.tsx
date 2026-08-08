@@ -3,12 +3,10 @@ import type { useHeaderSubmenu } from './hooks/use-header-submenu'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
 import {
-  activeTextShadowClass,
-  headerWaveTriggerClassName,
-  headerWaveUnderlineClassName,
-  inactiveTextShadowClass,
-  slideVariants,
-} from './constant'
+  waveLinkTriggerClassName,
+  waveLinkUnderlineClassName,
+} from '@/ui/components/shared/wave-link'
+import { activeTextShadowClass, inactiveTextShadowClass, slideVariants } from './constant'
 import { NavItem } from './nav-item'
 
 export function HeaderSubmenu({
@@ -70,13 +68,13 @@ export function HeaderSubmenu({
                   }}
                   className={cn(
                     'rounded-lg px-4 py-2 transition-[color,text-shadow] duration-200 ease-out',
-                    headerWaveTriggerClassName,
+                    waveLinkTriggerClassName,
                     item.path === activeRoute.effectiveActiveUrl
                       ? cn('text-primary', activeTextShadowClass)
                       : cn('text-neutral-600 dark:text-neutral-400', inactiveTextShadowClass),
                   )}
                 >
-                  <span className={headerWaveUnderlineClassName}>{item.pathName}</span>
+                  <span className={waveLinkUnderlineClassName}>{item.pathName}</span>
                 </NavItem>
               ))}
             </motion.div>

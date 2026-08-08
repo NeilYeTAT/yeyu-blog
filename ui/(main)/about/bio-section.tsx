@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Emoticon } from '@/ui/components/shared/emoticon'
+import { WaveLink } from '@/ui/components/shared/wave-link'
 import { AboutLine, AboutSection } from './about-section'
 
 export function BioSection() {
@@ -31,9 +31,9 @@ export function BioSection() {
       <AboutLine>
         <p>
           未来想要成为像{' '}
-          <Link className="underline" href={'https://x.com/emilkowalski'} target="_blank">
+          <WaveLink href="https://x.com/emilkowalski" target="_blank">
             Emil Kowalski
-          </Link>{' '}
+          </WaveLink>{' '}
           一样的设计工程师
         </p>
       </AboutLine>

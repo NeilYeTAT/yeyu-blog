@@ -1,8 +1,8 @@
 import type { NavRoute } from './types'
-import Link from 'next/link'
 import { type ComponentProps, type FC, startTransition } from 'react'
 import { sileo } from 'sileo'
 import { useModalActions } from '@/store/use-modal-store'
+import { WaveLink } from '@/ui/components/shared/wave-link'
 
 export const NavItem: FC<
   {
@@ -44,10 +44,11 @@ export const NavItem: FC<
   }
 
   return (
-    <Link
+    <WaveLink
       ref={elRef as React.Ref<HTMLAnchorElement>}
       href={item.path}
       className={className}
+      withWaveUnderline={false}
       {...props}
       onClick={e => {
         if (item.disabled === true) {
@@ -61,6 +62,6 @@ export const NavItem: FC<
       }}
     >
       {children}
-    </Link>
+    </WaveLink>
   )
 }

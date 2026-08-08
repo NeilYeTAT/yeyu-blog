@@ -4,12 +4,10 @@ import type { RouteItem } from './types'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/common/shadcn'
 import {
-  activeTextShadowClass,
-  headerWaveTriggerClassName,
-  headerWaveUnderlineClassName,
-  inactiveTextShadowClass,
-  isNavGroupRoute,
-} from './constant'
+  waveLinkTriggerClassName,
+  waveLinkUnderlineClassName,
+} from '@/ui/components/shared/wave-link'
+import { activeTextShadowClass, inactiveTextShadowClass, isNavGroupRoute } from './constant'
 import { NavItem } from './nav-item'
 
 export function HeaderRouteItem({
@@ -34,7 +32,7 @@ export function HeaderRouteItem({
           item={currentItem}
           className={cn(
             'relative z-10 block cursor-pointer transition-[color,text-shadow] duration-200 ease-out',
-            headerWaveTriggerClassName,
+            waveLinkTriggerClassName,
             isGroupActive
               ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
               : inactiveTextShadowClass,
@@ -57,7 +55,7 @@ export function HeaderRouteItem({
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.h2
                 key={currentItem.pathName}
-                className={headerWaveUnderlineClassName}
+                className={waveLinkUnderlineClassName}
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -4 }}
@@ -77,7 +75,7 @@ export function HeaderRouteItem({
       item={route}
       className={cn(
         'relative z-10 block transition-[color,text-shadow] duration-200 ease-out',
-        headerWaveTriggerClassName,
+        waveLinkTriggerClassName,
         route.path === activeRoute.activeKey
           ? cn('text-theme-accent-foreground dark:text-black', activeTextShadowClass)
           : inactiveTextShadowClass,
@@ -98,7 +96,7 @@ export function HeaderRouteItem({
             }
           />
         )}
-        <h2 className={headerWaveUnderlineClassName}>{route.pathName}</h2>
+        <h2 className={waveLinkUnderlineClassName}>{route.pathName}</h2>
       </div>
     </NavItem>
   )

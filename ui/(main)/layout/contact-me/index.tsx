@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { WaveLink } from '@/ui/components/shared/wave-link'
 
 const externalLinks = [
   {
@@ -22,16 +22,16 @@ export function ContactMe() {
         © {new Date().getFullYear()} 叶鱼
       </p>
 
-      <nav aria-label="社交链接" className="flex flex-wrap justify-end gap-x-4 underline">
+      <nav aria-label="社交链接" className="flex flex-wrap justify-end gap-x-4">
         {externalLinks.map(link => (
-          <Link
+          <WaveLink
             className="text-theme-accent hover:text-theme-primary dark:text-[#888888] dark:hover:text-white"
             href={link.url}
             key={link.url}
             target="_blank"
           >
             {link.name}
-          </Link>
+          </WaveLink>
         ))}
       </nav>
     </footer>
