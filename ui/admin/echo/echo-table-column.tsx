@@ -2,13 +2,14 @@
 
 import type { ColumnDef } from '@tanstack/react-table'
 import type { EchoRecord } from '@/lib/api/echo/type'
+import type { dataTableFeatures } from '@/ui/admin/components/table/data-table-features'
 import { CalendarDays, Eye, Quote, TypeIcon, Wrench } from 'lucide-react'
 import { prettyDateTime } from '@/lib/utils/common/time'
 import { Button } from '@/ui/shadcn/button'
 import ActionButtons from './action-buttons'
 import PublishToggleSwitch from './publish-toggle-switch'
 
-export const columns: ColumnDef<EchoRecord>[] = [
+export const columns: ColumnDef<typeof dataTableFeatures, EchoRecord>[] = [
   {
     accessorKey: 'content',
     header: () => {

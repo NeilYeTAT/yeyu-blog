@@ -2,6 +2,7 @@
 
 import type { ColumnDef } from '@tanstack/react-table'
 import type { BlogListItem } from '@/lib/api/blog/type'
+import type { dataTableFeatures } from '@/ui/admin/components/table/data-table-features'
 import { ArrowDown, ArrowUp, CalendarDays, Eye, TagIcon, TypeIcon, Wrench } from 'lucide-react'
 import { prettyDateTime } from '@/lib/utils/common/time'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
@@ -9,7 +10,7 @@ import { Button } from '@/ui/shadcn/button'
 import ActionButtons from './action-buttons'
 import PublishToggleSwitch from './publish-toggle-switch'
 
-export const columns: ColumnDef<BlogListItem>[] = [
+export const columns: ColumnDef<typeof dataTableFeatures, BlogListItem>[] = [
   {
     accessorKey: 'title',
     header: () => {
