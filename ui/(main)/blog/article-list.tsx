@@ -2,7 +2,7 @@ import type { Variants } from 'motion/react'
 import type { BlogListItem } from '@/lib/api/blog/type'
 import * as motion from 'motion/react-client'
 import { ArticleLink } from './article-link'
-import { BlogBottomBlur } from './blog-bottom-blur'
+import { BlogScrollBlur } from './blog-scroll-blur'
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -84,7 +84,7 @@ export const ArticleList = ({ items }: { items: BlogListItem[] }) => {
           </motion.div>
         ))}
       </motion.div>
-      <BlogBottomBlur />
+      <BlogScrollBlur />
     </>
   )
 }
