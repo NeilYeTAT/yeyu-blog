@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-export function BlogScrollBlur() {
+export function MainScrollBlur() {
   const [hasContentAbove, setHasContentAbove] = useState(false)
   const [hasContentBelow, setHasContentBelow] = useState(false)
 
