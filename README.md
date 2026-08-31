@@ -158,7 +158,7 @@ pnpm dev
 - `config/seo/index.ts`：站点 metadata 和 SEO 信息
 - `config/env/parse-server-env.ts`、`config/env/server-env.ts`：服务端环境变量校验与读取
 - `config/img/avatar.webp`：首页头像图片
-- `ui/(main)/(home)/bio-section.tsx`：首页个人简介
+- `ui/(main)/(home)/profile-section.tsx`：首页个人简介
 - `ui/(main)/layout/contact-me/index.tsx`：底部联系方式
 - `ui/(main)/(home)/tech-stack.tsx`：首页技术栈展示
 - `lib/core/auth/guard.ts`、`lib/core/auth/utils.ts`：后台管理员权限判断
