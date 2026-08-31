@@ -4,8 +4,8 @@ import { toDisplayDate } from '@/lib/utils/common/time'
 import { MarkdownCodeBlockEnhancer } from '@/ui/components/shared/markdown-code-block-enhancer'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
 import { ArticleImageLoadEnhancer } from './article-image-load-enhancer'
+import { ArticleScrollProgress } from './article-scroll-progress'
 import './media.css'
-import { PostToc } from './post-toc'
 import { extractHeadings } from './utils/extract-headings'
 import { extractTitleAndBody } from './utils/extract-title-and-body'
 
@@ -88,7 +88,9 @@ export default function ArticleDisplayPage({
         />
         <ArticleImageLoadEnhancer rootSelector="#article-content" />
         <MarkdownCodeBlockEnhancer rootSelector="#article-content" />
-        <PostToc headings={headings} />
+        <ArticleScrollProgress
+          sections={headings.map(({ id, level, text }) => ({ id, label: text, level }))}
+        />
       </motion.article>
     </div>
   )
