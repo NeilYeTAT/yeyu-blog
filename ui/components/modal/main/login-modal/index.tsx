@@ -26,7 +26,7 @@ export const LoginModal = () => {
       title={isLoggedIn ? '用户信息' : '登录 (ゝ∀･)'}
       closeLabel="关闭登录弹窗"
       maxWidth={440}
-      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-theme-dark-border/20 dark:bg-black/70"
+      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-white/10 dark:bg-black/70"
       titleClassName="font-bold text-xl text-foreground"
     >
       <Suspense fallback={<Loading />}>

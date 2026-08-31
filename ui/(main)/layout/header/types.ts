@@ -8,12 +8,3 @@ export type NavRoute = {
   type?: 'link' | 'button'
   modal?: ModalType
 }
-
-export type NavGroup = {
-  key: string
-  mainPath?: string
-  disabled?: boolean
-  items: [NavRoute, ...NavRoute[]]
-}
-
-export type RouteItem = (NavRoute & { group?: never }) | { group: NavGroup }

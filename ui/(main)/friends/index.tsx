@@ -20,9 +20,7 @@ export async function FriendsPage() {
       {friends.length > 0 ? (
         <FriendsList friends={friends} />
       ) : (
-        <p className="m-auto py-24 text-theme-muted-foreground dark:text-theme-dark-muted-foreground">
-          虚无。
-        </p>
+        <p className="m-auto py-24 text-zinc-600 dark:text-zinc-400">虚无。</p>
       )}
     </section>
   )

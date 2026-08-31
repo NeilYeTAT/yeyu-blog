@@ -6,9 +6,6 @@
 
 @import "./shadcn.css";
 
-/* * theme config */
-@import "./themes/index.css";
-
 @import "./theme-vars.css";
 
 @import "./fonts.css";

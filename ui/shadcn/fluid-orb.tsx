@@ -104,7 +104,7 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 
 const FluidOrb = ({
   size = 240,
-  color = '#1A73F2',
+  color = 'var(--theme-accent)',
   maxDpr = 2,
   frameRate = 60,
   className,
@@ -155,16 +155,7 @@ const FluidOrb = ({
     const uResolution = gl.getUniformLocation(program, 'u_resolution')
     const uTime = gl.getUniformLocation(program, 'u_time')
     const uColor = gl.getUniformLocation(program, 'u_color')
-    const updateColor = () => {
-      gl.uniform3f(uColor, ...getRgbChannels(container))
-    }
-    updateColor()
-
-    const themeObserver = new MutationObserver(updateColor)
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class', 'data-brand-theme', 'style'],
-    })
+    gl.uniform3f(uColor, ...getRgbChannels(container))
 
     const dpr = Math.min(window.devicePixelRatio, maxDpr)
     const px = Math.round(size * dpr)
@@ -193,7 +184,6 @@ const FluidOrb = ({
 
     return () => {
       cancelAnimationFrame(raf)
-      themeObserver.disconnect()
       gl.deleteProgram(program)
       gl.deleteShader(vert)
       gl.deleteShader(frag)

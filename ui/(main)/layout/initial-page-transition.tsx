@@ -56,7 +56,7 @@ export default function InitialPageTransition({ children }: { children: ReactNod
           >
             <FluidOrb
               size={168}
-              color="var(--theme-accent-strong)"
+              color="var(--theme-accent)"
               maxDpr={1.5}
               frameRate={30}
               aria-hidden

@@ -74,7 +74,7 @@ export function CommentComposer({
           ) : null}
           <Button
             type="button"
-            className="h-9 shrink-0 rounded-xl bg-theme-accent px-4 text-theme-accent-foreground shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35 disabled:cursor-not-allowed disabled:bg-theme-accent disabled:text-theme-accent-foreground disabled:opacity-45"
+            className="h-9 shrink-0 rounded-xl bg-theme-accent px-4 text-white shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-white focus-visible:ring-theme-ring/35 disabled:cursor-not-allowed disabled:bg-theme-accent disabled:text-white disabled:opacity-45"
             disabled={trimmedContent.length === 0 || inputExceeded || isSubmitting}
             onClick={onSubmit}
           >

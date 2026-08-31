@@ -1,4 +1,3 @@
-import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 import MainProvider from '../components/provider/main'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 import { Background } from './layout/background'
@@ -11,15 +10,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <MainProvider>
       <InitialPageTransition>
-        <div className="flex min-h-dvh max-w-screen flex-col justify-between gap-2 md:text-lg dark:text-white">
-          <Header />
+        <div className="relative isolate flex min-h-dvh max-w-screen p-3 text-black sm:p-5 dark:text-white">
+          <div className="flex min-h-[calc(100dvh-1.5rem)] w-full flex-1 flex-col rounded-lg bg-white/90 sm:min-h-[calc(100dvh-2.5rem)] dark:bg-black/85">
+            <Header />
 
-          <MaxWidthWrapper className="flex flex-1 flex-col justify-between gap-2 overflow-x-hidden">
-            <main className="flex flex-1 flex-col">{children}</main>
+            <MaxWidthWrapper className="flex flex-1 flex-col overflow-x-hidden">
+              <main className="flex flex-1 flex-col">{children}</main>
 
-            <HorizontalDividingLine />
-            <ContactMe />
-          </MaxWidthWrapper>
+              <ContactMe />
+            </MaxWidthWrapper>
+          </div>
 
           <Background />
           <DraggableFloatingMenu />

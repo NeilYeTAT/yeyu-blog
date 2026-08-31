@@ -50,7 +50,7 @@ export const TocFloatingPanel = ({
         'fixed bottom-8 left-1/2 z-50 -translate-x-1/2',
         'bg-theme-background/80 backdrop-blur-sm dark:bg-black/70',
         'border border-[#00000011] dark:border-white/10',
-        'shadow-[0_16px_46px_color-mix(in_srgb,var(--theme-ring)_34%,transparent)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.58)]',
+        'shadow-[0_16px_46px_color-mix(in_srgb,var(--theme-accent)_34%,transparent)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.58)]',
         'overflow-hidden',
         'max-w-[90vw]',
         isExpanded ? 'w-[360px]' : 'w-[300px]',

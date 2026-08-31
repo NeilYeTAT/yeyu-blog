@@ -11,7 +11,6 @@ export type ModalType =
   | 'editEchoModal'
   | 'createTagModal'
   | 'loginModal'
-  | 'selectThemeModal'
   | 'mutterCommentModal'
   | 'friendLinkApplyModal'
   | null

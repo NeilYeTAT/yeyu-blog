@@ -8,7 +8,6 @@ import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useBackgroundMusicActions, useIsPlaying } from '@/store/use-background-music-store'
-import { useModalActions } from '@/store/use-modal-store'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
 import { type IconsId, icons } from './constant'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
@@ -17,7 +16,6 @@ const menuRadius = 82
 const menuAngles: Record<IconsId, number> = {
   tl: 160,
   tr: 20,
-  lm: 90,
   bl: 125,
   br: 55,
 }
@@ -26,12 +24,12 @@ const menuAngles: Record<IconsId, number> = {
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const pathname = usePathname()
+  const isHomePage = pathname === '/'
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
   const isPlaying = useIsPlaying()
   const { play, pause } = useBackgroundMusicActions()
 
-  const { setModalOpen } = useModalActions()
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isOpen, setIsOpen] = useState(false)
   const [canSelectAction, setCanSelectAction] = useState(false)
@@ -70,16 +68,9 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
     } else if (id === 'tr') {
       play()
       playSoundEffect()
-    } else if (id === 'lm') {
-      setModalOpen('selectThemeModal')
-      playSoundEffect()
     }
     setCanSelectAction(false)
     setIsOpen(false)
-  }
-
-  if (pathname === '/') {
-    return null
   }
 
   return (
@@ -99,24 +90,24 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         animate={{ scale: 1, y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         className={cn(
-          'fixed bottom-20 left-1/2 z-100 -ml-6 cursor-grab active:cursor-grabbing',
+          'fixed left-1/2 z-100 -ml-6 cursor-grab active:cursor-grabbing',
+          isHomePage ? 'bottom-[100px]' : 'bottom-20',
           className,
         )}
         {...props}
       >
-        <button
-          type="button"
+        <FloatingMenuActionButton
           aria-expanded={isOpen}
           aria-label="打开快捷菜单"
-          className="relative z-10 flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
+          className="relative z-10 size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
           onClick={() => {
             setCanSelectAction(false)
             setIsOpen(value => !value)
           }}
         >
           <FluidOrb size={48} color="var(--theme-accent)" aria-hidden />
-          <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-ring ring-offset-1 ring-offset-background dark:ring-theme-dark-ring dark:ring-offset-black" />
-        </button>
+          <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-ring ring-offset-1 ring-offset-background dark:ring-white dark:ring-offset-black" />
+        </FloatingMenuActionButton>
 
         <AnimatePresence>
           {isOpen && (

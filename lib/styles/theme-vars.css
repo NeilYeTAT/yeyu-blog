@@ -1,20 +1,13 @@
+:root {
+  --theme-accent: #1a73f2;
+}
+
 @theme inline {
-  --color-theme-primary: var(--theme-primary);
-  --color-theme-background: var(--theme-background);
-  --color-theme-surface: var(--theme-surface);
+  --color-theme-primary: color-mix(in srgb, var(--theme-accent) 72%, black);
+  --color-theme-background: color-mix(in srgb, var(--theme-accent) 8%, white);
+  --color-theme-surface: white;
   --color-theme-accent: var(--theme-accent);
-  --color-theme-accent-strong: var(--theme-accent-strong);
-  --color-theme-accent-foreground: var(--theme-accent-foreground);
-  --color-theme-hover-background: var(--theme-hover-background);
-  --color-theme-border: var(--theme-border);
-  --color-theme-muted: var(--theme-muted);
-  --color-theme-muted-foreground: var(--theme-muted-foreground);
-  --color-theme-ring: var(--theme-ring);
-  --color-theme-dark-surface: var(--theme-dark-surface);
-  --color-theme-dark-foreground: var(--theme-dark-foreground);
-  --color-theme-dark-muted-foreground: var(--theme-dark-muted-foreground);
-  --color-theme-dark-border: var(--theme-dark-border);
-  --color-theme-dark-hover-background: var(--theme-dark-hover-background);
-  --color-theme-dark-hover-foreground: var(--theme-dark-hover-foreground);
-  --color-theme-dark-ring: var(--theme-dark-ring);
+  --color-theme-hover-background: color-mix(in srgb, var(--theme-accent) 16%, white);
+  --color-theme-border: color-mix(in srgb, var(--theme-accent) 34%, white);
+  --color-theme-ring: color-mix(in srgb, var(--theme-accent) 70%, white);
 }

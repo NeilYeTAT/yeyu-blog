@@ -8,12 +8,6 @@ import Loading from '@/ui/components/shared/loading'
 
 const modalExitDuration = 180
 
-const SelectThemeModal = lazy(() =>
-  import('@/ui/components/modal/main/select-theme-modal').then(mod => ({
-    default: mod.SelectThemeModal,
-  })),
-)
-
 const MutterCommentModal = lazy(() =>
   import('@/ui/components/modal/main/mutter-comment-modal').then(mod => ({
     default: mod.MutterCommentModal,
@@ -37,7 +31,7 @@ const MainModalLoading = () => {
       title={<span className="sr-only">正在加载</span>}
       closeLabel="关闭弹窗"
       maxWidth={384}
-      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-theme-dark-border/20 dark:bg-black/70"
+      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-white/10 dark:bg-black/70"
     >
       <Loading />
     </Modal>
@@ -70,7 +64,6 @@ export function MainModalProvider({ children }: { children: React.ReactNode }) {
       {children}
       <Suspense fallback={<MainModalLoading />}>
         {activeModalType === 'loginModal' ? <LoginModal /> : null}
-        {activeModalType === 'selectThemeModal' ? <SelectThemeModal /> : null}
         {activeModalType === 'mutterCommentModal' ? <MutterCommentModal /> : null}
         {activeModalType === 'friendLinkApplyModal' ? <FriendLinkApplyModal /> : null}
       </Suspense>

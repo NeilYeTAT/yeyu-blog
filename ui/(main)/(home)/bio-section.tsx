@@ -1,24 +1,11 @@
-import { Emoticon } from '@/ui/components/shared/emoticon'
+import TechStack from './tech-stack'
 
 export default function BioSection() {
   return (
-    <section className="flex flex-col gap-4 px-4 text-center">
-      <h1>
-        你好! 我是{' '}
-        <span className="font-bold text-theme-primary">
-          叶鱼 <Emoticon>(*´∪`)</Emoticon>
-        </span>
-      </h1>
-      <p>
-        专注于 TypeScript 全栈开发 <Emoticon>(ง *´▽`* )ว</Emoticon>
-      </p>
-      <p>
-        欢迎来到我的主页 <Emoticon>Σ( ´･ω･`)</Emoticon>
-      </p>
-      <p>我把此处当作我的前端试验田，看到有意思的东西都会往里面塞</p>
-      <small className="text-xs md:text-sm">
-        话说上面的头像可以拖动来着 <Emoticon className="text-theme-accent">⸜( *ˊᵕˋ* )⸝</Emoticon>
-      </small>
+    <section className="flex flex-col items-center text-center md:translate-y-[5px] md:items-start md:text-left">
+      <h1 className="font-bold text-xl leading-8 sm:text-2xl">你好! 我是 叶鱼 ( ^¯꒳¯^ )ﾉﾉ</h1>
+      <p className="mt-[22px] font-bold text-[16px] leading-8">TypeScript 全栈开发者 ⸜( *ˊᵕˋ* )⸝</p>
+      <TechStack />
     </section>
   )
 }

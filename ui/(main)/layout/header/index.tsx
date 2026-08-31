@@ -1,138 +1,78 @@
 'use client'
 
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'motion/react'
-import { createPortal } from 'react-dom'
-import { useIsHydrated } from '@/hooks/common/use-is-hydrated'
+import { motion, useReducedMotion } from 'motion/react'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/common/shadcn'
-import { MaxWidthWrapper } from '../../../components/shared/max-width-wrapper'
-import { isNavGroupRoute, navigationConfig } from './constant'
-import { HeaderRouteItem } from './header-route-item'
-import { HeaderSubmenu } from './header-submenu'
-import { useHeaderActiveRoute } from './hooks/use-header-active-route'
-import { useHeaderSubmenu } from './hooks/use-header-submenu'
+import {
+  WaveLink,
+  waveLinkTriggerClassName,
+  waveLinkUnderlineClassName,
+} from '@/ui/components/shared/wave-link'
+import { navigationConfig } from './constant'
 import { useScrollVisibility } from './hooks/use-scroll-visibility'
-
-const headerEase: [number, number, number, number] = [0.76, 0, 0.24, 1]
-const headerExpandDuration = 0.48
-const navigationRevealDelay = headerExpandDuration / 5
-
-const HeaderBackdropPortal = ({
-  isOpen,
-  onClose,
-  shouldReduceMotion,
-}: {
-  isOpen: boolean
-  onClose: () => void
-  shouldReduceMotion: boolean | null
-}) => {
-  const mounted = useIsHydrated()
-
-  if (!mounted) return null
-
-  return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <motion.button
-          type="button"
-          aria-label="关闭导航菜单"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0 : 0.14 }}
-          className="fixed inset-0 z-10 cursor-default appearance-none border-0 bg-black/5 p-0 dark:bg-black/20"
-          onClick={onClose}
-        />
-      )}
-    </AnimatePresence>,
-    document.body,
-  )
-}
+import { NavItem } from './nav-item'
 
 export default function Header() {
-  const isHeaderReady = useIsHydrated()
+  const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
-  const activeRoute = useHeaderActiveRoute()
-  const submenu = useHeaderSubmenu()
-
-  const shouldShowHeader = isHeaderVisible || submenu.state.isOpen
-  const canInteractWithHeader = shouldShowHeader
 
   return (
     <motion.header
       className={cn(
-        'sticky top-3 z-20 mx-auto mb-4 flex h-9 w-3/4 items-center justify-center md:h-12 md:w-1/2 lg:w-5/12',
-        !canInteractWithHeader && 'pointer-events-none',
+        'sticky top-5 z-20 mx-auto mt-5 mb-4 h-10 w-[calc(100%-2rem)] max-w-[550px] overflow-hidden rounded-full bg-black text-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] sm:h-12',
+        !isHeaderVisible && 'pointer-events-none',
       )}
       initial={false}
       animate={{
-        y: shouldShowHeader || shouldReduceMotion ? 0 : '-140%',
-        opacity: shouldShowHeader ? 1 : 0,
+        y: isHeaderVisible || shouldReduceMotion ? 0 : '-140%',
+        opacity: isHeaderVisible ? 1 : 0,
       }}
       transition={
         shouldReduceMotion
           ? { duration: 0.12 }
-          : shouldShowHeader
+          : isHeaderVisible
             ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
             : { duration: 0.18, ease: [0.4, 0, 1, 1] }
       }
     >
-      <HeaderBackdropPortal
-        isOpen={submenu.state.isOpen}
-        onClose={submenu.close}
-        shouldReduceMotion={shouldReduceMotion}
-      />
-      <motion.div
-        aria-hidden="true"
-        layout="size"
-        className={cn(
-          'pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto h-full rounded-full border border-[#00000011] bg-theme-background/80 shadow-[0px_4px_10px_0px_#00000010] backdrop-blur-sm dark:border-white/10 dark:bg-black/70',
-          isHeaderReady ? 'w-full' : 'w-16',
-        )}
-        initial={false}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0 }
-            : { duration: headerExpandDuration, ease: headerEase }
-        }
-      />
-      <MaxWidthWrapper
-        aria-hidden={!canInteractWithHeader}
-        inert={!canInteractWithHeader}
-        className="relative h-full w-full px-2.5 py-1 md:px-3 md:py-2"
-      >
-        <motion.nav
-          className="flex h-full items-center justify-between text-nowrap text-sm md:text-xl dark:text-neutral-400"
-          initial={false}
-          animate={{
-            opacity: isHeaderReady ? 1 : 0,
-            y: isHeaderReady || shouldReduceMotion ? 0 : 4,
-          }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0 }
-              : {
-                  duration: 0.22,
-                  delay: isHeaderReady ? navigationRevealDelay : 0,
-                  ease: [0.22, 1, 0.36, 1],
-                }
-          }
-          {...submenu.hoverAreaProps}
+      <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
+        <WaveLink
+          href="/"
+          className="pl-4 font-serif text-xs leading-none sm:pl-5 sm:text-base"
+          aria-label="返回首页"
         >
-          <LayoutGroup id="header-navigation">
-            {navigationConfig.map(route => (
-              <HeaderRouteItem
-                key={isNavGroupRoute(route) ? route.group.key : route.path}
-                activeRoute={activeRoute}
-                route={route}
-                submenu={submenu}
-              />
-            ))}
+          Yuuri &amp;
+        </WaveLink>
 
-            <HeaderSubmenu activeRoute={activeRoute} submenu={submenu} />
-          </LayoutGroup>
-        </motion.nav>
-      </MaxWidthWrapper>
+        <nav aria-label="主导航" className="grid h-full grid-cols-4 items-center">
+          {navigationConfig.map(route => {
+            const isActive = route.type !== 'button' && route.pattern.test(pathname)
+
+            return (
+              <NavItem
+                key={route.path}
+                item={route}
+                aria-current={isActive ? 'page' : undefined}
+                className={cn(
+                  'flex h-full items-center justify-center font-serif text-xs transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
+                  waveLinkTriggerClassName,
+                  isActive ? 'font-bold text-white' : 'font-normal text-white/90 hover:text-white',
+                )}
+              >
+                <span
+                  className={cn(
+                    waveLinkUnderlineClassName,
+                    isActive && 'after:[clip-path:inset(0)]',
+                  )}
+                >
+                  {route.pathName}
+                </span>
+              </NavItem>
+            )
+          })}
+        </nav>
+      </div>
     </motion.header>
   )
 }

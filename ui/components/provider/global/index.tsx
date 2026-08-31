@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sileo'
-import { BrandThemeInitializer } from './brand-theme-initializer'
 import ReactQueryProvider from './react-query-provider'
 
 const Analytics = dynamic(() => import('@vercel/analytics/react').then(m => m.Analytics), {
@@ -20,7 +19,6 @@ const SpeedInsights = dynamic(
 export default function GlobalProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <BrandThemeInitializer />
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <ReactQueryProvider>
           {children}

@@ -5,7 +5,7 @@ export const YearSummary: FC<{ year: number; dayOfYear: number }> = ({ year, day
   <section className="text-center text-lg">
     <h2 className="font-semibold">
       今天是 <span className="text-theme-ring">{year}</span> 的第{' '}
-      <span className="text-theme-accent-strong">{dayOfYear}</span> 天
+      <span className="text-theme-accent">{dayOfYear}</span> 天
     </h2>
     <p>
       今年已经过去了 <span className="font-bold text-pink-400">{getYearProgress().passed}%</span>{' '}

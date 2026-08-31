@@ -111,7 +111,7 @@ export const FriendLinkApplyModal = () => {
               type="submit"
               form="friend-link-apply-form"
               disabled={isSubmitting}
-              className="h-10 cursor-pointer rounded-xl bg-theme-accent px-4 text-theme-accent-foreground shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-theme-accent-foreground focus-visible:ring-theme-ring/35"
+              className="h-10 cursor-pointer rounded-xl bg-theme-accent px-4 text-white shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-white focus-visible:ring-theme-ring/35"
               onMouseEnter={() => {
                 sendIconRef.current?.startAnimation()
               }}
