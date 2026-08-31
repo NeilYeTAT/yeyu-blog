@@ -46,7 +46,7 @@ export function FriendCard({
         rel="noreferrer"
         aria-label={`访问 ${friend.name} 的网站`}
         className={cn(
-          'flex h-[72px] w-full items-center gap-2 rounded-xl border border-[#00000011] bg-theme-background/80 px-3 py-1.5 text-left text-zinc-900 transition-colors hover:border-black/15 focus-visible:outline-2 focus-visible:outline-theme-ring md:h-20 md:gap-3 md:px-4 md:py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-zinc-700',
+          'flex h-[72px] w-full items-center gap-2 rounded-xl border border-[#00000011] bg-theme-background/80 px-3 py-1.5 text-left text-zinc-900 transition-colors hover:border-theme-accent focus-visible:outline-2 focus-visible:outline-theme-ring md:h-20 md:gap-3 md:px-4 md:py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-theme-accent',
           isRightAligned && 'flex-row-reverse text-right',
         )}
       >

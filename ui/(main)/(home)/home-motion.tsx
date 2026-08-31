@@ -24,6 +24,17 @@ const textVariants: Variants = {
   },
 }
 
+const avatarVariants: Variants = {
+  hidden: { opacity: 0, y: 20, scale: 0.9, rotate: -3 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    transition: { duration: 0.82, ease: [0.16, 1, 0.3, 1] },
+  },
+}
+
 export function HomeMotion({ children }: { children: ReactNode }) {
   const isPageRevealing = useInitialPageTransition()
   const shouldReduceMotion = useReducedMotion()
@@ -51,5 +62,19 @@ export function HomeTextMotion({
     <motion.div className={className} variants={textVariants}>
       {children}
     </motion.div>
+  )
+}
+
+export function HomeAvatarMotion({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <motion.figure className={className} variants={avatarVariants}>
+      {children}
+    </motion.figure>
   )
 }

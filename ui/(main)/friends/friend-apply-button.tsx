@@ -29,7 +29,7 @@ export function FriendApplyButton() {
       onClick={() => {
         setModalOpen('friendLinkApplyModal')
       }}
-      className="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-lg border border-[#00000011] bg-theme-background/80 px-3 font-medium text-sm text-zinc-900 transition-colors hover:border-black/15 focus-visible:outline-2 focus-visible:outline-theme-ring dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-zinc-700"
+      className="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-lg border border-black/15 bg-white/65 px-3 font-medium text-sm text-zinc-800 transition-colors duration-300 ease-out hover:border-black hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-black dark:border-white/20 dark:bg-white/[0.07] dark:text-zinc-100 dark:focus-visible:outline-white dark:hover:border-white dark:hover:bg-white dark:hover:text-black"
     >
       申请友链
     </motion.button>

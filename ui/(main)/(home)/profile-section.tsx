@@ -1,12 +1,12 @@
 import Image from 'next/image'
 import avatar from '@/config/img/avatar.webp'
-import { HomeTextMotion } from './home-motion'
+import { HomeAvatarMotion, HomeTextMotion } from './home-motion'
 import TechStack from './tech-stack'
 
 export default function ProfileSection() {
   return (
     <header className="grid grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-[180px_1fr] md:justify-items-stretch md:gap-16">
-      <figure className="size-[180px] shrink-0 overflow-hidden rounded-[64px] border border-[#eaeaea]">
+      <HomeAvatarMotion className="size-[180px] shrink-0 overflow-hidden rounded-[64px] border border-[#eaeaea]">
         <Image
           src={avatar}
           alt="叶鱼的头像"
@@ -17,7 +17,7 @@ export default function ProfileSection() {
           fetchPriority="high"
           draggable={false}
         />
-      </figure>
+      </HomeAvatarMotion>
 
       <div className="flex flex-col items-center text-center md:translate-y-[5px] md:items-start md:text-left">
         <HomeTextMotion>

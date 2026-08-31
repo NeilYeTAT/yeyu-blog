@@ -39,10 +39,11 @@ export default function Header() {
       <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
         <WaveLink
           href="/"
-          className="flex h-full items-center pl-4 font-medium font-serif text-xl leading-none sm:pl-5 [&>span]:translate-y-px"
+          withWaveUnderline={false}
+          className="flex h-full items-center pl-4 font-medium font-serif text-xl leading-none sm:pl-5"
           aria-label="返回首页"
         >
-          Yuuri &amp;
+          <span className="translate-y-px">Yuuri &amp;</span>
         </WaveLink>
 
         <nav aria-label="主导航" className="grid h-full grid-cols-4 items-center">
@@ -64,6 +65,7 @@ export default function Header() {
                 <span
                   className={cn(
                     waveLinkUnderlineClassName,
+                    'after:-bottom-1 after:bg-[color-mix(in_srgb,var(--theme-accent)_50%,white)]',
                     isActive && 'after:[clip-path:inset(0)]',
                   )}
                 >
