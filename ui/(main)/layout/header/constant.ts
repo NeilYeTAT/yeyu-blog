@@ -20,7 +20,7 @@ export const navigationConfig: NavRoute[] = [
   },
   {
     path: '/language',
-    pathName: '中 / EN',
+    pathName: 'EN',
     pattern: /^\/language($|\/)/,
     type: 'button',
   },

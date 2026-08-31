@@ -1,7 +1,6 @@
 'use client'
 
 import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react'
-import { usePathname } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { useTransitionTheme } from '@/hooks/animation/use-transition-theme'
 import { useSound } from '@/hooks/common/use-sound'
@@ -23,8 +22,6 @@ const menuAngles: Record<IconsId, number> = {
 // TODO: 固定底部时吸附效果
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
-  const pathname = usePathname()
-  const isHomePage = pathname === '/'
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
   const isPlaying = useIsPlaying()
@@ -90,8 +87,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
         animate={{ scale: 1, y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         className={cn(
-          'fixed left-1/2 z-100 -ml-6 cursor-grab active:cursor-grabbing',
-          isHomePage ? 'bottom-[100px]' : 'bottom-20',
+          'fixed bottom-[100px] left-1/2 z-100 -ml-6 cursor-grab active:cursor-grabbing',
           className,
         )}
         {...props}

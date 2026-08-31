@@ -8,8 +8,9 @@ export const NavItem: FC<
   {
     item: NavRoute
     elRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>
+    onButtonClick?: () => void
   } & Omit<ComponentProps<'a'>, 'href' | 'ref'>
-> = ({ item, className, children, elRef, ...props }) => {
+> = ({ item, className, children, elRef, onButtonClick, ...props }) => {
   const isButton = item.type === 'button'
   const { setModalOpen } = useModalActions()
 
@@ -19,6 +20,7 @@ export const NavItem: FC<
         ref={elRef as React.Ref<HTMLButtonElement>}
         className={className}
         type="button"
+        aria-label={props['aria-label']}
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           if (item.disabled === true) {
             e.preventDefault()
@@ -36,6 +38,8 @@ export const NavItem: FC<
               setModalOpen(modalType)
             })
           }
+
+          onButtonClick?.()
         }}
       >
         {children}
