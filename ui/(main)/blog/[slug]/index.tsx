@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { processor } from '@/lib/core/markdown/processor'
 import { prisma } from '@/prisma/instance'
 import ArticleDisplayPage from '@/ui/(main)/blog/article-display-page'
+import { BlogBottomBlur } from '@/ui/(main)/blog/blog-bottom-blur'
 import CommentCard from '@/ui/(main)/blog/comment-card'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 
@@ -33,6 +34,7 @@ export async function BlogDetail({ slug }: { slug: string }) {
       <ArticleDisplayPage createdAt={createdAt} sanitizedContent={content} tags={tagNames} />
       <HorizontalDividingLine />
       <CommentCard articleId={id} />
+      <BlogBottomBlur />
     </div>
   )
 }

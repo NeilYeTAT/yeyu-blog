@@ -1,7 +1,7 @@
 'use client'
 
 import type { Heading } from './utils/extract-headings'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useReducedMotion } from 'motion/react'
 import {
   type FC,
   type MouseEvent,
@@ -49,23 +49,6 @@ const getPortalStateSnapshot = () => {
 }
 
 const getServerPortalStateSnapshot = () => emptyPortalState
-
-const ArticleBottomShadow = ({ container }: { container: HTMLElement }) => {
-  const ref = useRef(container)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end end'],
-  })
-  const shadowOpacity = useTransform(scrollYProgress, [0, 0.84, 0.96, 1], [0.46, 0.46, 0.16, 0])
-
-  return (
-    <motion.div
-      aria-hidden
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-16 select-none bg-[linear-gradient(transparent,rgb(249,250,250))] backdrop-blur-[10px] [-webkit-mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] [mask-image:linear-gradient(to_top,rgb(249,250,250)_40%,transparent)] dark:bg-[linear-gradient(transparent,rgb(9,9,11))] dark:[-webkit-mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)] dark:[mask-image:linear-gradient(to_top,rgb(9,9,11)_40%,transparent)]"
-      style={{ opacity: shadowOpacity }}
-    />
-  )
-}
 
 const useActiveHeading = (headings: Heading[]) => {
   const [{ activeId, direction }, setActiveHeading] = useState({
@@ -189,22 +172,19 @@ export const PostToc: FC<{
   }
 
   return createPortal(
-    <>
-      {articleContent != null ? <ArticleBottomShadow container={articleContent} /> : null}
-      <TocFloatingPanel
-        activeHeading={activeHeading}
-        activeId={activeId}
-        articleContent={articleContent}
-        direction={direction}
-        headings={headings}
-        isExpanded={isExpanded}
-        reduceMotion={reduceMotion}
-        scrollContainerRef={scrollContainerRef}
-        onClose={() => setIsExpanded(false)}
-        onLinkClick={handleLinkClick}
-        onToggle={handleTocToggleClick}
-      />
-    </>,
+    <TocFloatingPanel
+      activeHeading={activeHeading}
+      activeId={activeId}
+      articleContent={articleContent}
+      direction={direction}
+      headings={headings}
+      isExpanded={isExpanded}
+      reduceMotion={reduceMotion}
+      scrollContainerRef={scrollContainerRef}
+      onClose={() => setIsExpanded(false)}
+      onLinkClick={handleLinkClick}
+      onToggle={handleTocToggleClick}
+    />,
     container,
   )
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-export function ArticleListBottomBlur() {
+export function BlogBottomBlur() {
   const [hasContentBelow, setHasContentBelow] = useState(false)
 
   useEffect(() => {
