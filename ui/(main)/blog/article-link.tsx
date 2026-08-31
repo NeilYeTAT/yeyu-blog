@@ -1,22 +1,13 @@
-import type { FC } from 'react'
 import type { BlogListItem } from '@/lib/api/blog/type'
-import type { NoteListItem } from '@/lib/api/note/type'
-import { TagType } from '@prisma/client'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'
 import { toDisplayDate } from '@/lib/utils/common/time'
 import { ScaleUnderline } from './scale-underline'
 
-export const ArticleLink: FC<{
-  item: BlogListItem | NoteListItem
-  type: TagType
-}> = ({ item, type }) => {
-  const isBlog = type === TagType.BLOG
-  const isNote = type === TagType.NOTE
-
+export const ArticleLink = ({ item }: { item: BlogListItem }) => {
   return (
     <Link
-      href={isBlog ? `/blog/${item?.slug}` : isNote ? `/note/${item?.slug}` : '/'}
+      href={`/blog/${item.slug}`}
       className={cn(
         'group flex cursor-pointer items-center justify-between gap-10 rounded-sm p-2 duration-500',
         'hover:text-theme-accent dark:hover:text-white',

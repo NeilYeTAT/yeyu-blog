@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import BlogListPage from '@/ui/(main)/(blog-and-note-layout)/blog'
+import BlogListPage from '@/ui/(main)/blog'
 
 export const metadata: Metadata = {
   title: '日志',

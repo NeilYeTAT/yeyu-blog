@@ -168,16 +168,19 @@ export const PostToc: FC<{
     event.preventDefault()
 
     const element = document.getElementById(id)
-    if (element != null) {
+    const mainScrollContainer = document.querySelector<HTMLElement>('[data-main-scroll-container]')
+    if (element != null && mainScrollContainer != null) {
       const headerOffset = 80
       const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
+      const containerPosition = mainScrollContainer.getBoundingClientRect().top
+      const offsetPosition =
+        elementPosition - containerPosition + mainScrollContainer.scrollTop - headerOffset
 
       updateActiveHeading(id)
       setIsExpanded(false)
 
       requestAnimationFrame(() => {
-        window.scrollTo({
+        mainScrollContainer.scrollTo({
           top: offsetPosition,
           behavior: 'smooth',
         })

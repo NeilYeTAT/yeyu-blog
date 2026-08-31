@@ -13,7 +13,7 @@ const containerVariants = {
   },
 }
 
-export default function BlogAndNoteLayout({ children }: { children: ReactNode }) {
+export default function BlogLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const shouldReduceMotion = useReducedMotion()
 

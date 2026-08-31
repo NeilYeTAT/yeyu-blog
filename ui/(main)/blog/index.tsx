@@ -1,9 +1,8 @@
-import { TagType } from '@prisma/client'
 import { prisma } from '@/prisma/instance'
-import { ArticleList } from '../article-list'
+import { ArticleList } from './article-list'
 
-export default async function NoteListPage() {
-  const noteList = await prisma.note.findMany({
+export default async function BlogListPage() {
+  const blogList = await prisma.blog.findMany({
     where: {
       isPublished: true,
     },
@@ -21,5 +20,5 @@ export default async function NoteListPage() {
     },
   })
 
-  return <ArticleList items={noteList} type={TagType.NOTE} />
+  return <ArticleList items={blogList} />
 }

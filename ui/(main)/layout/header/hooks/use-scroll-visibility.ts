@@ -19,14 +19,18 @@ export const useScrollVisibility = (
   const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
-    lastScrollYRef.current = window.scrollY
+    const scrollTarget = document.querySelector<HTMLElement>('[data-main-scroll-container]')
+
+    if (scrollTarget === null) return
+
+    lastScrollYRef.current = scrollTarget.scrollTop
     directionRef.current = 0
     accumulatedDistanceRef.current = 0
 
     const updateVisibility = () => {
       frameRef.current = null
 
-      const currentScrollY = Math.max(window.scrollY, 0)
+      const currentScrollY = Math.max(scrollTarget.scrollTop, 0)
       const delta = currentScrollY - lastScrollYRef.current
 
       if (currentScrollY <= topShowOffset) {
@@ -68,9 +72,9 @@ export const useScrollVisibility = (
       frameRef.current = window.requestAnimationFrame(updateVisibility)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    scrollTarget.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      scrollTarget.removeEventListener('scroll', handleScroll)
 
       if (frameRef.current != null) {
         window.cancelAnimationFrame(frameRef.current)

@@ -1,4 +1,3 @@
-import type { CommentTargetType } from '@/lib/api/comment/type'
 import type { CommentTreeNode } from './type'
 import { startTransition, useState } from 'react'
 import { type Address, isAddress } from 'viem'
@@ -11,13 +10,7 @@ import { useModalActions } from '@/store/use-modal-store'
 import { maxCommentLength } from './constant'
 import { buildCommentTree } from './helper'
 
-export function useCommentCard({
-  articleId,
-  articleType,
-}: {
-  articleId: number
-  articleType: CommentTargetType
-}) {
+export function useCommentCard({ articleId }: { articleId: number }) {
   const [commentContent, setCommentContent] = useState('')
   const [replyContent, setReplyContent] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
@@ -36,7 +29,7 @@ export function useCommentCard({
     dataUpdatedAt: commentReferenceTime,
     isPending: isCommentPending,
   } = usePublicCommentQuery({
-    targetType: articleType,
+    targetType: 'BLOG',
     targetId: articleId,
     take: 50,
   })
@@ -84,7 +77,7 @@ export function useCommentCard({
 
     createComment(
       {
-        targetType: articleType,
+        targetType: 'BLOG',
         targetId: articleId,
         parentId,
         content: trimmedContent,

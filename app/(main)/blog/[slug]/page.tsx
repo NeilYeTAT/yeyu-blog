@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/prisma/instance'
-import { BlogDetail } from '@/ui/(main)/(blog-and-note-layout)/blog/[slug]'
+import { BlogDetail } from '@/ui/(main)/blog/[slug]'
 
 export async function generateStaticParams() {
   const blogs = await prisma.blog.findMany({

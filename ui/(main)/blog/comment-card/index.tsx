@@ -1,7 +1,6 @@
 'use client'
 
 import type { ComponentProps } from 'react'
-import type { CommentTargetType } from '@/lib/api/comment/type'
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
@@ -13,11 +12,9 @@ import { useCommentCard } from './use-comment-card'
 
 export default function CommentCard({
   articleId,
-  articleType,
   className,
 }: ComponentProps<'section'> & {
   articleId: number
-  articleType: CommentTargetType
 }) {
   const {
     total,
@@ -44,7 +41,7 @@ export default function CommentCard({
     cancelReply,
     submitReply,
     confirmDeleteComment,
-  } = useCommentCard({ articleId, articleType })
+  } = useCommentCard({ articleId })
   const nextSortOrder = sortOrder === 'asc' ? 'desc' : 'asc'
   const SortIcon = sortOrder === 'asc' ? ArrowUpNarrowWide : ArrowDownNarrowWide
 
