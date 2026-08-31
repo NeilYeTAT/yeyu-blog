@@ -7,11 +7,6 @@ export const navigationConfig: NavRoute[] = [
     pattern: /^\/blog($|\/)/,
   },
   {
-    path: '/mutter',
-    pathName: '动态',
-    pattern: /^\/mutter($|\/)/,
-  },
-  {
     path: '/friends',
     pathName: '友链',
     pattern: /^\/friends($|\/)/,
@@ -22,5 +17,11 @@ export const navigationConfig: NavRoute[] = [
     pattern: /^\/login($|\/)/,
     type: 'button',
     modal: 'loginModal',
+  },
+  {
+    path: '/language',
+    pathName: '中 / EN',
+    pattern: /^\/language($|\/)/,
+    type: 'button',
   },
 ]

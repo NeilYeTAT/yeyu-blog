@@ -57,6 +57,7 @@ export default function Header() {
                 className={cn(
                   'flex h-full items-center justify-center font-serif text-xs leading-none transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
                   waveLinkTriggerClassName,
+                  route.type === 'button' && 'cursor-pointer',
                   isActive ? 'font-bold text-white' : 'font-normal text-white/90 hover:text-white',
                 )}
               >

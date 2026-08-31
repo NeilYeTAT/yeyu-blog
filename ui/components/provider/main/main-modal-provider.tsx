@@ -8,12 +8,6 @@ import Loading from '@/ui/components/shared/loading'
 
 const modalExitDuration = 180
 
-const MutterCommentModal = lazy(() =>
-  import('@/ui/components/modal/main/mutter-comment-modal').then(mod => ({
-    default: mod.MutterCommentModal,
-  })),
-)
-
 const FriendLinkApplyModal = lazy(() =>
   import('@/ui/components/modal/main/friend-link-apply-modal').then(mod => ({
     default: mod.FriendLinkApplyModal,
@@ -64,7 +58,6 @@ export function MainModalProvider({ children }: { children: React.ReactNode }) {
       {children}
       <Suspense fallback={<MainModalLoading />}>
         {activeModalType === 'loginModal' ? <LoginModal /> : null}
-        {activeModalType === 'mutterCommentModal' ? <MutterCommentModal /> : null}
         {activeModalType === 'friendLinkApplyModal' ? <FriendLinkApplyModal /> : null}
       </Suspense>
     </>
