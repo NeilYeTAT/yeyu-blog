@@ -39,7 +39,7 @@ export default function Header() {
       <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
         <WaveLink
           href="/"
-          className="pl-4 font-serif text-xs leading-none sm:pl-5 sm:text-base"
+          className="flex h-full items-center pl-4 font-medium font-serif text-xl leading-none sm:pl-5 [&>span]:translate-y-px"
           aria-label="返回首页"
         >
           Yuuri &amp;
@@ -55,7 +55,7 @@ export default function Header() {
                 item={route}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'flex h-full items-center justify-center font-serif text-xs transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
+                  'flex h-full items-center justify-center font-serif text-xs leading-none transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
                   waveLinkTriggerClassName,
                   isActive ? 'font-bold text-white' : 'font-normal text-white/90 hover:text-white',
                 )}
