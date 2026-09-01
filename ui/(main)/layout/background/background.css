@@ -1,12 +1,211 @@
 .site-background {
-  background: linear-gradient(
-    180deg,
-    #233fa0 0.8%,
-    #254fc4 15.4%,
-    #4d97ef 57.4%,
-    #93bfef 77.4%,
-    #9ac1e8 83.9%,
-    #a0c3e1 91.9%,
-    #adc8d2 100%
+  --site-sky-cloud-brightness: 1;
+  --site-sky-cloud-opacity: 1;
+  --site-sky-cloud-play-state: running;
+  --site-sky-cloud-saturate: 1;
+  --site-sky-sky-bottom: #d9f8fb;
+  --site-sky-sky-lower: #8ce1f7;
+  --site-sky-sky-middle: #54c6f2;
+  --site-sky-sky-top: #66d8ff;
+  --site-sky-sky-upper: #5fcef8;
+  --site-sky-star-opacity: 0;
+  --site-sky-upper-glow-opacity: 0.38;
+  --site-sky-upper-glow-rgb: 126 228 255;
+  --site-sky-upper-glow-soft-opacity: 0.24;
+  --site-sky-warm-glow-opacity: 0.06;
+  --site-sky-warm-glow-rgb: 255 243 188;
+  --site-sky-warm-glow-soft-opacity: 0.02;
+  --site-sky-warm-glow-strong-opacity: 0.04;
+
+  background:
+    radial-gradient(
+      ellipse at 44% -6%,
+      rgb(var(--site-sky-upper-glow-rgb) / var(--site-sky-upper-glow-opacity)) 0 14%,
+      rgb(var(--site-sky-upper-glow-rgb) / var(--site-sky-upper-glow-soft-opacity)) 29%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 20% 74%,
+      rgb(var(--site-sky-warm-glow-rgb) / var(--site-sky-warm-glow-strong-opacity)) 0 10%,
+      rgb(var(--site-sky-warm-glow-rgb) / var(--site-sky-warm-glow-soft-opacity)) 22%,
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      var(--site-sky-sky-top) 0%,
+      var(--site-sky-sky-upper) 24%,
+      var(--site-sky-sky-middle) 58%,
+      var(--site-sky-sky-lower) 84%,
+      var(--site-sky-sky-bottom) 100%
+    );
+  transition: background 800ms ease;
+}
+
+.site-background::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  z-index: 5;
+  background: radial-gradient(
+    ellipse at 55% 100%,
+    rgb(var(--site-sky-warm-glow-rgb) / calc(var(--site-sky-warm-glow-opacity) * 0.34)) 0 12%,
+    transparent 34%
   );
+}
+
+.site-whiteboard {
+  border: 1px solid rgb(255 255 255 / 0.62);
+  background: rgb(252 254 255 / 0.88);
+  box-shadow:
+    0 24px 64px rgb(15 23 42 / 0.14),
+    inset 0 1px 0 rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(18px) saturate(1.06);
+  transition:
+    color 300ms ease,
+    background-color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.dark .site-whiteboard {
+  border-color: rgb(255 255 255 / 0.14);
+  background: rgb(19 21 26 / 0.7);
+  box-shadow:
+    0 28px 72px rgb(0 0 0 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(24px) saturate(0.68) brightness(0.7);
+}
+
+.site-sky-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  opacity: var(--site-sky-star-opacity);
+  background-image:
+    radial-gradient(circle at 8% 17%, rgb(255 255 255 / 0.92) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 18% 36%, rgb(255 255 255 / 0.7) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 29% 11%, rgb(255 255 255 / 0.86) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 41% 29%, rgb(255 255 255 / 0.76) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 54% 14%, rgb(255 255 255 / 0.96) 0 1.1px, transparent 1.7px),
+    radial-gradient(circle at 65% 38%, rgb(255 255 255 / 0.7) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 74% 9%, rgb(255 255 255 / 0.86) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 85% 28%, rgb(255 255 255 / 0.78) 0 0.9px, transparent 1.4px),
+    radial-gradient(circle at 93% 13%, rgb(255 255 255 / 0.9) 0 1px, transparent 1.5px);
+  transition: opacity 800ms ease;
+}
+
+.site-sky-stars::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-image:
+    radial-gradient(circle at 14% 51%, rgb(255 255 255 / 0.72) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 37% 46%, rgb(255 255 255 / 0.86) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 61% 51%, rgb(255 255 255 / 0.7) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 81% 48%, rgb(255 255 255 / 0.84) 0 1px, transparent 1.5px);
+  animation: site-sky-star-twinkle 4.8s ease-in-out infinite alternate;
+}
+
+.site-sky-clouds {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  height: 74vh;
+  overflow: hidden;
+  opacity: var(--site-sky-cloud-opacity);
+  filter: brightness(var(--site-sky-cloud-brightness)) saturate(var(--site-sky-cloud-saturate))
+    hue-rotate(var(--site-sky-cloud-hue-rotate));
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 100%);
+  transition:
+    opacity 800ms ease,
+    filter 800ms ease;
+}
+
+.site-sky-cloud {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0%;
+  opacity: 0;
+  transform-origin: 50% 100%;
+  will-change: opacity, transform;
+  animation-name: site-sky-cloud-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-play-state: var(--site-sky-cloud-play-state);
+}
+
+.site-sky-cloud-1 {
+  animation-duration: var(--site-sky-cloud-1-duration);
+  animation-delay: -4s;
+}
+
+.site-sky-cloud-2 {
+  animation-duration: var(--site-sky-cloud-2-duration);
+  animation-delay: -10s;
+}
+
+.site-sky-cloud-3 {
+  animation-duration: var(--site-sky-cloud-3-duration);
+  animation-delay: -17s;
+}
+
+.site-sky-cloud-4 {
+  animation-duration: var(--site-sky-cloud-4-duration);
+  animation-delay: -23s;
+}
+
+@keyframes site-sky-cloud-drift {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  18% {
+    opacity: 0.58;
+  }
+
+  68% {
+    opacity: 0.52;
+  }
+
+  86%,
+  100% {
+    opacity: 0;
+    transform: scale(2.05);
+  }
+}
+
+@keyframes site-sky-star-twinkle {
+  0% {
+    opacity: 0.42;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-sky-clouds {
+    height: 80vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-sky-cloud {
+    animation-play-state: paused;
+  }
+
+  .site-sky-stars::before {
+    animation: none;
+  }
 }

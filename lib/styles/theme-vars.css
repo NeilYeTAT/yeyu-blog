@@ -1,13 +1,30 @@
 :root {
   --theme-accent: #1a73f2;
+  --theme-primary: color-mix(in srgb, var(--theme-accent) 72%, black);
+  --theme-background: color-mix(in srgb, var(--theme-accent) 6%, white);
+  --theme-surface: rgb(255 255 255 / 0.88);
+  --theme-hover-background: color-mix(in srgb, var(--theme-accent) 14%, white);
+  --theme-border: color-mix(in srgb, var(--theme-accent) 28%, white);
+  --theme-ring: color-mix(in srgb, var(--theme-accent) 70%, white);
+  color-scheme: light;
+}
+
+.dark {
+  --theme-primary: color-mix(in srgb, var(--theme-accent) 48%, white);
+  --theme-background: rgb(20 22 27 / 0.92);
+  --theme-surface: rgb(31 33 39 / 0.82);
+  --theme-hover-background: color-mix(in srgb, var(--theme-accent) 10%, #2a2c32);
+  --theme-border: color-mix(in srgb, var(--theme-accent) 10%, #52525b);
+  --theme-ring: color-mix(in srgb, var(--theme-accent) 50%, white);
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-theme-primary: color-mix(in srgb, var(--theme-accent) 72%, black);
-  --color-theme-background: color-mix(in srgb, var(--theme-accent) 8%, white);
-  --color-theme-surface: white;
+  --color-theme-primary: var(--theme-primary);
+  --color-theme-background: var(--theme-background);
+  --color-theme-surface: var(--theme-surface);
   --color-theme-accent: var(--theme-accent);
-  --color-theme-hover-background: color-mix(in srgb, var(--theme-accent) 16%, white);
-  --color-theme-border: color-mix(in srgb, var(--theme-accent) 34%, white);
-  --color-theme-ring: color-mix(in srgb, var(--theme-accent) 70%, white);
+  --color-theme-hover-background: var(--theme-hover-background);
+  --color-theme-border: var(--theme-border);
+  --color-theme-ring: var(--theme-ring);
 }

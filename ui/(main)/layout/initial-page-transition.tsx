@@ -56,7 +56,7 @@ export default function InitialPageTransition({ children }: { children: ReactNod
                 duration: shouldReduceMotion ? 0 : 0.36,
                 ease: [0.4, 0, 0.2, 1],
               }}
-              className="fixed inset-0 z-[1000] flex items-center justify-center bg-theme-background dark:bg-zinc-950"
+              className="fixed inset-0 z-[1000] flex items-center justify-center bg-theme-background"
             >
               <FluidOrb
                 size={168}
