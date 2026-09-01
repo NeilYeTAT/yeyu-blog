@@ -78,7 +78,7 @@ export const ArticleList = ({ items }: { items: BlogListItem[] }) => {
                     transition: { type: 'spring', stiffness: 200, damping: 25 },
                   }}
                 >
-                  <ArticleLink item={v} />
+                  <ArticleLink slug={v.slug} title={v.title} createdAt={v.createdAt} />
                 </motion.div>
               ))}
             </div>

@@ -21,6 +21,9 @@ export default function Header() {
   const { language, toggleLanguage } = useLanguage()
   const translations = useTranslations()
   const languageOffset = language === 'en' ? '100%' : '-100%'
+  const languagePathPrefix = `/${language}`
+  const currentPathname =
+    pathname === languagePathPrefix ? '/' : pathname.slice(languagePathPrefix.length)
 
   return (
     <motion.header
@@ -43,7 +46,7 @@ export default function Header() {
     >
       <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
         <WaveLink
-          href="/"
+          href={languagePathPrefix}
           withWaveUnderline={false}
           className="flex h-full items-center pl-4 font-header-brand text-xl leading-none sm:pl-5"
           aria-label={translations.header.homeLabel}
@@ -56,7 +59,7 @@ export default function Header() {
           className="grid h-full grid-cols-4 items-center"
         >
           {navigationConfig.map(route => {
-            const isActive = route.type !== 'button' && route.pattern.test(pathname)
+            const isActive = route.type !== 'button' && route.pattern.test(currentPathname)
             const isLanguageRoute = route.path === '/language'
 
             return (

@@ -3,7 +3,7 @@
 import type { Variants } from 'motion/react'
 import { motion } from 'motion/react'
 import { useModalActions } from '@/store/use-modal-store'
-import { useTranslations } from '@/ui/components/provider/main/language-provider'
+import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 
 const buttonVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -20,12 +20,13 @@ const buttonVariants: Variants = {
 
 export function FriendApplyButton() {
   const { setModalOpen } = useModalActions()
+  const { isLanguageChanging } = useLanguage()
   const translations = useTranslations()
 
   return (
     <motion.button
       type="button"
-      initial="hidden"
+      initial={isLanguageChanging ? false : 'hidden'}
       animate="visible"
       variants={buttonVariants}
       onClick={() => {

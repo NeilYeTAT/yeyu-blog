@@ -2,6 +2,7 @@ import type { NavRoute } from './types'
 import { type ComponentProps, type FC, startTransition } from 'react'
 import { sileo } from 'sileo'
 import { useModalActions } from '@/store/use-modal-store'
+import { useLanguage } from '@/ui/components/provider/main/language-provider'
 import { WaveLink } from '@/ui/components/shared/wave-link'
 
 export const NavItem: FC<
@@ -13,6 +14,7 @@ export const NavItem: FC<
 > = ({ item, className, children, elRef, onButtonClick, ...props }) => {
   const isButton = item.type === 'button'
   const { setModalOpen } = useModalActions()
+  const { language } = useLanguage()
 
   if (isButton) {
     return (
@@ -50,7 +52,7 @@ export const NavItem: FC<
   return (
     <WaveLink
       ref={elRef as React.Ref<HTMLAnchorElement>}
-      href={item.path}
+      href={`/${language}${item.path}`}
       className={className}
       withWaveUnderline={false}
       {...props}

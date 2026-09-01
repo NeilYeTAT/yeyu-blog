@@ -1,46 +1,67 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react'
-import { type Language, languageCookieName, languageHtmlLang } from '@/lib/i18n/config'
+import { isLanguage, type Language, languageHtmlLang } from '@/lib/i18n/config'
 import { messages } from '@/lib/i18n/messages'
-
-const languageCookieMaxAge = 60 * 60 * 24 * 365
 
 const LanguageContext = createContext<
   | {
       language: Language
+      isLanguageChanging: boolean
       toggleLanguage: () => void
     }
   | undefined
 >(undefined)
 
-export function LanguageProvider({
-  children,
-  initialLanguage,
-}: {
-  children: React.ReactNode
-  initialLanguage: Language
-}) {
-  const [language, setLanguage] = useState(initialLanguage)
+function getLocalizedPathname(pathname: string, language: Language) {
+  const pathSegments = pathname.split('/')
+
+  pathSegments[1] = language
+  return pathSegments.join('/')
+}
+
+function requireLanguage(value: string) {
+  if (!isLanguage(value)) {
+    throw new Error(`Unsupported route language: ${value}`)
+  }
+
+  return value
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const routeLanguage = requireLanguage(pathname.split('/')[1] ?? '')
+  const [pendingLanguage, setPendingLanguage] = useState<Language | null>(null)
+  const language = pendingLanguage === null ? routeLanguage : pendingLanguage
+  const isLanguageChanging = pendingLanguage !== null
+  const nextLanguage = language === 'zh' ? 'en' : 'zh'
+  const nextPathname = getLocalizedPathname(pathname, nextLanguage)
 
   useEffect(() => {
-    document.documentElement.lang = languageHtmlLang[language]
-  }, [language])
+    if (pendingLanguage !== null && routeLanguage === pendingLanguage) {
+      setPendingLanguage(null)
+    }
+  }, [pendingLanguage, routeLanguage])
 
   const toggleLanguage = useCallback(() => {
-    const nextLanguage = language === 'zh' ? 'en' : 'zh'
+    if (pendingLanguage !== null) return
 
-    setLanguage(nextLanguage)
+    const url = new URL(window.location.href)
+
+    url.pathname = nextPathname
+    setPendingLanguage(nextLanguage)
     document.documentElement.lang = languageHtmlLang[nextLanguage]
-    document.cookie = `${languageCookieName}=${nextLanguage}; Path=/; Max-Age=${languageCookieMaxAge}; SameSite=Lax`
-  }, [language])
+    window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+  }, [nextLanguage, nextPathname, pendingLanguage])
 
   const value = useMemo(
     () => ({
       language,
+      isLanguageChanging,
       toggleLanguage,
     }),
-    [language, toggleLanguage],
+    [isLanguageChanging, language, toggleLanguage],
   )
 
   return <LanguageContext value={value}>{children}</LanguageContext>

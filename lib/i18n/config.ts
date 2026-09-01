@@ -3,7 +3,6 @@ export const languages = ['zh', 'en'] as const
 export type Language = (typeof languages)[number]
 
 export const defaultLanguage: Language = 'zh'
-export const languageCookieName = 'yeyu-language'
 
 export const languageHtmlLang: Record<Language, string> = {
   zh: 'zh-CN',

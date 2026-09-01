@@ -39,11 +39,12 @@ const avatarVariants: Variants = {
 export function HomeMotion({ children }: { children: ReactNode }) {
   const isPageRevealing = useInitialPageTransition()
   const shouldReduceMotion = useReducedMotion()
+  const { isLanguageChanging } = useLanguage()
 
   return (
     <motion.div
       className="contents"
-      initial={shouldReduceMotion ? false : 'hidden'}
+      initial={shouldReduceMotion || isLanguageChanging ? false : 'hidden'}
       animate={isPageRevealing || shouldReduceMotion ? 'visible' : 'hidden'}
       variants={homeVariants}
     >

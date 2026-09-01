@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { seoMetadata } from '@/config/seo'
-import { getCurrentLanguage } from '@/lib/i18n/get-current-language'
+import { getRouteLanguage } from '@/lib/i18n/get-route-language'
 import { prisma } from '@/prisma/instance'
 import { BlogDetail } from '@/ui/(main)/blog/[slug]'
 
@@ -17,9 +17,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ language: string; slug: string }>
 }): Promise<Metadata> {
-  const [{ slug }, language] = await Promise.all([params, getCurrentLanguage()])
+  const { language: languageParam, slug } = await params
+  const language = getRouteLanguage(languageParam)
   const blog = await prisma.blog.findUnique({
     where: { slug },
     select: { title: true },
@@ -32,11 +33,21 @@ export async function generateMetadata({
   return {
     title: blog.title,
     description: seoMetadata[language].articleDescription(blog.title),
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: {
+      canonical: `/${language}/blog/${slug}`,
+      languages: {
+        zh: `/zh/blog/${slug}`,
+        en: `/en/blog/${slug}`,
+      },
+    },
   }
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ language: string; slug: string }>
+}) {
   const slug = (await params).slug
 
   return <BlogDetail slug={slug} />

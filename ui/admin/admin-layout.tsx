@@ -1,11 +1,12 @@
 import { redirect } from 'next/navigation'
 import { noPermission } from '@/lib/core/auth/guard'
+import { defaultLanguage } from '@/lib/i18n/config'
 import AdminProvider from '@/ui/components/provider/admin'
 import { AdminNavbar } from './layout/header'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   if (await noPermission()) {
-    redirect('/')
+    redirect(`/${defaultLanguage}`)
   }
 
   return (

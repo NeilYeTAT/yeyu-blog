@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { serverEnv } from '@/config/env/server-env'
+import { defaultLanguage } from '@/lib/i18n/config'
 import { getAdminMailRecipients, sendEmail } from './send-email'
 
 const subjectPrefix = '叶鱼博客'
@@ -216,7 +217,7 @@ export const notifyFriendLinkApproved = async ({
   name: string
   siteUrl: string
 }) => {
-  const friendsUrl = getAbsoluteUrl('/friends')
+  const friendsUrl = getAbsoluteUrl(`/${defaultLanguage}/friends`)
   const lines = [
     `你好，${name} 的友链申请已经通过。`,
     `站点地址：${siteUrl}`,

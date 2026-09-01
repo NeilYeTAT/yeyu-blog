@@ -1,6 +1,7 @@
 import { TagType } from '@prisma/client'
 import { Edit2, Eye, Trash } from 'lucide-react'
 import Link from 'next/link'
+import { defaultLanguage } from '@/lib/i18n/config'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalActions } from '@/store/use-modal-store'
 import { Button, buttonVariants } from '@/ui/shadcn/button'
@@ -19,7 +20,7 @@ export default function ActionButtons({
   return (
     <section className="flex items-center gap-1">
       <Link
-        href={`/blog/${slug}`}
+        href={`/${defaultLanguage}/blog/${slug}`}
         className={cn(buttonVariants({ variant: 'outline', className: 'size-8' }))}
       >
         <Eye className="size-4" />

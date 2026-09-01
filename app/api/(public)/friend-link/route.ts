@@ -1,5 +1,6 @@
 import { revalidatePath } from 'next/cache'
 import { BadRequestError } from '@/lib/common/errors/request'
+import { languages } from '@/lib/i18n/config'
 import { notifyAdminFriendLinkApplication } from '@/lib/infra/email/notifications'
 import { sendEmailInBackground } from '@/lib/infra/email/send-email'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
@@ -72,7 +73,9 @@ export const POST = withResponse(async request => {
     },
   })
 
-  revalidatePath('/friends')
+  for (const language of languages) {
+    revalidatePath(`/${language}/friends`)
+  }
   revalidatePath('/admin/friend-link')
 
   sendEmailInBackground(() =>

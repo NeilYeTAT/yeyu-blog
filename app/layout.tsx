@@ -1,26 +1,17 @@
-import type { Metadata } from 'next'
-import { seoMetadata } from '@/config/seo'
-import { languageHtmlLang } from '@/lib/i18n/config'
-import { getCurrentLanguage } from '@/lib/i18n/get-current-language'
+import Script from 'next/script'
+import { defaultLanguage, languageHtmlLang } from '@/lib/i18n/config'
 import '@/lib/styles/index.css'
 import GlobalProvider from '@/ui/components/provider/global'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const language = await getCurrentLanguage()
-
-  return seoMetadata[language].root
-}
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  const language = await getCurrentLanguage()
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={languageHtmlLang[language]} suppressHydrationWarning>
+    <html lang={languageHtmlLang[defaultLanguage]} suppressHydrationWarning>
       <body className="font-ye-font">
+        <Script id="sync-document-language" strategy="beforeInteractive">
+          {`const language = window.location.pathname.split('/')[1]
+const htmlLanguage = { zh: 'zh-CN', en: 'en' }[language]
+if (htmlLanguage !== undefined) document.documentElement.lang = htmlLanguage`}
+        </Script>
         <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>

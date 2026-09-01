@@ -2,12 +2,16 @@
 
 import type { Friend } from './types'
 import { useEffect, useRef, useState } from 'react'
+import { useLanguage } from '@/ui/components/provider/main/language-provider'
 import { FriendCard } from './friend-card'
 
 const revealInterval = 100
 
 export function FriendsList({ friends }: { friends: Friend[] }) {
-  const [visibleFriendIds, setVisibleFriendIds] = useState<number[]>([])
+  const { isLanguageChanging } = useLanguage()
+  const [visibleFriendIds, setVisibleFriendIds] = useState<number[]>(() =>
+    isLanguageChanging ? friends.map(friend => friend.id) : [],
+  )
   const queuedFriendIdsRef = useRef<Set<number> | null>(null)
   const pendingFriendsRef = useRef<{ id: number; index: number }[]>([])
   const revealTimerRef = useRef<number | null>(null)
@@ -62,7 +66,12 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
           friend={friend}
           index={index}
           isVisible={visibleFriendIdSet.has(friend.id)}
+          shouldAnimate={!isLanguageChanging}
           onViewportEnter={() => {
+            if (isLanguageChanging) {
+              return
+            }
+
             queueFriendReveal(friend, index)
           }}
         />

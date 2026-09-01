@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import { seoMetadata } from '@/config/seo'
-import { getCurrentLanguage } from '@/lib/i18n/get-current-language'
+import { getRouteLanguage } from '@/lib/i18n/get-route-language'
 import { FriendsPage } from '@/ui/(main)/friends'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const language = await getCurrentLanguage()
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ language: string }>
+}): Promise<Metadata> {
+  const language = getRouteLanguage((await params).language)
 
   return seoMetadata[language].friends
 }

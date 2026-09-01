@@ -43,17 +43,26 @@ export const seoMetadata = {
     home: {
       title: '首页',
       description: '叶鱼的个人主页，记录全栈开发、设计与生活。',
-      alternates: { canonical: '/' },
+      alternates: {
+        canonical: '/zh',
+        languages: { zh: '/zh', en: '/en' },
+      },
     },
     blog: {
       title: '日志',
       description: '记录全栈开发、设计与生活的文章。',
-      alternates: { canonical: '/blog' },
+      alternates: {
+        canonical: '/zh/blog',
+        languages: { zh: '/zh/blog', en: '/en/blog' },
+      },
     },
     friends: {
       title: '友链',
       description: '叶鱼的朋友们与友链申请。',
-      alternates: { canonical: '/friends' },
+      alternates: {
+        canonical: '/zh/friends',
+        languages: { zh: '/zh/friends', en: '/en/friends' },
+      },
     },
     articleDescription: (title: string) => `阅读叶鱼的文章《${title}》。`,
   },
@@ -89,17 +98,26 @@ export const seoMetadata = {
     home: {
       title: 'Home',
       description: "Yuuri's personal site about full-stack development, design, and life.",
-      alternates: { canonical: '/' },
+      alternates: {
+        canonical: '/en',
+        languages: { zh: '/zh', en: '/en' },
+      },
     },
     blog: {
       title: 'Blog',
       description: 'Articles about full-stack development, design, and life.',
-      alternates: { canonical: '/blog' },
+      alternates: {
+        canonical: '/en/blog',
+        languages: { zh: '/zh/blog', en: '/en/blog' },
+      },
     },
     friends: {
       title: 'Friends',
       description: "Yuuri's friends and friend link applications.",
-      alternates: { canonical: '/friends' },
+      alternates: {
+        canonical: '/en/friends',
+        languages: { zh: '/zh/friends', en: '/en/friends' },
+      },
     },
     articleDescription: (title: string) => `Read "${title}" on Yuuri's blog.`,
   },

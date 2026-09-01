@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { BadRequestError } from '@/lib/common/errors/request'
 import { noPermission } from '@/lib/core/auth/guard'
+import { languages } from '@/lib/i18n/config'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
 import { withResponse } from '@/lib/infra/http/with-response'
 import { prisma } from '@/prisma/instance'
@@ -26,7 +27,6 @@ function parseTagNames(rawTagNames: string | undefined) {
 }
 
 function revalidateBlogPaths(...slugs: Array<string | undefined>) {
-  revalidatePath('/blog')
   revalidatePath('/admin/blog')
 
   const uniqueSlugs = new Set<string>()
@@ -38,8 +38,12 @@ function revalidateBlogPaths(...slugs: Array<string | undefined>) {
     }
   }
 
-  for (const slug of uniqueSlugs) {
-    revalidatePath(`/blog/${encodeURIComponent(slug)}`)
+  for (const language of languages) {
+    revalidatePath(`/${language}/blog`)
+
+    for (const slug of uniqueSlugs) {
+      revalidatePath(`/${language}/blog/${encodeURIComponent(slug)}`)
+    }
   }
 }
 

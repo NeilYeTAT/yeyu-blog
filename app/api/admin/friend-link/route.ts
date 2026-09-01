@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { BadRequestError } from '@/lib/common/errors/request'
 import { noPermission } from '@/lib/core/auth/guard'
+import { languages } from '@/lib/i18n/config'
 import {
   notifyAdminFriendLinkApproved,
   notifyFriendLinkApproved,
@@ -119,7 +120,9 @@ export const PATCH = withResponse(async request => {
     },
   })
 
-  revalidatePath('/friends')
+  for (const language of languages) {
+    revalidatePath(`/${language}/friends`)
+  }
   revalidatePath('/admin/friend-link')
 
   if (existing.state !== 'APPROVED' && updated.state === 'APPROVED') {
@@ -180,7 +183,9 @@ export const DELETE = withResponse(async request => {
     },
   })
 
-  revalidatePath('/friends')
+  for (const language of languages) {
+    revalidatePath(`/${language}/friends`)
+  }
   revalidatePath('/admin/friend-link')
 
   return {

@@ -23,11 +23,13 @@ export function FriendCard({
   friend,
   index,
   isVisible,
+  shouldAnimate,
   onViewportEnter,
 }: {
   friend: Friend
   index: number
   isVisible: boolean
+  shouldAnimate: boolean
   onViewportEnter: () => void
 }) {
   const isRightAligned = index % 2 === 1
@@ -35,7 +37,7 @@ export function FriendCard({
 
   return (
     <motion.li
-      initial="hidden"
+      initial={shouldAnimate ? 'hidden' : false}
       animate={isVisible ? 'visible' : 'hidden'}
       onViewportEnter={onViewportEnter}
       viewport={{ amount: 0.4, once: true }}

@@ -1,19 +1,12 @@
-import type { Language } from '@/lib/i18n/config'
 import MainProvider from '../components/provider/main'
 import { MaxWidthWrapper } from '../components/shared/max-width-wrapper'
 import Header from './layout/header'
 import InitialPageTransition from './layout/initial-page-transition'
 import { MainStage } from './layout/main-stage'
 
-export default function MainLayout({
-  children,
-  language,
-}: {
-  children: React.ReactNode
-  language: Language
-}) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <MainProvider initialLanguage={language}>
+    <MainProvider>
       <InitialPageTransition>
         <MainStage>
           <div className="site-whiteboard flex h-[calc(100dvh-1.5rem)] min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg sm:h-[calc(100dvh-2.5rem)]">

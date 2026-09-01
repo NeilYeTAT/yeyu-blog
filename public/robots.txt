@@ -7,7 +7,7 @@ Disallow: /auth/
 Disallow: /auth/*
 
 # Host
-Host: http://localhost:3000
+Host: https://www.useyeyu.cc
 
 # Sitemaps
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://www.useyeyu.cc/sitemap.xml

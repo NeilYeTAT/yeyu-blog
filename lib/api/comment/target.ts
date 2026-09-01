@@ -2,6 +2,7 @@ import 'server-only'
 
 import type { SiteCommentTargetType } from '@prisma/client'
 import type { CommentTarget } from './type'
+import { defaultLanguage } from '@/lib/i18n/config'
 import { prisma } from '@/prisma/instance'
 
 export const getSiteCommentTargetKey = (targetType: SiteCommentTargetType, targetId: number) =>
@@ -32,7 +33,7 @@ export async function getSiteCommentTarget(
       return {
         ...blog,
         targetType,
-        path: `/blog/${blog.slug}`,
+        path: `/${defaultLanguage}/blog/${blog.slug}`,
       }
     }
     case 'NOTE': {
@@ -120,7 +121,7 @@ export async function getSiteCommentTargetMap(
     map.set(getSiteCommentTargetKey('BLOG', blog.id), {
       ...blog,
       targetType: 'BLOG',
-      path: `/blog/${blog.slug}`,
+      path: `/${defaultLanguage}/blog/${blog.slug}`,
     })
   }
 
