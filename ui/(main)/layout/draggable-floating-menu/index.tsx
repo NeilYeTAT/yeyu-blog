@@ -104,7 +104,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
                 aria-label={
                   isOpen ? translations.common.closeQuickMenu : translations.common.openQuickMenu
                 }
-                className="relative z-10 size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/15 dark:shadow-[0_0_16px_rgba(255,255,255,0.14),0_10px_24px_rgba(0,0,0,0.42)]"
+                className="relative z-10 size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/30 dark:shadow-[0_0_16px_rgba(255,255,255,0.14),0_10px_24px_rgba(0,0,0,0.42)]"
               />
             }
           >
@@ -164,11 +164,11 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
               <div
                 role="group"
                 aria-label={translations.common.appearance}
-                className="relative grid grid-cols-2 rounded-full bg-foreground/6 p-0.5"
+                className="relative grid grid-cols-2 rounded-full bg-foreground/6 p-0.5 dark:bg-white/10"
               >
                 <motion.span
                   aria-hidden
-                  className="absolute top-0.5 right-1/2 bottom-0.5 left-0.5 rounded-full bg-background shadow-sm"
+                  className="absolute top-0.5 right-1/2 bottom-0.5 left-0.5 rounded-full bg-background shadow-sm dark:bg-white/18 dark:shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
                   initial={false}
                   animate={{ x: resolvedTheme === 'dark' ? '100%' : '0%' }}
                   transition={{ type: 'spring', stiffness: 420, damping: 34, mass: 0.7 }}
@@ -180,8 +180,8 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
                   className={cn(
                     'relative z-10 flex h-7 cursor-pointer items-center gap-1.5 rounded-full px-2.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-theme-ring',
                     resolvedTheme === 'light'
-                      ? 'text-foreground'
-                      : 'text-foreground/50 hover:text-foreground/80',
+                      ? 'text-foreground dark:text-white'
+                      : 'text-foreground/50 hover:text-foreground/80 dark:text-zinc-400 dark:hover:text-white',
                   )}
                   onClick={() => handleThemeChange('light')}
                 >
@@ -195,8 +195,8 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
                   className={cn(
                     'relative z-10 flex h-7 cursor-pointer items-center gap-1.5 rounded-full px-2.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-theme-ring',
                     resolvedTheme === 'dark'
-                      ? 'text-foreground'
-                      : 'text-foreground/50 hover:text-foreground/80',
+                      ? 'text-foreground dark:text-white'
+                      : 'text-foreground/50 hover:text-foreground/80 dark:text-zinc-400 dark:hover:text-white',
                   )}
                   onClick={() => handleThemeChange('dark')}
                 >

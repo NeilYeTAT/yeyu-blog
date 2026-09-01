@@ -93,11 +93,9 @@
 }
 
 .dark .site-whiteboard {
-  border-color: rgb(255 255 255 / 0.14);
-  background: rgb(19 21 26 / 0.86);
-  box-shadow:
-    0 28px 72px rgb(0 0 0 / 0.3),
-    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  border: 0;
+  background: rgb(0 0 0 / 0.86);
+  box-shadow: 0 28px 72px rgb(0 0 0 / 0.3);
 }
 
 .site-main-stage[data-background-only] .site-whiteboard {

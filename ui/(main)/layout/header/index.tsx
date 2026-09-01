@@ -40,7 +40,7 @@ export default function Header() {
     <motion.header
       aria-hidden={isWaitingForHomeLoading}
       className={cn(
-        'sticky top-5 z-20 mx-auto mt-5 mb-4 h-10 w-[calc(100%-2rem)] max-w-[550px] overflow-hidden rounded-full bg-black font-header text-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-[background-color,box-shadow] duration-300 sm:h-12 dark:bg-zinc-950/76 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)] dark:ring-1 dark:ring-white/10 dark:backdrop-blur-xl',
+        'sticky top-5 z-20 mx-auto mt-5 mb-4 h-10 w-[calc(100%-2rem)] max-w-[550px] overflow-hidden rounded-full bg-black font-header text-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-[background-color,box-shadow] duration-300 sm:h-12 dark:bg-white/15 dark:shadow-[0_10px_28px_rgba(0,0,0,0.24)] dark:backdrop-blur-xl',
         (!isHeaderVisible || isWaitingForHomeLoading) && 'pointer-events-none',
       )}
       initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -16 }}
