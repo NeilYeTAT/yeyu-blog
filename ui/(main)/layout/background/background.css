@@ -9,6 +9,7 @@
   --site-sky-sky-top: #66d8ff;
   --site-sky-sky-upper: #5fcef8;
   --site-sky-star-opacity: 0;
+  --site-sky-star-play-state: paused;
   --site-sky-upper-glow-opacity: 0.38;
   --site-sky-upper-glow-rgb: 126 228 255;
   --site-sky-upper-glow-soft-opacity: 0.24;
@@ -38,7 +39,6 @@
       var(--site-sky-sky-lower) 84%,
       var(--site-sky-sky-bottom) 100%
     );
-  transition: background 800ms ease;
 }
 
 .site-background::before {
@@ -56,11 +56,10 @@
 
 .site-whiteboard {
   border: 1px solid rgb(255 255 255 / 0.62);
-  background: rgb(252 254 255 / 0.88);
+  background: rgb(252 254 255 / 0.94);
   box-shadow:
     0 24px 64px rgb(15 23 42 / 0.14),
     inset 0 1px 0 rgb(255 255 255 / 0.72);
-  backdrop-filter: blur(18px) saturate(1.06);
   transition:
     color 300ms ease,
     background-color 300ms ease,
@@ -70,11 +69,15 @@
 
 .dark .site-whiteboard {
   border-color: rgb(255 255 255 / 0.14);
-  background: rgb(19 21 26 / 0.7);
+  background: rgb(19 21 26 / 0.86);
   box-shadow:
     0 28px 72px rgb(0 0 0 / 0.3),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
-  backdrop-filter: blur(24px) saturate(0.68) brightness(0.7);
+}
+
+.site-main-stage[data-background-only] .site-whiteboard {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .site-sky-stars {
@@ -105,6 +108,7 @@
     radial-gradient(circle at 61% 51%, rgb(255 255 255 / 0.7) 0 0.8px, transparent 1.4px),
     radial-gradient(circle at 81% 48%, rgb(255 255 255 / 0.84) 0 1px, transparent 1.5px);
   animation: site-sky-star-twinkle 4.8s ease-in-out infinite alternate;
+  animation-play-state: var(--site-sky-star-play-state);
 }
 
 .site-sky-clouds {
@@ -136,7 +140,6 @@
   object-position: 50% 0%;
   opacity: 0;
   transform-origin: 50% 100%;
-  will-change: opacity, transform;
   animation-name: site-sky-cloud-drift;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;

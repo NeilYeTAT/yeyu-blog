@@ -1,9 +1,9 @@
 'use client'
 
-import { Clock3, Cloud, Eye, RotateCcw, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { type HTMLMotionProps, motion } from 'motion/react'
 import { useTheme } from 'next-themes'
-import { type FC, useId, useRef, useState } from 'react'
+import { type FC, useRef, useState } from 'react'
 import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -16,36 +16,14 @@ import { SunIcon } from '@/ui/shadcn/sun'
 import { Switch } from '@/ui/shadcn/switch'
 import { VolumeIcon } from '@/ui/shadcn/volume'
 import { VolumeOffIcon } from '@/ui/shadcn/volume-off'
-import { skyCloudLayers } from '../background/sky-background-config'
-import { useSkyBackground } from '../background/sky-background-context'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
-
-const minCloudSpeed = 0.25
-const maxCloudSpeed = 3
-const cloudSpeedStep = 0.25
-const minPreviewMinutesOfDay = 0
-const maxPreviewMinutesOfDay = 23 * 60 + 45
-const previewMinutesStep = 15
+import { SkyBackgroundControls } from './sky-background-controls'
 
 // TODO: 固定底部时吸附效果
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
   const translations = useTranslations()
   const { setTheme, resolvedTheme } = useTheme()
-  const {
-    cloudSpeed,
-    isBackgroundOnly,
-    isCloudAnimationRunning,
-    isUsingRealTime,
-    minutesOfDay,
-    resetSkyBackground,
-    setBackgroundOnly,
-    setCloudAnimationRunning,
-    setCloudSpeed,
-    setMinutesOfDay,
-    setUsingRealTime,
-    timeState,
-  } = useSkyBackground()
 
   const isPlaying = useIsPlaying()
   const { play, pause } = useBackgroundMusicActions()
@@ -53,8 +31,6 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isOpen, setIsOpen] = useState(false)
   const constraintsRef = useRef<HTMLDivElement>(null)
-  const timeInputId = useId()
-  const cloudSpeedInputId = useId()
 
   const playSoundEffect = () => {
     playClickSoft()
@@ -154,115 +130,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
               />
             </div>
 
-            <div className="flex min-h-12 items-center justify-between gap-4 px-2 py-2">
-              <div className="flex min-w-0 items-center gap-2.5">
-                <Eye aria-hidden className="size-4.5 shrink-0" />
-                <span className="truncate text-sm">{translations.common.backgroundOnly}</span>
-              </div>
-              <Switch
-                checked={isBackgroundOnly}
-                className="cursor-pointer"
-                aria-label={
-                  isBackgroundOnly
-                    ? translations.common.showFullInterface
-                    : translations.common.showBackgroundOnly
-                }
-                onCheckedChange={setBackgroundOnly}
-              />
-            </div>
-
-            <div className="space-y-3 px-2 py-3">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <Clock3 aria-hidden className="size-4.5 shrink-0" />
-                  <label className="truncate text-sm" htmlFor={timeInputId}>
-                    {translations.common.skyTime}
-                  </label>
-                </div>
-                <output className="shrink-0 font-medium text-foreground/70 text-xs tabular-nums">
-                  {timeState.label}
-                </output>
-              </div>
-              <input
-                aria-label={translations.common.skyTime}
-                className="h-1.5 w-full cursor-pointer accent-theme-accent"
-                id={timeInputId}
-                max={maxPreviewMinutesOfDay}
-                min={minPreviewMinutesOfDay}
-                step={previewMinutesStep}
-                type="range"
-                value={minutesOfDay}
-                onChange={event => setMinutesOfDay(Number(event.currentTarget.value))}
-              />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-foreground/65 text-xs">
-                  {translations.common.useRealTime}
-                </span>
-                <Switch
-                  checked={isUsingRealTime}
-                  className="cursor-pointer"
-                  aria-label={translations.common.useRealTime}
-                  onCheckedChange={setUsingRealTime}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-3 px-2 py-3">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <Cloud aria-hidden className="size-4.5 shrink-0" />
-                  <label className="truncate text-sm" htmlFor={cloudSpeedInputId}>
-                    {translations.common.cloudSpeed}
-                  </label>
-                </div>
-                <output className="shrink-0 font-medium text-foreground/70 text-xs tabular-nums">
-                  {cloudSpeed.toFixed(2)}x
-                </output>
-              </div>
-              <input
-                aria-label={translations.common.cloudSpeed}
-                className="h-1.5 w-full cursor-pointer accent-theme-accent"
-                id={cloudSpeedInputId}
-                max={maxCloudSpeed}
-                min={minCloudSpeed}
-                step={cloudSpeedStep}
-                type="range"
-                value={cloudSpeed}
-                onChange={event => setCloudSpeed(Number(event.currentTarget.value))}
-              />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-foreground/65 text-xs">
-                  {translations.common.cloudMotion}
-                </span>
-                <Switch
-                  checked={isCloudAnimationRunning}
-                  className="cursor-pointer"
-                  aria-label={
-                    isCloudAnimationRunning
-                      ? translations.common.pauseCloudMotion
-                      : translations.common.playCloudMotion
-                  }
-                  onCheckedChange={setCloudAnimationRunning}
-                />
-              </div>
-              <div className="flex min-h-7 items-center gap-3 border-border/60 border-t pt-2 text-[11px] text-foreground/55">
-                <span>
-                  {translations.common.phase}: {translations.common.skyPhases[timeState.phase]}
-                </span>
-                <span>
-                  {translations.common.cloudLayers}: {skyCloudLayers.length}
-                </span>
-                <button
-                  type="button"
-                  aria-label={translations.common.resetSkyBackground}
-                  className="ml-auto flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-foreground/8 hover:text-foreground focus-visible:outline-2 focus-visible:outline-theme-ring"
-                  title={translations.common.resetSkyBackground}
-                  onClick={resetSkyBackground}
-                >
-                  <RotateCcw aria-hidden className="size-3.5" />
-                </button>
-              </div>
-            </div>
+            <SkyBackgroundControls />
 
             <div className="flex min-h-12 items-center justify-between gap-4 px-2 py-2">
               <span className="shrink-0 text-sm">{translations.common.appearance}</span>

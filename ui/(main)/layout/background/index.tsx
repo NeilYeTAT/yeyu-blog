@@ -2,12 +2,18 @@
 
 import type { CSSProperties, FC } from 'react'
 import Image from 'next/image'
+import {
+  useCloudSpeed,
+  useIsCloudAnimationRunning,
+  useSkyBackgroundTimeState,
+} from '@/store/use-sky-background-store'
 import './background.css'
 import { skyCloudLayers } from './sky-background-config'
-import { useSkyBackground } from './sky-background-context'
 
 export const Background: FC = () => {
-  const { cloudSpeed, isCloudAnimationRunning, timeState } = useSkyBackground()
+  const cloudSpeed = useCloudSpeed()
+  const isCloudAnimationRunning = useIsCloudAnimationRunning()
+  const { timeState } = useSkyBackgroundTimeState()
   const cloudDurations = skyCloudLayers.map(layer => layer.duration / cloudSpeed)
   const backgroundStyle = {
     '--site-sky-cloud-1-duration': `${cloudDurations[0]}s`,
@@ -25,6 +31,7 @@ export const Background: FC = () => {
     '--site-sky-sky-top': timeState.skyTop,
     '--site-sky-sky-upper': timeState.skyUpper,
     '--site-sky-star-opacity': timeState.starOpacity,
+    '--site-sky-star-play-state': timeState.starOpacity > 0 ? 'running' : 'paused',
     '--site-sky-upper-glow-opacity': timeState.upperGlowOpacity,
     '--site-sky-upper-glow-rgb': timeState.upperGlowRgb,
     '--site-sky-upper-glow-soft-opacity': timeState.upperGlowOpacity * 0.64,

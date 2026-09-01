@@ -197,7 +197,6 @@ export const getSkyBackgroundTimeState = (minutesOfDay: number) => {
     ),
     label: formatMinutesOfDay(normalizedMinutesOfDay),
     minutesOfDay: normalizedMinutesOfDay,
-    nextPhase: nextFrame.phase,
     phase: currentFrame.phase,
     skyBottom: interpolateColor(currentFrame.skyBottom, nextFrame.skyBottom, phaseProgress),
     skyLower: interpolateColor(currentFrame.skyLower, nextFrame.skyLower, phaseProgress),
