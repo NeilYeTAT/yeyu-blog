@@ -21,7 +21,12 @@ import { SkyBackgroundControls } from './sky-background-controls'
 
 // TODO: 固定底部时吸附效果
 // TODO: 类似 ipad cursor ?
-export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
+export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
+  className,
+  onDragEnd,
+  onDragStart,
+  ...props
+}) => {
   const translations = useTranslations()
   const { setTheme, resolvedTheme } = useTheme()
 
@@ -30,6 +35,8 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
 
   const [playClickSoft] = useSound(uChatScrollButtonSound)
   const [isOpen, setIsOpen] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [orbAnimationPulse, setOrbAnimationPulse] = useState(0)
   const constraintsRef = useRef<HTMLDivElement>(null)
 
   const playSoundEffect = () => {
@@ -53,13 +60,18 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
     playSoundEffect()
   }
 
+  const handleOpenChange = (nextIsOpen: boolean) => {
+    setIsOpen(nextIsOpen)
+    setOrbAnimationPulse(value => value + 1)
+  }
+
   return (
     <>
       <div
         ref={constraintsRef}
         className="pointer-events-none fixed top-20 right-4 bottom-4 left-4 sm:right-5 sm:left-5"
       />
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover open={isOpen} onOpenChange={handleOpenChange}>
         <motion.div
           drag={!isOpen}
           dragConstraints={constraintsRef}
@@ -70,6 +82,15 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
           initial={{ scale: 0.2, y: 100, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+          onDragStart={(event, info) => {
+            setIsDragging(true)
+            onDragStart?.(event, info)
+          }}
+          onDragEnd={(event, info) => {
+            setIsDragging(false)
+            setOrbAnimationPulse(value => value + 1)
+            onDragEnd?.(event, info)
+          }}
           className={cn(
             'fixed bottom-[100px] left-1/2 z-100 -ml-6 size-12 touch-none select-none',
             !isOpen && 'cursor-grab active:cursor-grabbing',
@@ -87,7 +108,13 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
               />
             }
           >
-            <FluidOrb size={48} color="var(--theme-accent)" aria-hidden />
+            <FluidOrb
+              size={48}
+              color="var(--theme-accent)"
+              animationPulse={orbAnimationPulse}
+              isAnimating={isDragging}
+              aria-hidden
+            />
             <span className="absolute top-0 left-0 size-full animate-ye-ping-one-dot-one rounded-full ring-2 ring-theme-ring ring-offset-1 ring-offset-background dark:ring-white/65 dark:ring-offset-zinc-950" />
           </PopoverTrigger>
         </motion.div>
@@ -104,7 +131,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
               type="button"
               aria-label={translations.common.closeQuickMenu}
               className="flex size-7 cursor-pointer items-center justify-center rounded-full text-foreground/50 transition-colors hover:bg-foreground/8 hover:text-foreground focus-visible:outline-2 focus-visible:outline-theme-ring"
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleOpenChange(false)}
             >
               <X aria-hidden className="size-4" />
             </button>

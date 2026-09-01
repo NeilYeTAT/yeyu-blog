@@ -106,7 +106,10 @@ const FluidOrb = ({
   size = 240,
   color = 'var(--theme-accent)',
   maxDpr = 2,
-  frameRate = 60,
+  frameRate = 30,
+  animationDuration = 1_200,
+  animationPulse = 0,
+  isAnimating = false,
   className,
   style,
   ...props
@@ -115,9 +118,14 @@ const FluidOrb = ({
   color?: string
   maxDpr?: number
   frameRate?: number
+  animationDuration?: number
+  animationPulse?: number
+  isAnimating?: boolean
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const isAnimatingRef = useRef(isAnimating)
+  const requestRenderingRef = useRef<((duration?: number) => void) | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -164,32 +172,119 @@ const FluidOrb = ({
     gl.viewport(0, 0, px, px)
     gl.uniform2f(uResolution, px, px)
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const start = performance.now()
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     const frameInterval = 1000 / frameRate
-    let previousRenderTime = start - frameInterval
+    let animationEndTime = 0
+    let isIntersecting = false
+    let previousRenderTime = 0
     let raf = 0
+    let shaderTime = 0
+
+    const stopRendering = () => {
+      cancelAnimationFrame(raf)
+      raf = 0
+      previousRenderTime = 0
+    }
+
+    const canRender = () =>
+      isIntersecting && document.visibilityState === 'visible'
 
     const render = (now: number) => {
+      raf = 0
+
+      if (!canRender()) {
+        previousRenderTime = 0
+        return
+      }
+
+      if (reducedMotionQuery.matches) {
+        gl.uniform1f(uTime, 0)
+        gl.drawArrays(gl.TRIANGLES, 0, 6)
+        return
+      }
+
+      if (previousRenderTime === 0) previousRenderTime = now - frameInterval
       const elapsedTime = now - previousRenderTime
 
       if (elapsedTime >= frameInterval) {
         previousRenderTime = now - (elapsedTime % frameInterval)
-        gl.uniform1f(uTime, reduce ? 0 : (now - start) / 1000)
+        shaderTime += Math.min(elapsedTime, frameInterval * 2) / 1000
+        gl.uniform1f(uTime, shaderTime)
         gl.drawArrays(gl.TRIANGLES, 0, 6)
       }
-      if (!reduce) raf = requestAnimationFrame(render)
+
+      if (isAnimatingRef.current || now < animationEndTime) {
+        raf = requestAnimationFrame(render)
+        return
+      }
+
+      previousRenderTime = 0
     }
-    render(start)
+
+    const requestRendering = (duration = 0) => {
+      animationEndTime = Math.max(animationEndTime, performance.now() + duration)
+
+      if (!canRender()) return
+
+      if (reducedMotionQuery.matches) {
+        stopRendering()
+        render(performance.now())
+        return
+      }
+
+      if (raf === 0) raf = requestAnimationFrame(render)
+    }
+
+    requestRenderingRef.current = requestRendering
+
+    const observer = new IntersectionObserver(entries => {
+      isIntersecting = entries[0]?.isIntersecting ?? false
+
+      if (!isIntersecting) {
+        stopRendering()
+        return
+      }
+
+      requestRendering(animationDuration)
+    })
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') {
+        stopRendering()
+        return
+      }
+
+      requestRendering(animationDuration)
+    }
+    const handleReducedMotionChange = () => {
+      stopRendering()
+      requestRendering()
+    }
+
+    observer.observe(container)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
 
     return () => {
-      cancelAnimationFrame(raf)
+      requestRenderingRef.current = null
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
+      stopRendering()
       gl.deleteProgram(program)
       gl.deleteShader(vert)
       gl.deleteShader(frag)
       gl.deleteBuffer(buffer)
     }
-  }, [color, frameRate, maxDpr, size])
+  }, [animationDuration, color, frameRate, maxDpr, size])
+
+  useEffect(() => {
+    isAnimatingRef.current = isAnimating
+    requestRenderingRef.current?.(isAnimating ? 0 : animationDuration)
+  }, [animationDuration, isAnimating])
+
+  useEffect(() => {
+    requestRenderingRef.current?.(animationDuration)
+  }, [animationDuration, animationPulse])
 
   return (
     <div
