@@ -1,7 +1,7 @@
 'use client'
 
 import type { ScrollProgressSection } from '@/ui/shadcn/scroll-progress'
-import { useMemo, useSyncExternalStore } from 'react'
+import { useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { ScrollProgress } from '@/ui/shadcn/scroll-progress'
 
@@ -43,7 +43,7 @@ export function ArticleScrollProgress({ sections }: { sections: ScrollProgressSe
     getScrollProgressStateSnapshot,
     getServerScrollProgressStateSnapshot,
   )
-  const containerRef = useMemo(() => ({ current: container }), [container])
+  const containerRef = { current: container }
 
   if (sections.length === 0 || container == null || portal == null) return null
 

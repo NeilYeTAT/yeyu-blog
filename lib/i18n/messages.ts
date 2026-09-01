@@ -58,12 +58,27 @@ export const messages = {
       greeting: '你好! 我是 叶鱼 ( ^¯꒳¯^ )ﾉﾉ',
       role: 'TypeScript 全栈开发者 ⸜( *ˊᵕˋ* )⸝',
       about: [
-        ['26 年大学毕业，工作至今，主业是前端工程师', '现在工作中会更喜欢写后端接口捏 φ(-ω-*)'],
-        [
-          '业余时间会尝试使用 Figma 来自己设计页面 φ(´･ω･｀)',
-          '未来希望能成为一名设计工程师，做出让人觉得好看的设计 ( ˙◞˙ )',
-        ],
-        ['目前在努力打工加仓 A 股', '我相信 A 股会让我早几年退休，而不是晚几年 (ㅅ´˘`)'],
+        {
+          id: 'career',
+          paragraphs: [
+            '26 年大学毕业，工作至今，主业是前端工程师',
+            '现在工作中会更喜欢写后端接口捏 φ(-ω-*)',
+          ],
+        },
+        {
+          id: 'design',
+          paragraphs: [
+            '业余时间会尝试使用 Figma 来自己设计页面 φ(´･ω･｀)',
+            '未来希望能成为一名设计工程师，做出让人觉得好看的设计 ( ˙◞˙ )',
+          ],
+        },
+        {
+          id: 'investing',
+          paragraphs: [
+            '目前在努力打工加仓 A 股',
+            '我相信 A 股会让我早几年退休，而不是晚几年 (ㅅ´˘`)',
+          ],
+        },
       ],
       techStackLabel: '技术栈',
       socialLinksLabel: '社交链接',
@@ -214,18 +229,27 @@ export const messages = {
       greeting: "Hello! I'm Yuuri ( ^¯꒳¯^ )ﾉﾉ",
       role: 'TypeScript full-stack developer ⸜( *ˊᵕˋ* )⸝',
       about: [
-        [
-          'I graduated in 2026 and have been working as a frontend engineer ever since.',
-          'These days, I enjoy writing backend APIs even more φ(-ω-*)',
-        ],
-        [
-          'In my spare time, I use Figma to design interfaces of my own φ(´･ω･｀)',
-          'I hope to become a design engineer and create designs people find beautiful ( ˙◞˙ )',
-        ],
-        [
-          'Right now, I am working hard and adding to my A-share positions.',
-          'I believe A-shares will let me retire a few years earlier, not later (ㅅ´˘`)',
-        ],
+        {
+          id: 'career',
+          paragraphs: [
+            'I graduated in 2026 and have been working as a frontend engineer ever since.',
+            'These days, I enjoy writing backend APIs even more φ(-ω-*)',
+          ],
+        },
+        {
+          id: 'design',
+          paragraphs: [
+            'In my spare time, I use Figma to design interfaces of my own φ(´･ω･｀)',
+            'I hope to become a design engineer and create designs people find beautiful ( ˙◞˙ )',
+          ],
+        },
+        {
+          id: 'investing',
+          paragraphs: [
+            'Right now, I am working hard and adding to my A-share positions.',
+            'I believe A-shares will let me retire a few years earlier, not later (ㅅ´˘`)',
+          ],
+        },
       ],
       techStackLabel: 'Tech stack',
       socialLinksLabel: 'Social links',

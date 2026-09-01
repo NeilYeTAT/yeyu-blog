@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { create } from 'zustand'
 import {
   getMinutesOfDay,
@@ -102,7 +101,7 @@ export const useSkyBackgroundTimeState = () => {
 
     return state.isDarkTheme && isDaytime ? darkThemeMinutesOfDay : state.realTimeMinutesOfDay
   })
-  const timeState = useMemo(() => getSkyBackgroundTimeState(minutesOfDay), [minutesOfDay])
+  const timeState = getSkyBackgroundTimeState(minutesOfDay)
 
   return { minutesOfDay, timeState }
 }

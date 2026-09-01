@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react'
+import { createContext, use, useState } from 'react'
 import { isLanguage, type Language, languageHtmlLang } from '@/lib/i18n/config'
 import { messages } from '@/lib/i18n/messages'
 
@@ -32,37 +32,28 @@ function requireLanguage(value: string) {
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const routeLanguage = requireLanguage(pathname.split('/')[1] ?? '')
-  const [pendingLanguage, setPendingLanguage] = useState<Language | null>(null)
-  const language = pendingLanguage === null ? routeLanguage : pendingLanguage
-  const isLanguageChanging = pendingLanguage !== null
+  const [targetLanguage, setTargetLanguage] = useState(routeLanguage)
+  const isLanguageChanging = targetLanguage !== routeLanguage
+  const language = isLanguageChanging ? targetLanguage : routeLanguage
   const nextLanguage = language === 'zh' ? 'en' : 'zh'
   const nextPathname = getLocalizedPathname(pathname, nextLanguage)
 
-  useEffect(() => {
-    if (pendingLanguage !== null && routeLanguage === pendingLanguage) {
-      setPendingLanguage(null)
-    }
-  }, [pendingLanguage, routeLanguage])
-
-  const toggleLanguage = useCallback(() => {
-    if (pendingLanguage !== null) return
+  const toggleLanguage = () => {
+    if (isLanguageChanging) return
 
     const url = new URL(window.location.href)
 
     url.pathname = nextPathname
-    setPendingLanguage(nextLanguage)
+    setTargetLanguage(nextLanguage)
     document.documentElement.lang = languageHtmlLang[nextLanguage]
     window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
-  }, [nextLanguage, nextPathname, pendingLanguage])
+  }
 
-  const value = useMemo(
-    () => ({
-      language,
-      isLanguageChanging,
-      toggleLanguage,
-    }),
-    [isLanguageChanging, language, toggleLanguage],
-  )
+  const value = {
+    language,
+    isLanguageChanging,
+    toggleLanguage,
+  }
 
   return <LanguageContext value={value}>{children}</LanguageContext>
 }
