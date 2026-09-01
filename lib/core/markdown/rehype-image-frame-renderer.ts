@@ -62,7 +62,7 @@ const collectImages = (parent: ParentLike, images: ElementLike[]): void => {
   }
 }
 
-const addImageDimensions = async (image: ElementLike) => {
+const addImageProperties = async (image: ElementLike) => {
   const src = image.properties?.src
   if (typeof src !== 'string' || src.length === 0) {
     throw new Error('Image source is missing')
@@ -71,8 +71,10 @@ const addImageDimensions = async (image: ElementLike) => {
   const dimensions = await getImageDimensions(src)
   image.properties = {
     ...image.properties,
-    width: dimensions.width,
+    loading: 'lazy',
+    decoding: 'async',
     height: dimensions.height,
+    width: dimensions.width,
   }
 }
 
@@ -105,7 +107,7 @@ export const rehypeImageFrameRenderer = () => {
   return async (tree: ParentLike) => {
     const images: ElementLike[] = []
     collectImages(tree, images)
-    await Promise.all(images.map(addImageDimensions))
+    await Promise.all(images.map(addImageProperties))
     walkAndDecorate(tree)
   }
 }

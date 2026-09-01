@@ -23,8 +23,6 @@ export function ArticleImageLoadEnhancer({ rootSelector }: { rootSelector: strin
     if (root == null) return
 
     const markImage = (image: HTMLImageElement) => {
-      image.loading = 'lazy'
-      image.decoding = 'async'
       image.tabIndex = 0
       image.setAttribute('role', 'button')
       image.setAttribute('aria-haspopup', 'dialog')
