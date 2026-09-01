@@ -1,10 +1,15 @@
-import { metadata } from '@/config/seo'
+import type { Metadata } from 'next'
+import { seoMetadata } from '@/config/seo'
 import { languageHtmlLang } from '@/lib/i18n/config'
 import { getCurrentLanguage } from '@/lib/i18n/get-current-language'
 import '@/lib/styles/index.css'
 import GlobalProvider from '@/ui/components/provider/global'
 
-export { metadata }
+export async function generateMetadata(): Promise<Metadata> {
+  const language = await getCurrentLanguage()
+
+  return seoMetadata[language].root
+}
 
 export default async function RootLayout({
   children,
