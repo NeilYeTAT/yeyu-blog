@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { subscribeScrollContainer } from '@/lib/utils/common/scroll-container-store'
 
 const defaultHideDistance = 32
 const defaultShowDistance = 12
@@ -16,21 +17,17 @@ export const useScrollVisibility = (
   const lastScrollYRef = useRef(0)
   const directionRef = useRef<-1 | 0 | 1>(0)
   const accumulatedDistanceRef = useRef(0)
-  const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
     const scrollTarget = document.querySelector<HTMLElement>('[data-main-scroll-container]')
 
     if (scrollTarget === null) return
 
-    lastScrollYRef.current = scrollTarget.scrollTop
+    lastScrollYRef.current = Math.max(scrollTarget.scrollTop, 0)
     directionRef.current = 0
     accumulatedDistanceRef.current = 0
 
-    const updateVisibility = () => {
-      frameRef.current = null
-
-      const currentScrollY = Math.max(scrollTarget.scrollTop, 0)
+    return subscribeScrollContainer(scrollTarget, ({ scrollTop: currentScrollY }) => {
       const delta = currentScrollY - lastScrollYRef.current
 
       if (currentScrollY <= topShowOffset) {
@@ -64,22 +61,7 @@ export const useScrollVisibility = (
         setIsVisible(prev => (prev ? prev : true))
         accumulatedDistanceRef.current = 0
       }
-    }
-
-    const handleScroll = () => {
-      if (frameRef.current != null) return
-
-      frameRef.current = window.requestAnimationFrame(updateVisibility)
-    }
-
-    scrollTarget.addEventListener('scroll', handleScroll, { passive: true })
-    return () => {
-      scrollTarget.removeEventListener('scroll', handleScroll)
-
-      if (frameRef.current != null) {
-        window.cancelAnimationFrame(frameRef.current)
-      }
-    }
+    })
   }, [hideDistance, showDistance, topShowOffset])
 
   return isVisible

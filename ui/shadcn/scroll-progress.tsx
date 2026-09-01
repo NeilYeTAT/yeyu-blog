@@ -4,12 +4,16 @@ import * as React from "react"
 import {
   AnimatePresence,
   motion,
+  useMotionValue,
   useReducedMotion,
-  useScroll,
   useSpring,
 } from "motion/react"
 
 import { cn } from "@/lib/utils/common/shadcn"
+import {
+  type ScrollContainerSnapshot,
+  subscribeScrollContainer,
+} from "@/lib/utils/common/scroll-container-store"
 
 export type ScrollProgressSection = { id: string; label: string; level: number }
 
@@ -25,6 +29,31 @@ const useIsoLayoutEffect =
 type Size = { width: number; height: number }
 
 const getSectionPaddingLeft = (level: number) => `${level * 0.75 - 0.25}rem`
+
+const findActiveSectionId = (
+  headingPositions: { id: string; top: number }[],
+  anchorPosition: number,
+  initialId: string | undefined
+) => {
+  let activeId = initialId
+  let lowerIndex = 0
+  let upperIndex = headingPositions.length - 1
+
+  while (lowerIndex <= upperIndex) {
+    const middleIndex = Math.floor((lowerIndex + upperIndex) / 2)
+    const heading = headingPositions[middleIndex]
+
+    if (heading === undefined || heading.top > anchorPosition) {
+      upperIndex = middleIndex - 1
+      continue
+    }
+
+    activeId = heading.id
+    lowerIndex = middleIndex + 1
+  }
+
+  return activeId
+}
 
 export type ScrollProgressProps = React.ComponentProps<"div"> & {
   sections?: ScrollProgressSection[]
@@ -42,43 +71,92 @@ const ScrollProgress = ({
   const layoutId = React.useId()
   const reduceMotion = useReducedMotion()
 
-  const { scrollYProgress } = useScroll(
-    containerRef ? { container: containerRef } : undefined
-  )
+  const scrollYProgress = useMotionValue(0)
   const progress = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 30,
     mass: 0.3,
   })
 
-  const [activeId, setActiveId] = React.useState(sections[0]?.id)
+  const [activeId, setActiveId] = React.useState<string | undefined>(sections[0]?.id)
   const [open, setOpen] = React.useState(false)
 
+  const activeIdRef = React.useRef(activeId)
   const scrollLock = React.useRef(false)
   const scrollLockTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined)
 
   React.useEffect(() => {
-    const scroller = containerRef?.current ?? window
+    const scroller = containerRef?.current
+    if (scroller == null) return
 
-    const update = () => {
-      if (scrollLock.current) return
-      const anchor =
-        (containerRef?.current?.getBoundingClientRect().top ?? 0) + offset
-      const active = sections.findLast(({ id }) => {
-        const top = document.getElementById(id)?.getBoundingClientRect().top
-        return top !== undefined && top <= anchor
+    let headingPositions: { id: string; top: number }[] = []
+    let latestSnapshot: ScrollContainerSnapshot | null = null
+    let layoutVersion = -1
+    let measurementFrame: number | null = null
+
+    const updateActiveSection = (snapshot: ScrollContainerSnapshot) => {
+      if (scrollLock.current || headingPositions.length === 0) return
+
+      const nextActiveId = findActiveSectionId(
+        headingPositions,
+        snapshot.scrollTop + offset,
+        sections[0]?.id
+      )
+
+      if (activeIdRef.current === nextActiveId) return
+
+      activeIdRef.current = nextActiveId
+      setActiveId(nextActiveId)
+    }
+    const measureHeadingPositions = () => {
+      measurementFrame = null
+      if (latestSnapshot == null) return
+
+      const containerTop = scroller.getBoundingClientRect().top
+      const scrollTop = latestSnapshot.scrollTop
+
+      headingPositions = sections.flatMap(({ id }) => {
+        const heading = document.getElementById(id)
+        if (heading == null) return []
+
+        return [
+          {
+            id,
+            top: heading.getBoundingClientRect().top - containerTop + scrollTop,
+          },
+        ]
       })
-      setActiveId(active?.id ?? sections[0]?.id)
+
+      if (latestSnapshot != null) updateActiveSection(latestSnapshot)
+    }
+    const scheduleHeadingMeasurement = () => {
+      if (measurementFrame != null) return
+      measurementFrame = requestAnimationFrame(measureHeadingPositions)
     }
 
-    update()
-    scroller.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
+    const unsubscribe = subscribeScrollContainer(scroller, snapshot => {
+      latestSnapshot = snapshot
+
+      const scrollRange = snapshot.scrollHeight - snapshot.clientHeight
+      scrollYProgress.set(
+        scrollRange > 0 ? Math.min(snapshot.scrollTop / scrollRange, 1) : 0
+      )
+
+      if (layoutVersion !== snapshot.layoutVersion) {
+        layoutVersion = snapshot.layoutVersion
+        scheduleHeadingMeasurement()
+      }
+
+      updateActiveSection(snapshot)
+    })
+
+    scheduleHeadingMeasurement()
+
     return () => {
-      scroller.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
+      unsubscribe()
+      if (measurementFrame != null) cancelAnimationFrame(measurementFrame)
     }
-  }, [sections, containerRef, offset])
+  }, [sections, containerRef, offset, scrollYProgress])
 
   const label = sections.find((s) => s.id === activeId)?.label
 
@@ -152,6 +230,7 @@ const ScrollProgress = ({
       reduceMotion ? 0 : 700
     )
 
+    activeIdRef.current = id
     setActiveId(id)
     setOpen(false)
     document.getElementById(id)?.scrollIntoView({

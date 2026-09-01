@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { subscribeScrollContainer } from '@/lib/utils/common/scroll-container-store'
 
 export function MainScrollBlur() {
   const [hasContentBelow, setHasContentBelow] = useState(false)
@@ -10,26 +11,14 @@ export function MainScrollBlur() {
 
     if (scrollContainer == null) return
 
-    const updateVisibility = () => {
-      const remainingScroll =
-        scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight
+    return subscribeScrollContainer(
+      scrollContainer,
+      ({ clientHeight, scrollHeight, scrollTop }) => {
+        const remainingScroll = scrollHeight - scrollTop - clientHeight
 
-      setHasContentBelow(remainingScroll > 1)
-    }
-
-    const resizeObserver = new ResizeObserver(updateVisibility)
-    const scrollContent = scrollContainer.firstElementChild
-
-    resizeObserver.observe(scrollContainer)
-    if (scrollContent instanceof HTMLElement) resizeObserver.observe(scrollContent)
-
-    scrollContainer.addEventListener('scroll', updateVisibility, { passive: true })
-    updateVisibility()
-
-    return () => {
-      resizeObserver.disconnect()
-      scrollContainer.removeEventListener('scroll', updateVisibility)
-    }
+        setHasContentBelow(remainingScroll > 1)
+      },
+    )
   }, [])
 
   return (
