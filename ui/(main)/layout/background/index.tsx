@@ -2,6 +2,7 @@
 
 import type { CSSProperties, FC } from 'react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import {
   useCloudSpeed,
   useIsCloudAnimationRunning,
@@ -11,10 +12,15 @@ import {
 import './background.css'
 import { skyCloudLayers } from './sky-background-config'
 
+const cloudLoadDelayMilliseconds = 2_000
+const mobileCloudLayerCount = 2
+
 export const Background: FC = () => {
   const cloudSpeed = useCloudSpeed()
   const isCloudAnimationRunning = useIsCloudAnimationRunning()
   const isInitialized = useIsSkyBackgroundInitialized()
+  const [isPageVisible, setIsPageVisible] = useState(true)
+  const [loadedCloudLayerCount, setLoadedCloudLayerCount] = useState(0)
   const { timeState } = useSkyBackgroundTimeState()
   const cloudDurations = skyCloudLayers.map(layer => layer.duration / cloudSpeed)
   const backgroundStyle = {
@@ -25,7 +31,7 @@ export const Background: FC = () => {
     '--site-sky-cloud-brightness': timeState.cloudBrightness,
     '--site-sky-cloud-hue-rotate': `${timeState.cloudHueRotate}deg`,
     '--site-sky-cloud-opacity': timeState.cloudOpacity,
-    '--site-sky-cloud-play-state': isCloudAnimationRunning ? 'running' : 'paused',
+    '--site-sky-cloud-play-state': isCloudAnimationRunning && isPageVisible ? 'running' : 'paused',
     '--site-sky-cloud-saturate': timeState.cloudSaturate,
     '--site-sky-sky-bottom': timeState.skyBottom,
     '--site-sky-sky-lower': timeState.skyLower,
@@ -33,7 +39,7 @@ export const Background: FC = () => {
     '--site-sky-sky-top': timeState.skyTop,
     '--site-sky-sky-upper': timeState.skyUpper,
     '--site-sky-star-opacity': timeState.starOpacity,
-    '--site-sky-star-play-state': timeState.starOpacity > 0 ? 'running' : 'paused',
+    '--site-sky-star-play-state': timeState.starOpacity > 0 && isPageVisible ? 'running' : 'paused',
     '--site-sky-upper-glow-opacity': timeState.upperGlowOpacity,
     '--site-sky-upper-glow-rgb': timeState.upperGlowRgb,
     '--site-sky-upper-glow-soft-opacity': timeState.upperGlowOpacity * 0.64,
@@ -43,6 +49,53 @@ export const Background: FC = () => {
     '--site-sky-warm-glow-strong-opacity': timeState.warmGlowOpacity * 0.7,
   } as CSSProperties
 
+  useEffect(() => {
+    const syncPageVisibility = () => {
+      setIsPageVisible(document.visibilityState === 'visible')
+    }
+
+    syncPageVisibility()
+    document.addEventListener('visibilitychange', syncPageVisibility)
+
+    return () => document.removeEventListener('visibilitychange', syncPageVisibility)
+  }, [])
+
+  useEffect(() => {
+    if (!isPageVisible || loadedCloudLayerCount > 0) return
+
+    const connection = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean }
+      }
+    ).connection
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || connection?.saveData) {
+      return
+    }
+
+    let timeoutId = 0
+    const scheduleCloudLoad = () => {
+      timeoutId = window.setTimeout(() => {
+        setLoadedCloudLayerCount(
+          window.matchMedia('(max-width: 767px)').matches
+            ? mobileCloudLayerCount
+            : skyCloudLayers.length,
+        )
+      }, cloudLoadDelayMilliseconds)
+    }
+
+    if (document.readyState === 'complete') {
+      scheduleCloudLoad()
+    } else {
+      window.addEventListener('load', scheduleCloudLoad, { once: true })
+    }
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      window.removeEventListener('load', scheduleCloudLoad)
+    }
+  }, [isPageVisible, loadedCloudLayerCount])
+
   return (
     <div
       aria-hidden="true"
@@ -51,19 +104,24 @@ export const Background: FC = () => {
       style={backgroundStyle}
     >
       <div className="site-sky-stars" />
-      <div className="site-sky-clouds">
-        {skyCloudLayers.map((layer, index) => (
-          <Image
-            alt=""
-            className={`site-sky-cloud site-sky-cloud-${index + 1}`}
-            fill
-            key={layer.src}
-            loading="eager"
-            sizes="100vw"
-            src={layer.src}
-          />
-        ))}
-      </div>
+      {loadedCloudLayerCount > 0 ? (
+        <div className="site-sky-clouds">
+          {skyCloudLayers.slice(0, loadedCloudLayerCount).map((layer, index) => (
+            <Image
+              alt=""
+              className={`site-sky-cloud site-sky-cloud-${index + 1}`}
+              decoding="async"
+              fetchPriority="low"
+              height={layer.height}
+              key={layer.src}
+              loading="lazy"
+              src={layer.src}
+              unoptimized
+              width={layer.width}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

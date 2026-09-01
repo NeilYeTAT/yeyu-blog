@@ -17,6 +17,7 @@
 }
 
 .site-background {
+  --site-sky-cloud-max-scale: 2.05;
   --site-sky-cloud-brightness: 0.98;
   --site-sky-cloud-opacity: 0.945;
   --site-sky-cloud-play-state: running;
@@ -207,7 +208,7 @@
   86%,
   100% {
     opacity: 0;
-    transform: scale(2.05);
+    transform: scale(var(--site-sky-cloud-max-scale));
   }
 }
 
@@ -222,8 +223,12 @@
 }
 
 @media (max-width: 767px) {
+  .site-background {
+    --site-sky-cloud-max-scale: 1.55;
+  }
+
   .site-sky-clouds {
-    height: 80vh;
+    height: 64vh;
   }
 }
 
