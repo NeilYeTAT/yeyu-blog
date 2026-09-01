@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     // 'lucide-react' is default. https://nextjs.org/docs/app/api-reference/config/next-config-js/optimizePackageImports
-    optimizePackageImports: ['simple-icons'],
     turbopackRustReactCompiler: true,
   },
 }

@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
 import type { CommentAuthorLike, SessionAvatarProps } from './type'
 import Image from 'next/image'
-import { siGithub, siGoogle } from 'simple-icons/icons'
 import avatar from '@/config/img/avatar.webp'
+import { GitHubIcon } from '@/ui/components/modal/main/login-modal/assets/github-icon'
+import { GoogleIcon } from '@/ui/components/modal/main/login-modal/assets/google-icon'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import {
@@ -57,22 +58,19 @@ export function SessionAvatar({
 }
 
 function CommentProviderIcon({ provider }: { provider: 'github' | 'google' }) {
-  const icon = provider === 'github' ? siGithub : siGoogle
+  const Icon = provider === 'github' ? GitHubIcon : GoogleIcon
+  const title = provider === 'github' ? 'GitHub' : 'Google'
 
   return (
     <span
       className="absolute -right-0.5 -bottom-0.5 flex size-4 items-center justify-center rounded-full border border-white bg-white text-zinc-950 shadow-sm dark:border-zinc-950 dark:bg-zinc-950 dark:text-zinc-50"
-      title={icon.title}
+      title={title}
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
+      <Icon
         aria-hidden="true"
         className={provider === 'google' ? 'size-2.5 text-[#4285F4]' : 'size-2.5'}
-      >
-        <path d={icon.path} />
-      </svg>
-      <span className="sr-only">{icon.title}</span>
+      />
+      <span className="sr-only">{title}</span>
     </span>
   )
 }

@@ -2,10 +2,24 @@
 
 import type { Variants } from 'motion/react'
 import * as motion from 'motion/react-client'
-import { siFigma, siHono, siNestjs, siNextdotjs, siReact, siTypescript } from 'simple-icons/icons'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
+import {
+  FigmaIcon,
+  HonoIcon,
+  NestJsIcon,
+  NextJsIcon,
+  ReactIcon,
+  TypeScriptIcon,
+} from './assets/tech-stack-icons'
 
-const techStackData = [siTypescript, siReact, siNextdotjs, siHono, siNestjs, siFigma]
+const techStackData = [
+  { name: 'TypeScript', Icon: TypeScriptIcon },
+  { name: 'React', Icon: ReactIcon },
+  { name: 'Next.js', Icon: NextJsIcon },
+  { name: 'Hono', Icon: HonoIcon },
+  { name: 'NestJS', Icon: NestJsIcon },
+  { name: 'Figma', Icon: FigmaIcon },
+]
 
 const techStackVariants: Variants = {
   hidden: {},
@@ -36,22 +50,9 @@ export default function TechStack() {
       className="mt-[21px] grid grid-cols-6 gap-[10px]"
       variants={techStackVariants}
     >
-      {techStackData.map(icon => (
-        <motion.li
-          key={icon.slug}
-          title={icon.title}
-          className="size-6"
-          variants={techStackItemVariants}
-        >
-          <svg
-            role="img"
-            aria-label={icon.title}
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="size-full"
-          >
-            <path d={icon.path} />
-          </svg>
+      {techStackData.map(({ Icon, name }) => (
+        <motion.li key={name} title={name} className="size-6" variants={techStackItemVariants}>
+          <Icon role="img" aria-label={name} className="size-full" />
         </motion.li>
       ))}
     </motion.ul>

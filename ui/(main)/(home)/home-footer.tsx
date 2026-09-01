@@ -2,25 +2,25 @@
 
 import type { Variants } from 'motion/react'
 import * as motion from 'motion/react-client'
-import { siGithub, siGmail, siX } from 'simple-icons/icons'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
+import { GitHubIcon, GmailIcon, XIcon } from './assets/social-icons'
 import { HomeTextMotion } from './home-motion'
 
 const socialLinks = [
   {
     name: 'GitHub',
     url: 'https://github.com/yeyuqwer',
-    icon: siGithub,
+    Icon: GitHubIcon,
   },
   {
     name: 'X',
     url: 'https://x.com/yeyuTvT',
-    icon: siX,
+    Icon: XIcon,
   },
   {
     name: 'Gmail',
     url: 'mailto:yeyuqwer@gmail.com',
-    icon: siGmail,
+    Icon: GmailIcon,
   },
 ]
 
@@ -60,19 +60,17 @@ export default function HomeFooter() {
         className="flex justify-end gap-6"
         variants={socialLinksVariants}
       >
-        {socialLinks.map(link => (
+        {socialLinks.map(({ Icon, name, url }) => (
           <motion.a
-            aria-label={link.name}
+            aria-label={name}
             className="size-5 text-zinc-700 transition-colors hover:text-black focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-4 dark:text-zinc-300 dark:focus-visible:outline-white dark:hover:text-white"
-            href={link.url}
-            key={link.url}
+            href={url}
+            key={url}
             target="_blank"
             rel="noreferrer"
             variants={socialLinkVariants}
           >
-            <svg role="img" viewBox="0 0 24 24" className="size-full" fill="currentColor">
-              <path d={link.icon.path} />
-            </svg>
+            <Icon aria-hidden="true" className="size-full" />
           </motion.a>
         ))}
       </motion.nav>
