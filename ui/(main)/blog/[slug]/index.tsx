@@ -3,6 +3,7 @@ import { processor } from '@/lib/core/markdown/processor'
 import { prisma } from '@/prisma/instance'
 import ArticleDisplayPage from '@/ui/(main)/blog/article-display-page'
 import CommentCard from '@/ui/(main)/blog/comment-card'
+import ReactQueryProvider from '@/ui/components/provider/react-query-provider'
 import HorizontalDividingLine from '@/ui/components/shared/horizontal-dividing-line'
 import { MainScrollBlur } from '@/ui/components/shared/main-scroll-blur'
 
@@ -33,7 +34,9 @@ export async function BlogDetail({ slug }: { slug: string }) {
     <div className="flex flex-col gap-4">
       <ArticleDisplayPage createdAt={createdAt} sanitizedContent={content} tags={tagNames} />
       <HorizontalDividingLine />
-      <CommentCard articleId={id} />
+      <ReactQueryProvider>
+        <CommentCard articleId={id} />
+      </ReactQueryProvider>
       <MainScrollBlur />
     </div>
   )

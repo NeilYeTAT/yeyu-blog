@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sileo'
-import ReactQueryProvider from './react-query-provider'
 
 const Analytics = dynamic(() => import('@vercel/analytics/react').then(m => m.Analytics), {
   ssr: false,
@@ -20,10 +19,8 @@ export default function GlobalProvider({ children }: { children: React.ReactNode
   return (
     <>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <ReactQueryProvider>
-          {children}
-          <Toaster position="top-left" theme="system" />
-        </ReactQueryProvider>
+        {children}
+        <Toaster position="top-left" theme="system" />
       </ThemeProvider>
       <Analytics mode="production" />
       <SpeedInsights />

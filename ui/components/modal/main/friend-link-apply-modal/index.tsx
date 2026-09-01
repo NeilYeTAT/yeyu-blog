@@ -7,6 +7,7 @@ import { useFriendLinkMutation } from '@/hooks/api/friend-link/use-friend-link-m
 import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Modal } from '@/ui/components/interior/modal'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
+import ReactQueryProvider from '@/ui/components/provider/react-query-provider'
 import { Button } from '@/ui/shadcn/button'
 import { CheckIcon } from '@/ui/shadcn/check'
 import { CopyIcon } from '@/ui/shadcn/copy'
@@ -16,7 +17,7 @@ import { Label } from '@/ui/shadcn/label'
 import { SendIcon, type SendIconHandle } from '@/ui/shadcn/send'
 import { friendLinkApplyFields } from './constant'
 
-export const FriendLinkApplyModal = () => {
+const FriendLinkApplyModalContent = () => {
   const modalType = useModalType()
   const { closeModal } = useModalActions()
   const isModalOpen = modalType === 'friendLinkApplyModal'
@@ -179,5 +180,13 @@ export const FriendLinkApplyModal = () => {
         })}
       </form>
     </Modal>
+  )
+}
+
+export const FriendLinkApplyModal = () => {
+  return (
+    <ReactQueryProvider>
+      <FriendLinkApplyModalContent />
+    </ReactQueryProvider>
   )
 }
