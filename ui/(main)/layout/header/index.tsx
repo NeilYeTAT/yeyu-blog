@@ -1,7 +1,7 @@
 'use client'
 
 import { Languages } from 'lucide-react'
-import { motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
@@ -18,8 +18,9 @@ export default function Header() {
   const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
-  const { toggleLanguage } = useLanguage()
+  const { language, toggleLanguage } = useLanguage()
   const translations = useTranslations()
+  const languageOffset = language === 'en' ? '100%' : '-100%'
 
   return (
     <motion.header
@@ -63,7 +64,11 @@ export default function Header() {
                 key={route.path}
                 item={route}
                 aria-current={isActive ? 'page' : undefined}
-                aria-label={isLanguageRoute ? translations.header.switchLanguageLabel : undefined}
+                aria-label={
+                  isLanguageRoute
+                    ? translations.header.switchLanguageLabel
+                    : translations.header.routes[route.pathName]
+                }
                 onButtonClick={isLanguageRoute ? toggleLanguage : undefined}
                 className={cn(
                   'flex h-full items-center justify-center text-xs leading-none transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
@@ -76,20 +81,38 @@ export default function Header() {
                   className={cn(
                     waveLinkUnderlineClassName,
                     'after:-bottom-1 after:bg-[color-mix(in_srgb,var(--theme-accent)_50%,white)]',
-                    isLanguageRoute && 'inline-flex items-center gap-1',
+                    'inline-flex items-center',
+                    isLanguageRoute && 'gap-1',
                     isActive && 'after:[clip-path:inset(0)]',
                   )}
                 >
                   {isLanguageRoute && (
                     <Languages aria-hidden="true" className="size-3.5 shrink-0 sm:size-4" />
                   )}
-                  {isLanguageRoute ? (
-                    <span className="inline-block w-5 text-center">
-                      {translations.header.routes.language}
-                    </span>
-                  ) : (
-                    translations.header.routes[route.pathName]
-                  )}
+                  <span
+                    className={cn(
+                      'grid h-[1.25em] overflow-hidden whitespace-nowrap leading-[1.25]',
+                      isLanguageRoute && 'w-5 text-center',
+                    )}
+                  >
+                    <AnimatePresence initial={false}>
+                      <motion.span
+                        key={language}
+                        aria-hidden="true"
+                        className="col-start-1 row-start-1 flex items-center justify-center"
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: languageOffset }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: languageOffset }}
+                        transition={
+                          shouldReduceMotion
+                            ? { duration: 0 }
+                            : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }
+                        }
+                      >
+                        {translations.header.routes[route.pathName]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
                 </span>
               </NavItem>
             )

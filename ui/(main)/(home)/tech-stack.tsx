@@ -3,7 +3,7 @@
 import type { Variants } from 'motion/react'
 import * as motion from 'motion/react-client'
 import { siFigma, siHono, siNestjs, siNextdotjs, siReact, siTypescript } from 'simple-icons/icons'
-import { useTranslations } from '@/ui/components/provider/main/language-provider'
+import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 
 const techStackData = [siTypescript, siReact, siNextdotjs, siHono, siNestjs, siFigma]
 
@@ -26,10 +26,12 @@ const techStackItemVariants: Variants = {
 }
 
 export default function TechStack() {
+  const { language } = useLanguage()
   const translations = useTranslations()
 
   return (
     <motion.ul
+      key={language}
       aria-label={translations.home.techStackLabel}
       className="mt-[21px] grid grid-cols-6 gap-[10px]"
       variants={techStackVariants}

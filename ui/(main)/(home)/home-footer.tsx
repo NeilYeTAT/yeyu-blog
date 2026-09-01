@@ -3,7 +3,7 @@
 import type { Variants } from 'motion/react'
 import * as motion from 'motion/react-client'
 import { siGithub, siGmail, siX } from 'simple-icons/icons'
-import { useTranslations } from '@/ui/components/provider/main/language-provider'
+import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import { HomeTextMotion } from './home-motion'
 
 const socialLinks = [
@@ -43,6 +43,7 @@ const socialLinkVariants: Variants = {
 }
 
 export default function HomeFooter() {
+  const { language } = useLanguage()
   const translations = useTranslations()
 
   return (
@@ -54,6 +55,7 @@ export default function HomeFooter() {
       </HomeTextMotion>
 
       <motion.nav
+        key={language}
         aria-label={translations.home.socialLinksLabel}
         className="flex justify-end gap-6"
         variants={socialLinksVariants}

@@ -2,7 +2,8 @@
 
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { useLanguage } from '@/ui/components/provider/main/language-provider'
 import { useInitialPageTransition } from '../layout/initial-page-transition-context'
 
 const homeVariants: Variants = {
@@ -58,9 +59,28 @@ export function HomeTextMotion({
   children: ReactNode
   className?: string
 }) {
+  const { language } = useLanguage()
+  const shouldReduceMotion = useReducedMotion()
+  const languageOffset = language === 'en' ? '100%' : '-100%'
+
   return (
     <motion.div className={className} variants={textVariants}>
-      {children}
+      <div className="grid overflow-hidden">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={language}
+            className="col-start-1 row-start-1 min-w-0"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: languageOffset }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: languageOffset }}
+            transition={
+              shouldReduceMotion ? { duration: 0 } : { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
+            }
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </motion.div>
   )
 }
