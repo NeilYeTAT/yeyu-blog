@@ -3,7 +3,9 @@
 import { Languages } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useHasCompletedHomeLoading, useHomeLoadingActions } from '@/store/use-home-loading-store'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import {
   WaveLink,
@@ -18,30 +20,53 @@ export default function Header() {
   const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
+  const hasCompletedHomeLoading = useHasCompletedHomeLoading()
+  const { completeHomeLoading } = useHomeLoadingActions()
+  const [hasEntered, setHasEntered] = useState(false)
   const { language, toggleLanguage } = useLanguage()
   const translations = useTranslations()
   const languageOffset = language === 'en' ? '100%' : '-100%'
   const languagePathPrefix = `/${language}`
   const currentPathname =
     pathname === languagePathPrefix ? '/' : pathname.slice(languagePathPrefix.length)
+  const isWaitingForHomeLoading =
+    currentPathname === '/' && !hasCompletedHomeLoading && !shouldReduceMotion
+
+  useEffect(() => {
+    if (currentPathname !== '/' && !hasCompletedHomeLoading) completeHomeLoading()
+  }, [completeHomeLoading, currentPathname, hasCompletedHomeLoading])
 
   return (
     <motion.header
+      aria-hidden={isWaitingForHomeLoading}
       className={cn(
         'sticky top-5 z-20 mx-auto mt-5 mb-4 h-10 w-[calc(100%-2rem)] max-w-[550px] overflow-hidden rounded-full bg-black font-header text-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-[background-color,box-shadow] duration-300 sm:h-12 dark:bg-zinc-950/76 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)] dark:ring-1 dark:ring-white/10 dark:backdrop-blur-xl',
-        !isHeaderVisible && 'pointer-events-none',
+        (!isHeaderVisible || isWaitingForHomeLoading) && 'pointer-events-none',
       )}
-      initial={false}
+      initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -16 }}
       animate={{
-        y: isHeaderVisible || shouldReduceMotion ? 0 : '-140%',
-        opacity: isHeaderVisible ? 1 : 0,
+        y: isWaitingForHomeLoading ? -16 : isHeaderVisible || shouldReduceMotion ? 0 : '-140%',
+        opacity: isWaitingForHomeLoading ? 0 : isHeaderVisible ? 1 : 0,
+        scale: isWaitingForHomeLoading ? 0.98 : 1,
+      }}
+      inert={isWaitingForHomeLoading}
+      onAnimationComplete={() => {
+        if (!isWaitingForHomeLoading && !hasEntered) setHasEntered(true)
       }}
       transition={
         shouldReduceMotion
-          ? { duration: 0.12 }
-          : isHeaderVisible
-            ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
-            : { duration: 0.18, ease: [0.4, 0, 1, 1] }
+          ? { duration: 0 }
+          : isWaitingForHomeLoading
+            ? { duration: 0 }
+            : !hasEntered
+              ? {
+                  delay: currentPathname === '/' ? 0.24 : 0,
+                  duration: 0.48,
+                  ease: [0.16, 1, 0.3, 1],
+                }
+              : isHeaderVisible
+                ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
+                : { duration: 0.18, ease: [0.4, 0, 1, 1] }
       }
     >
       <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
