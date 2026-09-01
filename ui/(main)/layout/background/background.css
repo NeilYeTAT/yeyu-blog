@@ -1,22 +1,40 @@
+.site-main-stage {
+  background:
+    radial-gradient(ellipse at 55% 100%, rgb(255 230 168 / 0.0391) 0 12%, transparent 34%),
+    radial-gradient(
+      ellipse at 44% -6%,
+      rgb(132 228 254 / 0.36) 0 14%,
+      rgb(132 228 254 / 0.2304) 29%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 20% 74%,
+      rgb(255 230 168 / 0.0805) 0 10%,
+      rgb(255 230 168 / 0.0368) 22%,
+      transparent 42%
+    ),
+    linear-gradient(180deg, #6fd9fe 0%, #65d0f8 24%, #5ac9f3 58%, #8fe3f8 84%, #d5f7fb 100%);
+}
+
 .site-background {
-  --site-sky-cloud-brightness: 1;
-  --site-sky-cloud-opacity: 1;
+  --site-sky-cloud-brightness: 0.98;
+  --site-sky-cloud-opacity: 0.945;
   --site-sky-cloud-play-state: running;
   --site-sky-cloud-saturate: 1;
-  --site-sky-sky-bottom: #d9f8fb;
-  --site-sky-sky-lower: #8ce1f7;
-  --site-sky-sky-middle: #54c6f2;
-  --site-sky-sky-top: #66d8ff;
-  --site-sky-sky-upper: #5fcef8;
+  --site-sky-sky-bottom: #d5f7fb;
+  --site-sky-sky-lower: #8fe3f8;
+  --site-sky-sky-middle: #5ac9f3;
+  --site-sky-sky-top: #6fd9fe;
+  --site-sky-sky-upper: #65d0f8;
   --site-sky-star-opacity: 0;
   --site-sky-star-play-state: paused;
-  --site-sky-upper-glow-opacity: 0.38;
-  --site-sky-upper-glow-rgb: 126 228 255;
-  --site-sky-upper-glow-soft-opacity: 0.24;
-  --site-sky-warm-glow-opacity: 0.06;
-  --site-sky-warm-glow-rgb: 255 243 188;
-  --site-sky-warm-glow-soft-opacity: 0.02;
-  --site-sky-warm-glow-strong-opacity: 0.04;
+  --site-sky-upper-glow-opacity: 0.36;
+  --site-sky-upper-glow-rgb: 132 228 254;
+  --site-sky-upper-glow-soft-opacity: 0.2304;
+  --site-sky-warm-glow-opacity: 0.115;
+  --site-sky-warm-glow-rgb: 255 230 168;
+  --site-sky-warm-glow-soft-opacity: 0.0368;
+  --site-sky-warm-glow-strong-opacity: 0.0805;
 
   background:
     radial-gradient(
@@ -39,6 +57,12 @@
       var(--site-sky-sky-lower) 84%,
       var(--site-sky-sky-bottom) 100%
     );
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+
+.site-background[data-initialized] {
+  opacity: 1;
 }
 
 .site-background::before {
@@ -204,6 +228,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .site-background {
+    transition: none;
+  }
+
   .site-sky-cloud {
     animation-play-state: paused;
   }

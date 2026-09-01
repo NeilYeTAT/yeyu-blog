@@ -5,6 +5,7 @@ import Image from 'next/image'
 import {
   useCloudSpeed,
   useIsCloudAnimationRunning,
+  useIsSkyBackgroundInitialized,
   useSkyBackgroundTimeState,
 } from '@/store/use-sky-background-store'
 import './background.css'
@@ -13,6 +14,7 @@ import { skyCloudLayers } from './sky-background-config'
 export const Background: FC = () => {
   const cloudSpeed = useCloudSpeed()
   const isCloudAnimationRunning = useIsCloudAnimationRunning()
+  const isInitialized = useIsSkyBackgroundInitialized()
   const { timeState } = useSkyBackgroundTimeState()
   const cloudDurations = skyCloudLayers.map(layer => layer.duration / cloudSpeed)
   const backgroundStyle = {
@@ -45,6 +47,7 @@ export const Background: FC = () => {
     <div
       aria-hidden="true"
       className="site-background pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      data-initialized={isInitialized ? '' : undefined}
       style={backgroundStyle}
     >
       <div className="site-sky-stars" />

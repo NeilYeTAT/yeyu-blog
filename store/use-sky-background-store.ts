@@ -5,7 +5,7 @@ import {
   getSkyBackgroundTimeState,
 } from '@/ui/(main)/layout/background/sky-background-time'
 
-const defaultMinutesOfDay = 12 * 60
+const defaultMinutesOfDay = 11 * 60
 const darkThemeMinutesOfDay = 22 * 60
 const daytimeStartMinutes = 6 * 60
 const daytimeEndMinutes = 18 * 60
@@ -18,10 +18,12 @@ const useSkyBackgroundStore = create<{
   isBackgroundOnly: boolean
   isCloudAnimationRunning: boolean
   isDarkTheme: boolean
+  isInitialized: boolean
   isUsingRealTime: boolean
   previewMinutesOfDay: number
   realTimeMinutesOfDay: number
   actions: {
+    initializeSkyBackground: (isDarkTheme: boolean, realTimeMinutesOfDay: number) => void
     resetSkyBackground: () => void
     setBackgroundOnly: (isBackgroundOnly: boolean) => void
     setCloudAnimationRunning: (isRunning: boolean) => void
@@ -36,10 +38,18 @@ const useSkyBackgroundStore = create<{
   isBackgroundOnly: false,
   isCloudAnimationRunning: defaultCloudAnimationRunning,
   isDarkTheme: false,
+  isInitialized: false,
   isUsingRealTime: defaultUsingRealTime,
   previewMinutesOfDay: defaultMinutesOfDay,
   realTimeMinutesOfDay: defaultMinutesOfDay,
   actions: {
+    initializeSkyBackground: (isDarkTheme, realTimeMinutesOfDay) => {
+      set({
+        isDarkTheme,
+        isInitialized: true,
+        realTimeMinutesOfDay,
+      })
+    },
     resetSkyBackground: () => {
       const nextMinutesOfDay = getMinutesOfDay(new Date())
 
@@ -77,6 +87,8 @@ export const useCloudSpeed = () => useSkyBackgroundStore(state => state.cloudSpe
 export const useIsBackgroundOnly = () => useSkyBackgroundStore(state => state.isBackgroundOnly)
 export const useIsCloudAnimationRunning = () =>
   useSkyBackgroundStore(state => state.isCloudAnimationRunning)
+export const useIsSkyBackgroundInitialized = () =>
+  useSkyBackgroundStore(state => state.isInitialized)
 export const useIsUsingRealTime = () => useSkyBackgroundStore(state => state.isUsingRealTime)
 export const useSkyBackgroundActions = () => useSkyBackgroundStore(state => state.actions)
 

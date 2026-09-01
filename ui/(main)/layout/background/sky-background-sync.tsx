@@ -1,39 +1,58 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect } from 'react'
-import { useIsUsingRealTime, useSkyBackgroundActions } from '@/store/use-sky-background-store'
+import { useEffect, useLayoutEffect } from 'react'
+import {
+  useIsSkyBackgroundInitialized,
+  useIsUsingRealTime,
+  useSkyBackgroundActions,
+} from '@/store/use-sky-background-store'
 import { getMinutesOfDay } from './sky-background-time'
 
 const millisecondsPerMinute = 60_000
 
 export function SkyBackgroundSync() {
   const { resolvedTheme } = useTheme()
+  const isInitialized = useIsSkyBackgroundInitialized()
   const isUsingRealTime = useIsUsingRealTime()
-  const { setDarkTheme, setRealTimeMinutesOfDay } = useSkyBackgroundActions()
+  const { initializeSkyBackground, setDarkTheme, setRealTimeMinutesOfDay } =
+    useSkyBackgroundActions()
+
+  useLayoutEffect(() => {
+    const now = new Date()
+
+    initializeSkyBackground(
+      document.documentElement.classList.contains('dark'),
+      getMinutesOfDay(now),
+    )
+  }, [initializeSkyBackground])
 
   useEffect(() => {
+    if (!isInitialized || resolvedTheme === undefined) return
+
     setDarkTheme(resolvedTheme === 'dark')
-  }, [resolvedTheme, setDarkTheme])
+  }, [isInitialized, resolvedTheme, setDarkTheme])
 
   useEffect(() => {
-    if (!isUsingRealTime) return
+    if (!isInitialized || !isUsingRealTime) return
 
     let timeoutId = 0
-    const syncRealTime = () => {
+    const scheduleNextSync = () => {
       const now = new Date()
 
-      setRealTimeMinutesOfDay(getMinutesOfDay(now))
       timeoutId = window.setTimeout(
-        syncRealTime,
+        () => {
+          setRealTimeMinutesOfDay(getMinutesOfDay(new Date()))
+          scheduleNextSync()
+        },
         millisecondsPerMinute - now.getSeconds() * 1000 - now.getMilliseconds(),
       )
     }
 
-    syncRealTime()
+    scheduleNextSync()
 
     return () => window.clearTimeout(timeoutId)
-  }, [isUsingRealTime, setRealTimeMinutesOfDay])
+  }, [isInitialized, isUsingRealTime, setRealTimeMinutesOfDay])
 
   return null
 }

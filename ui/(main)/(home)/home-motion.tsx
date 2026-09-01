@@ -2,8 +2,8 @@
 
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useIsInitialPageReady } from '@/store/use-initial-page-transition-store'
+import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from 'motion/react'
+import { useLayoutEffect, useState } from 'react'
 import { useLanguage } from '@/ui/components/provider/main/language-provider'
 
 const homeVariants: Variants = {
@@ -37,15 +37,28 @@ const avatarVariants: Variants = {
 }
 
 export function HomeMotion({ children }: { children: ReactNode }) {
-  const isPageReady = useIsInitialPageReady()
+  const animationControls = useAnimationControls()
   const shouldReduceMotion = useReducedMotion()
   const { isLanguageChanging } = useLanguage()
+  const [shouldAnimate] = useState(() => !shouldReduceMotion && !isLanguageChanging)
+
+  useLayoutEffect(() => {
+    if (!shouldAnimate) {
+      animationControls.set('visible')
+      return
+    }
+
+    animationControls.set('hidden')
+    void animationControls.start('visible')
+
+    return () => animationControls.stop()
+  }, [animationControls, shouldAnimate])
 
   return (
     <motion.div
       className="contents"
-      initial={shouldReduceMotion || isLanguageChanging ? false : 'hidden'}
-      animate={isPageReady || shouldReduceMotion ? 'visible' : 'hidden'}
+      initial={false}
+      animate={animationControls}
       variants={homeVariants}
     >
       {children}
