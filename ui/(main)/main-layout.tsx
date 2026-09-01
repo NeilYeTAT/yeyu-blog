@@ -16,8 +16,8 @@ export default function MainLayout({
   return (
     <MainProvider initialLanguage={language}>
       <InitialPageTransition>
-        <div className="relative isolate flex h-dvh max-w-screen overflow-hidden p-3 text-black sm:p-5 dark:text-white">
-          <div className="flex h-[calc(100dvh-1.5rem)] min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg bg-white/90 sm:h-[calc(100dvh-2.5rem)] dark:bg-black/85">
+        <div className="relative isolate flex h-dvh max-w-screen overflow-hidden p-3 text-black transition-colors duration-300 ease-out sm:p-5 dark:text-white">
+          <div className="flex h-[calc(100dvh-1.5rem)] min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg bg-white/90 transition-colors duration-300 ease-out sm:h-[calc(100dvh-2.5rem)] dark:bg-black/85">
             <Header />
 
             <div
