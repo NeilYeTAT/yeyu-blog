@@ -3,11 +3,16 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Modal } from '@/ui/components/interior/modal'
-import { LoginModal } from '@/ui/components/modal/main/login-modal'
 import Loading from '@/ui/components/shared/loading'
 import { useTranslations } from './language-provider'
 
 const modalExitDuration = 180
+
+const LoginModal = lazy(() =>
+  import('@/ui/components/modal/main/login-modal').then(mod => ({
+    default: mod.LoginModal,
+  })),
+)
 
 const FriendLinkApplyModal = lazy(() =>
   import('@/ui/components/modal/main/friend-link-apply-modal').then(mod => ({
