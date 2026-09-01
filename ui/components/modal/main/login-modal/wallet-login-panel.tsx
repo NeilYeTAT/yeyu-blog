@@ -34,10 +34,7 @@ export const WalletLoginPanel = ({
   }) => {
     const checksumWalletAddress = getAddress(walletAddress)
 
-    const { data: nonceData, error: nonceError } = await authClient.siwe.nonce({
-      walletAddress: checksumWalletAddress,
-      chainId: currentChainId,
-    })
+    const { data: nonceData, error: nonceError } = await authClient.siwe.nonce()
 
     if (nonceError !== null || nonceData === null) {
       return
@@ -62,8 +59,6 @@ export const WalletLoginPanel = ({
     const { data: verifyData, error: verifyError } = await authClient.siwe.verify({
       message,
       signature,
-      walletAddress: checksumWalletAddress,
-      chainId: currentChainId,
     })
 
     if (verifyError !== null || verifyData === null) {
