@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
-    "@hookform/resolvers": "^5.7.1",
+    "@hookform/resolvers": "^5.9.1",
     "@outpacelabs/avatars": "^0.4.0",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
