@@ -49,7 +49,7 @@ export default function CommentCard({
 
   return (
     <>
-      <section id="comments" className={cn('py-2 sm:py-4', className)}>
+      <section className={cn('py-2 sm:py-4', className)}>
         <CommentCardHeader total={total} />
 
         <section className="mt-5 border-zinc-200/70 border-b pb-5 dark:border-zinc-800/70">
