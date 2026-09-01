@@ -1,4 +1,5 @@
 import type { CommentTreeNode, SessionAvatarProps } from './type'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import Loading from '@/ui/components/shared/loading'
 import { CommentThreadItem } from './comment-thread-item'
 
@@ -34,6 +35,8 @@ export function CommentList({
   onReplySubmit: (commentId: number) => void
   onDeleteClick: (comment: CommentTreeNode) => void
 }) {
+  const translations = useTranslations()
+
   if (status.isPending) {
     return (
       <div className="flex min-h-24 items-center justify-center">
@@ -45,7 +48,7 @@ export function CommentList({
   if (commentTree.length === 0) {
     return (
       <div className="px-1 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
-        评论会在这里按时间展开，回复会以缩进形式挂在对应楼层下面。
+        {translations.comments.empty}
       </div>
     )
   }

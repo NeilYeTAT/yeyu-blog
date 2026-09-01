@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFriendLinkMutation } from '@/hooks/api/friend-link/use-friend-link-mutation'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Modal } from '@/ui/components/interior/modal'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { CheckIcon } from '@/ui/shadcn/check'
 import { CopyIcon } from '@/ui/shadcn/copy'
@@ -13,7 +14,7 @@ import { copyToClipboard } from '@/ui/shadcn/copy-button'
 import { Input } from '@/ui/shadcn/input'
 import { Label } from '@/ui/shadcn/label'
 import { SendIcon, type SendIconHandle } from '@/ui/shadcn/send'
-import { friendLinkApplyFields, friendLinkSiteInfo } from './constant'
+import { friendLinkApplyFields } from './constant'
 
 export const FriendLinkApplyModal = () => {
   const modalType = useModalType()
@@ -24,6 +25,7 @@ export const FriendLinkApplyModal = () => {
   const firstFieldRef = useRef<HTMLInputElement>(null)
   const [copyFeedbackVersion, setCopyFeedbackVersion] = useState(0)
   const isCopied = copyFeedbackVersion > 0
+  const translations = useTranslations()
   const { mutate: createFriendLink, isPending: isSubmitting } = useFriendLinkMutation()
 
   useEffect(() => {
@@ -39,7 +41,15 @@ export const FriendLinkApplyModal = () => {
   }, [copyFeedbackVersion])
 
   const handleCopySiteInfo = async () => {
-    await copyToClipboard(friendLinkSiteInfo)
+    const siteInfo = friendLinkApplyFields
+      .map(field => {
+        const fieldTranslations = translations.friendLinkApplyModal.fields[field.name]
+
+        return `${fieldTranslations.label}: ${fieldTranslations.placeholder}`
+      })
+      .join('\n')
+
+    await copyToClipboard(siteInfo)
 
     setCopyFeedbackVersion(currentCopyFeedbackVersion => currentCopyFeedbackVersion + 1)
   }
@@ -66,11 +76,14 @@ export const FriendLinkApplyModal = () => {
     <Modal
       open={isModalOpen}
       onClose={closeModal}
-      title="申请友链"
+      title={translations.friendLinkApplyModal.title}
       description={
         <>
-          <span className="block">申请说明：技术博客或生活记录，需 HTTPS、无广告 ~</span>
-          <span className="block">已添加本站 / 站点可访问 / 内容合规 ~</span>
+          {translations.friendLinkApplyModal.description.map(description => (
+            <span key={description} className="block">
+              {description}
+            </span>
+          ))}
         </>
       }
       footer={
@@ -95,7 +108,9 @@ export const FriendLinkApplyModal = () => {
             ) : (
               <CopyIcon ref={copyStatusIconRef} className="size-4" size={16} />
             )}
-            {isCopied ? '已复制' : '复制本站信息'}
+            {isCopied
+              ? translations.friendLinkApplyModal.copied
+              : translations.friendLinkApplyModal.copySiteInfo}
           </Button>
 
           <div className="flex flex-col-reverse gap-2 sm:flex-row">
@@ -105,7 +120,7 @@ export const FriendLinkApplyModal = () => {
               className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/35 px-4 text-zinc-700 shadow-none hover:bg-black/5 hover:text-zinc-900 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
               onClick={closeModal}
             >
-              取消
+              {translations.friendLinkApplyModal.cancel}
             </Button>
             <Button
               type="submit"
@@ -120,12 +135,14 @@ export const FriendLinkApplyModal = () => {
               }}
             >
               <SendIcon ref={sendIconRef} className="size-4" />
-              {isSubmitting ? '稍等' : '提交'}
+              {isSubmitting
+                ? translations.friendLinkApplyModal.submitting
+                : translations.friendLinkApplyModal.submit}
             </Button>
           </div>
         </div>
       }
-      closeLabel="关闭友链申请弹窗"
+      closeLabel={translations.friendLinkApplyModal.closeLabel}
       initialFocusRef={firstFieldRef}
       maxWidth={500}
       maxHeight="88vh"
@@ -138,6 +155,7 @@ export const FriendLinkApplyModal = () => {
       <form id="friend-link-apply-form" className="grid gap-4" onSubmit={handleSubmit}>
         {friendLinkApplyFields.map((field, index) => {
           const fieldId = `friend-link-apply-${field.name}`
+          const fieldTranslations = translations.friendLinkApplyModal.fields[field.name]
 
           return (
             <div key={field.name} className="grid gap-2">
@@ -145,15 +163,15 @@ export const FriendLinkApplyModal = () => {
                 htmlFor={fieldId}
                 className="font-medium text-sm text-zinc-700 dark:text-zinc-200"
               >
-                {field.label}
+                {fieldTranslations.label}
               </Label>
               <Input
                 ref={index === 0 ? firstFieldRef : undefined}
                 id={fieldId}
                 name={field.name}
                 type={field.type}
-                required={field.required ?? true}
-                placeholder={field.placeholder}
+                required={field.required}
+                placeholder={fieldTranslations.placeholder}
                 className="h-10 rounded-xl border-black/10 bg-theme-background/65 text-sm shadow-none placeholder:text-zinc-400 focus-visible:border-zinc-400 focus-visible:ring-zinc-400/25 dark:border-white/10 dark:bg-zinc-900/70 dark:focus-visible:border-zinc-500 dark:focus-visible:ring-zinc-500/25 dark:placeholder:text-zinc-500"
               />
             </div>

@@ -5,6 +5,7 @@ import { useModalActions, useModalType } from '@/store/use-modal-store'
 import { Modal } from '@/ui/components/interior/modal'
 import { LoginModal } from '@/ui/components/modal/main/login-modal'
 import Loading from '@/ui/components/shared/loading'
+import { useTranslations } from './language-provider'
 
 const modalExitDuration = 180
 
@@ -17,13 +18,14 @@ const FriendLinkApplyModal = lazy(() =>
 const MainModalLoading = () => {
   const modalType = useModalType()
   const { closeModal } = useModalActions()
+  const translations = useTranslations()
 
   return (
     <Modal
       open={modalType !== null}
       onClose={closeModal}
-      title={<span className="sr-only">正在加载</span>}
-      closeLabel="关闭弹窗"
+      title={<span className="sr-only">{translations.loginModal.loading}</span>}
+      closeLabel={translations.loginModal.closeModalLabel}
       maxWidth={384}
       className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-white/10 dark:bg-black/70"
     >

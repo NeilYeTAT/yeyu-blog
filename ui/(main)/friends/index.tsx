@@ -1,5 +1,6 @@
 import type { Friend } from './types'
 import { prisma } from '@/prisma/instance'
+import { MainEmptyState } from '@/ui/components/shared/main-empty-state'
 import { MainScrollBlur } from '@/ui/components/shared/main-scroll-blur'
 import { FriendApplyButton } from './friend-apply-button'
 import { FriendsList } from './friends-list'
@@ -22,7 +23,7 @@ export async function FriendsPage() {
         {friends.length > 0 ? (
           <FriendsList friends={friends} />
         ) : (
-          <p className="m-auto py-24 text-zinc-600 dark:text-zinc-400">虚无。</p>
+          <MainEmptyState className="m-auto py-24 text-zinc-600 dark:text-zinc-400" />
         )}
       </section>
       <MainScrollBlur />

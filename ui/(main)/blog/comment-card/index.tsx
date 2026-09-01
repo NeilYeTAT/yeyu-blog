@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { CommentCardHeader } from './comment-card-header'
 import { CommentComposer } from './comment-composer'
 import { CommentList } from './comment-list'
@@ -16,6 +17,7 @@ export default function CommentCard({
 }: ComponentProps<'section'> & {
   articleId: number
 }) {
+  const translations = useTranslations()
   const {
     total,
     commentReferenceTime,
@@ -56,9 +58,9 @@ export default function CommentCard({
               value={commentContent}
               isSubmitting={isCreatingComment}
               sessionAvatarProps={sessionAvatarProps}
-              placeholder="写下你的评论..."
-              submitLabel="发布"
-              helperText="Web3 钱包登录用户评论提交后可能需要审核。"
+              placeholder={translations.comments.placeholder}
+              submitLabel={translations.comments.publish}
+              helperText={translations.comments.walletReview}
               onChange={setCommentContent}
               onSubmit={submitRootComment}
             />
@@ -73,13 +75,13 @@ export default function CommentCard({
               <button
                 type="button"
                 className="inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-theme-accent dark:text-zinc-400 dark:hover:text-theme-accent"
-                aria-label={`切换为${nextSortOrder === 'asc' ? '正序' : '倒序'}`}
+                aria-label={translations.comments.switchSortOrder[nextSortOrder]}
                 onClick={() => {
                   setSortOrder(nextSortOrder)
                 }}
               >
                 <SortIcon className="size-3.5" />
-                <span>{`按时间${sortOrder === 'asc' ? '正序' : '倒序'}`}</span>
+                <span>{translations.comments.sortOrder[sortOrder]}</span>
               </button>
             </div>
           ) : null}
@@ -112,8 +114,8 @@ export default function CommentCard({
           setDeletingComment(null)
         }}
         onConfirm={confirmDeleteComment}
-        title="确定要删除这条评论吗？"
-        description="该操作不可撤销。"
+        title={translations.comments.deleteTitle}
+        description={translations.comments.deleteDescription}
         isPending={isDeletingComment}
       >
         {deletingComment != null ? (

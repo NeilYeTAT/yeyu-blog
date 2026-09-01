@@ -7,6 +7,7 @@ import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useBackgroundMusicActions, useIsPlaying } from '@/store/use-background-music-store'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
 import { type IconsId, icons } from './constant'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
@@ -22,6 +23,7 @@ const menuAngles: Record<IconsId, number> = {
 // TODO: 固定底部时吸附效果
 // TODO: 类似 ipad cursor ?
 export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, ...props }) => {
+  const translations = useTranslations()
   const { setTransitionTheme, resolvedTheme } = useTransitionTheme()
 
   const isPlaying = useIsPlaying()
@@ -94,7 +96,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({ className, .
       >
         <FloatingMenuActionButton
           aria-expanded={isOpen}
-          aria-label="打开快捷菜单"
+          aria-label={translations.common.openQuickMenu}
           className="relative z-10 size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/10 dark:shadow-[0_0_18px_rgba(255,255,255,0.3),0_10px_24px_rgba(0,0,0,0.56)]"
           onClick={() => {
             setCanSelectAction(false)

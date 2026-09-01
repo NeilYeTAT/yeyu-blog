@@ -3,24 +3,24 @@ import type { NavRoute } from './types'
 export const navigationConfig: NavRoute[] = [
   {
     path: '/blog',
-    pathName: '日志',
+    pathName: 'blog',
     pattern: /^\/blog($|\/)/,
   },
   {
     path: '/friends',
-    pathName: '友链',
+    pathName: 'friends',
     pattern: /^\/friends($|\/)/,
   },
   {
     path: '/login',
-    pathName: '登录',
+    pathName: 'login',
     pattern: /^\/login($|\/)/,
     type: 'button',
     modal: 'loginModal',
   },
   {
     path: '/language',
-    pathName: 'EN',
+    pathName: 'language',
     pattern: /^\/language($|\/)/,
     type: 'button',
   },

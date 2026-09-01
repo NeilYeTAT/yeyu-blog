@@ -1,11 +1,13 @@
 import { useRef } from 'react'
 import { signOut, useSession } from '@/lib/core/auth/client'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { LogoutIcon, type LogoutIconHandle } from '@/ui/shadcn/logout'
 
 export function LogoutButton() {
   const iconRef = useRef<LogoutIconHandle>(null)
   const { refetch: refetchSession } = useSession()
+  const translations = useTranslations()
 
   const handleSignOut = async () => {
     await signOut()
@@ -26,7 +28,7 @@ export function LogoutButton() {
       }}
     >
       <LogoutIcon ref={iconRef} className="size-4" size={16} />
-      退出登录
+      {translations.loginModal.logout}
     </Button>
   )
 }

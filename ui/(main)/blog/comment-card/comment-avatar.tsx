@@ -3,6 +3,7 @@ import type { CommentAuthorLike, SessionAvatarProps } from './type'
 import Image from 'next/image'
 import { siGithub, siGoogle } from 'simple-icons/icons'
 import avatar from '@/config/img/avatar.webp'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import {
   getCommentAddress,
@@ -21,11 +22,13 @@ export function SessionAvatar({
   sessionAvatar,
   sessionAddress,
 }: SessionAvatarProps) {
+  const translations = useTranslations()
+
   if (isAdminUser) {
     return (
       <Image
         src={avatar}
-        alt="admin avatar"
+        alt={translations.comments.adminAvatarAlt}
         width={40}
         height={40}
         className={avatarImageClassName}
@@ -45,7 +48,7 @@ export function SessionAvatar({
   return (
     <Image
       src={sessionAvatar}
-      alt="my avatar"
+      alt={translations.comments.sessionAvatarAlt}
       width={40}
       height={40}
       className={avatarImageClassName}
@@ -85,6 +88,7 @@ function CommentAvatarFrame({
   githubAccountId?: string
   provider?: 'github' | 'google'
 }) {
+  const translations = useTranslations()
   const avatarContent = (
     <>
       {children}
@@ -99,7 +103,7 @@ function CommentAvatarFrame({
         target="_blank"
         rel="noreferrer"
         className="relative inline-flex size-10 shrink-0 rounded-full outline-none transition-transform hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-theme-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        aria-label={`打开 ${displayName} 的 GitHub 主页`}
+        aria-label={translations.comments.openGithubProfile(displayName)}
       >
         {avatarContent}
       </a>

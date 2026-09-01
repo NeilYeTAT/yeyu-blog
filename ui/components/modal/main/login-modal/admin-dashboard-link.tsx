@@ -2,12 +2,14 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useModalActions } from '@/store/use-modal-store'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { buttonVariants } from '@/ui/shadcn/button'
 import { LayoutGridIcon, type LayoutGridIconHandle } from '@/ui/shadcn/layout-grid'
 
 export function AdminDashboardLink() {
   const { closeModal } = useModalActions()
   const iconRef = useRef<LayoutGridIconHandle>(null)
+  const translations = useTranslations()
 
   return (
     <Link
@@ -25,7 +27,7 @@ export function AdminDashboardLink() {
       }}
     >
       <LayoutGridIcon ref={iconRef} className="size-4" size={16} />
-      进入后台
+      {translations.loginModal.adminDashboard}
     </Link>
   )
 }

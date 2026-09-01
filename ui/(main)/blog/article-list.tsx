@@ -1,6 +1,7 @@
 import type { Variants } from 'motion/react'
 import type { BlogListItem } from '@/lib/api/blog/type'
 import * as motion from 'motion/react-client'
+import { MainEmptyState } from '@/ui/components/shared/main-empty-state'
 import { MainScrollBlur } from '@/ui/components/shared/main-scroll-blur'
 import { ArticleLink } from './article-link'
 
@@ -30,7 +31,7 @@ const listVariants: Variants = {
 // TODO: 大括号样式
 export const ArticleList = ({ items }: { items: BlogListItem[] }) => {
   if (items.length === 0) {
-    return <p className="m-auto">虚无。</p>
+    return <MainEmptyState className="m-auto" />
   }
 
   // * 虽然数据库返回的数据已经有序了，但是做个保险吧

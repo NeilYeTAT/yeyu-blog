@@ -1,6 +1,9 @@
+'use client'
+
 import type { Variants } from 'motion/react'
 import * as motion from 'motion/react-client'
 import { siGithub, siGmail, siX } from 'simple-icons/icons'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { HomeTextMotion } from './home-motion'
 
 const socialLinks = [
@@ -40,14 +43,18 @@ const socialLinkVariants: Variants = {
 }
 
 export default function HomeFooter() {
+  const translations = useTranslations()
+
   return (
     <footer className="mx-auto mt-auto flex w-full max-w-[550px] items-center justify-between gap-4 px-4 pb-1 font-serif text-sm md:px-0">
       <HomeTextMotion className="shrink-0">
-        <p className="leading-5">© {new Date().getFullYear()} 叶鱼</p>
+        <p className="leading-5">
+          © {new Date().getFullYear()} {translations.home.copyrightName}
+        </p>
       </HomeTextMotion>
 
       <motion.nav
-        aria-label="社交链接"
+        aria-label={translations.home.socialLinksLabel}
         className="flex justify-end gap-6"
         variants={socialLinksVariants}
       >

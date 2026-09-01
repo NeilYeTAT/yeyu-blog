@@ -3,8 +3,8 @@
 import { Languages } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import {
   WaveLink,
   waveLinkTriggerClassName,
@@ -18,7 +18,8 @@ export default function Header() {
   const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
   const shouldReduceMotion = useReducedMotion()
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh')
+  const { toggleLanguage } = useLanguage()
+  const translations = useTranslations()
 
   return (
     <motion.header
@@ -44,12 +45,15 @@ export default function Header() {
           href="/"
           withWaveUnderline={false}
           className="flex h-full items-center pl-4 font-header-brand text-xl leading-none sm:pl-5"
-          aria-label="返回首页"
+          aria-label={translations.header.homeLabel}
         >
           <span className="translate-y-px">Yuuri &amp;</span>
         </WaveLink>
 
-        <nav aria-label="主导航" className="grid h-full grid-cols-4 items-center">
+        <nav
+          aria-label={translations.header.navigationLabel}
+          className="grid h-full grid-cols-4 items-center"
+        >
           {navigationConfig.map(route => {
             const isActive = route.type !== 'button' && route.pattern.test(pathname)
             const isLanguageRoute = route.path === '/language'
@@ -59,16 +63,8 @@ export default function Header() {
                 key={route.path}
                 item={route}
                 aria-current={isActive ? 'page' : undefined}
-                aria-label={
-                  isLanguageRoute ? (language === 'zh' ? '切换到英文' : '切换到中文') : undefined
-                }
-                onButtonClick={
-                  isLanguageRoute
-                    ? () => {
-                        setLanguage(currentLanguage => (currentLanguage === 'zh' ? 'en' : 'zh'))
-                      }
-                    : undefined
-                }
+                aria-label={isLanguageRoute ? translations.header.switchLanguageLabel : undefined}
+                onButtonClick={isLanguageRoute ? toggleLanguage : undefined}
                 className={cn(
                   'flex h-full items-center justify-center text-xs leading-none transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[-4px] sm:text-lg',
                   waveLinkTriggerClassName,
@@ -89,10 +85,10 @@ export default function Header() {
                   )}
                   {isLanguageRoute ? (
                     <span className="inline-block w-5 text-center">
-                      {language === 'zh' ? 'EN' : 'ZH'}
+                      {translations.header.routes.language}
                     </span>
                   ) : (
-                    route.pathName
+                    translations.header.routes[route.pathName]
                   )}
                 </span>
               </NavItem>

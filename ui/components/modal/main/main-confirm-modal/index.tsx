@@ -3,6 +3,7 @@
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { Modal } from '@/ui/components/interior/modal'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 
 export function MainConfirmModal({
@@ -21,9 +22,6 @@ export function MainConfirmModal({
   description,
   children,
   isPending = false,
-  cancelText = '取消',
-  confirmText = '确定',
-  pendingText = '稍等',
 }: {
   open: boolean
   onClose: () => void
@@ -40,10 +38,9 @@ export function MainConfirmModal({
   confirmButtonClassName?: string
   cancelButtonVariant?: ComponentProps<typeof Button>['variant']
   confirmButtonVariant?: ComponentProps<typeof Button>['variant']
-  cancelText?: ReactNode
-  confirmText?: ReactNode
-  pendingText?: ReactNode
 }) {
+  const translations = useTranslations()
+
   return (
     <Modal
       open={open}
@@ -62,7 +59,7 @@ export function MainConfirmModal({
               cancelButtonClassName,
             )}
           >
-            {cancelText}
+            {translations.common.cancel}
           </Button>
           <Button
             type="button"
@@ -76,11 +73,11 @@ export function MainConfirmModal({
               confirmButtonClassName,
             )}
           >
-            {isPending ? pendingText : confirmText}
+            {isPending ? translations.common.pending : translations.common.confirm}
           </Button>
         </>
       }
-      closeLabel="关闭确认弹窗"
+      closeLabel={translations.common.closeConfirmDialog}
       maxWidth={420}
       className={cn(
         'rounded-xl border-theme-border/70 bg-theme-background/85 text-theme-primary shadow-[0_18px_54px_color-mix(in_srgb,var(--theme-accent)_14%,transparent)] backdrop-blur-xl sm:max-w-[420px] dark:border-white/10 dark:bg-zinc-950/85 dark:text-zinc-100 dark:shadow-[0_18px_60px_rgba(0,0,0,0.38)]',

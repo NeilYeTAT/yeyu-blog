@@ -3,6 +3,7 @@ import type { Friend } from './types'
 import * as motion from 'motion/react-client'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/common/shadcn'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { FriendAvatarImage } from './friend-avatar-image'
 
 const cardVariants: Variants = {
@@ -30,6 +31,7 @@ export function FriendCard({
   onViewportEnter: () => void
 }) {
   const isRightAligned = index % 2 === 1
+  const translations = useTranslations()
 
   return (
     <motion.li
@@ -44,7 +46,7 @@ export function FriendCard({
         href={friend.siteUrl}
         target="_blank"
         rel="noreferrer"
-        aria-label={`访问 ${friend.name} 的网站`}
+        aria-label={translations.friends.visitSite(friend.name)}
         className={cn(
           'flex h-[72px] w-full items-center gap-2 rounded-xl border border-[#00000011] bg-theme-background/80 px-3 py-1.5 text-left text-zinc-900 transition-colors hover:border-theme-accent focus-visible:outline-2 focus-visible:outline-theme-ring md:h-20 md:gap-3 md:px-4 md:py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-theme-accent',
           isRightAligned && 'flex-row-reverse text-right',

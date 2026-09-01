@@ -2,6 +2,7 @@ import type { CommentTreeNode, SessionAvatarProps } from './type'
 import { CornerUpLeft, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { CommentAuthorAvatar } from './comment-avatar'
 import { CommentComposer } from './comment-composer'
@@ -41,6 +42,7 @@ export function CommentThreadItem({
   onReplySubmit: (commentId: number) => void
   onDeleteClick: (comment: CommentTreeNode) => void
 }) {
+  const translations = useTranslations()
   const isDeletedComment = comment.isDeleted
   const commentCreatedAt = new Date(comment.createdAt)
   const absoluteTime = prettyDateTime(commentCreatedAt)
@@ -81,12 +83,12 @@ export function CommentThreadItem({
                   </span>
                   {comment.isAdmin ? (
                     <span className="rounded-full bg-theme-accent/12 px-2 py-0.5 font-medium text-theme-accent">
-                      Admin
+                      {translations.comments.admin}
                     </span>
                   ) : null}
                   {isCurrentUserComment ? (
                     <span className="rounded-full bg-theme-accent/8 px-2 py-0.5 font-medium text-theme-accent/70">
-                      You
+                      {translations.comments.you}
                     </span>
                   ) : null}
                   <time
@@ -106,14 +108,16 @@ export function CommentThreadItem({
                     </time>
                   ) : null}
                   {isDeletedComment ? (
-                    <span className="text-zinc-400 dark:text-zinc-500">（已删除）</span>
+                    <span className="text-zinc-400 dark:text-zinc-500">
+                      {translations.comments.deletedStatus}
+                    </span>
                   ) : null}
                 </div>
 
                 {parentDisplayName != null ? (
                   <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
                     <CornerUpLeft className="size-3.5" />
-                    <span>{`回复 ${parentDisplayName}`}</span>
+                    <span>{translations.comments.replyTo(parentDisplayName)}</span>
                   </div>
                 ) : null}
               </div>
@@ -126,7 +130,7 @@ export function CommentThreadItem({
                       variant="ghost"
                       size="icon-xs"
                       className="rounded-lg text-zinc-500 hover:text-destructive dark:text-zinc-400"
-                      aria-label={`删除 ${formattedDisplayName} 的评论`}
+                      aria-label={translations.comments.deleteLabel(formattedDisplayName)}
                       disabled={isDeletingComment}
                       onClick={() => {
                         onDeleteClick(comment)
@@ -140,7 +144,7 @@ export function CommentThreadItem({
                     variant="ghost"
                     size="icon-xs"
                     className="rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label={`回复 ${formattedDisplayName}`}
+                    aria-label={translations.comments.replyLabel(formattedDisplayName)}
                     onClick={() => {
                       onReplyClick(comment.id)
                     }}
@@ -154,7 +158,7 @@ export function CommentThreadItem({
             <div className="mt-2 text-zinc-900 dark:text-zinc-100">
               {isDeletedComment ? (
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  <del>已删除</del>
+                  <del>{translations.comments.deleted}</del>
                 </p>
               ) : (
                 <CommentMarkdownContent
@@ -171,14 +175,14 @@ export function CommentThreadItem({
                 value={replyContent}
                 isSubmitting={isCreatingComment}
                 sessionAvatarProps={sessionAvatarProps}
-                submitLabel="回复"
-                placeholder={`回复 ${formattedDisplayName}...`}
+                submitLabel={translations.comments.reply}
+                placeholder={translations.comments.replyPlaceholder(formattedDisplayName)}
                 helperText={
                   isLoggedIn
-                    ? 'Web3 钱包登录用户回复提交后可能需要审核。'
-                    : '登录后即可回复这条评论。'
+                    ? translations.comments.walletReplyReview
+                    : translations.comments.loginToReply
                 }
-                title={`回复 ${formattedDisplayName}`}
+                title={translations.comments.replyTo(formattedDisplayName)}
                 onChange={onReplyContentChange}
                 onCancel={onReplyCancel}
                 onSubmit={() => {

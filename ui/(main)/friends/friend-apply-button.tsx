@@ -3,6 +3,7 @@
 import type { Variants } from 'motion/react'
 import { motion } from 'motion/react'
 import { useModalActions } from '@/store/use-modal-store'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 
 const buttonVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -19,6 +20,7 @@ const buttonVariants: Variants = {
 
 export function FriendApplyButton() {
   const { setModalOpen } = useModalActions()
+  const translations = useTranslations()
 
   return (
     <motion.button
@@ -31,7 +33,7 @@ export function FriendApplyButton() {
       }}
       className="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-lg border border-black/15 bg-white/65 px-3 font-medium text-sm text-zinc-800 transition-colors duration-300 ease-out hover:border-black hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-black dark:border-white/20 dark:bg-white/[0.07] dark:text-zinc-100 dark:focus-visible:outline-white dark:hover:border-white dark:hover:bg-white dark:hover:text-black"
     >
-      申请友链
+      {translations.friends.apply}
     </motion.button>
   )
 }

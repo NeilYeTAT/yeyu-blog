@@ -2,12 +2,14 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { type ReactNode, useEffect, useState } from 'react'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
 import { InitialPageTransitionProvider } from './initial-page-transition-context'
 
 const minimumLoadingDuration = 800
 
 export default function InitialPageTransition({ children }: { children: ReactNode }) {
+  const translations = useTranslations()
   const [isPageReady, setIsPageReady] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
@@ -46,7 +48,7 @@ export default function InitialPageTransition({ children }: { children: ReactNod
             <motion.div
               key="initial-page-loading"
               role="status"
-              aria-label="页面加载中"
+              aria-label={translations.common.pageLoading}
               initial={false}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

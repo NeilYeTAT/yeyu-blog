@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { getAddress } from 'viem'
 import { createSiweMessage } from 'viem/siwe'
 import { authClient, useSession } from '@/lib/core/auth/client'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 
 export const WalletLoginPanel = ({
@@ -18,6 +19,7 @@ export const WalletLoginPanel = ({
   setIsWalletSigningIn: Dispatch<SetStateAction<boolean>>
 }) => {
   const isActionPending = injectedWallet.isConnecting || isLoginPending
+  const translations = useTranslations()
 
   const { refetch: refetchSession } = useSession()
 
@@ -44,7 +46,7 @@ export const WalletLoginPanel = ({
     const message = createSiweMessage({
       domain: window.location.host,
       address: checksumWalletAddress,
-      statement: 'Sign in with Ethereum to the useyeyu.cc',
+      statement: translations.loginModal.walletSignInStatement,
       uri: window.location.origin,
       version: '1',
       chainId: currentChainId,

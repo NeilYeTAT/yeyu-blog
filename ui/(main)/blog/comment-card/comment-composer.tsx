@@ -1,5 +1,6 @@
 import type { SessionAvatarProps } from './type'
 import { CornerUpLeft, X } from 'lucide-react'
+import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { Textarea } from '@/ui/shadcn/textarea'
 import { SessionAvatar } from './comment-avatar'
@@ -28,6 +29,7 @@ export function CommentComposer({
   onCancel?: () => void
   title?: string
 }) {
+  const translations = useTranslations()
   const trimmedContent = value.trim()
   const inputExceeded = trimmedContent.length > maxCommentLength
 
@@ -69,7 +71,7 @@ export function CommentComposer({
               className="h-9 rounded-xl px-3 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
             >
               <X className="size-4" />
-              取消
+              {translations.common.cancel}
             </Button>
           ) : null}
           <Button
@@ -78,7 +80,7 @@ export function CommentComposer({
             disabled={trimmedContent.length === 0 || inputExceeded || isSubmitting}
             onClick={onSubmit}
           >
-            {isSubmitting ? '稍等' : submitLabel}
+            {isSubmitting ? translations.common.pending : submitLabel}
           </Button>
         </div>
       </div>
