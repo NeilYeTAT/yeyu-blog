@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useHasCompletedHomeLoading, useHomeLoadingActions } from '@/store/use-home-loading-store'
+import { HandwritingWordmark } from '@/ui/(main)/layout/header/handwriting-wordmark'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import {
   WaveLink,
@@ -16,6 +17,9 @@ import { navigationConfig } from './constant'
 import { useScrollVisibility } from './hooks/use-scroll-visibility'
 import { NavItem } from './nav-item'
 
+const navigationEntranceDelay = 0.08
+const navigationEntranceStagger = 0.07
+
 export default function Header() {
   const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
@@ -23,6 +27,7 @@ export default function Header() {
   const hasCompletedHomeLoading = useHasCompletedHomeLoading()
   const { completeHomeLoading } = useHomeLoadingActions()
   const [hasEntered, setHasEntered] = useState(false)
+  const [wordmarkAnimationKey, setWordmarkAnimationKey] = useState(0)
   const { language, toggleLanguage } = useLanguage()
   const translations = useTranslations()
   const languageOffset = language === 'en' ? '100%' : '-100%'
@@ -31,6 +36,7 @@ export default function Header() {
     pathname === languagePathPrefix ? '/' : pathname.slice(languagePathPrefix.length)
   const isWaitingForHomeLoading =
     currentPathname === '/' && !hasCompletedHomeLoading && !shouldReduceMotion
+  const headerEntranceDelay = currentPathname === '/' ? 0.24 : 0
 
   useEffect(() => {
     if (currentPathname !== '/' && !hasCompletedHomeLoading) completeHomeLoading()
@@ -60,7 +66,7 @@ export default function Header() {
             ? { duration: 0 }
             : !hasEntered
               ? {
-                  delay: currentPathname === '/' ? 0.24 : 0,
+                  delay: headerEntranceDelay,
                   duration: 0.48,
                   ease: [0.16, 1, 0.3, 1],
                 }
@@ -73,17 +79,22 @@ export default function Header() {
         <WaveLink
           href={languagePathPrefix}
           withWaveUnderline={false}
-          className="flex h-full shrink-0 items-center whitespace-nowrap pl-4 font-header-brand text-base leading-none sm:pl-5 sm:text-xl"
+          className="flex h-full shrink-0 items-center whitespace-nowrap pl-4 leading-none sm:pl-5"
           aria-label={translations.header.homeLabel}
+          onClick={() => setWordmarkAnimationKey(animationKey => animationKey + 1)}
         >
-          <span className="translate-y-px">Yuuri &amp;</span>
+          <HandwritingWordmark
+            key={wordmarkAnimationKey}
+            delay={wordmarkAnimationKey === 0 ? headerEntranceDelay : 0}
+            isVisible={!isWaitingForHomeLoading}
+          />
         </WaveLink>
 
         <nav
           aria-label={translations.header.navigationLabel}
           className="grid h-full grid-cols-4 items-center"
         >
-          {navigationConfig.map(route => {
+          {navigationConfig.map((route, routeIndex) => {
             const isActive = route.type !== 'button' && route.pattern.test(currentPathname)
             const isLanguageRoute = route.path === '/language'
 
@@ -105,7 +116,7 @@ export default function Header() {
                   isActive ? 'font-bold text-white' : 'font-normal text-white/90 hover:text-white',
                 )}
               >
-                <span
+                <motion.span
                   className={cn(
                     waveLinkUnderlineClassName,
                     'after:-bottom-1 after:bg-[color-mix(in_srgb,var(--theme-accent)_50%,white)]',
@@ -113,6 +124,24 @@ export default function Header() {
                     isLanguageRoute && 'gap-1',
                     isActive && 'after:[clip-path:inset(0)]',
                   )}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
+                  animate={
+                    shouldReduceMotion || !isWaitingForHomeLoading
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: -8 }
+                  }
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0 }
+                      : {
+                          delay:
+                            headerEntranceDelay +
+                            navigationEntranceDelay +
+                            routeIndex * navigationEntranceStagger,
+                          duration: 0.36,
+                          ease: [0.22, 1, 0.36, 1],
+                        }
+                  }
                 >
                   {isLanguageRoute && (
                     <Languages aria-hidden="true" className="size-3.5 shrink-0 sm:size-4" />
@@ -141,7 +170,7 @@ export default function Header() {
                       </motion.span>
                     </AnimatePresence>
                   </span>
-                </span>
+                </motion.span>
               </NavItem>
             )
           })}
