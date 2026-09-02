@@ -7,11 +7,10 @@ import { sileo } from 'sileo'
 import { useEchoUpdateMutation } from '@/hooks/api/echo/use-echo-update-mutation'
 import { updateEchoSchema } from '@/lib/api/echo/schema'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
+import { PublishedFormField, ReferenceFormField } from '@/ui/components/shared/admin-form-fields'
 import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
-import { Input } from '@/ui/shadcn/input'
-import { Switch } from '@/ui/shadcn/switch'
 import { Textarea } from '@/ui/shadcn/textarea'
 
 export default function EditEchoModal() {
@@ -87,38 +86,9 @@ export default function EditEchoModal() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="reference"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>来源</FormLabel>
-                    <FormControl>
-                      <Input placeholder="请输入来源" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <ReferenceFormField control={form.control} name="reference" />
 
-              <FormField
-                control={form.control}
-                name="isPublished"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-lg">是否发布</FormLabel>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={checked => {
-                          field.onChange(checked)
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <PublishedFormField control={form.control} name="isPublished" />
               <Button type="submit" className="cursor-pointer" disabled={isPending}>
                 保存修改
               </Button>

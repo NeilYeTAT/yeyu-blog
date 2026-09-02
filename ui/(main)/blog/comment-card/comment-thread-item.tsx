@@ -9,6 +9,247 @@ import { CommentComposer } from './comment-composer'
 import { CommentMarkdownContent } from './comment-markdown-content'
 import { formatCommentDisplayName, getCommentDisplayName } from './helper'
 
+function CommentHeader({
+  comment,
+  commentCreatedAt,
+  absoluteTime,
+  shouldShowRelativeTime,
+  formattedDisplayName,
+  isCurrentUserComment,
+  isDeletingComment,
+  onReplyClick,
+  onDeleteClick,
+}: {
+  comment: CommentTreeNode
+  commentCreatedAt: Date
+  absoluteTime: string
+  shouldShowRelativeTime: boolean
+  formattedDisplayName: string
+  isCurrentUserComment: boolean
+  isDeletingComment: boolean
+  onReplyClick: (commentId: number) => void
+  onDeleteClick: (comment: CommentTreeNode) => void
+}) {
+  const translations = useTranslations()
+  const canDeleteComment = !comment.isDeleted && isCurrentUserComment
+  const parentDisplayName =
+    comment.parent == null ? null : formatCommentDisplayName(getCommentDisplayName(comment.parent))
+
+  return (
+    <header className="flex items-start justify-between gap-3">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span
+            className={
+              comment.isAdmin
+                ? 'max-w-40 truncate font-medium text-theme-accent'
+                : 'max-w-40 truncate font-medium text-zinc-800 dark:text-zinc-100'
+            }
+          >
+            {formattedDisplayName}
+          </span>
+          {comment.isAdmin ? (
+            <span className="rounded-full bg-theme-accent/12 px-2 py-0.5 font-medium text-theme-accent">
+              {translations.comments.admin}
+            </span>
+          ) : null}
+          {isCurrentUserComment ? (
+            <span className="rounded-full bg-theme-accent/8 px-2 py-0.5 font-medium text-theme-accent/70">
+              {translations.comments.you}
+            </span>
+          ) : null}
+          <time
+            className="text-zinc-500 dark:text-zinc-400"
+            dateTime={commentCreatedAt.toISOString()}
+            title={absoluteTime}
+          >
+            {absoluteTime}
+          </time>
+          {shouldShowRelativeTime ? (
+            <time
+              className="text-zinc-400 dark:text-zinc-500"
+              dateTime={commentCreatedAt.toISOString()}
+              title={absoluteTime}
+            >
+              {toRelativeDate(commentCreatedAt)}
+            </time>
+          ) : null}
+          {comment.isDeleted ? (
+            <span className="text-zinc-400 dark:text-zinc-500">
+              {translations.comments.deletedStatus}
+            </span>
+          ) : null}
+        </div>
+
+        {parentDisplayName != null ? (
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <CornerUpLeft className="size-3.5" />
+            <span>{translations.comments.replyTo(parentDisplayName)}</span>
+          </div>
+        ) : null}
+      </div>
+
+      {!comment.isDeleted ? (
+        <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+          {canDeleteComment ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              className="rounded-lg text-zinc-500 hover:text-destructive dark:text-zinc-400"
+              aria-label={translations.comments.deleteLabel(formattedDisplayName)}
+              disabled={isDeletingComment}
+              onClick={() => {
+                onDeleteClick(comment)
+              }}
+            >
+              <Trash2 className="size-3.5" />
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            className="rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            aria-label={translations.comments.replyLabel(formattedDisplayName)}
+            onClick={() => {
+              onReplyClick(comment.id)
+            }}
+          >
+            <CornerUpLeft className="size-3.5" />
+          </Button>
+        </div>
+      ) : null}
+    </header>
+  )
+}
+
+function CommentContent({ comment }: { comment: CommentTreeNode }) {
+  const translations = useTranslations()
+
+  return (
+    <div className="mt-2 text-zinc-900 dark:text-zinc-100">
+      {comment.isDeleted ? (
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <del>{translations.comments.deleted}</del>
+        </p>
+      ) : (
+        <CommentMarkdownContent content={comment.content} htmlContent={comment.htmlContent} />
+      )}
+    </div>
+  )
+}
+
+function CommentReplyEditor({
+  comment,
+  formattedDisplayName,
+  isLoggedIn,
+  activeReplyCommentId,
+  replyContent,
+  isCreatingComment,
+  sessionAvatarProps,
+  onReplyCancel,
+  onReplyContentChange,
+  onReplySubmit,
+}: {
+  comment: CommentTreeNode
+  formattedDisplayName: string
+  isLoggedIn: boolean
+  activeReplyCommentId: number | null
+  replyContent: string
+  isCreatingComment: boolean
+  sessionAvatarProps: SessionAvatarProps
+  onReplyCancel: () => void
+  onReplyContentChange: (value: string) => void
+  onReplySubmit: (commentId: number) => void
+}) {
+  const translations = useTranslations()
+
+  if (comment.isDeleted || activeReplyCommentId !== comment.id) return null
+
+  return (
+    <div className="mt-3 border-zinc-200/70 border-t pt-3 dark:border-zinc-800/70">
+      <CommentComposer
+        value={replyContent}
+        isSubmitting={isCreatingComment}
+        sessionAvatarProps={sessionAvatarProps}
+        submitLabel={translations.comments.reply}
+        placeholder={translations.comments.replyPlaceholder(formattedDisplayName)}
+        helperText={
+          isLoggedIn ? translations.comments.walletReplyReview : translations.comments.loginToReply
+        }
+        title={translations.comments.replyTo(formattedDisplayName)}
+        onChange={onReplyContentChange}
+        onCancel={onReplyCancel}
+        onSubmit={() => {
+          onReplySubmit(comment.id)
+        }}
+      />
+    </div>
+  )
+}
+
+function CommentReplies({
+  comment,
+  commentReferenceTime,
+  depth,
+  sessionUserId,
+  isLoggedIn,
+  activeReplyCommentId,
+  replyContent,
+  isCreatingComment,
+  isDeletingComment,
+  sessionAvatarProps,
+  onReplyClick,
+  onReplyCancel,
+  onReplyContentChange,
+  onReplySubmit,
+  onDeleteClick,
+}: {
+  comment: CommentTreeNode
+  commentReferenceTime: number
+  depth: number
+  sessionUserId?: string
+  isLoggedIn: boolean
+  activeReplyCommentId: number | null
+  replyContent: string
+  isCreatingComment: boolean
+  isDeletingComment: boolean
+  sessionAvatarProps: SessionAvatarProps
+  onReplyClick: (commentId: number) => void
+  onReplyCancel: () => void
+  onReplyContentChange: (value: string) => void
+  onReplySubmit: (commentId: number) => void
+  onDeleteClick: (comment: CommentTreeNode) => void
+}) {
+  if (comment.children.length === 0) return null
+
+  return (
+    <ul className="mt-4 space-y-4">
+      {comment.children.map(childComment => (
+        <CommentThreadItem
+          key={childComment.id}
+          comment={childComment}
+          commentReferenceTime={commentReferenceTime}
+          depth={depth + 1}
+          sessionUserId={sessionUserId}
+          isLoggedIn={isLoggedIn}
+          activeReplyCommentId={activeReplyCommentId}
+          replyContent={replyContent}
+          isCreatingComment={isCreatingComment}
+          isDeletingComment={isDeletingComment}
+          sessionAvatarProps={sessionAvatarProps}
+          onReplyClick={onReplyClick}
+          onReplyCancel={onReplyCancel}
+          onReplyContentChange={onReplyContentChange}
+          onReplySubmit={onReplySubmit}
+          onDeleteClick={onDeleteClick}
+        />
+      ))}
+    </ul>
+  )
+}
+
 export function CommentThreadItem({
   comment,
   commentReferenceTime,
@@ -42,8 +283,6 @@ export function CommentThreadItem({
   onReplySubmit: (commentId: number) => void
   onDeleteClick: (comment: CommentTreeNode) => void
 }) {
-  const translations = useTranslations()
-  const isDeletedComment = comment.isDeleted
   const commentCreatedAt = new Date(comment.createdAt)
   const absoluteTime = prettyDateTime(commentCreatedAt)
   const shouldShowRelativeTime =
@@ -51,10 +290,6 @@ export function CommentThreadItem({
   const displayName = getCommentDisplayName(comment)
   const formattedDisplayName = formatCommentDisplayName(displayName)
   const isCurrentUserComment = sessionUserId != null && comment.userId === sessionUserId
-  const canDeleteComment = !isDeletedComment && isCurrentUserComment
-  const isReplyEditorOpen = !isDeletedComment && activeReplyCommentId === comment.id
-  const parentDisplayName =
-    comment.parent == null ? null : formatCommentDisplayName(getCommentDisplayName(comment.parent))
 
   return (
     <li
@@ -69,153 +304,51 @@ export function CommentThreadItem({
 
         <div className="min-w-0 flex-1">
           <article>
-            <header className="flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  <span
-                    className={
-                      comment.isAdmin
-                        ? 'max-w-40 truncate font-medium text-theme-accent'
-                        : 'max-w-40 truncate font-medium text-zinc-800 dark:text-zinc-100'
-                    }
-                  >
-                    {formattedDisplayName}
-                  </span>
-                  {comment.isAdmin ? (
-                    <span className="rounded-full bg-theme-accent/12 px-2 py-0.5 font-medium text-theme-accent">
-                      {translations.comments.admin}
-                    </span>
-                  ) : null}
-                  {isCurrentUserComment ? (
-                    <span className="rounded-full bg-theme-accent/8 px-2 py-0.5 font-medium text-theme-accent/70">
-                      {translations.comments.you}
-                    </span>
-                  ) : null}
-                  <time
-                    className="text-zinc-500 dark:text-zinc-400"
-                    dateTime={commentCreatedAt.toISOString()}
-                    title={absoluteTime}
-                  >
-                    {absoluteTime}
-                  </time>
-                  {shouldShowRelativeTime ? (
-                    <time
-                      className="text-zinc-400 dark:text-zinc-500"
-                      dateTime={commentCreatedAt.toISOString()}
-                      title={absoluteTime}
-                    >
-                      {toRelativeDate(commentCreatedAt)}
-                    </time>
-                  ) : null}
-                  {isDeletedComment ? (
-                    <span className="text-zinc-400 dark:text-zinc-500">
-                      {translations.comments.deletedStatus}
-                    </span>
-                  ) : null}
-                </div>
+            <CommentHeader
+              comment={comment}
+              commentCreatedAt={commentCreatedAt}
+              absoluteTime={absoluteTime}
+              shouldShowRelativeTime={shouldShowRelativeTime}
+              formattedDisplayName={formattedDisplayName}
+              isCurrentUserComment={isCurrentUserComment}
+              isDeletingComment={isDeletingComment}
+              onReplyClick={onReplyClick}
+              onDeleteClick={onDeleteClick}
+            />
 
-                {parentDisplayName != null ? (
-                  <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-                    <CornerUpLeft className="size-3.5" />
-                    <span>{translations.comments.replyTo(parentDisplayName)}</span>
-                  </div>
-                ) : null}
-              </div>
-
-              {!isDeletedComment ? (
-                <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                  {canDeleteComment ? (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-xs"
-                      className="rounded-lg text-zinc-500 hover:text-destructive dark:text-zinc-400"
-                      aria-label={translations.comments.deleteLabel(formattedDisplayName)}
-                      disabled={isDeletingComment}
-                      onClick={() => {
-                        onDeleteClick(comment)
-                      }}
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
-                  ) : null}
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-xs"
-                    className="rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                    aria-label={translations.comments.replyLabel(formattedDisplayName)}
-                    onClick={() => {
-                      onReplyClick(comment.id)
-                    }}
-                  >
-                    <CornerUpLeft className="size-3.5" />
-                  </Button>
-                </div>
-              ) : null}
-            </header>
-
-            <div className="mt-2 text-zinc-900 dark:text-zinc-100">
-              {isDeletedComment ? (
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  <del>{translations.comments.deleted}</del>
-                </p>
-              ) : (
-                <CommentMarkdownContent
-                  content={comment.content}
-                  htmlContent={comment.htmlContent}
-                />
-              )}
-            </div>
+            <CommentContent comment={comment} />
           </article>
 
-          {isReplyEditorOpen ? (
-            <div className="mt-3 border-zinc-200/70 border-t pt-3 dark:border-zinc-800/70">
-              <CommentComposer
-                value={replyContent}
-                isSubmitting={isCreatingComment}
-                sessionAvatarProps={sessionAvatarProps}
-                submitLabel={translations.comments.reply}
-                placeholder={translations.comments.replyPlaceholder(formattedDisplayName)}
-                helperText={
-                  isLoggedIn
-                    ? translations.comments.walletReplyReview
-                    : translations.comments.loginToReply
-                }
-                title={translations.comments.replyTo(formattedDisplayName)}
-                onChange={onReplyContentChange}
-                onCancel={onReplyCancel}
-                onSubmit={() => {
-                  onReplySubmit(comment.id)
-                }}
-              />
-            </div>
-          ) : null}
+          <CommentReplyEditor
+            comment={comment}
+            formattedDisplayName={formattedDisplayName}
+            isLoggedIn={isLoggedIn}
+            activeReplyCommentId={activeReplyCommentId}
+            replyContent={replyContent}
+            isCreatingComment={isCreatingComment}
+            sessionAvatarProps={sessionAvatarProps}
+            onReplyCancel={onReplyCancel}
+            onReplyContentChange={onReplyContentChange}
+            onReplySubmit={onReplySubmit}
+          />
 
-          {comment.children.length > 0 ? (
-            <ul className="mt-4 space-y-4">
-              {comment.children.map(childComment => (
-                <CommentThreadItem
-                  key={childComment.id}
-                  comment={childComment}
-                  commentReferenceTime={commentReferenceTime}
-                  depth={depth + 1}
-                  sessionUserId={sessionUserId}
-                  isLoggedIn={isLoggedIn}
-                  activeReplyCommentId={activeReplyCommentId}
-                  replyContent={replyContent}
-                  isCreatingComment={isCreatingComment}
-                  isDeletingComment={isDeletingComment}
-                  sessionAvatarProps={sessionAvatarProps}
-                  onReplyClick={onReplyClick}
-                  onReplyCancel={onReplyCancel}
-                  onReplyContentChange={onReplyContentChange}
-                  onReplySubmit={onReplySubmit}
-                  onDeleteClick={onDeleteClick}
-                />
-              ))}
-            </ul>
-          ) : null}
+          <CommentReplies
+            comment={comment}
+            commentReferenceTime={commentReferenceTime}
+            depth={depth}
+            sessionUserId={sessionUserId}
+            isLoggedIn={isLoggedIn}
+            activeReplyCommentId={activeReplyCommentId}
+            replyContent={replyContent}
+            isCreatingComment={isCreatingComment}
+            isDeletingComment={isDeletingComment}
+            sessionAvatarProps={sessionAvatarProps}
+            onReplyClick={onReplyClick}
+            onReplyCancel={onReplyCancel}
+            onReplyContentChange={onReplyContentChange}
+            onReplySubmit={onReplySubmit}
+            onDeleteClick={onDeleteClick}
+          />
         </div>
       </div>
     </li>

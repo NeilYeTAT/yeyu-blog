@@ -1,5 +1,6 @@
 'use client'
 
+import type { ComponentProps } from 'react'
 import { Languages } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
@@ -21,6 +22,49 @@ import { NavItem } from './nav-item'
 const navigationEntranceDelay = 0.08
 const navigationEntranceStagger = 0.07
 
+function getHeaderAnimation({
+  isHeaderVisible,
+  isWaitingForHomeLoading,
+  shouldReduceMotion,
+}: {
+  isHeaderVisible: boolean
+  isWaitingForHomeLoading: boolean
+  shouldReduceMotion: boolean | null
+}): ComponentProps<typeof motion.header>['animate'] {
+  if (isWaitingForHomeLoading) return { opacity: 0, scale: 0.98, y: -16 }
+  if (isHeaderVisible) return { opacity: 1, scale: 1, y: 0 }
+
+  return { opacity: 0, scale: 1, y: shouldReduceMotion ? 0 : '-140%' }
+}
+
+function getHeaderTransition({
+  hasEntered,
+  headerEntranceDelay,
+  isHeaderVisible,
+  isWaitingForHomeLoading,
+  shouldReduceMotion,
+}: {
+  hasEntered: boolean
+  headerEntranceDelay: number
+  isHeaderVisible: boolean
+  isWaitingForHomeLoading: boolean
+  shouldReduceMotion: boolean | null
+}): ComponentProps<typeof motion.header>['transition'] {
+  if (shouldReduceMotion || isWaitingForHomeLoading) return { duration: 0 }
+
+  if (!hasEntered) {
+    return {
+      delay: headerEntranceDelay,
+      duration: 0.48,
+      ease: [0.16, 1, 0.3, 1],
+    }
+  }
+
+  if (isHeaderVisible) return { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
+
+  return { duration: 0.18, ease: [0.4, 0, 1, 1] }
+}
+
 export default function Header() {
   const pathname = usePathname()
   const isHeaderVisible = useScrollVisibility()
@@ -37,6 +81,18 @@ export default function Header() {
   const isWaitingForHomeLoading =
     currentPathname === '/' && !hasCompletedHomeLoading && !shouldReduceMotion
   const headerEntranceDelay = currentPathname === '/' ? 0.24 : 0
+  const headerAnimation = getHeaderAnimation({
+    isHeaderVisible,
+    isWaitingForHomeLoading,
+    shouldReduceMotion,
+  })
+  const headerTransition = getHeaderTransition({
+    hasEntered,
+    headerEntranceDelay,
+    isHeaderVisible,
+    isWaitingForHomeLoading,
+    shouldReduceMotion,
+  })
 
   useEffect(() => {
     if (currentPathname !== '/' && !hasCompletedHomeLoading) completeHomeLoading()
@@ -50,30 +106,12 @@ export default function Header() {
         (!isHeaderVisible || isWaitingForHomeLoading) && 'pointer-events-none',
       )}
       initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -16 }}
-      animate={{
-        y: isWaitingForHomeLoading ? -16 : isHeaderVisible || shouldReduceMotion ? 0 : '-140%',
-        opacity: isWaitingForHomeLoading ? 0 : isHeaderVisible ? 1 : 0,
-        scale: isWaitingForHomeLoading ? 0.98 : 1,
-      }}
+      animate={headerAnimation}
       inert={isWaitingForHomeLoading}
       onAnimationComplete={() => {
         if (!isWaitingForHomeLoading && !hasEntered) setHasEntered(true)
       }}
-      transition={
-        shouldReduceMotion
-          ? { duration: 0 }
-          : isWaitingForHomeLoading
-            ? { duration: 0 }
-            : !hasEntered
-              ? {
-                  delay: headerEntranceDelay,
-                  duration: 0.48,
-                  ease: [0.16, 1, 0.3, 1],
-                }
-              : isHeaderVisible
-                ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
-                : { duration: 0.18, ease: [0.4, 0, 1, 1] }
-      }
+      transition={headerTransition}
     >
       <div className="grid h-full grid-cols-[5rem_1fr] items-center sm:grid-cols-[7rem_1fr]">
         <WaveLink

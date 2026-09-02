@@ -8,6 +8,7 @@ import { sileo } from 'sileo'
 import { useEchoCreateMutation } from '@/hooks/api/echo/use-echo-create-mutation'
 import { createEchoSchema } from '@/lib/api/echo/schema'
 import { useModalActions, useModalType } from '@/store/use-modal-store'
+import { ReferenceFormField } from '@/ui/components/shared/admin-form-fields'
 import { Button } from '@/ui/shadcn/button'
 import {
   Dialog,
@@ -18,7 +19,6 @@ import {
   DialogTitle,
 } from '@/ui/shadcn/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
-import { Input } from '@/ui/shadcn/input'
 import { Switch } from '@/ui/shadcn/switch'
 import { Textarea } from '@/ui/shadcn/textarea'
 
@@ -85,19 +85,7 @@ export default function CreateEchoModal() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="reference"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>来源</FormLabel>
-                    <FormControl>
-                      <Input placeholder="请输入来源" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <ReferenceFormField control={form.control} name="reference" />
 
               <FormField
                 control={form.control}

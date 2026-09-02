@@ -18,11 +18,11 @@ import { updateBlog } from '@/lib/api/blog/update-blog'
 import { createNote } from '@/lib/api/note/create-note'
 import { updateNote } from '@/lib/api/note/update-note'
 import { useModalActions } from '@/store/use-modal-store'
+import { PublishedFormField } from '@/ui/components/shared/admin-form-fields'
 import { Button } from '@/ui/shadcn/button'
 import { Combobox } from '@/ui/shadcn/combobox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
 import { Input } from '@/ui/shadcn/input'
-import { Switch } from '@/ui/shadcn/switch'
 import MarkdownEditor from './markdown-editor'
 import { ArticleSchema } from './type'
 import { useMarkdownAutoSave } from './use-markdown-auto-save'
@@ -207,24 +207,7 @@ export const AdminArticleEditPage: FC<{
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="isPublished"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg">是否发布</FormLabel>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={checked => {
-                    field.onChange(checked)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <PublishedFormField control={form.control} name="isPublished" />
 
         <div className="flex items-end gap-2">
           <FormField

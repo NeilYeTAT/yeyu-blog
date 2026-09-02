@@ -278,8 +278,6 @@ export function SkyBackgroundCanvas({
   const [isReady, setIsReady] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
-  colorsRef.current = colors
-
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     const syncMotionPreference = () => setPrefersReducedMotion(mediaQuery.matches)
@@ -322,6 +320,7 @@ export function SkyBackgroundCanvas({
   }, [])
 
   useEffect(() => {
+    colorsRef.current = colors
     const renderer = rendererRef.current
     if (!renderer) return
 
