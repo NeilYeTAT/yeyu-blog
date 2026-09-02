@@ -3,7 +3,7 @@
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHasCompletedHomeLoading, useHomeLoadingActions } from '@/store/use-home-loading-store'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
@@ -123,28 +123,66 @@ export function HomeTextMotion({
   children: ReactNode
   className?: string
 }) {
-  const { language } = useLanguage()
+  const { isLanguageChanging, language } = useLanguage()
   const shouldReduceMotion = useReducedMotion()
   const languageOffset = language === 'en' ? '100%' : '-100%'
+  const languageEntryOffset = isLanguageChanging ? 0 : languageOffset
+  const contentRefs = useRef(new Map<string, HTMLDivElement>())
+  const [contentHeight, setContentHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    const content = contentRefs.current.get(language)
+    if (!content) return
+
+    const updateContentHeight = () => {
+      setContentHeight(content.offsetHeight)
+    }
+
+    updateContentHeight()
+
+    const resizeObserver = new ResizeObserver(updateContentHeight)
+    resizeObserver.observe(content)
+
+    return () => resizeObserver.disconnect()
+  }, [language])
 
   return (
     <motion.div className={className} variants={textVariants}>
-      <div className="grid overflow-hidden">
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={language}
-            className="col-start-1 row-start-1 min-w-0"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: languageOffset }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: languageOffset }}
-            transition={
-              shouldReduceMotion ? { duration: 0 } : { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
-            }
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <motion.div
+        animate={contentHeight === null ? undefined : { height: contentHeight }}
+        className="overflow-hidden"
+        transition={
+          shouldReduceMotion ? { duration: 0 } : { duration: 0.42, ease: [0.4, 0, 0.2, 1] }
+        }
+      >
+        <div className="grid items-start overflow-hidden">
+          <AnimatePresence initial={false}>
+            <motion.div
+              ref={content => {
+                if (content) {
+                  contentRefs.current.set(language, content)
+                } else {
+                  contentRefs.current.delete(language)
+                }
+              }}
+              key={language}
+              className="col-start-1 row-start-1 min-w-0"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: languageEntryOffset }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{
+                opacity: 0,
+                y: 0,
+                transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+              }}
+              transition={
+                shouldReduceMotion ? { duration: 0 } : { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
+              }
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </motion.div>
   )
 }

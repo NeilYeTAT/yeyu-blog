@@ -73,7 +73,7 @@ export default function Header() {
         <WaveLink
           href={languagePathPrefix}
           withWaveUnderline={false}
-          className="flex h-full items-center pl-4 font-header-brand text-xl leading-none sm:pl-5"
+          className="flex h-full shrink-0 items-center whitespace-nowrap pl-4 font-header-brand text-base leading-none sm:pl-5 sm:text-xl"
           aria-label={translations.header.homeLabel}
         >
           <span className="translate-y-px">Yuuri &amp;</span>
