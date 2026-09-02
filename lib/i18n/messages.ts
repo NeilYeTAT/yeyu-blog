@@ -31,7 +31,6 @@ export const messages = {
       pauseCloudMotion: '暂停云层动画',
       resetSkyBackground: '重置天空背景',
       phase: '时段',
-      cloudLayers: '云层',
       skyPhases: {
         midnight: '深夜',
         dawn: '黎明',
@@ -202,7 +201,6 @@ export const messages = {
       pauseCloudMotion: 'Pause cloud motion',
       resetSkyBackground: 'Reset sky background',
       phase: 'Phase',
-      cloudLayers: 'Clouds',
       skyPhases: {
         midnight: 'Midnight',
         dawn: 'Dawn',

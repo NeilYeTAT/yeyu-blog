@@ -3,10 +3,6 @@ const minutesPerDay = 24 * minutesPerHour
 
 const skyFrames = [
   {
-    cloudBrightness: 0.42,
-    cloudHueRotate: -14,
-    cloudOpacity: 0.24,
-    cloudSaturate: 0.72,
     minutes: 0,
     phase: 'midnight',
     skyBottom: '#17244f',
@@ -21,10 +17,6 @@ const skyFrames = [
     warmGlowOpacity: 0,
   },
   {
-    cloudBrightness: 0.62,
-    cloudHueRotate: -8,
-    cloudOpacity: 0.42,
-    cloudSaturate: 0.86,
     minutes: 300,
     phase: 'dawn',
     skyBottom: '#f4a66e',
@@ -39,10 +31,6 @@ const skyFrames = [
     warmGlowOpacity: 0.68,
   },
   {
-    cloudBrightness: 0.92,
-    cloudHueRotate: 0,
-    cloudOpacity: 0.78,
-    cloudSaturate: 1,
     minutes: 480,
     phase: 'morning',
     skyBottom: '#c9f4fb',
@@ -57,10 +45,6 @@ const skyFrames = [
     warmGlowOpacity: 0.28,
   },
   {
-    cloudBrightness: 1,
-    cloudHueRotate: 0,
-    cloudOpacity: 1,
-    cloudSaturate: 1,
     minutes: 720,
     phase: 'noon',
     skyBottom: '#d9f8fb',
@@ -75,10 +59,6 @@ const skyFrames = [
     warmGlowOpacity: 0.06,
   },
   {
-    cloudBrightness: 0.96,
-    cloudHueRotate: -1,
-    cloudOpacity: 0.84,
-    cloudSaturate: 0.98,
     minutes: 960,
     phase: 'afternoon',
     skyBottom: '#c6eef9',
@@ -93,10 +73,6 @@ const skyFrames = [
     warmGlowOpacity: 0.16,
   },
   {
-    cloudBrightness: 0.82,
-    cloudHueRotate: -8,
-    cloudOpacity: 0.68,
-    cloudSaturate: 0.95,
     minutes: 1110,
     phase: 'sunset',
     skyBottom: '#ffd088',
@@ -111,10 +87,6 @@ const skyFrames = [
     warmGlowOpacity: 0.86,
   },
   {
-    cloudBrightness: 0.48,
-    cloudHueRotate: -12,
-    cloudOpacity: 0.32,
-    cloudSaturate: 0.76,
     minutes: 1260,
     phase: 'night',
     skyBottom: '#1b2b57',
@@ -129,10 +101,6 @@ const skyFrames = [
     warmGlowOpacity: 0.04,
   },
   {
-    cloudBrightness: 0.42,
-    cloudHueRotate: -14,
-    cloudOpacity: 0.24,
-    cloudSaturate: 0.72,
     minutes: minutesPerDay,
     phase: 'midnight',
     skyBottom: '#17244f',
@@ -175,26 +143,6 @@ export const getSkyBackgroundTimeState = (minutesOfDay: number) => {
     (normalizedMinutesOfDay - currentFrame.minutes) / (nextFrame.minutes - currentFrame.minutes)
 
   return {
-    cloudBrightness: interpolateNumber(
-      currentFrame.cloudBrightness,
-      nextFrame.cloudBrightness,
-      phaseProgress,
-    ),
-    cloudHueRotate: interpolateNumber(
-      currentFrame.cloudHueRotate,
-      nextFrame.cloudHueRotate,
-      phaseProgress,
-    ),
-    cloudOpacity: interpolateNumber(
-      currentFrame.cloudOpacity,
-      nextFrame.cloudOpacity,
-      phaseProgress,
-    ),
-    cloudSaturate: interpolateNumber(
-      currentFrame.cloudSaturate,
-      nextFrame.cloudSaturate,
-      phaseProgress,
-    ),
     label: formatMinutesOfDay(normalizedMinutesOfDay),
     minutesOfDay: normalizedMinutesOfDay,
     phase: currentFrame.phase,

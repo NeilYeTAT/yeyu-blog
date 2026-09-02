@@ -17,11 +17,6 @@
 }
 
 .site-background {
-  --site-sky-cloud-max-scale: 2.05;
-  --site-sky-cloud-brightness: 0.98;
-  --site-sky-cloud-opacity: 0.945;
-  --site-sky-cloud-play-state: running;
-  --site-sky-cloud-saturate: 1;
   --site-sky-sky-bottom: #d5f7fb;
   --site-sky-sky-lower: #8fe3f8;
   --site-sky-sky-middle: #5ac9f3;
@@ -142,80 +137,23 @@
   animation-play-state: var(--site-sky-star-play-state);
 }
 
-.site-sky-clouds {
+.site-sky-field {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 20;
-  height: 74vh;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
-  opacity: var(--site-sky-cloud-opacity);
-  filter: brightness(var(--site-sky-cloud-brightness)) saturate(var(--site-sky-cloud-saturate))
-    hue-rotate(var(--site-sky-cloud-hue-rotate));
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 100%);
-  transition:
-    opacity 800ms ease,
-    filter 800ms ease;
-}
-
-.site-sky-cloud {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 0%;
   opacity: 0;
-  transform-origin: 50% 100%;
-  animation-name: site-sky-cloud-drift;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-play-state: var(--site-sky-cloud-play-state);
+  transition: opacity 700ms ease-out;
 }
 
-.site-sky-cloud-1 {
-  animation-duration: var(--site-sky-cloud-1-duration);
-  animation-delay: -4s;
+.site-sky-field[data-ready] {
+  opacity: 1;
 }
 
-.site-sky-cloud-2 {
-  animation-duration: var(--site-sky-cloud-2-duration);
-  animation-delay: -10s;
-}
-
-.site-sky-cloud-3 {
-  animation-duration: var(--site-sky-cloud-3-duration);
-  animation-delay: -17s;
-}
-
-.site-sky-cloud-4 {
-  animation-duration: var(--site-sky-cloud-4-duration);
-  animation-delay: -23s;
-}
-
-@keyframes site-sky-cloud-drift {
-  0% {
-    opacity: 0;
-    transform: scale(1);
-  }
-
-  18% {
-    opacity: 0.58;
-  }
-
-  68% {
-    opacity: 0.52;
-  }
-
-  86%,
-  100% {
-    opacity: 0;
-    transform: scale(var(--site-sky-cloud-max-scale));
-  }
+.site-sky-field-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes site-sky-star-twinkle {
@@ -228,23 +166,13 @@
   }
 }
 
-@media (max-width: 767px) {
-  .site-background {
-    --site-sky-cloud-max-scale: 1.55;
-  }
-
-  .site-sky-clouds {
-    height: 64vh;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .site-background {
     transition: none;
   }
 
-  .site-sky-cloud {
-    animation-play-state: paused;
+  .site-sky-field {
+    transition: none;
   }
 
   .site-sky-stars::before {

@@ -12,7 +12,6 @@ import {
 } from '@/store/use-sky-background-store'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Switch } from '@/ui/shadcn/switch'
-import { skyCloudLayers } from '../background/sky-background-config'
 
 const minCloudSpeed = 0.25
 const maxCloudSpeed = 3
@@ -133,9 +132,6 @@ export function SkyBackgroundControls() {
         <div className="flex min-h-7 items-center gap-3 border-border/60 border-t pt-2 text-[11px] text-foreground/55">
           <span>
             {translations.common.phase}: {translations.common.skyPhases[timeState.phase]}
-          </span>
-          <span>
-            {translations.common.cloudLayers}: {skyCloudLayers.length}
           </span>
           <button
             type="button"
