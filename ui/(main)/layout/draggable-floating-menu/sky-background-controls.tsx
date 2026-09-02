@@ -11,6 +11,7 @@ import {
   useSkyBackgroundTimeState,
 } from '@/store/use-sky-background-store'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
+import { Slider } from '@/ui/shadcn/slider'
 import { Switch } from '@/ui/shadcn/switch'
 
 const minCloudSpeed = 0.25
@@ -69,16 +70,15 @@ export function SkyBackgroundControls() {
             {timeState.label}
           </output>
         </div>
-        <input
+        <Slider
           aria-label={translations.common.skyTime}
-          className="h-1.5 w-full cursor-pointer accent-black dark:accent-white"
+          className="cursor-pointer"
           id={timeInputId}
           max={maxPreviewMinutesOfDay}
           min={minPreviewMinutesOfDay}
           step={previewMinutesStep}
-          type="range"
-          value={minutesOfDay}
-          onChange={event => setMinutesOfDay(Number(event.currentTarget.value))}
+          value={[minutesOfDay]}
+          onValueChange={([nextMinutesOfDay]) => setMinutesOfDay(nextMinutesOfDay)}
         />
         <div className="flex items-center justify-between gap-4">
           <span className="text-foreground/65 text-xs">{translations.common.useRealTime}</span>
@@ -105,16 +105,15 @@ export function SkyBackgroundControls() {
             {cloudSpeed.toFixed(2)}x
           </output>
         </div>
-        <input
+        <Slider
           aria-label={translations.common.cloudSpeed}
-          className="h-1.5 w-full cursor-pointer accent-black dark:accent-white"
+          className="cursor-pointer"
           id={cloudSpeedInputId}
           max={maxCloudSpeed}
           min={minCloudSpeed}
           step={cloudSpeedStep}
-          type="range"
-          value={cloudSpeed}
-          onChange={event => setCloudSpeed(Number(event.currentTarget.value))}
+          value={[cloudSpeed]}
+          onValueChange={([nextCloudSpeed]) => setCloudSpeed(nextCloudSpeed)}
         />
         <div className="flex items-center justify-between gap-4">
           <span className="text-foreground/65 text-xs">{translations.common.cloudMotion}</span>
