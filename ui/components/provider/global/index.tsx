@@ -18,7 +18,7 @@ const SpeedInsights = dynamic(
 export default function GlobalProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
         {children}
         <Toaster position="top-left" theme="system" />
       </ThemeProvider>

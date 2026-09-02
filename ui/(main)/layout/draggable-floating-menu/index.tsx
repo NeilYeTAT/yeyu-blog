@@ -123,7 +123,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
           side="top"
           sideOffset={12}
           animation="fade"
-          className="max-h-[min(38rem,calc(100dvh-7rem))] w-[min(19rem,calc(100vw-2rem))] overflow-y-auto rounded-lg border-border/60 bg-background/94 p-2 shadow-lg backdrop-blur-xl dark:border-white/12 dark:bg-zinc-950/82 dark:shadow-[0_20px_48px_rgba(0,0,0,0.38)]"
+          className="max-h-[min(38rem,calc(100dvh-7rem))] w-[min(19rem,calc(100vw-2rem))] overflow-y-auto rounded-lg border-border/60 bg-background p-2 shadow-lg dark:border-white/12 dark:bg-zinc-950 dark:shadow-[0_20px_48px_rgba(0,0,0,0.38)]"
         >
           <div className="flex h-9 items-center justify-between px-2">
             <h2 className="font-medium text-sm">{translations.common.quickSettings}</h2>

@@ -72,7 +72,7 @@ export function SkyBackgroundControls() {
         </div>
         <input
           aria-label={translations.common.skyTime}
-          className="h-1.5 w-full cursor-pointer accent-theme-accent"
+          className="h-1.5 w-full cursor-pointer accent-black dark:accent-white"
           id={timeInputId}
           max={maxPreviewMinutesOfDay}
           min={minPreviewMinutesOfDay}
@@ -108,7 +108,7 @@ export function SkyBackgroundControls() {
         </div>
         <input
           aria-label={translations.common.cloudSpeed}
-          className="h-1.5 w-full cursor-pointer accent-theme-accent"
+          className="h-1.5 w-full cursor-pointer accent-black dark:accent-white"
           id={cloudSpeedInputId}
           max={maxCloudSpeed}
           min={minCloudSpeed}
