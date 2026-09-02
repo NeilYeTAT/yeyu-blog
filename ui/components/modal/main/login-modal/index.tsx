@@ -25,8 +25,8 @@ export const LoginModal = () => {
       }
       closeLabel={translations.loginModal.closeLabel}
       maxWidth={440}
-      className="border-theme-border/70 bg-theme-background/80 text-foreground backdrop-blur-xl dark:border-white/10 dark:bg-black/70"
-      titleClassName="font-bold text-xl text-foreground"
+      className="border-black/10 bg-white/90 text-zinc-800 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/90 dark:text-zinc-100 dark:shadow-[0_20px_48px_rgba(0,0,0,0.38)]"
+      titleClassName="font-semibold text-lg text-zinc-900 tracking-tight dark:text-white"
     >
       <LoginModalContent />
     </Modal>

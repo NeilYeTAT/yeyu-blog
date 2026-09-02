@@ -94,7 +94,7 @@ export const WalletLoginPanel = ({
         <Button
           key={wallet.id}
           type="button"
-          className="h-10 min-w-0 cursor-pointer justify-start rounded-xl border-theme-border/70 bg-theme-surface/50 px-3 text-sm text-theme-primary hover:border-theme-accent/40 hover:bg-theme-hover-background/70 hover:text-theme-primary focus-visible:ring-theme-ring/25 disabled:cursor-not-allowed dark:border-white/10 dark:bg-zinc-900/35 dark:text-zinc-100 dark:hover:bg-zinc-800/70 dark:hover:text-white"
+          className="h-10 min-w-0 cursor-pointer justify-start rounded-xl border-black/10 bg-black/[0.03] px-3 text-sm text-zinc-800 hover:border-black/20 hover:bg-black/[0.06] hover:text-black focus-visible:ring-black/20 disabled:cursor-not-allowed dark:border-white/12 dark:bg-white/[0.06] dark:text-zinc-100 dark:focus-visible:ring-white/35 dark:hover:border-white/25 dark:hover:bg-white/[0.12] dark:hover:text-white"
           onClick={() => handleWalletConnect(wallet)}
           disabled={isActionPending}
         >

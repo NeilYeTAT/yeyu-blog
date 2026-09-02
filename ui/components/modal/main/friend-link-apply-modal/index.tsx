@@ -88,12 +88,12 @@ const FriendLinkApplyModalContent = () => {
         </>
       }
       footer={
-        <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex w-full flex-col-reverse gap-1.5 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"
             variant="outline"
             data-copied={isCopied ? 'true' : undefined}
-            className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/25 px-4 text-zinc-600 shadow-none hover:bg-black/5 hover:text-zinc-900 data-[copied=true]:text-theme-accent dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
+            className="h-9 cursor-pointer rounded-lg border-black/10 bg-black/[0.03] px-3 text-zinc-700 shadow-none hover:border-black/20 hover:bg-black/[0.06] hover:text-black data-[copied=true]:border-black/25 data-[copied=true]:bg-black/[0.08] data-[copied=true]:text-black dark:border-white/12 dark:bg-white/[0.06] dark:text-zinc-300 dark:data-[copied=true]:border-white/30 dark:data-[copied=true]:bg-white/[0.15] dark:data-[copied=true]:text-white dark:hover:border-white/25 dark:hover:bg-white/[0.12] dark:hover:text-white"
             onClick={() => {
               void handleCopySiteInfo()
             }}
@@ -114,11 +114,11 @@ const FriendLinkApplyModalContent = () => {
               : translations.friendLinkApplyModal.copySiteInfo}
           </Button>
 
-          <div className="flex flex-col-reverse gap-2 sm:flex-row">
+          <div className="flex flex-col-reverse gap-1.5 sm:flex-row">
             <Button
               type="button"
               variant="outline"
-              className="h-10 cursor-pointer rounded-xl border-black/10 bg-white/35 px-4 text-zinc-700 shadow-none hover:bg-black/5 hover:text-zinc-900 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
+              className="h-9 cursor-pointer rounded-lg border-black/10 bg-black/[0.03] px-3 text-zinc-700 shadow-none hover:border-black/20 hover:bg-black/[0.06] hover:text-black dark:border-white/12 dark:bg-white/[0.06] dark:text-zinc-300 dark:hover:border-white/25 dark:hover:bg-white/[0.12] dark:hover:text-white"
               onClick={closeModal}
             >
               {translations.friendLinkApplyModal.cancel}
@@ -127,7 +127,7 @@ const FriendLinkApplyModalContent = () => {
               type="submit"
               form="friend-link-apply-form"
               disabled={isSubmitting}
-              className="h-10 cursor-pointer rounded-xl bg-theme-accent px-4 text-white shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-white focus-visible:ring-theme-ring/35"
+              className="h-9 cursor-pointer rounded-lg bg-black px-3 text-white shadow-none hover:bg-zinc-800 hover:text-white focus-visible:border-black focus-visible:ring-black/25 disabled:cursor-not-allowed dark:bg-white dark:text-black dark:focus-visible:border-white dark:focus-visible:ring-white/35 dark:hover:bg-zinc-200 dark:hover:text-black"
               onMouseEnter={() => {
                 sendIconRef.current?.startAnimation()
               }}
@@ -147,19 +147,19 @@ const FriendLinkApplyModalContent = () => {
       initialFocusRef={firstFieldRef}
       maxWidth={500}
       maxHeight="88vh"
-      className="border-black/10 bg-theme-background/80 text-zinc-700 shadow-[0_18px_54px_rgba(15,23,42,0.10)] backdrop-blur-xl dark:border-white/10 dark:bg-black/70 dark:text-zinc-200 dark:shadow-[0_18px_60px_rgba(0,0,0,0.38)]"
-      titleClassName="text-center font-bold text-xl text-zinc-900 dark:text-zinc-100"
+      className="border-black/10 bg-white/90 text-zinc-800 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/90 dark:text-zinc-100 dark:shadow-[0_20px_48px_rgba(0,0,0,0.38)]"
+      titleClassName="text-center font-semibold text-lg text-zinc-900 tracking-tight dark:text-white"
       descriptionClassName="text-center text-[11px] text-zinc-500 leading-5 dark:text-zinc-400"
       bodyClassName="[scrollbar-color:rgba(113,113,122,0.45)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-500/45 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-400/35 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-0.75"
       footerClassName="border-black/10 dark:border-white/10"
     >
-      <form id="friend-link-apply-form" className="grid gap-4" onSubmit={handleSubmit}>
+      <form id="friend-link-apply-form" className="grid gap-3" onSubmit={handleSubmit}>
         {friendLinkApplyFields.map((field, index) => {
           const fieldId = `friend-link-apply-${field.name}`
           const fieldTranslations = translations.friendLinkApplyModal.fields[field.name]
 
           return (
-            <div key={field.name} className="grid gap-2">
+            <div key={field.name} className="grid gap-1.5">
               <Label
                 htmlFor={fieldId}
                 className="font-medium text-sm text-zinc-700 dark:text-zinc-200"
@@ -173,7 +173,7 @@ const FriendLinkApplyModalContent = () => {
                 type={field.type}
                 required={field.required}
                 placeholder={fieldTranslations.placeholder}
-                className="h-10 rounded-xl border-black/10 bg-theme-background/65 text-sm shadow-none placeholder:text-zinc-400 focus-visible:border-zinc-400 focus-visible:ring-zinc-400/25 dark:border-white/10 dark:bg-zinc-900/70 dark:focus-visible:border-zinc-500 dark:focus-visible:ring-zinc-500/25 dark:placeholder:text-zinc-500"
+                className="h-9 rounded-lg border-black/10 bg-black/[0.03] text-sm shadow-none placeholder:text-zinc-400 focus-visible:border-black/30 focus-visible:ring-black/20 dark:border-white/12 dark:bg-white/[0.06] dark:focus-visible:border-white/30 dark:focus-visible:ring-white/35 dark:placeholder:text-zinc-500"
               />
             </div>
           )
