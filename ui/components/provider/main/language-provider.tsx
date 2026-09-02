@@ -1,8 +1,10 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { createContext, use, useState } from 'react'
+import { createContext, use, useLayoutEffect, useState } from 'react'
+import { seoMetadata } from '@/config/seo'
 import { isLanguage, type Language, languageHtmlLang } from '@/lib/i18n/config'
+import { getRoutePathname } from '@/lib/i18n/get-route-pathname'
 import { messages } from '@/lib/i18n/messages'
 
 const LanguageContext = createContext<
@@ -29,6 +31,21 @@ function requireLanguage(value: string) {
   return value
 }
 
+function getDocumentTitle(pathname: string, language: Language, currentTitle: string) {
+  const routePathname = getRoutePathname(pathname)
+  const pageTitle =
+    routePathname === '/'
+      ? seoMetadata[language].home.title
+      : routePathname === '/blog'
+        ? seoMetadata[language].blog.title
+        : routePathname === '/friends'
+          ? seoMetadata[language].friends.title
+          : currentTitle.replace(/\s*&\s*(?:叶鱼|Yuuri)$/, '')
+  const siteName = language === 'en' ? 'Yuuri' : '叶鱼'
+
+  return `${pageTitle} & ${siteName}`
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const routeLanguage = requireLanguage(pathname.split('/')[1] ?? '')
@@ -38,6 +55,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const nextLanguage = language === 'zh' ? 'en' : 'zh'
   const nextPathname = getLocalizedPathname(pathname, nextLanguage)
 
+  useLayoutEffect(() => {
+    document.documentElement.lang = languageHtmlLang[language]
+    document.title = getDocumentTitle(pathname, language, document.title)
+  }, [language, pathname])
+
   const toggleLanguage = () => {
     if (isLanguageChanging) return
 
@@ -45,7 +67,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     url.pathname = nextPathname
     setTargetLanguage(nextLanguage)
-    document.documentElement.lang = languageHtmlLang[nextLanguage]
     window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
   }
 

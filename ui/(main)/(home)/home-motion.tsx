@@ -3,7 +3,7 @@
 import type { Variants } from 'motion/react'
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useHasCompletedHomeLoading, useHomeLoadingActions } from '@/store/use-home-loading-store'
 import { useLanguage, useTranslations } from '@/ui/components/provider/main/language-provider'
 import FluidOrb from '@/ui/shadcn/fluid-orb'
@@ -130,7 +130,7 @@ export function HomeTextMotion({
   const contentRefs = useRef(new Map<string, HTMLDivElement>())
   const [contentHeight, setContentHeight] = useState<number | null>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const content = contentRefs.current.get(language)
     if (!content) return
 

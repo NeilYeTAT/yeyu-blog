@@ -4,6 +4,7 @@ import { Languages } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { getRoutePathname } from '@/lib/i18n/get-route-pathname'
 import { cn } from '@/lib/utils/common/shadcn'
 import { useHasCompletedHomeLoading, useHomeLoadingActions } from '@/store/use-home-loading-store'
 import { HandwritingWordmark } from '@/ui/(main)/layout/header/handwriting-wordmark'
@@ -32,8 +33,7 @@ export default function Header() {
   const translations = useTranslations()
   const languageOffset = language === 'en' ? '100%' : '-100%'
   const languagePathPrefix = `/${language}`
-  const currentPathname =
-    pathname === languagePathPrefix ? '/' : pathname.slice(languagePathPrefix.length)
+  const currentPathname = getRoutePathname(pathname)
   const isWaitingForHomeLoading =
     currentPathname === '/' && !hasCompletedHomeLoading && !shouldReduceMotion
   const headerEntranceDelay = currentPathname === '/' ? 0.24 : 0
