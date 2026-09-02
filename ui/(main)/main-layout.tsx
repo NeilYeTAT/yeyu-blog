@@ -7,7 +7,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <MainProvider>
       <MainStage>
-        <div className="site-whiteboard flex h-[calc(100dvh-1.5rem)] min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg sm:h-[calc(100dvh-2.5rem)]">
+        <div className="site-whiteboard flex h-[calc(100dvh-1.5rem)] min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl sm:h-[calc(100dvh-2.5rem)]">
           <Header />
 
           <div

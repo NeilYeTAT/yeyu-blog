@@ -80,8 +80,11 @@
 }
 
 .site-whiteboard {
-  border: 1px solid rgb(255 255 255 / 0.62);
-  background: rgb(252 254 255 / 0.94);
+  border: clamp(4px, 0.55vw, 8px) solid rgb(255 255 255 / 0.42);
+  background: rgb(252 254 255 / 0.9);
+  background-clip: padding-box;
+  -webkit-backdrop-filter: blur(12px) saturate(112%);
+  backdrop-filter: blur(12px) saturate(112%);
   box-shadow:
     0 24px 64px rgb(15 23 42 / 0.14),
     inset 0 1px 0 rgb(255 255 255 / 0.72);
@@ -93,9 +96,14 @@
 }
 
 .dark .site-whiteboard {
-  border: 0;
-  background: rgb(0 0 0 / 0.86);
-  box-shadow: 0 28px 72px rgb(0 0 0 / 0.3);
+  border-color: rgb(255 255 255 / 0.22);
+  background: rgb(8 13 24 / 0.96);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    0 28px 72px rgb(0 0 0 / 0.38),
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05);
 }
 
 .site-main-stage[data-background-only] .site-whiteboard {
