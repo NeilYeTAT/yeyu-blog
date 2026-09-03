@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useCommentDeleteMutation } from '@/hooks/api/comment/use-comment-delete-mutation'
 import { useCommentMutation } from '@/hooks/api/comment/use-comment-mutation'
 import { usePublicCommentQuery } from '@/hooks/api/comment/use-public-comment-query'
@@ -40,62 +40,56 @@ export function useCommentCard({ articleId }: { articleId: number }) {
     targetId: articleId,
   })
 
-  const openLoginModal = useCallback(() => {
+  const openLoginModal = () => {
     setModalOpen('loginModal')
-  }, [setModalOpen])
+  }
 
-  const submitComment = useCallback(
-    ({
-      content,
-      parentId,
-      onSuccess,
-    }: {
-      content: string
-      parentId?: number
-      onSuccess: () => void
-    }) => {
-      const trimmedContent = content.trim()
+  const submitComment = ({
+    content,
+    parentId,
+    onSuccess,
+  }: {
+    content: string
+    parentId?: number
+    onSuccess: () => void
+  }) => {
+    const trimmedContent = content.trim()
 
-      if (!isLoggedIn || trimmedContent.length === 0 || trimmedContent.length > maxCommentLength) {
-        return
-      }
+    if (!isLoggedIn || trimmedContent.length === 0 || trimmedContent.length > maxCommentLength) {
+      return
+    }
 
-      createComment(
-        {
-          parentId,
-          content: trimmedContent,
+    createComment(
+      {
+        parentId,
+        content: trimmedContent,
+      },
+      {
+        onSuccess: () => {
+          onSuccess()
         },
-        {
-          onSuccess: () => {
-            onSuccess()
-          },
-        },
-      )
-    },
-    [createComment, isLoggedIn],
-  )
+      },
+    )
+  }
 
-  const submitRootComment = useCallback(() => {
+  const submitRootComment = () => {
     submitComment({
       content: commentContent,
       onSuccess: () => {
         setCommentContent('')
       },
     })
-  }, [commentContent, submitComment])
+  }
 
-  const submitReply = useCallback(
-    (commentId: number) => {
-      submitComment({
-        content: useCommentCardStore.getState().replyContent,
-        parentId: commentId,
-        onSuccess: clearReply,
-      })
-    },
-    [clearReply, submitComment],
-  )
+  const submitReply = (commentId: number) => {
+    submitComment({
+      content: useCommentCardStore.getState().replyContent,
+      parentId: commentId,
+      onSuccess: clearReply,
+    })
+  }
 
-  const confirmDeleteComment = useCallback(() => {
+  const confirmDeleteComment = () => {
     const { activeReplyCommentId, deletingCommentId } = useCommentCardStore.getState()
 
     if (deletingCommentId == null) {
@@ -116,7 +110,7 @@ export function useCommentCard({ articleId }: { articleId: number }) {
         },
       },
     )
-  }, [clearReply, deleteComment, setDeletingCommentId])
+  }
 
   useEffect(() => {
     if (previousArticleId.current !== articleId) {

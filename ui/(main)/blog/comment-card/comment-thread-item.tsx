@@ -137,7 +137,7 @@ function CommentContent({ comment }: { comment: CommentTreeNode }) {
           <del>{translations.comments.deleted}</del>
         </p>
       ) : (
-        <CommentMarkdownContent htmlContent={comment.htmlContent} />
+        <CommentMarkdownContent sanitizedHtmlContent={comment.sanitizedHtmlContent} />
       )}
     </div>
   )

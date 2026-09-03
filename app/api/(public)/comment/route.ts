@@ -121,7 +121,7 @@ const serializePublicCommentParent = (comment: PublicCommentParentRecord) => {
 
 const serializePublicComment = async (comment: PublicCommentRecord) => {
   const content = comment.isDeleted ? deletedCommentText : comment.content
-  const htmlContent = comment.isDeleted
+  const sanitizedHtmlContent = comment.isDeleted
     ? deletedCommentText
     : String(await commentProcessor.process(content))
 
@@ -136,7 +136,7 @@ const serializePublicComment = async (comment: PublicCommentRecord) => {
     authorName: comment.authorName,
     authorImage: comment.authorImage,
     content,
-    htmlContent,
+    sanitizedHtmlContent,
     isDeleted: comment.isDeleted,
     state: comment.state,
     createdAt: comment.createdAt,

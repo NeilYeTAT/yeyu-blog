@@ -3,6 +3,8 @@
 import type { ComponentType } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
+const loadCommentCard = () => import('./deferred-comment-card-content')
+
 export default function DeferredCommentCard({ articleId }: { articleId: number }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const [LoadedCommentCard, setLoadedCommentCard] = useState<ComponentType<{
@@ -20,7 +22,7 @@ export default function DeferredCommentCard({ articleId }: { articleId: number }
         if (!entries.some(entry => entry.isIntersecting)) return
 
         observer.disconnect()
-        void import('./deferred-comment-card-content').then(({ default: CommentCard }) => {
+        void loadCommentCard().then(({ default: CommentCard }) => {
           if (!isMounted) return
 
           setLoadedCommentCard(() => CommentCard)

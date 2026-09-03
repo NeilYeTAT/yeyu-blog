@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils/common/shadcn'
 
-export function CommentMarkdownContent({ htmlContent }: { htmlContent: string }) {
+export function CommentMarkdownContent({ sanitizedHtmlContent }: { sanitizedHtmlContent: string }) {
   return (
     <div
       className={cn(
@@ -13,7 +13,7 @@ export function CommentMarkdownContent({ htmlContent }: { htmlContent: string })
         'prose-blockquote:my-3 prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:font-normal prose-blockquote:text-black/70 dark:prose-blockquote:text-white/70',
         'prose-img:my-3 prose-pre:my-4 prose-pre:overflow-x-auto prose-img:rounded-md prose-pre:rounded-md prose-code:text-black prose-pre:text-black dark:prose-code:text-white dark:prose-pre:text-white',
       )}
-      dangerouslySetInnerHTML={{ __html: htmlContent }}
+      dangerouslySetInnerHTML={{ __html: sanitizedHtmlContent }}
     />
   )
 }

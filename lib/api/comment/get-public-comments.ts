@@ -10,7 +10,7 @@ export type PublicCommentRecord = {
   authorName: string
   authorImage: string | null
   content: string
-  htmlContent: string
+  sanitizedHtmlContent: string
   isDeleted: boolean
   createdAt: string
   user: CommentUser | null
