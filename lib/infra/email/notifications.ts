@@ -147,37 +147,6 @@ export const notifyCommentAuthorReply = async ({
   })
 }
 
-export const notifyAdminNewMutterComment = async ({
-  authorName,
-  authorEmail,
-  content,
-  mutterId,
-  state,
-}: {
-  authorName: string
-  authorEmail: string
-  content: string
-  mutterId: number
-  state: string
-}) => {
-  const mutterUrl = getAbsoluteUrl('/mutter')
-  const adminUrl = getAbsoluteUrl('/admin/comment')
-
-  await sendAdminNotificationEmail({
-    subject: '收到新的低语评论',
-    title: '收到一条新的低语评论',
-    lines: [
-      `低语 ID：${mutterId}`,
-      `评论人：${authorName}（${authorEmail}）`,
-      `状态：${state === 'APPROVED' ? '已发布' : '待审核'}`,
-      `内容：${truncateText(content)}`,
-      `低语页面：${mutterUrl}`,
-    ],
-    actionUrl: adminUrl,
-    actionLabel: '去后台查看评论',
-  })
-}
-
 export const notifyAdminFriendLinkApplication = async ({
   name,
   email,

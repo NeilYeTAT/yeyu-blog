@@ -1,4 +1,4 @@
-export type CommentTargetType = 'BLOG' | 'NOTE'
+export type CommentTargetType = 'BLOG'
 
 export type CommentState = 'PENDING' | 'APPROVED' | 'REJECTED'
 

@@ -46,7 +46,7 @@ type PublicCommentParentRecord = {
 
 type PublicCommentRecord = {
   id: number
-  targetType: 'BLOG' | 'NOTE'
+  targetType: 'BLOG'
   targetId: number
   parentId: number | null
   userId: string | null

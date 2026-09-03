@@ -1,5 +1,3 @@
-import type { TagType } from '@prisma/client'
-
 export type CreateBlogDTO = {
   title: string
   slug: string
@@ -20,7 +18,6 @@ export type UpdateBlogParams = {
 type BlogTagRecord = {
   id: number
   tagName: string
-  tagType: TagType
 }
 
 export type BlogListItem = {

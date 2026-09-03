@@ -12,53 +12,26 @@ export async function getSiteCommentTarget(
   targetType: SiteCommentTargetType,
   targetId: number,
 ): Promise<CommentTarget | null> {
-  switch (targetType) {
-    case 'BLOG': {
-      const blog = await prisma.blog.findUnique({
-        where: {
-          id: targetId,
-        },
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          isPublished: true,
-        },
-      })
+  const blog = await prisma.blog.findUnique({
+    where: {
+      id: targetId,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      isPublished: true,
+    },
+  })
 
-      if (blog == null) {
-        return null
-      }
+  if (blog == null) {
+    return null
+  }
 
-      return {
-        ...blog,
-        targetType,
-        path: `/${defaultLanguage}/blog/${blog.slug}`,
-      }
-    }
-    case 'NOTE': {
-      const note = await prisma.note.findUnique({
-        where: {
-          id: targetId,
-        },
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          isPublished: true,
-        },
-      })
-
-      if (note == null) {
-        return null
-      }
-
-      return {
-        ...note,
-        targetType,
-        path: `/note/${note.slug}`,
-      }
-    }
+  return {
+    ...blog,
+    targetType,
+    path: `/${defaultLanguage}/blog/${blog.slug}`,
   }
 }
 
@@ -69,23 +42,17 @@ export async function getSiteCommentTargetMap(
   }>,
 ) {
   const blogIdSet = new Set<number>()
-  const noteIdSet = new Set<number>()
 
   for (const target of targets) {
-    if (target.targetType === 'BLOG') {
-      blogIdSet.add(target.targetId)
-    } else if (target.targetType === 'NOTE') {
-      noteIdSet.add(target.targetId)
-    }
+    blogIdSet.add(target.targetId)
   }
 
   const blogIds = Array.from(blogIdSet)
-  const noteIds = Array.from(noteIdSet)
 
-  const [blogs, notes] = await Promise.all([
+  const blogs =
     blogIds.length === 0
-      ? Promise.resolve([])
-      : prisma.blog.findMany({
+      ? []
+      : await prisma.blog.findMany({
           where: {
             id: {
               in: blogIds,
@@ -97,23 +64,7 @@ export async function getSiteCommentTargetMap(
             slug: true,
             isPublished: true,
           },
-        }),
-    noteIds.length === 0
-      ? Promise.resolve([])
-      : prisma.note.findMany({
-          where: {
-            id: {
-              in: noteIds,
-            },
-          },
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            isPublished: true,
-          },
-        }),
-  ])
+        })
 
   const map = new Map<string, CommentTarget>()
 
@@ -122,14 +73,6 @@ export async function getSiteCommentTargetMap(
       ...blog,
       targetType: 'BLOG',
       path: `/${defaultLanguage}/blog/${blog.slug}`,
-    })
-  }
-
-  for (const note of notes) {
-    map.set(getSiteCommentTargetKey('NOTE', note.id), {
-      ...note,
-      targetType: 'NOTE',
-      path: `/note/${note.slug}`,
     })
   }
 

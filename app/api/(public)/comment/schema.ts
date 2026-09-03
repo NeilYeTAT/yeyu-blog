@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const siteCommentTargetTypeSchema = z.enum(['BLOG', 'NOTE'])
+const siteCommentTargetTypeSchema = z.literal('BLOG')
 
 export const getPublicCommentsQuerySchema = z.object({
   targetType: siteCommentTargetTypeSchema,
