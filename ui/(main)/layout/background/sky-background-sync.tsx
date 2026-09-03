@@ -1,6 +1,5 @@
 'use client'
 
-import { useTheme } from 'next-themes'
 import { useEffect, useLayoutEffect } from 'react'
 import {
   useIsSkyBackgroundInitialized,
@@ -12,26 +11,15 @@ import { getMinutesOfDay } from './sky-background-time'
 const millisecondsPerMinute = 60_000
 
 export function SkyBackgroundSync() {
-  const { resolvedTheme } = useTheme()
   const isInitialized = useIsSkyBackgroundInitialized()
   const isUsingRealTime = useIsUsingRealTime()
-  const { initializeSkyBackground, setDarkTheme, setRealTimeMinutesOfDay } =
-    useSkyBackgroundActions()
+  const { initializeSkyBackground, setRealTimeMinutesOfDay } = useSkyBackgroundActions()
 
   useLayoutEffect(() => {
     const now = new Date()
 
-    initializeSkyBackground(
-      document.documentElement.classList.contains('dark'),
-      getMinutesOfDay(now),
-    )
+    initializeSkyBackground(getMinutesOfDay(now))
   }, [initializeSkyBackground])
-
-  useEffect(() => {
-    if (!isInitialized || resolvedTheme === undefined) return
-
-    setDarkTheme(resolvedTheme === 'dark')
-  }, [isInitialized, resolvedTheme, setDarkTheme])
 
   useEffect(() => {
     if (!isInitialized || !isUsingRealTime) return

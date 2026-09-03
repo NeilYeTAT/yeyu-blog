@@ -5,9 +5,6 @@ import {
 } from '@/ui/(main)/layout/background/sky-background-time'
 
 const defaultMinutesOfDay = 11 * 60
-const darkThemeMinutesOfDay = 22 * 60
-const daytimeStartMinutes = 6 * 60
-const daytimeEndMinutes = 18 * 60
 const defaultCloudSpeed = 1
 const defaultCloudAnimationRunning = true
 const defaultUsingRealTime = true
@@ -16,18 +13,16 @@ const useSkyBackgroundStore = create<{
   cloudSpeed: number
   isBackgroundOnly: boolean
   isCloudAnimationRunning: boolean
-  isDarkTheme: boolean
   isInitialized: boolean
   isUsingRealTime: boolean
   previewMinutesOfDay: number
   realTimeMinutesOfDay: number
   actions: {
-    initializeSkyBackground: (isDarkTheme: boolean, realTimeMinutesOfDay: number) => void
+    initializeSkyBackground: (realTimeMinutesOfDay: number) => void
     resetSkyBackground: () => void
     setBackgroundOnly: (isBackgroundOnly: boolean) => void
     setCloudAnimationRunning: (isRunning: boolean) => void
     setCloudSpeed: (speed: number) => void
-    setDarkTheme: (isDarkTheme: boolean) => void
     setMinutesOfDay: (minutesOfDay: number) => void
     setRealTimeMinutesOfDay: (minutesOfDay: number) => void
     setUsingRealTime: (isUsingRealTime: boolean, minutesOfDay: number) => void
@@ -36,15 +31,13 @@ const useSkyBackgroundStore = create<{
   cloudSpeed: defaultCloudSpeed,
   isBackgroundOnly: false,
   isCloudAnimationRunning: defaultCloudAnimationRunning,
-  isDarkTheme: false,
   isInitialized: false,
   isUsingRealTime: defaultUsingRealTime,
   previewMinutesOfDay: defaultMinutesOfDay,
   realTimeMinutesOfDay: defaultMinutesOfDay,
   actions: {
-    initializeSkyBackground: (isDarkTheme, realTimeMinutesOfDay) => {
+    initializeSkyBackground: realTimeMinutesOfDay => {
       set({
-        isDarkTheme,
         isInitialized: true,
         realTimeMinutesOfDay,
       })
@@ -63,7 +56,6 @@ const useSkyBackgroundStore = create<{
     setBackgroundOnly: isBackgroundOnly => set({ isBackgroundOnly }),
     setCloudAnimationRunning: isCloudAnimationRunning => set({ isCloudAnimationRunning }),
     setCloudSpeed: cloudSpeed => set({ cloudSpeed }),
-    setDarkTheme: isDarkTheme => set({ isDarkTheme }),
     setMinutesOfDay: previewMinutesOfDay => {
       set({ isUsingRealTime: false, previewMinutesOfDay })
     },
@@ -95,11 +87,7 @@ export const useSkyBackgroundTimeState = () => {
   const minutesOfDay = useSkyBackgroundStore(state => {
     if (!state.isUsingRealTime) return state.previewMinutesOfDay
 
-    const isDaytime =
-      state.realTimeMinutesOfDay >= daytimeStartMinutes &&
-      state.realTimeMinutesOfDay < daytimeEndMinutes
-
-    return state.isDarkTheme && isDaytime ? darkThemeMinutesOfDay : state.realTimeMinutesOfDay
+    return state.realTimeMinutesOfDay
   })
   const timeState = getSkyBackgroundTimeState(minutesOfDay)
 
