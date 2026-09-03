@@ -1,12 +1,14 @@
-import type { CommentTreeNode, SessionAvatarProps } from './type'
+import type { CommentCardView, CommentTreeNode } from './type'
 import { CornerUpLeft, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { prettyDateTime, toRelativeDate } from '@/lib/utils/common/time'
+import { useCommentCardActions, useCommentCardStore } from '@/store/use-comment-card-store'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { CommentAuthorAvatar } from './comment-avatar'
 import { CommentComposer } from './comment-composer'
 import { CommentMarkdownContent } from './comment-markdown-content'
+import { maxCommentLevels } from './constant'
 import { formatCommentDisplayName, getCommentDisplayName } from './helper'
 
 function CommentHeader({
@@ -15,109 +17,110 @@ function CommentHeader({
   absoluteTime,
   shouldShowRelativeTime,
   formattedDisplayName,
-  isCurrentUserComment,
-  isDeletingComment,
-  onReplyClick,
-  onDeleteClick,
+  canReply,
+  view,
 }: {
   comment: CommentTreeNode
   commentCreatedAt: Date
   absoluteTime: string
   shouldShowRelativeTime: boolean
   formattedDisplayName: string
-  isCurrentUserComment: boolean
-  isDeletingComment: boolean
-  onReplyClick: (commentId: number) => void
-  onDeleteClick: (comment: CommentTreeNode) => void
+  canReply: boolean
+  view: CommentCardView
 }) {
   const translations = useTranslations()
+  const { sessionUserId, isDeletingComment, isLoggedIn, onDeleteClick, onLoginClick } = view
+  const { toggleReply } = useCommentCardActions()
+  const isCurrentUserComment = sessionUserId != null && comment.userId === sessionUserId
   const canDeleteComment = !comment.isDeleted && isCurrentUserComment
   const parentDisplayName =
     comment.parent == null ? null : formatCommentDisplayName(getCommentDisplayName(comment.parent))
+  const createdAtIso = commentCreatedAt.toISOString()
 
   return (
-    <header className="flex items-start justify-between gap-3">
+    <header className="flex items-start justify-between gap-4">
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span
-            className={
-              comment.isAdmin
-                ? 'max-w-40 truncate font-medium text-theme-accent'
-                : 'max-w-40 truncate font-medium text-zinc-800 dark:text-zinc-100'
-            }
-          >
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs">
+          <span className="max-w-40 truncate font-semibold text-black dark:text-white">
             {formattedDisplayName}
           </span>
           {comment.isAdmin ? (
-            <span className="rounded-full bg-theme-accent/12 px-2 py-0.5 font-medium text-theme-accent">
+            <span className="rounded-md bg-black/8 px-1.5 py-0.5 font-medium text-[11px] text-black dark:bg-white/10 dark:text-white">
               {translations.comments.admin}
             </span>
           ) : null}
           {isCurrentUserComment ? (
-            <span className="rounded-full bg-theme-accent/8 px-2 py-0.5 font-medium text-theme-accent/70">
+            <span className="rounded-md bg-black/6 px-1.5 py-0.5 font-medium text-[11px] text-black/75 dark:bg-white/8 dark:text-white/75">
               {translations.comments.you}
             </span>
           ) : null}
           <time
-            className="text-zinc-500 dark:text-zinc-400"
-            dateTime={commentCreatedAt.toISOString()}
+            className="text-[11px] text-black/50 dark:text-white/50"
+            dateTime={createdAtIso}
             title={absoluteTime}
           >
             {absoluteTime}
           </time>
           {shouldShowRelativeTime ? (
             <time
-              className="text-zinc-400 dark:text-zinc-500"
-              dateTime={commentCreatedAt.toISOString()}
+              className="text-[11px] text-black/38 dark:text-white/38"
+              dateTime={createdAtIso}
               title={absoluteTime}
             >
               {toRelativeDate(commentCreatedAt)}
             </time>
           ) : null}
           {comment.isDeleted ? (
-            <span className="text-zinc-400 dark:text-zinc-500">
+            <span className="text-[11px] text-black/42 dark:text-white/42">
               {translations.comments.deletedStatus}
             </span>
           ) : null}
         </div>
 
         {parentDisplayName != null ? (
-          <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <div className="mt-2 flex items-center gap-1.5 text-black/55 text-xs dark:text-white/55">
             <CornerUpLeft className="size-3.5" />
             <span>{translations.comments.replyTo(parentDisplayName)}</span>
           </div>
         ) : null}
       </div>
 
-      {!comment.isDeleted ? (
+      {!comment.isDeleted && (canDeleteComment || canReply) ? (
         <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
           {canDeleteComment ? (
             <Button
               type="button"
               variant="ghost"
               size="icon-xs"
-              className="rounded-lg text-zinc-500 hover:text-destructive dark:text-zinc-400"
+              className="rounded-md text-black/55 hover:bg-destructive/10 hover:text-destructive dark:text-white/55"
               aria-label={translations.comments.deleteLabel(formattedDisplayName)}
               disabled={isDeletingComment}
               onClick={() => {
-                onDeleteClick(comment)
+                onDeleteClick(comment.id)
               }}
             >
               <Trash2 className="size-3.5" />
             </Button>
           ) : null}
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            className="rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            aria-label={translations.comments.replyLabel(formattedDisplayName)}
-            onClick={() => {
-              onReplyClick(comment.id)
-            }}
-          >
-            <CornerUpLeft className="size-3.5" />
-          </Button>
+          {canReply ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              className="rounded-md text-black/55 hover:bg-black/5 hover:text-black dark:text-white/55 dark:hover:bg-white/10 dark:hover:text-white"
+              aria-label={translations.comments.replyLabel(formattedDisplayName)}
+              onClick={() => {
+                if (!isLoggedIn) {
+                  onLoginClick()
+                  return
+                }
+
+                toggleReply(comment.id)
+              }}
+            >
+              <CornerUpLeft className="size-3.5" />
+            </Button>
+          ) : null}
         </div>
       ) : null}
     </header>
@@ -128,13 +131,13 @@ function CommentContent({ comment }: { comment: CommentTreeNode }) {
   const translations = useTranslations()
 
   return (
-    <div className="mt-2 text-zinc-900 dark:text-zinc-100">
+    <div className="mt-3 text-black dark:text-white">
       {comment.isDeleted ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-black/55 text-sm dark:text-white/55">
           <del>{translations.comments.deleted}</del>
         </p>
       ) : (
-        <CommentMarkdownContent content={comment.content} htmlContent={comment.htmlContent} />
+        <CommentMarkdownContent htmlContent={comment.htmlContent} />
       )}
     </div>
   )
@@ -143,44 +146,30 @@ function CommentContent({ comment }: { comment: CommentTreeNode }) {
 function CommentReplyEditor({
   comment,
   formattedDisplayName,
-  isLoggedIn,
-  activeReplyCommentId,
-  replyContent,
-  isCreatingComment,
-  sessionAvatarProps,
-  onReplyCancel,
-  onReplyContentChange,
-  onReplySubmit,
+  view,
 }: {
   comment: CommentTreeNode
   formattedDisplayName: string
-  isLoggedIn: boolean
-  activeReplyCommentId: number | null
-  replyContent: string
-  isCreatingComment: boolean
-  sessionAvatarProps: SessionAvatarProps
-  onReplyCancel: () => void
-  onReplyContentChange: (value: string) => void
-  onReplySubmit: (commentId: number) => void
+  view: CommentCardView
 }) {
   const translations = useTranslations()
+  const activeReplyCommentId = useCommentCardStore(state => state.activeReplyCommentId)
+  const replyContent = useCommentCardStore(state => state.replyContent)
+  const { isCreatingComment, onReplySubmit } = view
+  const { clearReply, setReplyContent } = useCommentCardActions()
 
   if (comment.isDeleted || activeReplyCommentId !== comment.id) return null
 
   return (
-    <div className="mt-3 border-zinc-200/70 border-t pt-3 dark:border-zinc-800/70">
+    <div className="mt-4 pt-1">
       <CommentComposer
         value={replyContent}
         isSubmitting={isCreatingComment}
-        sessionAvatarProps={sessionAvatarProps}
         submitLabel={translations.comments.reply}
         placeholder={translations.comments.replyPlaceholder(formattedDisplayName)}
-        helperText={
-          isLoggedIn ? translations.comments.walletReplyReview : translations.comments.loginToReply
-        }
         title={translations.comments.replyTo(formattedDisplayName)}
-        onChange={onReplyContentChange}
-        onCancel={onReplyCancel}
+        onChange={setReplyContent}
+        onCancel={clearReply}
         onSubmit={() => {
           onReplySubmit(comment.id)
         }}
@@ -189,117 +178,32 @@ function CommentReplyEditor({
   )
 }
 
-function CommentReplies({
-  comment,
-  commentReferenceTime,
-  depth,
-  sessionUserId,
-  isLoggedIn,
-  activeReplyCommentId,
-  replyContent,
-  isCreatingComment,
-  isDeletingComment,
-  sessionAvatarProps,
-  onReplyClick,
-  onReplyCancel,
-  onReplyContentChange,
-  onReplySubmit,
-  onDeleteClick,
-}: {
-  comment: CommentTreeNode
-  commentReferenceTime: number
-  depth: number
-  sessionUserId?: string
-  isLoggedIn: boolean
-  activeReplyCommentId: number | null
-  replyContent: string
-  isCreatingComment: boolean
-  isDeletingComment: boolean
-  sessionAvatarProps: SessionAvatarProps
-  onReplyClick: (commentId: number) => void
-  onReplyCancel: () => void
-  onReplyContentChange: (value: string) => void
-  onReplySubmit: (commentId: number) => void
-  onDeleteClick: (comment: CommentTreeNode) => void
-}) {
-  if (comment.children.length === 0) return null
-
-  return (
-    <ul className="mt-4 space-y-4">
-      {comment.children.map(childComment => (
-        <CommentThreadItem
-          key={childComment.id}
-          comment={childComment}
-          commentReferenceTime={commentReferenceTime}
-          depth={depth + 1}
-          sessionUserId={sessionUserId}
-          isLoggedIn={isLoggedIn}
-          activeReplyCommentId={activeReplyCommentId}
-          replyContent={replyContent}
-          isCreatingComment={isCreatingComment}
-          isDeletingComment={isDeletingComment}
-          sessionAvatarProps={sessionAvatarProps}
-          onReplyClick={onReplyClick}
-          onReplyCancel={onReplyCancel}
-          onReplyContentChange={onReplyContentChange}
-          onReplySubmit={onReplySubmit}
-          onDeleteClick={onDeleteClick}
-        />
-      ))}
-    </ul>
-  )
-}
-
 export function CommentThreadItem({
   comment,
-  commentReferenceTime,
   depth,
-  sessionUserId,
-  isLoggedIn,
-  activeReplyCommentId,
-  replyContent,
-  isCreatingComment,
-  isDeletingComment,
-  sessionAvatarProps,
-  onReplyClick,
-  onReplyCancel,
-  onReplyContentChange,
-  onReplySubmit,
-  onDeleteClick,
+  view,
 }: {
   comment: CommentTreeNode
-  commentReferenceTime: number
   depth: number
-  sessionUserId?: string
-  isLoggedIn: boolean
-  activeReplyCommentId: number | null
-  replyContent: string
-  isCreatingComment: boolean
-  isDeletingComment: boolean
-  sessionAvatarProps: SessionAvatarProps
-  onReplyClick: (commentId: number) => void
-  onReplyCancel: () => void
-  onReplyContentChange: (value: string) => void
-  onReplySubmit: (commentId: number) => void
-  onDeleteClick: (comment: CommentTreeNode) => void
+  view: CommentCardView
 }) {
+  const { commentReferenceTime } = view
   const commentCreatedAt = new Date(comment.createdAt)
   const absoluteTime = prettyDateTime(commentCreatedAt)
   const shouldShowRelativeTime =
     Math.abs(commentReferenceTime - commentCreatedAt.getTime()) <= 7 * 24 * 60 * 60 * 1000
-  const displayName = getCommentDisplayName(comment)
-  const formattedDisplayName = formatCommentDisplayName(displayName)
-  const isCurrentUserComment = sessionUserId != null && comment.userId === sessionUserId
+  const formattedDisplayName = formatCommentDisplayName(getCommentDisplayName(comment))
+  const canReply = depth + 1 < maxCommentLevels
 
   return (
     <li
       className={cn(
         'group',
-        depth === 0 && 'border-zinc-200/70 border-b pb-5 last:border-b-0 dark:border-zinc-800/70',
-        depth > 0 && 'ml-5 border-zinc-200/80 border-l pl-4 sm:ml-7 dark:border-zinc-800',
+        depth === 0 && 'pb-6',
+        depth > 0 && 'ml-4 border-black/20 border-l pl-4 sm:ml-7 dark:border-white/20',
       )}
     >
-      <div className="flex items-start gap-3.5">
+      <div className="flex items-start gap-3">
         <CommentAuthorAvatar comment={comment} />
 
         <div className="min-w-0 flex-1">
@@ -310,10 +214,8 @@ export function CommentThreadItem({
               absoluteTime={absoluteTime}
               shouldShowRelativeTime={shouldShowRelativeTime}
               formattedDisplayName={formattedDisplayName}
-              isCurrentUserComment={isCurrentUserComment}
-              isDeletingComment={isDeletingComment}
-              onReplyClick={onReplyClick}
-              onDeleteClick={onDeleteClick}
+              canReply={canReply}
+              view={view}
             />
 
             <CommentContent comment={comment} />
@@ -322,33 +224,21 @@ export function CommentThreadItem({
           <CommentReplyEditor
             comment={comment}
             formattedDisplayName={formattedDisplayName}
-            isLoggedIn={isLoggedIn}
-            activeReplyCommentId={activeReplyCommentId}
-            replyContent={replyContent}
-            isCreatingComment={isCreatingComment}
-            sessionAvatarProps={sessionAvatarProps}
-            onReplyCancel={onReplyCancel}
-            onReplyContentChange={onReplyContentChange}
-            onReplySubmit={onReplySubmit}
+            view={view}
           />
 
-          <CommentReplies
-            comment={comment}
-            commentReferenceTime={commentReferenceTime}
-            depth={depth}
-            sessionUserId={sessionUserId}
-            isLoggedIn={isLoggedIn}
-            activeReplyCommentId={activeReplyCommentId}
-            replyContent={replyContent}
-            isCreatingComment={isCreatingComment}
-            isDeletingComment={isDeletingComment}
-            sessionAvatarProps={sessionAvatarProps}
-            onReplyClick={onReplyClick}
-            onReplyCancel={onReplyCancel}
-            onReplyContentChange={onReplyContentChange}
-            onReplySubmit={onReplySubmit}
-            onDeleteClick={onDeleteClick}
-          />
+          {canReply && comment.children.length > 0 ? (
+            <ul className="mt-5 space-y-5">
+              {comment.children.map(childComment => (
+                <CommentThreadItem
+                  key={childComment.id}
+                  comment={childComment}
+                  depth={depth + 1}
+                  view={view}
+                />
+              ))}
+            </ul>
+          ) : null}
         </div>
       </div>
     </li>

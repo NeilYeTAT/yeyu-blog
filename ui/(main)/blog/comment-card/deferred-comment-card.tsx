@@ -3,10 +3,6 @@
 import type { ComponentType } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
-function loadDeferredCommentCard() {
-  return import('./deferred-comment-card-content').then(module => module.default)
-}
-
 export default function DeferredCommentCard({ articleId }: { articleId: number }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const [LoadedCommentCard, setLoadedCommentCard] = useState<ComponentType<{
@@ -24,7 +20,7 @@ export default function DeferredCommentCard({ articleId }: { articleId: number }
         if (!entries.some(entry => entry.isIntersecting)) return
 
         observer.disconnect()
-        void loadDeferredCommentCard().then(CommentCard => {
+        void import('./deferred-comment-card-content').then(({ default: CommentCard }) => {
           if (!isMounted) return
 
           setLoadedCommentCard(() => CommentCard)
@@ -42,11 +38,15 @@ export default function DeferredCommentCard({ articleId }: { articleId: number }
   }, [])
 
   return (
-    <div id="comments" ref={rootRef} className="mb-4 min-h-[13rem] scroll-mt-20">
+    <div id="comments" ref={rootRef} className="mb-4 min-h-[16rem] scroll-mt-20">
       {LoadedCommentCard == null ? (
-        <div aria-hidden="true" className="py-2 sm:py-4">
-          <div className="h-7 w-24 animate-pulse rounded bg-foreground/10 motion-reduce:animate-none" />
-          <div className="mt-5 h-28 animate-pulse rounded-lg bg-foreground/5 motion-reduce:animate-none" />
+        <div aria-hidden="true" className="py-8 sm:py-10">
+          <div className="h-8 w-28 animate-pulse rounded-lg bg-black/8 motion-reduce:animate-none dark:bg-white/10" />
+          <div className="mt-6 space-y-3">
+            <div className="h-3 w-full animate-pulse rounded-full bg-black/8 motion-reduce:animate-none dark:bg-white/10" />
+            <div className="h-3 w-11/12 animate-pulse rounded-full bg-black/8 motion-reduce:animate-none dark:bg-white/10" />
+            <div className="h-3 w-3/4 animate-pulse rounded-full bg-black/8 motion-reduce:animate-none dark:bg-white/10" />
+          </div>
         </div>
       ) : (
         <LoadedCommentCard articleId={articleId} />

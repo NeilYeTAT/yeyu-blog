@@ -1,11 +1,11 @@
 'use client'
 
 import type { ComponentProps } from 'react'
+import type { CommentCardView } from './type'
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react'
 import { cn } from '@/lib/utils/common/shadcn'
 import { MainConfirmModal } from '@/ui/components/modal/main/main-confirm-modal'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
-import { CommentCardHeader } from './comment-card-header'
 import { CommentComposer } from './comment-composer'
 import { CommentList } from './comment-list'
 import { CommentLoginPrompt } from './comment-login-prompt'
@@ -20,61 +20,60 @@ export default function CommentCard({
   const translations = useTranslations()
   const {
     total,
-    commentReferenceTime,
     commentTree,
+    commentReferenceTime,
     sortOrder,
     setSortOrder,
     commentContent,
     setCommentContent,
-    replyContent,
-    setReplyContent,
-    activeReplyCommentId,
     isLoggedIn,
+    sessionUserId,
     isCommentPending,
     isCreatingComment,
     isDeletingComment,
-    sessionUserId,
-    sessionAvatarProps,
     deletingComment,
-    setDeletingComment,
+    deletingCommentId,
+    setDeletingCommentId,
     openLoginModal,
     submitRootComment,
-    handleReplyClick,
-    cancelReply,
     submitReply,
     confirmDeleteComment,
   } = useCommentCard({ articleId })
+  const commentCardView: CommentCardView = {
+    commentReferenceTime,
+    sessionUserId,
+    isLoggedIn,
+    isCreatingComment,
+    isDeletingComment,
+    onReplySubmit: submitReply,
+    onDeleteClick: setDeletingCommentId,
+    onLoginClick: openLoginModal,
+  }
   const nextSortOrder = sortOrder === 'asc' ? 'desc' : 'asc'
   const SortIcon = sortOrder === 'asc' ? ArrowUpNarrowWide : ArrowDownNarrowWide
 
   return (
     <>
-      <section className={cn('py-2 sm:py-4', className)}>
-        <CommentCardHeader total={total} />
-
-        <section className="mt-5 border-zinc-200/70 border-b pb-5 dark:border-zinc-800/70">
-          {isLoggedIn ? (
-            <CommentComposer
-              value={commentContent}
-              isSubmitting={isCreatingComment}
-              sessionAvatarProps={sessionAvatarProps}
-              placeholder={translations.comments.placeholder}
-              submitLabel={translations.comments.publish}
-              helperText={translations.comments.walletReview}
-              onChange={setCommentContent}
-              onSubmit={submitRootComment}
-            />
-          ) : (
-            <CommentLoginPrompt onLoginClick={openLoginModal} />
-          )}
-        </section>
+      <section className={cn('py-8 sm:py-10', className)}>
+        {isLoggedIn ? (
+          <CommentComposer
+            value={commentContent}
+            isSubmitting={isCreatingComment}
+            placeholder={translations.comments.placeholder}
+            submitLabel={translations.comments.publish}
+            onChange={setCommentContent}
+            onSubmit={submitRootComment}
+          />
+        ) : (
+          <CommentLoginPrompt onLoginClick={openLoginModal} />
+        )}
 
         <section className="mt-6 min-h-24">
           {total != null && total > 1 ? (
             <div className="mb-4 flex justify-end">
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-theme-accent dark:text-zinc-400 dark:hover:text-theme-accent"
+                className="inline-flex h-8 items-center gap-2 rounded-lg bg-black px-2.5 font-medium text-white text-xs shadow-[0_6px_16px_rgba(0,0,0,0.16)] transition-colors hover:bg-zinc-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 dark:bg-white dark:text-black dark:shadow-[0_6px_16px_rgba(0,0,0,0.28)] dark:focus-visible:ring-white/30 dark:hover:bg-zinc-200 dark:hover:text-black"
                 aria-label={translations.comments.switchSortOrder[nextSortOrder]}
                 onClick={() => {
                   setSortOrder(nextSortOrder)
@@ -87,31 +86,17 @@ export default function CommentCard({
           ) : null}
 
           <CommentList
-            status={{
-              isCreatingComment,
-              isDeletingComment,
-              isLoggedIn,
-              isPending: isCommentPending,
-            }}
             commentTree={commentTree}
-            commentReferenceTime={commentReferenceTime}
-            sessionUserId={sessionUserId}
-            activeReplyCommentId={activeReplyCommentId}
-            replyContent={replyContent}
-            sessionAvatarProps={sessionAvatarProps}
-            onReplyClick={handleReplyClick}
-            onReplyCancel={cancelReply}
-            onReplyContentChange={setReplyContent}
-            onReplySubmit={submitReply}
-            onDeleteClick={setDeletingComment}
+            isPending={isCommentPending}
+            view={commentCardView}
           />
         </section>
       </section>
 
       <MainConfirmModal
-        open={deletingComment != null}
+        open={deletingCommentId != null}
         onClose={() => {
-          setDeletingComment(null)
+          setDeletingCommentId(null)
         }}
         onConfirm={confirmDeleteComment}
         title={translations.comments.deleteTitle}
@@ -119,11 +104,11 @@ export default function CommentCard({
         isPending={isDeletingComment}
       >
         {deletingComment != null ? (
-          <div className="rounded-xl border border-theme-border/70 bg-theme-surface/55 p-3 text-sm dark:border-white/10 dark:bg-zinc-900/35">
+          <div className="rounded-lg border border-black/15 bg-theme-surface/60 p-3 text-black text-sm dark:border-white/15 dark:text-white">
             <p className="font-medium">
               {deletingComment.user?.name ?? deletingComment.authorName}
             </p>
-            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-xs text-zinc-600 dark:text-zinc-400">
+            <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-black/60 text-xs dark:text-white/60">
               {deletingComment.content}
             </p>
           </div>

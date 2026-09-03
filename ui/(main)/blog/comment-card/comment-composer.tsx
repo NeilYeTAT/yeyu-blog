@@ -1,9 +1,7 @@
-import type { SessionAvatarProps } from './type'
 import { CornerUpLeft, X } from 'lucide-react'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { Button } from '@/ui/shadcn/button'
 import { Textarea } from '@/ui/shadcn/textarea'
-import { SessionAvatar } from './comment-avatar'
 import { maxCommentLength } from './constant'
 
 export function CommentComposer({
@@ -13,8 +11,6 @@ export function CommentComposer({
   isSubmitting,
   placeholder,
   submitLabel,
-  helperText,
-  sessionAvatarProps,
   onCancel,
   title,
 }: {
@@ -24,8 +20,6 @@ export function CommentComposer({
   isSubmitting: boolean
   placeholder: string
   submitLabel: string
-  helperText: string
-  sessionAvatarProps: SessionAvatarProps
   onCancel?: () => void
   title?: string
 }) {
@@ -34,32 +28,31 @@ export function CommentComposer({
   const inputExceeded = trimmedContent.length > maxCommentLength
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        {title != null ? (
-          <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-300">
-            <CornerUpLeft className="size-3.5" />
-            <span>{title}</span>
-          </div>
-        ) : null}
-        <Textarea
-          placeholder={placeholder}
-          value={value}
-          onChange={event => {
-            onChange(event.target.value)
-          }}
-          className="min-h-24 resize-none rounded-xl border-zinc-300 bg-white/70 text-sm text-zinc-900 shadow-none placeholder:text-zinc-400 focus-visible:border-zinc-400 focus-visible:ring-theme-ring/25 dark:border-zinc-700 dark:bg-zinc-900/55 dark:text-zinc-100 dark:focus-visible:border-zinc-600 dark:placeholder:text-zinc-500"
-        />
-        <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="min-w-0 truncate">{helperText}</span>
-          <span className={inputExceeded ? 'shrink-0 text-red-500 dark:text-red-400' : 'shrink-0'}>
-            {trimmedContent.length}/{maxCommentLength}
-          </span>
+    <div className="min-w-0">
+      {title != null ? (
+        <div className="mb-2 flex items-center gap-2 font-medium text-black/70 text-sm dark:text-white/70">
+          <CornerUpLeft className="size-3.5 text-black/70 dark:text-white/70" />
+          <span>{title}</span>
         </div>
-      </div>
-
-      <div className="flex items-center justify-between gap-3">
-        <SessionAvatar {...sessionAvatarProps} />
+      ) : null}
+      <Textarea
+        placeholder={placeholder}
+        value={value}
+        onChange={event => {
+          onChange(event.target.value)
+        }}
+        className="min-h-24 resize-none rounded-lg border-black/20 bg-transparent px-3.5 py-3 text-black text-sm shadow-none placeholder:text-black/45 focus-visible:border-black/45 focus-visible:ring-black/20 dark:border-white/20 dark:bg-transparent dark:text-white dark:focus-visible:border-white/55 dark:focus-visible:ring-white/25 dark:placeholder:text-white/45"
+      />
+      <div className="mt-2 flex items-center justify-end gap-3">
+        <span
+          className={
+            inputExceeded
+              ? 'shrink-0 font-mono text-red-500 text-xs dark:text-red-400'
+              : 'shrink-0 font-mono text-black/55 text-xs dark:text-white/55'
+          }
+        >
+          {trimmedContent.length}/{maxCommentLength}
+        </span>
 
         <div className="flex items-center gap-2">
           {onCancel != null ? (
@@ -68,7 +61,7 @@ export function CommentComposer({
               variant="ghost"
               onClick={onCancel}
               disabled={isSubmitting}
-              className="h-9 rounded-xl px-3 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+              className="h-8 rounded-lg px-3 text-black/65 hover:bg-black/5 hover:text-black dark:text-white/65 dark:hover:bg-white/10 dark:hover:text-white"
             >
               <X className="size-4" />
               {translations.common.cancel}
@@ -76,7 +69,7 @@ export function CommentComposer({
           ) : null}
           <Button
             type="button"
-            className="h-9 shrink-0 rounded-xl bg-theme-accent px-4 text-white shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-white focus-visible:ring-theme-ring/35 disabled:cursor-not-allowed disabled:bg-theme-accent disabled:text-white disabled:opacity-45"
+            className="h-8 shrink-0 rounded-lg bg-black px-4 text-white shadow-[0_6px_16px_rgba(0,0,0,0.16)] hover:bg-zinc-800 hover:text-white focus-visible:ring-black/25 disabled:cursor-not-allowed disabled:bg-black disabled:text-white disabled:opacity-45 dark:bg-white dark:text-black dark:shadow-[0_6px_16px_rgba(0,0,0,0.28)] dark:disabled:bg-white dark:disabled:text-black dark:focus-visible:ring-white/30 dark:hover:bg-zinc-200 dark:hover:text-black"
             disabled={trimmedContent.length === 0 || inputExceeded || isSubmitting}
             onClick={onSubmit}
           >

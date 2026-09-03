@@ -6,16 +6,10 @@ import { GitHubIcon } from '@/ui/components/modal/main/login-modal/assets/github
 import { GoogleIcon } from '@/ui/components/modal/main/login-modal/assets/google-icon'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
-import {
-  getCommentAddress,
-  getCommentAvatar,
-  getCommentDisplayName,
-  getCommentGithubAccountId,
-  getCommentLoginProvider,
-} from './helper'
+import { getCommentAuthor } from './helper'
 
 const avatarImageClassName =
-  'size-10 rounded-full border border-zinc-200 object-cover dark:border-zinc-700'
+  'size-10 rounded-full border border-black/15 bg-theme-surface object-cover dark:border-white/15'
 
 export function SessionAvatar({
   isAdminUser,
@@ -41,7 +35,7 @@ export function SessionAvatar({
     return (
       <AccountIcon
         account={sessionAddress}
-        className="size-10 rounded-full border border-zinc-200 dark:border-zinc-700"
+        className="size-10 rounded-full border border-black/15 bg-theme-surface dark:border-white/15"
       />
     )
   }
@@ -63,7 +57,7 @@ function CommentProviderIcon({ provider }: { provider: 'github' | 'google' }) {
 
   return (
     <span
-      className="absolute -right-0.5 -bottom-0.5 flex size-4 items-center justify-center rounded-full border border-white bg-white text-zinc-950 shadow-sm dark:border-zinc-950 dark:bg-zinc-950 dark:text-zinc-50"
+      className="absolute -right-0.5 -bottom-0.5 flex size-4 items-center justify-center rounded-full border border-black/15 bg-theme-background text-black shadow-sm dark:border-white/20 dark:text-white"
       title={title}
     >
       <Icon
@@ -100,7 +94,7 @@ function CommentAvatarFrame({
         href={`/api/github-user/${encodeURIComponent(githubAccountId)}`}
         target="_blank"
         rel="noreferrer"
-        className="relative inline-flex size-10 shrink-0 rounded-full outline-none transition-transform hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-theme-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="relative inline-flex size-10 shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-black/45 focus-visible:ring-offset-2 focus-visible:ring-offset-theme-background dark:focus-visible:ring-white/45"
         aria-label={translations.comments.openGithubProfile(displayName)}
       >
         {avatarContent}
@@ -112,47 +106,29 @@ function CommentAvatarFrame({
 }
 
 export function CommentAuthorAvatar({ comment }: { comment: CommentAuthorLike }) {
-  const displayName = getCommentDisplayName(comment)
-  const commentAvatar = getCommentAvatar(comment)
-  const commentAddress = getCommentAddress(comment)
-  const provider = getCommentLoginProvider(comment)
-  const githubAccountId = getCommentGithubAccountId(comment)
-
-  if (comment.isAdmin) {
-    return (
-      <CommentAvatarFrame
-        displayName={displayName}
-        provider={provider}
-        githubAccountId={githubAccountId}
-      >
-        <Image
-          src={avatar}
-          alt={displayName}
-          width={40}
-          height={40}
-          className={avatarImageClassName}
-        />
-      </CommentAvatarFrame>
-    )
-  }
-
-  if (commentAvatar != null) {
-    return (
-      <CommentAvatarFrame
-        displayName={displayName}
-        provider={provider}
-        githubAccountId={githubAccountId}
-      >
-        <Image
-          src={commentAvatar}
-          alt={displayName}
-          width={40}
-          height={40}
-          className={avatarImageClassName}
-        />
-      </CommentAvatarFrame>
-    )
-  }
+  const {
+    displayName,
+    avatar: commentAvatar,
+    address,
+    provider,
+    githubAccountId,
+  } = getCommentAuthor(comment)
+  const avatarContent = comment.isAdmin ? (
+    <Image src={avatar} alt={displayName} width={40} height={40} className={avatarImageClassName} />
+  ) : commentAvatar != null ? (
+    <Image
+      src={commentAvatar}
+      alt={displayName}
+      width={40}
+      height={40}
+      className={avatarImageClassName}
+    />
+  ) : (
+    <AccountIcon
+      account={address}
+      className="size-10 rounded-full border border-black/15 bg-theme-surface dark:border-white/15"
+    />
+  )
 
   return (
     <CommentAvatarFrame
@@ -160,10 +136,7 @@ export function CommentAuthorAvatar({ comment }: { comment: CommentAuthorLike })
       provider={provider}
       githubAccountId={githubAccountId}
     >
-      <AccountIcon
-        account={commentAddress}
-        className="size-10 rounded-full border border-zinc-200 dark:border-zinc-700"
-      />
+      {avatarContent}
     </CommentAvatarFrame>
   )
 }

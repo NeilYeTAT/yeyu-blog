@@ -17,3 +17,14 @@ export type SessionAvatarProps = {
   sessionAvatar?: string
   sessionAddress?: Address
 }
+
+export type CommentCardView = {
+  commentReferenceTime: number
+  sessionUserId?: string
+  isLoggedIn: boolean
+  isCreatingComment: boolean
+  isDeletingComment: boolean
+  onReplySubmit: (commentId: number) => void
+  onDeleteClick: (commentId: number) => void
+  onLoginClick: () => void
+}

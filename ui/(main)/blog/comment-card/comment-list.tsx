@@ -1,45 +1,22 @@
-import type { CommentTreeNode, SessionAvatarProps } from './type'
+import type { CommentCardView, CommentTreeNode } from './type'
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import Loading from '@/ui/components/shared/loading'
 import { CommentThreadItem } from './comment-thread-item'
 
 export function CommentList({
-  status,
   commentTree,
-  commentReferenceTime,
-  sessionUserId,
-  activeReplyCommentId,
-  replyContent,
-  sessionAvatarProps,
-  onReplyClick,
-  onReplyCancel,
-  onReplyContentChange,
-  onReplySubmit,
-  onDeleteClick,
+  isPending,
+  view,
 }: {
-  status: {
-    isCreatingComment: boolean
-    isDeletingComment: boolean
-    isLoggedIn: boolean
-    isPending: boolean
-  }
   commentTree: CommentTreeNode[]
-  commentReferenceTime: number
-  sessionUserId?: string
-  activeReplyCommentId: number | null
-  replyContent: string
-  sessionAvatarProps: SessionAvatarProps
-  onReplyClick: (commentId: number) => void
-  onReplyCancel: () => void
-  onReplyContentChange: (value: string) => void
-  onReplySubmit: (commentId: number) => void
-  onDeleteClick: (comment: CommentTreeNode) => void
+  isPending: boolean
+  view: CommentCardView
 }) {
   const translations = useTranslations()
 
-  if (status.isPending) {
+  if (isPending) {
     return (
-      <div className="flex min-h-24 items-center justify-center">
+      <div className="flex min-h-28 items-center justify-center">
         <Loading />
       </div>
     )
@@ -47,33 +24,16 @@ export function CommentList({
 
   if (commentTree.length === 0) {
     return (
-      <div className="px-1 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="rounded-lg border border-black/15 border-dashed bg-theme-surface/30 px-4 py-10 text-center text-black/55 text-sm dark:border-white/15 dark:text-white/55">
         {translations.comments.empty}
       </div>
     )
   }
 
   return (
-    <ul className="space-y-5">
+    <ul className="space-y-6">
       {commentTree.map(comment => (
-        <CommentThreadItem
-          key={comment.id}
-          comment={comment}
-          commentReferenceTime={commentReferenceTime}
-          depth={0}
-          sessionUserId={sessionUserId}
-          isLoggedIn={status.isLoggedIn}
-          activeReplyCommentId={activeReplyCommentId}
-          replyContent={replyContent}
-          isCreatingComment={status.isCreatingComment}
-          isDeletingComment={status.isDeletingComment}
-          sessionAvatarProps={sessionAvatarProps}
-          onReplyClick={onReplyClick}
-          onReplyCancel={onReplyCancel}
-          onReplyContentChange={onReplyContentChange}
-          onReplySubmit={onReplySubmit}
-          onDeleteClick={onDeleteClick}
-        />
+        <CommentThreadItem key={comment.id} comment={comment} depth={0} view={view} />
       ))}
     </ul>
   )

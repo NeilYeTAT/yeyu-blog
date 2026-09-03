@@ -1,19 +1,19 @@
 .markdown-content {
   --md-code-radius: 0.5rem;
-  --md-code-bg: #1e1e2e;
-  --md-code-border: #313244;
-  --md-code-foreground: #cdd6f4;
-  --md-code-muted: #6c7086;
-  --md-code-subtle: #a6adc8;
-  --md-code-red: #f38ba8;
-  --md-code-peach: #fab387;
-  --md-code-yellow: #f9e2af;
-  --md-code-green: #a6e3a1;
-  --md-code-teal: #94e2d5;
-  --md-code-sky: #89dceb;
-  --md-code-blue: #89b4fa;
-  --md-code-mauve: #cba6f7;
-  --md-code-pink: #f5c2e7;
+  --md-code-bg: #1a1b26;
+  --md-code-border: #292e42;
+  --md-code-foreground: #c0caf5;
+  --md-code-muted: #565f89;
+  --md-code-subtle: #a9b1d6;
+  --md-code-red: #f7768e;
+  --md-code-peach: #ff9e64;
+  --md-code-yellow: #e0af68;
+  --md-code-green: #9ece6a;
+  --md-code-teal: #73daca;
+  --md-code-sky: #7dcfff;
+  --md-code-blue: #7aa2f7;
+  --md-code-mauve: #bb9af7;
+  --md-code-pink: #bb9af7;
 }
 
 .markdown-content .md-code-block {
@@ -49,7 +49,7 @@
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  color: #71717a;
+  color: var(--md-code-muted);
   font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
   font-size: calc(0.64rem + 2px);
   font-weight: 400;

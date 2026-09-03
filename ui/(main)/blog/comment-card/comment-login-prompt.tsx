@@ -6,13 +6,13 @@ export function CommentLoginPrompt({ onLoginClick }: { onLoginClick: () => void 
   const translations = useTranslations()
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-black/65 text-sm dark:text-white/65">
         {translations.comments.loginPrompt}
       </p>
       <Button
         type="button"
-        className="h-9 rounded-xl bg-theme-accent px-4 text-white shadow-none hover:bg-[color-mix(in_srgb,var(--theme-accent)_92%,black)] hover:text-white focus-visible:ring-theme-ring/35"
+        className="h-8 rounded-lg bg-black px-4 text-white shadow-[0_6px_16px_rgba(0,0,0,0.16)] hover:bg-zinc-800 hover:text-white focus-visible:ring-black/25 dark:bg-white dark:text-black dark:shadow-[0_6px_16px_rgba(0,0,0,0.28)] dark:focus-visible:ring-white/30 dark:hover:bg-zinc-200 dark:hover:text-black"
         onClick={onLoginClick}
       >
         <LogIn className="size-4" />

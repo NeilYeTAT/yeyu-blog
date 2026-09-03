@@ -12,36 +12,22 @@ export function formatCommentDisplayName(displayName: string) {
     : displayName
 }
 
-export function getCommentAvatar(comment: Pick<CommentAuthorLike, 'authorImage' | 'user'>) {
-  return comment.user?.image?.trim() || comment.authorImage?.trim() || undefined
-}
-
-export function getCommentAddress(comment: Pick<CommentAuthorLike, 'user'>) {
-  return isAddress(comment.user?.name ?? '') ? (comment.user?.name as Address) : undefined
-}
-
-export function getCommentLoginProvider(comment: Pick<CommentAuthorLike, 'user'>) {
-  if (comment.user?.accounts?.some(account => account.providerId === 'github')) {
-    return 'github'
-  }
-
-  if (comment.user?.accounts?.some(account => account.providerId === 'google')) {
-    return 'google'
-  }
-
-  return undefined
-}
-
-export function getCommentGithubAccountId(comment: Pick<CommentAuthorLike, 'user'>) {
+export function getCommentAuthor(comment: CommentAuthorLike) {
   const githubAccount = comment.user?.accounts?.find(account => account.providerId === 'github')
+  const googleAccount = comment.user?.accounts?.find(account => account.providerId === 'google')
+  const provider: 'github' | 'google' | undefined =
+    githubAccount != null ? 'github' : googleAccount != null ? 'google' : undefined
 
-  return githubAccount?.accountId
+  return {
+    displayName: getCommentDisplayName(comment),
+    avatar: comment.user?.image?.trim() || comment.authorImage?.trim() || undefined,
+    address: isAddress(comment.user?.name ?? '') ? (comment.user?.name as Address) : undefined,
+    provider,
+    githubAccountId: githubAccount?.accountId,
+  }
 }
 
-export function buildCommentTree(
-  comments: PublicCommentRecord[],
-  sortOrder: 'asc' | 'desc' = 'asc',
-) {
+export function buildCommentTree(comments: PublicCommentRecord[], sortOrder: 'asc' | 'desc') {
   const nodeMap = new Map<number, CommentTreeNode>()
   const roots: CommentTreeNode[] = []
 
@@ -52,23 +38,20 @@ export function buildCommentTree(
     })
   }
 
-  for (const comment of comments) {
-    const node = nodeMap.get(comment.id)
-
-    if (node == null) {
+  for (const node of nodeMap.values()) {
+    if (node.parentId == null) {
+      roots.push(node)
       continue
     }
 
-    if (comment.parentId != null) {
-      const parentNode = nodeMap.get(comment.parentId)
+    const parentNode = nodeMap.get(node.parentId)
 
-      if (parentNode != null) {
-        parentNode.children.push(node)
-        continue
-      }
+    if (parentNode == null) {
+      roots.push(node)
+      continue
     }
 
-    roots.push(node)
+    parentNode.children.push(node)
   }
 
   sortCommentTree(roots, sortOrder)

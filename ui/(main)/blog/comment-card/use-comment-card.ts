@@ -1,183 +1,153 @@
-import type { CommentTreeNode } from './type'
-import { startTransition, useState } from 'react'
-import { type Address, isAddress } from 'viem'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCommentDeleteMutation } from '@/hooks/api/comment/use-comment-delete-mutation'
 import { useCommentMutation } from '@/hooks/api/comment/use-comment-mutation'
 import { usePublicCommentQuery } from '@/hooks/api/comment/use-public-comment-query'
 import { useSession } from '@/lib/core/auth/client'
-import { isAdminLoggedIn, isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
+import { isEmailLoggedIn, isWalletLoggedIn } from '@/lib/core/auth/utils'
+import { useCommentCardActions, useCommentCardStore } from '@/store/use-comment-card-store'
 import { useModalActions } from '@/store/use-modal-store'
 import { maxCommentLength } from './constant'
 import { buildCommentTree } from './helper'
 
 export function useCommentCard({ articleId }: { articleId: number }) {
   const [commentContent, setCommentContent] = useState('')
-  const [replyContent, setReplyContent] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
-  const [activeReplyCommentId, setActiveReplyCommentId] = useState<number | null>(null)
-  const [deletingComment, setDeletingComment] = useState<CommentTreeNode | null>(null)
+  const previousArticleId = useRef(articleId)
+  const deletingCommentId = useCommentCardStore(state => state.deletingCommentId)
+  const { clearReply, setDeletingCommentId } = useCommentCardActions()
   const { setModalOpen } = useModalActions()
 
   const { data: session } = useSession()
   const isWalletUser = isWalletLoggedIn({ data: session ?? null })
-  const isEmailUser = isEmailLoggedIn({ data: session ?? null })
-  const isAdminUser = isAdminLoggedIn({ data: session ?? null })
-  const isLoggedIn = isEmailUser || isWalletUser
+  const isLoggedIn = isEmailLoggedIn({ data: session ?? null }) || isWalletUser
+  const sessionUserId = session?.user?.id
 
   const {
     data,
     dataUpdatedAt: commentReferenceTime,
     isPending: isCommentPending,
   } = usePublicCommentQuery({
-    targetType: 'BLOG',
     targetId: articleId,
     take: 50,
   })
   const commentTree = buildCommentTree(data?.list ?? [], sortOrder)
+  const deletingComment = data?.list.find(comment => comment.id === deletingCommentId)
 
-  const { mutate: createComment, isPending: isCreatingComment } = useCommentMutation()
-  const { mutate: deleteComment, isPending: isDeletingComment } = useCommentDeleteMutation()
+  const { mutate: createComment, isPending: creatingComment } = useCommentMutation({
+    targetId: articleId,
+  })
+  const { mutate: deleteComment, isPending: deletingCommentPending } = useCommentDeleteMutation({
+    targetId: articleId,
+  })
 
-  const sessionAddress = isAddress(session?.user?.name ?? '')
-    ? (session?.user?.name as Address)
-    : undefined
-  const sessionAvatar = session?.user?.image?.trim() || undefined
-  const sessionAvatarProps = {
-    isAdminUser,
-    isWalletUser,
-    sessionAvatar,
-    sessionAddress,
-  }
+  const openLoginModal = useCallback(() => {
+    setModalOpen('loginModal')
+  }, [setModalOpen])
 
-  const openLoginModal = () => {
-    startTransition(() => {
-      setModalOpen('loginModal')
-    })
-  }
+  const submitComment = useCallback(
+    ({
+      content,
+      parentId,
+      onSuccess,
+    }: {
+      content: string
+      parentId?: number
+      onSuccess: () => void
+    }) => {
+      const trimmedContent = content.trim()
 
-  const submitComment = ({
-    content,
-    parentId,
-    onSuccess,
-  }: {
-    content: string
-    parentId?: number
-    onSuccess: () => void
-  }) => {
-    const trimmedContent = content.trim()
+      if (!isLoggedIn || trimmedContent.length === 0 || trimmedContent.length > maxCommentLength) {
+        return
+      }
 
-    if (
-      !isLoggedIn ||
-      articleId <= 0 ||
-      trimmedContent.length === 0 ||
-      trimmedContent.length > maxCommentLength
-    ) {
-      return
-    }
-
-    createComment(
-      {
-        targetType: 'BLOG',
-        targetId: articleId,
-        parentId,
-        content: trimmedContent,
-      },
-      {
-        onSuccess: () => {
-          onSuccess()
+      createComment(
+        {
+          parentId,
+          content: trimmedContent,
         },
-      },
-    )
-  }
+        {
+          onSuccess: () => {
+            onSuccess()
+          },
+        },
+      )
+    },
+    [createComment, isLoggedIn],
+  )
 
-  const submitRootComment = () => {
+  const submitRootComment = useCallback(() => {
     submitComment({
       content: commentContent,
       onSuccess: () => {
         setCommentContent('')
       },
     })
-  }
+  }, [commentContent, submitComment])
 
-  const handleReplyClick = (commentId: number) => {
-    if (!isLoggedIn) {
-      openLoginModal()
-      return
-    }
+  const submitReply = useCallback(
+    (commentId: number) => {
+      submitComment({
+        content: useCommentCardStore.getState().replyContent,
+        parentId: commentId,
+        onSuccess: clearReply,
+      })
+    },
+    [clearReply, submitComment],
+  )
 
-    if (activeReplyCommentId === commentId) {
-      setActiveReplyCommentId(null)
-      setReplyContent('')
-      return
-    }
+  const confirmDeleteComment = useCallback(() => {
+    const { activeReplyCommentId, deletingCommentId } = useCommentCardStore.getState()
 
-    setActiveReplyCommentId(commentId)
-    setReplyContent('')
-  }
-
-  const cancelReply = () => {
-    setActiveReplyCommentId(null)
-    setReplyContent('')
-  }
-
-  const submitReply = (commentId: number) => {
-    submitComment({
-      content: replyContent,
-      parentId: commentId,
-      onSuccess: () => {
-        setReplyContent('')
-        setActiveReplyCommentId(null)
-      },
-    })
-  }
-
-  const confirmDeleteComment = () => {
-    if (deletingComment == null) {
+    if (deletingCommentId == null) {
       return
     }
 
     deleteComment(
       {
-        id: deletingComment.id,
-        targetType: deletingComment.targetType,
-        targetId: deletingComment.targetId,
+        id: deletingCommentId,
       },
       {
         onSuccess: () => {
-          if (activeReplyCommentId === deletingComment.id) {
-            setActiveReplyCommentId(null)
-            setReplyContent('')
+          if (activeReplyCommentId === deletingCommentId) {
+            clearReply()
           }
 
-          setDeletingComment(null)
+          setDeletingCommentId(null)
         },
       },
     )
-  }
+  }, [clearReply, deleteComment, setDeletingCommentId])
+
+  useEffect(() => {
+    if (previousArticleId.current !== articleId) {
+      previousArticleId.current = articleId
+      setCommentContent('')
+      setSortOrder('asc')
+    }
+
+    return () => {
+      useCommentCardStore.getState().actions.reset()
+    }
+  }, [articleId])
 
   return {
     total: data?.total,
-    commentReferenceTime,
     commentTree,
+    commentReferenceTime,
     sortOrder,
     setSortOrder,
     commentContent,
     setCommentContent,
-    replyContent,
-    setReplyContent,
-    activeReplyCommentId,
     isLoggedIn,
+    sessionUserId,
     isCommentPending,
-    isCreatingComment,
-    isDeletingComment,
-    sessionUserId: session?.user?.id,
-    sessionAvatarProps,
+    isCreatingComment: creatingComment,
+    isDeletingComment: deletingCommentPending,
     deletingComment,
-    setDeletingComment,
+    deletingCommentId,
+    setDeletingCommentId,
     openLoginModal,
     submitRootComment,
-    handleReplyClick,
-    cancelReply,
     submitReply,
     confirmDeleteComment,
   }

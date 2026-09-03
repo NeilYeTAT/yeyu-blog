@@ -93,7 +93,7 @@ export const messages = {
       noComments: '还没有评论，来发表第一条评论吧',
       loginPrompt: '登录后即可评论喵~',
       loginToComment: '登录后评论',
-      placeholder: '写下你的评论...',
+      placeholder: '（*＾-＾*）',
       publish: '发布',
       walletReview: 'Web3 钱包登录用户评论提交后可能需要审核。',
       sortOrder: {
@@ -263,7 +263,7 @@ export const messages = {
       noComments: 'No comments yet. Be the first to comment.',
       loginPrompt: 'Log in to leave a comment.',
       loginToComment: 'Log in to comment',
-      placeholder: 'Write a comment...',
+      placeholder: '（*＾-＾*）',
       publish: 'Publish',
       walletReview: 'Comments from Web3 wallet users may require review.',
       sortOrder: {
