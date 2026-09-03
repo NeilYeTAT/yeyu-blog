@@ -104,7 +104,7 @@ export default function CommentCard({
         isPending={isDeletingComment}
       >
         {deletingComment != null ? (
-          <div className="rounded-lg border border-black/15 bg-theme-surface/60 p-3 text-black text-sm dark:border-white/15 dark:text-white">
+          <div className="px-1 py-2 text-black text-sm dark:text-white">
             <p className="font-medium">
               {deletingComment.user?.name ?? deletingComment.authorName}
             </p>
