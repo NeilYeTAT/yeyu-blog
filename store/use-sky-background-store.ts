@@ -6,7 +6,7 @@ import {
 
 const defaultMinutesOfDay = 11 * 60
 const defaultCloudSpeed = 1
-const defaultCloudAnimationRunning = true
+const defaultCloudAnimationRunning = false
 const defaultUsingRealTime = true
 
 const useSkyBackgroundStore = create<{
