@@ -1,4 +1,3 @@
-import { TagType } from '@prisma/client'
 import { z } from 'zod'
 
 const tagNameSchema = z
@@ -9,23 +8,19 @@ const tagNameSchema = z
 
 export const getTagsQuerySchema = z.object({
   q: z.string().trim().optional(),
-  tagType: z.enum(TagType).optional(),
   take: z.coerce.number().int().min(1).max(100).default(15),
   skip: z.coerce.number().int().min(0).default(0),
 })
 
 export const createTagSchema = z.object({
   tagName: tagNameSchema,
-  tagType: z.enum(TagType),
 })
 
 export const updateTagSchema = z.object({
   id: z.coerce.number().int().positive({ message: 'Invalid id.' }),
   tagName: tagNameSchema,
-  tagType: z.enum(TagType),
 })
 
 export const deleteTagQuerySchema = z.object({
   id: z.coerce.number().int().positive({ message: 'Invalid id.' }),
-  tagType: z.enum(TagType),
 })

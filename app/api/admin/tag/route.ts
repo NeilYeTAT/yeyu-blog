@@ -1,4 +1,3 @@
-import { TagType } from '@prisma/client'
 import { BadRequestError } from '@/lib/common/errors/request'
 import { noPermission } from '@/lib/core/auth/guard'
 import { readJsonBody } from '@/lib/infra/http/read-json-body'
@@ -18,7 +17,6 @@ export const GET = withResponse(async request => {
 
   const queryResult = getTagsQuerySchema.safeParse({
     q: request.nextUrl.searchParams.get('q') ?? undefined,
-    tagType: request.nextUrl.searchParams.get('tagType') ?? undefined,
     take: request.nextUrl.searchParams.get('take') ?? undefined,
     skip: request.nextUrl.searchParams.get('skip') ?? undefined,
   })
@@ -27,36 +25,13 @@ export const GET = withResponse(async request => {
     throw new BadRequestError('Invalid query parameters.', { data: queryResult.error.flatten() })
   }
 
-  const { q, tagType, take, skip } = queryResult.data
+  const { q, take, skip } = queryResult.data
   const where = q != null && q.length > 0 ? { tagName: { contains: q } } : undefined
 
-  if (tagType === TagType.BLOG) {
-    return await prisma.blogTag.findMany({
-      where,
-      orderBy: {
-        id: 'desc',
-      },
-    })
-  }
-
-  if (tagType === TagType.NOTE) {
-    return await prisma.noteTag.findMany({
-      where,
-      orderBy: {
-        id: 'desc',
-      },
-    })
-  }
-
-  const [blogTotal, noteTotal] = await Promise.all([
-    prisma.blogTag.count({ where }),
-    prisma.noteTag.count({ where }),
-  ])
-  const total = blogTotal + noteTotal
+  const blogTotal = await prisma.blogTag.count({ where })
+  const total = blogTotal
   const blogSkip = Math.min(skip, blogTotal)
   const blogTake = Math.min(take, Math.max(blogTotal - blogSkip, 0))
-  const noteSkip = Math.max(skip - blogTotal, 0)
-  const noteTake = take - blogTake
 
   const blogTags =
     blogTake > 0
@@ -73,37 +48,14 @@ export const GET = withResponse(async request => {
         })
       : []
 
-  const noteTags =
-    noteTake > 0
-      ? await prisma.noteTag.findMany({
-          where,
-          include: {
-            _count: true,
-          },
-          orderBy: {
-            id: 'desc',
-          },
-          take: noteTake,
-          skip: noteSkip,
-        })
-      : []
-
   const blogTagsWithCount = blogTags.map(tag => ({
     id: tag.id,
     tagName: tag.tagName,
-    tagType: TagType.BLOG,
     count: tag._count.blogs,
   }))
 
-  const noteTagsWithCount = noteTags.map(tag => ({
-    id: tag.id,
-    tagName: tag.tagName,
-    tagType: TagType.NOTE,
-    count: tag._count.notes,
-  }))
-
   return {
-    list: [...blogTagsWithCount, ...noteTagsWithCount],
+    list: blogTagsWithCount,
     total,
     take,
     skip,
@@ -122,29 +74,19 @@ export const POST = withResponse(async request => {
     throw new BadRequestError('Invalid request body.', { data: parseResult.error.flatten() })
   }
 
-  const { tagName, tagType } = parseResult.data
+  const { tagName } = parseResult.data
 
-  const existingTag =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.findFirst({ where: { tagName } })
-      : await prisma.noteTag.findFirst({ where: { tagName } })
+  const existingTag = await prisma.blogTag.findFirst({ where: { tagName } })
 
   if (existingTag != null) {
-    throw new BadRequestError('Tag name already exists.', { data: { tagName, tagType } })
+    throw new BadRequestError('Tag name already exists.', { data: { tagName } })
   }
 
-  const created =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.create({
-          data: {
-            tagName,
-          },
-        })
-      : await prisma.noteTag.create({
-          data: {
-            tagName,
-          },
-        })
+  const created = await prisma.blogTag.create({
+    data: {
+      tagName,
+    },
+  })
 
   return {
     message: 'Created.',
@@ -164,46 +106,29 @@ export const PATCH = withResponse(async request => {
     throw new BadRequestError('Invalid request body.', { data: parseResult.error.flatten() })
   }
 
-  const { id, tagName, tagType } = parseResult.data
+  const { id, tagName } = parseResult.data
 
-  const existingTag =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.findUnique({ where: { id } })
-      : await prisma.noteTag.findUnique({ where: { id } })
+  const existingTag = await prisma.blogTag.findUnique({ where: { id } })
 
   if (existingTag == null) {
-    throw new BadRequestError('Tag not found.', { data: { id, tagType } })
+    throw new BadRequestError('Tag not found.', { data: { id } })
   }
 
-  const duplicateTag =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.findFirst({
-          where: {
-            tagName,
-            NOT: { id },
-          },
-        })
-      : await prisma.noteTag.findFirst({
-          where: {
-            tagName,
-            NOT: { id },
-          },
-        })
+  const duplicateTag = await prisma.blogTag.findFirst({
+    where: {
+      tagName,
+      NOT: { id },
+    },
+  })
 
   if (duplicateTag != null) {
-    throw new BadRequestError('Tag name already exists.', { data: { id, tagName, tagType } })
+    throw new BadRequestError('Tag name already exists.', { data: { id, tagName } })
   }
 
-  const updated =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.update({
-          where: { id },
-          data: { tagName },
-        })
-      : await prisma.noteTag.update({
-          where: { id },
-          data: { tagName },
-        })
+  const updated = await prisma.blogTag.update({
+    where: { id },
+    data: { tagName },
+  })
 
   return {
     message: 'Updated.',
@@ -218,33 +143,24 @@ export const DELETE = withResponse(async request => {
 
   const queryResult = deleteTagQuerySchema.safeParse({
     id: request.nextUrl.searchParams.get('id') ?? undefined,
-    tagType: request.nextUrl.searchParams.get('tagType') ?? undefined,
   })
 
   if (!queryResult.success) {
     throw new BadRequestError('Invalid query parameters.', { data: queryResult.error.flatten() })
   }
 
-  const { id, tagType } = queryResult.data
+  const { id } = queryResult.data
 
-  const existingTag =
-    tagType === TagType.BLOG
-      ? await prisma.blogTag.findUnique({ where: { id } })
-      : await prisma.noteTag.findUnique({ where: { id } })
+  const existingTag = await prisma.blogTag.findUnique({ where: { id } })
 
   if (existingTag == null) {
-    throw new BadRequestError('Tag not found.', { data: { id, tagType } })
+    throw new BadRequestError('Tag not found.', { data: { id } })
   }
 
-  if (tagType === TagType.BLOG) {
-    await prisma.blogTag.delete({ where: { id } })
-  } else {
-    await prisma.noteTag.delete({ where: { id } })
-  }
+  await prisma.blogTag.delete({ where: { id } })
 
   return {
     message: 'Deleted.',
     id,
-    tagType,
   }
 })

@@ -1,4 +1,3 @@
-import { TagType } from '@prisma/client'
 import { Edit2, Eye, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { defaultLanguage } from '@/lib/i18n/config'
@@ -40,7 +39,6 @@ export default function ActionButtons({
           setModalOpen('deleteArticleModal', {
             id: blogId,
             title,
-            articleType: TagType.BLOG,
           })
         }
       >

@@ -1,4 +1,3 @@
-import { TagType } from '@prisma/client'
 import { z } from 'zod'
 
 const tagNameSchema = z
@@ -9,10 +8,9 @@ const tagNameSchema = z
 
 export const createTagSchema = z.object({
   tagName: tagNameSchema,
-  tagType: z.enum(TagType),
 })
 
 export const updateTagNameSchema = z.object({
   id: z.number(),
-  ...createTagSchema.shape,
+  tagName: tagNameSchema,
 })

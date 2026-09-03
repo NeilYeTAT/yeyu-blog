@@ -10,13 +10,13 @@ import { buttonVariants } from '@/ui/shadcn/button'
 import { ModeToggle } from '@/ui/shadcn/mode-toggle'
 import { AdminLogo } from './admin-logo'
 import { AvatarDropdownMenu } from './avatar-dropdown-menu'
-import { AdminRoutes } from './constant'
+import { adminRoutes } from './constant'
 
 export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
   const pathname = usePathname()
   const { data: pendingCountData } = useAdminPendingCountQuery()
 
-  const pendingCountByPath: Partial<Record<(typeof AdminRoutes)[number]['path'], number>> = {
+  const pendingCountByPath: Partial<Record<(typeof adminRoutes)[number]['path'], number>> = {
     '/admin/comment': pendingCountData?.commentPendingCount ?? 0,
     '/admin/friend-link': pendingCountData?.friendLinkPendingCount ?? 0,
   }
@@ -27,7 +27,7 @@ export const AdminNavbar: FC<ComponentProps<'header'>> = () => {
         {/* 左侧logo区域, 回到首页 */}
         <AdminLogo />
         {/* 路由 */}
-        {AdminRoutes.map(route => {
+        {adminRoutes.map(route => {
           const isActive = route.pattern.test(pathname)
           const pendingCount = pendingCountByPath[route.path] ?? 0
           const shouldShowPendingBadge = pendingCount > 0 && !isActive

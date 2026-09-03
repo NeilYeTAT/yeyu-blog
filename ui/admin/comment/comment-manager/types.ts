@@ -1,5 +1,5 @@
-import type { CommentState, CommentTargetType } from '@/lib/api/comment/type'
+import type { CommentState } from '@/lib/api/comment/type'
 
 export type CommentStateFilter = 'all' | 'deleted' | CommentState
 
-export type CommentTargetTypeFilter = 'all' | CommentTargetType
+export type CommentTargetTypeFilter = 'all' | 'BLOG'

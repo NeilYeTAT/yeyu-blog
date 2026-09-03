@@ -14,9 +14,6 @@ export function useTagUpdateMutation() {
         queryClient.invalidateQueries({
           queryKey: ['blog-tags'],
         }),
-        queryClient.invalidateQueries({
-          queryKey: ['note-tags'],
-        }),
       ])
     },
   })

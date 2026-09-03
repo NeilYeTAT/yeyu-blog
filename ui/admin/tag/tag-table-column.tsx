@@ -3,9 +3,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import type { WithCountTagDTO } from '@/lib/api/tag/type'
 import type { dataTableFeatures } from '@/ui/admin/components/table/data-table-features'
-import { ArrowDown, ArrowUp, FileText, TagsIcon, TypeIcon, Wrench } from 'lucide-react'
+import { ArrowDown, ArrowUp, FileText, TypeIcon, Wrench } from 'lucide-react'
 import TagItemBadge from '@/ui/components/shared/tag-item-badge'
-import { Badge } from '@/ui/shadcn/badge'
 import { Button } from '@/ui/shadcn/button'
 import ActionButtons from './action-buttons'
 
@@ -23,21 +22,6 @@ export const columns: ColumnDef<typeof dataTableFeatures, WithCountTagDTO>[] = [
     },
     cell: ({ row }) => {
       return <TagItemBadge tag={row.original.tagName} />
-    },
-  },
-  {
-    accessorKey: 'tagType',
-    header: () => {
-      return (
-        <span className="flex items-center gap-1">
-          <TagsIcon className="size-4" />
-          标签类型
-        </span>
-      )
-    },
-    cell: ({ row }) => {
-      const tagType = row.original.tagType
-      return <Badge className="font-mono">{tagType}</Badge>
     },
   },
   {
@@ -78,9 +62,9 @@ export const columns: ColumnDef<typeof dataTableFeatures, WithCountTagDTO>[] = [
       )
     },
     cell: ({ row }) => {
-      const { id, tagName, tagType } = row.original
+      const { id, tagName } = row.original
 
-      return <ActionButtons id={id} tagName={tagName} tagType={tagType} />
+      return <ActionButtons id={id} tagName={tagName} />
     },
   },
 ]

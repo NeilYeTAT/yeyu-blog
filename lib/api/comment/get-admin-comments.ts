@@ -1,9 +1,9 @@
-import type { CommentParent, CommentState, CommentTarget, CommentTargetType } from './type'
+import type { CommentParent, CommentState, CommentTarget } from './type'
 import { apiRequest } from '@/lib/infra/http/ky'
 
 export type AdminCommentRecord = {
   id: number
-  targetType: CommentTargetType
+  targetType: 'BLOG'
   targetId: number
   parentId: number | null
   parent: CommentParent | null
@@ -33,7 +33,7 @@ export type GetAdminCommentsResponse = {
 
 export type GetAdminCommentsParams = {
   q?: string
-  targetType?: CommentTargetType
+  targetType?: 'BLOG'
   targetId?: number
   state?: CommentState
   isDeleted?: boolean

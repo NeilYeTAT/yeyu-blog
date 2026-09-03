@@ -1,7 +1,5 @@
-import { TagType } from '@prisma/client'
 import { sileo } from 'sileo'
 import { useBlogDeleteMutation } from '@/hooks/api/blog/use-blog-delete-mutation'
-import { useNoteDeleteMutation } from '@/hooks/api/note/use-note-delete-mutation'
 import { useModalActions, useModalPayload, useModalType } from '@/store/use-modal-store'
 import { ConfirmDialog } from '@/ui/components/modal/base/confirm-dialog'
 
@@ -11,21 +9,19 @@ export default function DeleteArticleModal() {
   const { closeModal } = useModalActions()
 
   const isModalOpen = modalType === 'deleteArticleModal'
-  const { id, title, articleType } =
+  const { id, title } =
     payload != null
       ? (payload as {
           id: number
           title: string
-          articleType: TagType
         })
       : {}
 
   const { mutate: deleteBlogById, isPending: isDeletingBlog } = useBlogDeleteMutation()
-  const { mutate: deleteNoteById, isPending: isDeletingNote } = useNoteDeleteMutation()
-  const isPending = isDeletingBlog || isDeletingNote
+  const isPending = isDeletingBlog
 
   function onSubmit() {
-    if (id == null || articleType == null || title == null) {
+    if (id == null || title == null) {
       sileo.error({ title: '文章信息不存在，删除失败' })
       return
     }
@@ -43,16 +39,7 @@ export default function DeleteArticleModal() {
       }
     }
 
-    switch (articleType) {
-      case TagType.BLOG:
-        deleteBlogById({ id }, { onSuccess, onError })
-        break
-      case TagType.NOTE:
-        deleteNoteById({ id }, { onSuccess, onError })
-        break
-      default:
-        sileo.error({ title: '删除文章类型不匹配' })
-    }
+    deleteBlogById({ id }, { onSuccess, onError })
   }
 
   return (

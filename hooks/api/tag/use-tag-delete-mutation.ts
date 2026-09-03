@@ -16,9 +16,6 @@ export function useTagDeleteMutation() {
         queryClient.invalidateQueries({
           queryKey: ['blog-tags'],
         }),
-        queryClient.invalidateQueries({
-          queryKey: ['note-tags'],
-        }),
       ])
     },
     onError: () => {

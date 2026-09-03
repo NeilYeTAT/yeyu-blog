@@ -2,13 +2,8 @@ import { create } from 'zustand'
 
 export type ModalType =
   | 'deleteArticleModal'
-  | 'deleteMutterModal'
-  | 'updateMutterModal'
   | 'editTagModal'
   | 'deleteTagModal'
-  | 'createEchoModal'
-  | 'deleteEchoModal'
-  | 'editEchoModal'
   | 'createTagModal'
   | 'loginModal'
   | 'friendLinkApplyModal'

@@ -2,7 +2,6 @@
 
 import type { CreateTagDTO } from '@/lib/api/tag/type'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TagType } from '@prisma/client'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
@@ -13,7 +12,6 @@ import { Button } from '@/ui/shadcn/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/ui/shadcn/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/shadcn/form'
 import { Input } from '@/ui/shadcn/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/shadcn/select'
 
 export default function CreateTagModal() {
   const modalType = useModalType()
@@ -25,7 +23,6 @@ export default function CreateTagModal() {
     resolver: zodResolver(createTagSchema),
     defaultValues: {
       tagName: '',
-      tagType: TagType.BLOG,
     },
     mode: 'onBlur',
   })
@@ -71,32 +68,6 @@ export default function CreateTagModal() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="tagType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>标签类型</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={value => {
-                          field.onChange(value)
-                        }}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="请选择" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={TagType.BLOG}>BLOG</SelectItem>
-                          <SelectItem value={TagType.NOTE}>NOTE</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <DialogFooter>
                 <Button type="submit" className="cursor-pointer" disabled={isPending}>
                   保存

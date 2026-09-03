@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import type { CommentState, CommentTargetType } from '@/lib/api/comment/type'
+import type { CommentState } from '@/lib/api/comment/type'
 import type { Badge } from '@/ui/shadcn/badge'
 import type { CommentStateFilter, CommentTargetTypeFilter } from './types'
 
@@ -35,10 +35,8 @@ export const targetTypeOptions: Array<{
 }> = [
   { label: '全部类型', value: 'all' },
   { label: '博客', value: 'BLOG' },
-  { label: '笔记', value: 'NOTE' },
 ]
 
-export const targetTypeLabelMap: Record<CommentTargetType, string> = {
+export const targetTypeLabelMap: Record<'BLOG', string> = {
   BLOG: '博客',
-  NOTE: '笔记',
 }

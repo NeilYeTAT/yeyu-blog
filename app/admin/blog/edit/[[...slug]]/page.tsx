@@ -1,4 +1,3 @@
-import { TagType } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { noPermission } from '@/lib/core/auth/guard'
 import { prisma } from '@/prisma/instance'
@@ -28,11 +27,5 @@ export default async function Page({
 
   const relatedBlogTagNames = article != null ? article.tags.map(v => v.tagName) : []
 
-  return (
-    <AdminArticleEditPage
-      article={article}
-      relatedArticleTagNames={relatedBlogTagNames}
-      type={TagType.BLOG}
-    />
-  )
+  return <AdminArticleEditPage article={article} relatedArticleTagNames={relatedBlogTagNames} />
 }

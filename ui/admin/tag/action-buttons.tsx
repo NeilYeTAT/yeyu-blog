@@ -1,17 +1,8 @@
-import type { TagType } from '@prisma/client'
 import { Edit2, Trash } from 'lucide-react'
 import { useModalActions } from '@/store/use-modal-store'
 import { Button } from '@/ui/shadcn/button'
 
-export default function ActionButtons({
-  id,
-  tagName,
-  tagType,
-}: {
-  id: number
-  tagName: string
-  tagType: TagType
-}) {
+export default function ActionButtons({ id, tagName }: { id: number; tagName: string }) {
   const { setModalOpen } = useModalActions()
 
   return (
@@ -23,7 +14,6 @@ export default function ActionButtons({
           setModalOpen('editTagModal', {
             id,
             tagName,
-            tagType,
           })
         }
       >
@@ -37,7 +27,6 @@ export default function ActionButtons({
           setModalOpen('deleteTagModal', {
             id,
             tagName,
-            tagType,
           })
         }}
       >

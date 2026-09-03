@@ -2,7 +2,6 @@ import { apiRequest } from '@/lib/infra/http/ky'
 
 export type AdminPendingCount = {
   siteCommentPendingCount: number
-  mutterCommentPendingCount: number
   commentPendingCount: number
   friendLinkPendingCount: number
   pendingCount: number

@@ -2,14 +2,14 @@
 
 import { useAdminOverviewStatsQuery } from '@/hooks/api/admin/use-admin-overview-stats-query'
 
-const overviewStatLabels = ['博客', '笔记', '草稿', '待处理']
+const overviewStatLabels = ['博客', '草稿', '待处理']
 
 export function OverviewStats() {
   const overviewStatsQuery = useAdminOverviewStatsQuery()
 
   if (overviewStatsQuery.isPending) {
     return (
-      <section className="grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
+      <section className="grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-3">
         {overviewStatLabels.map(label => (
           <article
             key={label}
@@ -32,7 +32,6 @@ export function OverviewStats() {
 
   const stats = [
     { label: '博客', value: data.blogCount, description: `${data.blogDraftCount} 篇草稿` },
-    { label: '笔记', value: data.noteCount, description: `${data.noteDraftCount} 篇草稿` },
     { label: '草稿', value: data.draftCount, description: '未发布内容' },
     {
       label: '待处理',
@@ -42,7 +41,7 @@ export function OverviewStats() {
   ]
 
   return (
-    <section className="grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
+    <section className="grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-3">
       {stats.map(stat => (
         <article
           key={stat.label}

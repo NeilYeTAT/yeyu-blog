@@ -2,9 +2,7 @@ import { apiRequest } from '@/lib/infra/http/ky'
 
 export type AdminOverviewStats = {
   blogCount: number
-  noteCount: number
   blogDraftCount: number
-  noteDraftCount: number
   draftCount: number
   commentPendingCount: number
   friendLinkPendingCount: number

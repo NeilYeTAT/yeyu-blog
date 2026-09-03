@@ -1,7 +1,7 @@
 'use client'
 
-import type { BlogTag } from '@prisma/client'
 import type { Dispatch, SetStateAction } from 'react'
+import type { TagOptionRecord } from '@/lib/api/tag/type'
 import type { CarouselApi } from '@/ui/shadcn/carousel'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
@@ -13,7 +13,7 @@ export function BlogTagsContainer({
   blogTagList,
   setSelectedTags,
 }: {
-  blogTagList: BlogTag[]
+  blogTagList: TagOptionRecord[]
   setSelectedTags: Dispatch<SetStateAction<string[]>>
 }) {
   const [api, setApi] = useState<CarouselApi>()

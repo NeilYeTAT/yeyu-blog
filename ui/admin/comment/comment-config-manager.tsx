@@ -5,8 +5,6 @@ import { useState } from 'react'
 import { sileo } from 'sileo'
 import { useCommentConfigMutation } from '@/hooks/api/comment/use-comment-config-mutation'
 import { useCommentConfigQuery } from '@/hooks/api/comment/use-comment-config-query'
-import { useMutterCommentConfigMutation } from '@/hooks/api/mutter-comment/use-mutter-comment-config-mutation'
-import { useMutterCommentConfigQuery } from '@/hooks/api/mutter-comment/use-mutter-comment-config-query'
 import Loading from '@/ui/components/shared/loading'
 import { Switch } from '@/ui/shadcn/switch'
 
@@ -88,10 +86,7 @@ function CommentConfigSection({
 
 export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
   const { data: articleData, isPending: isArticlePending } = useCommentConfigQuery()
-  const { data: mutterData, isPending: isMutterPending } = useMutterCommentConfigQuery()
   const { mutate: updateArticleConfig, isPending: isUpdatingArticle } = useCommentConfigMutation()
-  const { mutate: updateMutterConfig, isPending: isUpdatingMutter } =
-    useMutterCommentConfigMutation()
 
   const handleUpdateArticleConfig = (nextConfig: {
     autoApproveEmailUsers: boolean
@@ -107,24 +102,9 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
     })
   }
 
-  const handleUpdateMutterConfig = (nextConfig: {
-    autoApproveEmailUsers: boolean
-    autoApproveWalletUsers: boolean
-  }) => {
-    updateMutterConfig(nextConfig, {
-      onSuccess: () => {
-        sileo.success({ title: '低语评论审核策略已更新' })
-      },
-      onError: error => {
-        sileo.error({ title: error.message })
-      },
-    })
-  }
-
   const articleConfig = articleData?.data
-  const mutterConfig = mutterData?.data
 
-  if (isArticlePending || isMutterPending || articleConfig == null || mutterConfig == null) {
+  if (isArticlePending || articleConfig == null) {
     return <Loading />
   }
 
@@ -134,7 +114,7 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
         <div className="min-w-0">
           <h2 className="font-medium text-sm">评论配置</h2>
           <p className="mt-1 text-muted-foreground text-xs">
-            控制文章评论和低语评论在不同登录方式下是否自动通过。
+            控制文章评论在不同登录方式下是否自动通过。
           </p>
         </div>
       </header>
@@ -149,18 +129,6 @@ export const CommentConfigManager: FC<ComponentProps<'main'>> = () => {
           isUpdating={isUpdatingArticle}
           onUpdate={handleUpdateArticleConfig}
         />
-
-        <div className="border-t">
-          <CommentConfigSection
-            key={`mutter-${mutterConfig.autoApproveEmailUsers}-${mutterConfig.autoApproveWalletUsers}`}
-            title="低语评论"
-            config={mutterConfig}
-            emailDescription="关闭后，GitHub 登录用户提交低语评论也会进入待审核状态。"
-            walletDescription="关闭后，钱包登录用户提交低语评论会进入待审核状态。"
-            isUpdating={isUpdatingMutter}
-            onUpdate={handleUpdateMutterConfig}
-          />
-        </div>
       </div>
     </main>
   )

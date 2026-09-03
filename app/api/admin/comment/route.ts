@@ -102,6 +102,7 @@ export const GET = withResponse(async request => {
   const { q, targetType, targetId, state, isDeleted, take, skip } = queryResult.data
 
   const where = {
+    targetType: 'BLOG' as const,
     ...(q != null && q.length > 0
       ? {
           content: {

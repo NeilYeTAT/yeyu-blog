@@ -24,7 +24,7 @@ export default function EditTagModal() {
   const { closeModal } = useModalActions()
   const payload = useModalPayload()
   const isModalOpen = modalType === 'editTagModal'
-  const { id, tagName, tagType } = payload != null ? (payload as UpdateTagNameDTO) : {}
+  const { id, tagName } = payload != null ? (payload as UpdateTagNameDTO) : {}
 
   const { mutate: updateTagName, isPending } = useTagUpdateMutation()
 
@@ -38,10 +38,9 @@ export default function EditTagModal() {
       form.reset({
         id: id!,
         tagName: tagName!,
-        tagType: tagType!,
       })
     }
-  }, [isModalOpen, form, tagName, id, tagType])
+  }, [isModalOpen, form, tagName, id])
 
   function onSubmit(values: UpdateTagNameDTO) {
     updateTagName(values, {
