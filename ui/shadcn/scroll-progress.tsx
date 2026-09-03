@@ -379,7 +379,7 @@ const ScrollProgress = ({
           >
             <span className="flex min-w-0 flex-1 items-center gap-3">
               <span
-                className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-bl from-slate-300 to-slate-500 dark:bg-[#09090b]"
+                className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-bl from-[#6fd9fe] via-[#5ac9f3] to-[#d5f7fb]"
                 aria-hidden
               />
 

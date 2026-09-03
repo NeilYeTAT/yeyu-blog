@@ -3,7 +3,8 @@
 import { X } from 'lucide-react'
 import { type HTMLMotionProps, motion } from 'motion/react'
 import { useTheme } from 'next-themes'
-import { type FC, useRef, useState } from 'react'
+import { type FC, useRef, useState, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
 import { useSound } from '@/hooks/common/use-sound'
 import { uChatScrollButtonSound } from '@/lib/core/sound/u-chat-scroll-button'
 import { cn } from '@/lib/utils/common/shadcn'
@@ -18,6 +19,14 @@ import { VolumeIcon } from '@/ui/shadcn/volume'
 import { VolumeOffIcon } from '@/ui/shadcn/volume-off'
 import { FloatingMenuActionButton } from './floating-menu-action-button'
 import { SkyBackgroundControls } from './sky-background-controls'
+
+const subscribePortal = (onStoreChange: () => void) => {
+  const frame = requestAnimationFrame(onStoreChange)
+  return () => cancelAnimationFrame(frame)
+}
+
+const getPortalSnapshot = () => document.body
+const getServerPortalSnapshot = () => null
 
 // TODO: 固定底部时吸附效果
 // TODO: 类似 ipad cursor ?
@@ -38,6 +47,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
   const [isDragging, setIsDragging] = useState(false)
   const [orbAnimationPulse, setOrbAnimationPulse] = useState(0)
   const constraintsRef = useRef<HTMLDivElement>(null)
+  const portal = useSyncExternalStore(subscribePortal, getPortalSnapshot, getServerPortalSnapshot)
 
   const playSoundEffect = () => {
     playClickSoft()
@@ -65,7 +75,9 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
     setOrbAnimationPulse(value => value + 1)
   }
 
-  return (
+  if (portal == null) return null
+
+  return createPortal(
     <>
       <div
         ref={constraintsRef}
@@ -104,7 +116,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
                 aria-label={
                   isOpen ? translations.common.closeQuickMenu : translations.common.openQuickMenu
                 }
-                className="relative z-10 size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/30 dark:shadow-[0_0_16px_rgba(255,255,255,0.14),0_10px_24px_rgba(0,0,0,0.42)]"
+                className="size-12 cursor-pointer overflow-hidden border-white/70 p-0 shadow-[0_8px_20px_color-mix(in_srgb,var(--theme-accent)_35%,transparent)] dark:border-white/30 dark:shadow-[0_0_16px_rgba(255,255,255,0.14),0_10px_24px_rgba(0,0,0,0.42)]"
               />
             }
           >
@@ -208,6 +220,7 @@ export const DraggableFloatingMenu: FC<HTMLMotionProps<'div'>> = ({
           </div>
         </PopoverContent>
       </Popover>
-    </>
+    </>,
+    portal,
   )
 }

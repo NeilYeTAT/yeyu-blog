@@ -42,7 +42,7 @@ export default function ArticleDisplayPage({
   } = extractTitleAndBody(sanitizedContent)
 
   return (
-    <div className="z-10 min-h-dvh backdrop-blur-[1px]">
+    <div className="z-10 min-h-dvh">
       <motion.article
         className="flex max-w-3xl flex-1 flex-col gap-4 rounded-sm px-6 py-2"
         variants={articleVariants}

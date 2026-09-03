@@ -47,5 +47,8 @@ export function ArticleScrollProgress({ sections }: { sections: ScrollProgressSe
 
   if (sections.length === 0 || container == null || portal == null) return null
 
-  return createPortal(<ScrollProgress containerRef={containerRef} sections={sections} />, portal)
+  return createPortal(
+    <ScrollProgress className="-translate-y-4" containerRef={containerRef} sections={sections} />,
+    portal,
+  )
 }

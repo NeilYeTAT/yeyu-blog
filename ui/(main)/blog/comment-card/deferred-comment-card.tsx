@@ -42,7 +42,7 @@ export default function DeferredCommentCard({ articleId }: { articleId: number }
   }, [])
 
   return (
-    <div id="comments" ref={rootRef} className="min-h-[13rem] scroll-mt-20">
+    <div id="comments" ref={rootRef} className="mb-4 min-h-[13rem] scroll-mt-20">
       {LoadedCommentCard == null ? (
         <div aria-hidden="true" className="py-2 sm:py-4">
           <div className="h-7 w-24 animate-pulse rounded bg-foreground/10 motion-reduce:animate-none" />
