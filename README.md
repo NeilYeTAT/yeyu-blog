@@ -8,15 +8,16 @@
 
 ## 功能
 
-- 前台：主页、博客、友链
+- 前台：中英文主页、博客、友链
 - 内容：Markdown 渲染、代码高亮、标签分类、博客评论与回复
 - 后台：博客、标签、友链、评论管理
 - 登录：Better Auth、GitHub OAuth、Google OAuth、SIWE 钱包登录
 - 上传：UploadThing 图片上传
+- 个性化：主题切换、天空背景控制、背景音乐
 
 ## 技术栈
 
-- Next.js 16 / React 19 / TypeScript 6
+- Next.js 16 / React 19 / TypeScript 7
 - Tailwind CSS 4 / shadcn/ui / Radix UI / Motion
 - Better Auth / Viem / SIWE
 - Prisma 7 / PostgreSQL / `@prisma/adapter-pg`
@@ -26,13 +27,11 @@
 
 ## 截图展示
 
-![首页浅色预览](.github/assets/home-light-preview.png)
+![首页深色主题](.github/assets/home-dark.png)
 
-![主题切换弹窗预览](.github/assets/theme-dialog-preview.png)
+![首页浅色主题](.github/assets/home-light.png)
 
-![后台管理预览](.github/assets/admin-dashboard-preview.png)
-
-![首页深色预览](.github/assets/home-dark-preview.png)
+![后台首页](.github/assets/admin-dashboard.png)
 
 ## 本地运行
 
