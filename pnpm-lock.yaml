@@ -50,9 +50,9 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      cnfast:
-        specifier: ^0.2.0
-        version: 0.2.0
+      cn:
+        specifier: ^0.2.5
+        version: 0.2.5
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.8)
@@ -2878,9 +2878,9 @@ packages:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
 
-  cnfast@0.2.0:
-    resolution: {integrity: sha512-US4gOKGIylQWC7Nm+wNj+rOej6hJKyY4HwZYgtfRrduejEIFNNxcGKIWzCcQZxzgx6wKCZCCysWjnzsffiyhrw==}
-    engines: {node: '>=22'}
+  cn@0.2.5:
+    resolution: {integrity: sha512-OCjZtMeQfXbI4Es1+EIjkd77gvWzaE689gD8KhfexlqjClC06qR1MQBR+Z35ZMSPNEBWyHiItW1Soy0UvwNv9w==}
+    engines: {node: '>=20'}
     hasBin: true
 
   comma-separated-tokens@2.0.3:
@@ -6863,7 +6863,7 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  cnfast@0.2.0: {}
+  cn@0.2.5: {}
 
   comma-separated-tokens@2.0.3: {}
 

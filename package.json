@@ -33,7 +33,7 @@
     "better-auth": "^1.7.2",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
-    "cnfast": "^0.2.0",
+    "cn": "^0.2.5",
     "embla-carousel-react": "^8.6.0",
     "ky": "^2.1.0",
     "lucide-react": "^1.38.0",
