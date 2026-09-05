@@ -1,12 +1,6 @@
-export type Heading = {
-  level: number
-  text: string
-  id: string
-}
-
 export const extractHeadings = (html: string) => {
   const regex = /<h([1-6])(?:[^>]*id="([^"]*)")?[^>]*>(.*?)<\/h\1>/g
-  const headings: Heading[] = []
+  const headings: { level: number; text: string; id: string }[] = []
   const matches = html.matchAll(regex)
 
   for (const match of matches) {

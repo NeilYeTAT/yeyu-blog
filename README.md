@@ -143,6 +143,20 @@ pnpm dev
 
 后台地址：`http://localhost:3000/admin`
 
+## 未使用代码检查
+
+```shell
+pnpm knip
+```
+
+`knip.json` 补充了静态分析无法自动识别的入口，并保留必要的公共接口：
+
+- `doctor.config.ts`、`next-sitemap.config.js` 和 `prisma/schema.prisma` 是工具配置或 Schema，作为入口保留。
+- `ui/shadcn/**` 保留基础组件的公共导出和类型，只忽略 `exports`、`types`，仍检查未使用文件和依赖。
+- `server-only` 由当前 Next.js 内置别名解析，忽略其未声明依赖提示，不移除服务端边界标记。
+
+业务代码不在忽略范围内；没有引用的文件和导出仍需清理。
+
 ## 部署
 
 推荐部署到 Vercel。部署前确认：

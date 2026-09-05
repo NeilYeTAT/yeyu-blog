@@ -71,41 +71,27 @@ function unlockDocumentScroll() {
 
 const stack: object[] = []
 
-export type UseModalOptions = {
-  open: boolean
-  onClose: () => void
-  closeOnEscape?: boolean
-  closeOnBackdrop?: boolean
-  lockScroll?: boolean
-  initialFocusRef?: React.RefObject<HTMLElement | null>
-  container?: HTMLElement | null
-}
-
-export type ModalOverlayProps = {
-  ref: React.RefObject<HTMLDivElement | null>
-  onPointerDown: (event: React.PointerEvent) => void
-  onClick: (event: React.MouseEvent) => void
-}
-
-export type ModalPanelProps = {
-  ref: React.RefObject<HTMLDivElement | null>
-  role: 'dialog'
-  'aria-modal': true
-  'aria-labelledby': string
-  tabIndex: -1
-  onKeyDown: (event: React.KeyboardEvent) => void
-}
-
 export type UseModalResult = {
   target: HTMLElement | null
   titleId: string
   descriptionId: string
-  overlayProps: ModalOverlayProps
-  panelProps: ModalPanelProps
+  overlayProps: {
+    ref: React.RefObject<HTMLDivElement | null>
+    onPointerDown: (event: React.PointerEvent) => void
+    onClick: (event: React.MouseEvent) => void
+  }
+  panelProps: {
+    ref: React.RefObject<HTMLDivElement | null>
+    role: 'dialog'
+    'aria-modal': true
+    'aria-labelledby': string
+    tabIndex: -1
+    onKeyDown: (event: React.KeyboardEvent) => void
+  }
   close: () => void
 }
 
-export function useModal({
+function useModal({
   open,
   onClose,
   closeOnEscape = true,
@@ -113,7 +99,15 @@ export function useModal({
   lockScroll = true,
   initialFocusRef,
   container,
-}: UseModalOptions): UseModalResult {
+}: {
+  open: boolean
+  onClose: () => void
+  closeOnEscape?: boolean
+  closeOnBackdrop?: boolean
+  lockScroll?: boolean
+  initialFocusRef?: React.RefObject<HTMLElement | null>
+  container?: HTMLElement | null
+}): UseModalResult {
   const hydrated = useIsHydrated()
   const target = container === undefined ? (hydrated ? document.body : null) : container
 

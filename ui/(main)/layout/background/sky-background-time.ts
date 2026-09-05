@@ -120,7 +120,7 @@ export const getMinutesOfDay = (date: Date) => {
   return date.getHours() * minutesPerHour + date.getMinutes()
 }
 
-export const formatMinutesOfDay = (minutesOfDay: number) => {
+const formatMinutesOfDay = (minutesOfDay: number) => {
   const normalizedMinutesOfDay = normalizeMinutesOfDay(minutesOfDay)
   const hours = Math.floor(normalizedMinutesOfDay / minutesPerHour)
   const minutes = normalizedMinutesOfDay % minutesPerHour

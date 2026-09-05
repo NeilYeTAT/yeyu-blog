@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { CommentAuthorLike, SessionAvatarProps } from './type'
+import type { CommentAuthorLike } from './type'
 import Image from 'next/image'
 import avatar from '@/config/img/avatar.webp'
 import { GitHubIcon } from '@/ui/components/modal/main/login-modal/assets/github-icon'
@@ -7,49 +7,6 @@ import { GoogleIcon } from '@/ui/components/modal/main/login-modal/assets/google
 import { useTranslations } from '@/ui/components/provider/main/language-provider'
 import { AccountIcon } from '@/ui/components/shared/account-icon'
 import { getCommentAuthor } from './helper'
-
-const avatarImageClassName =
-  'size-10 rounded-full border border-black/15 bg-theme-surface object-cover dark:border-white/15'
-
-export function SessionAvatar({
-  isAdminUser,
-  isWalletUser,
-  sessionAvatar,
-  sessionAddress,
-}: SessionAvatarProps) {
-  const translations = useTranslations()
-
-  if (isAdminUser) {
-    return (
-      <Image
-        src={avatar}
-        alt={translations.comments.adminAvatarAlt}
-        width={40}
-        height={40}
-        className={avatarImageClassName}
-      />
-    )
-  }
-
-  if (isWalletUser || sessionAvatar == null) {
-    return (
-      <AccountIcon
-        account={sessionAddress}
-        className="size-10 rounded-full border border-black/15 bg-theme-surface dark:border-white/15"
-      />
-    )
-  }
-
-  return (
-    <Image
-      src={sessionAvatar}
-      alt={translations.comments.sessionAvatarAlt}
-      width={40}
-      height={40}
-      className={avatarImageClassName}
-    />
-  )
-}
 
 function CommentProviderIcon({ provider }: { provider: 'github' | 'google' }) {
   const Icon = provider === 'github' ? GitHubIcon : GoogleIcon
@@ -114,14 +71,20 @@ export function CommentAuthorAvatar({ comment }: { comment: CommentAuthorLike })
     githubAccountId,
   } = getCommentAuthor(comment)
   const avatarContent = comment.isAdmin ? (
-    <Image src={avatar} alt={displayName} width={40} height={40} className={avatarImageClassName} />
+    <Image
+      src={avatar}
+      alt={displayName}
+      width={40}
+      height={40}
+      className="size-10 rounded-full border border-black/15 bg-theme-surface object-cover dark:border-white/15"
+    />
   ) : commentAvatar != null ? (
     <Image
       src={commentAvatar}
       alt={displayName}
       width={40}
       height={40}
-      className={avatarImageClassName}
+      className="size-10 rounded-full border border-black/15 bg-theme-surface object-cover dark:border-white/15"
     />
   ) : (
     <AccountIcon

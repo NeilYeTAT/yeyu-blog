@@ -11,6 +11,7 @@
     "lint": "biome check --max-diagnostics=100 .",
     "lint:fix": "biome check --max-diagnostics=100 --write .",
     "doctor": "npx react-doctor@latest --verbose",
+    "knip": "knip",
     "postinstall": "prisma generate --config ./prisma/prisma.config.ts",
     "postbuild": "next-sitemap",
     "prepare": "lefthook install",
@@ -73,12 +74,12 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "czg": "^1.14.0",
+    "knip": "^6.34.0",
     "lefthook": "^2.1.12",
     "lint-staged": "^17.4.1",
     "next-sitemap": "^4.2.3",
     "prisma": "7.10.0",
     "tailwindcss": "^4.3.3",
-    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   },
   "packageManager": "pnpm@9.13.2"

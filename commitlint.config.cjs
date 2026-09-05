@@ -1,4 +1,4 @@
-/** @type {import('cz-git').UserConfig} */
+/** @type {import('czg').UserConfig} */
 
 // TODO: open ai https://cz-git.qbb.sh/recipes/openai
 https: module.exports = {

@@ -1,5 +1,3 @@
-export type CommentTargetType = 'BLOG'
-
 export type CommentState = 'PENDING' | 'APPROVED' | 'REJECTED'
 
 export type CommentUser = {
@@ -27,6 +25,6 @@ export type CommentTarget = {
   title: string
   slug: string
   isPublished: boolean
-  targetType: CommentTargetType
+  targetType: 'BLOG'
   path: string
 }

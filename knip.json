@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "entry": ["doctor.config.ts", "next-sitemap.config.js", "prisma/schema.prisma"],
+  "ignoreDependencies": ["server-only"],
+  "ignoreIssues": {
+    "ui/shadcn/**": ["exports", "types"]
+  }
+}

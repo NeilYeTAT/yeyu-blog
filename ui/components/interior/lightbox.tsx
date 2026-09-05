@@ -60,17 +60,20 @@ type Drag = {
   y: number
 }
 
-export type UseLightboxOptions = {
+function useLightbox<
+  Frame extends HTMLElement = HTMLDivElement,
+  Content extends HTMLElement = HTMLImageElement,
+>({
+  maxScale = 4,
+  steps = 8,
+  disabled = false,
+  onDismiss,
+}: {
   maxScale?: number
   steps?: number
   disabled?: boolean
   onDismiss?: () => void
-}
-
-export function useLightbox<
-  Frame extends HTMLElement = HTMLDivElement,
-  Content extends HTMLElement = HTMLImageElement,
->({ maxScale = 4, steps = 8, disabled = false, onDismiss }: UseLightboxOptions = {}) {
+} = {}) {
   const cells = Math.max(1, Math.round(steps))
   const top = Math.max(1.1, maxScale)
 
